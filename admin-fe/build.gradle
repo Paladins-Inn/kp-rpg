@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+    id 'io.quarkus'
+}
+
+repositories {
+     mavenLocal()
+     mavenCentral()
+}
+
+dependencies {
+    compile 'com.vaadin:vaadin-server:8.10.3'
+    compile 'com.vaadin:vaadin-push:8.10.3'
+    compile 'com.vaadin:vaadin-client-compiled:8.10.3'
+    compile 'com.vaadin:vaadin-themes:8.10.3'
+    implementation 'io.quarkus:quarkus-undertow-websockets'
+    implementation 'io.quarkus:quarkus-undertow'
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+}
+
+group 'de.kaiserpfalz-edv.rpg'
+version '1.0.0-SNAPSHOT'
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}

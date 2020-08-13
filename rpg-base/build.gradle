@@ -1,0 +1,64 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+repositories {
+     mavenLocal()
+     mavenCentral()
+}
+
+dependencies {
+    api 'org.slf4j:slf4j-api:1.7.30'
+    api 'de.kaiserpfalz-edv.rpg:rpg-base-api'
+
+    implementation 'org.immutables:value:2.8.8'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
+    testRuntimeOnly 'ch.qos.logback:logback-classic:1.2.3'
+}
+
+group 'de.kaiserpfalz-edv.rpg'
+version '1.0.0-SNAPSHOT'
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    withJavadocJar()
+    withSourcesJar()
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+test {
+    useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        myLibrary(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+sourceSets {
+    build {
+        java.srcDir file('src/main/java')
+
+    }
+}
