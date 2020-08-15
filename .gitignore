@@ -1,6 +1,15 @@
+*Immutable.java
+*Mutable.java
+
 .idea/
 docs/generated/
 target/
 .gradle/
 build/
 *.iml
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build

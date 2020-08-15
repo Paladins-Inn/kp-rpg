@@ -14,9 +14,16 @@
  * permissions and limitations under the License.
  */
 
-pluginManagement {
-    repositories {
-        mavenLocal()
-        mavenCentral()
+package de.kaiserpfalzedv.rpg.base.dice;
+
+/**
+ * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 2020-08-12
+ */
+public class D6 extends BasicDie {
+    public static final int MAX = 6;
+
+    public D6() {
+        super(MAX);
     }
 }

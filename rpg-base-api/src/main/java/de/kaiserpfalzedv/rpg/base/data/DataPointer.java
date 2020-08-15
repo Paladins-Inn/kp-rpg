@@ -14,9 +14,26 @@
  * permissions and limitations under the License.
  */
 
-pluginManagement {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
+package de.kaiserpfalzedv.rpg.base.data;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.rpg.base.Immutable;
+import org.immutables.value.Value;
+
+import java.io.Serializable;
+
+/**
+ * A dataset containing data.
+ *
+ * @author rlichti
+ * @version 1.0.0 2020-08-15
+ * @since 1.0.0 2020-08-15
+ */
+@Immutable
+@Value.Immutable
+@Value.Modifiable
+@JsonSerialize(as = DataPointerImmutable.class)
+@JsonDeserialize(builder = DataPointerImmutable.Builder.class)
+public interface DataPointer extends BaseDataSet {
 }
