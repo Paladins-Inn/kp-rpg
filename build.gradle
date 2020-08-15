@@ -32,4 +32,5 @@ allprojects {
 subprojects {
     group = 'de.kaiserpfalz-edv.rpg'
     version = '1.0.0-SNAPSHOT'
+
 }

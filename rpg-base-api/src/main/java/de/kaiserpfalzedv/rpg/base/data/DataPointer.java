@@ -30,10 +30,5 @@ import java.io.Serializable;
  * @version 1.0.0 2020-08-15
  * @since 1.0.0 2020-08-15
  */
-@Immutable
-@Value.Immutable
-@Value.Modifiable
-@JsonSerialize(as = DataPointerImmutable.class)
-@JsonDeserialize(builder = DataPointerImmutable.Builder.class)
 public interface DataPointer extends BaseDataSet {
 }

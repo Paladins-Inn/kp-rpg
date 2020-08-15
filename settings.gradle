@@ -27,6 +27,10 @@ pluginManagement {
     repositories {
         mavenLocal()
         mavenCentral()
+        gradlePluginPortal()
+    }
+    plugins {
+        id 'io.quarkus' version "${quarkusPluginVersion}"
     }
 }
 
@@ -34,6 +38,6 @@ rootProject.name = 'kp-rpg'
 
 include 'rpg-base-api'
 include 'rpg-base-impl'
-// include 'traveller'
+include 'traveller'
 // include 'rpgserver'
 // include 'admin-fe'

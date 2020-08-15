@@ -17,14 +17,18 @@
 plugins {
     id 'java'
     id 'io.quarkus'
+    id 'maven-publish'
 }
 
 
 dependencies {
-    implementation project ':rpg-base-api'
-    implementation project ':rpg-base-impl'
+    implementation project(':rpg-base-api')
+    implementation project(':rpg-base-impl')
 
     implementation 'org.immutables:value:2.8.8'
+    implementation 'org.immutables:value:2.8.8:annotations'
+    annotationProcessor 'org.immutables:value:2.8.8'
+
     implementation 'io.quarkus:quarkus-kubernetes'
     implementation 'io.quarkus:quarkus-container-image-jib'
     implementation 'io.quarkus:quarkus-kubernetes-config'
@@ -47,9 +51,6 @@ dependencies {
     testImplementation 'io.rest-assured:rest-assured'
 }
 
-group 'de.kaiserpfalzedv.rpg'
-version '1.0.0-SNAPSHOT'
-
 compileJava {
     options.encoding = 'UTF-8'
     options.compilerArgs << '-parameters'
@@ -62,8 +63,29 @@ compileTestJava {
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+
+    withJavadocJar()
+    withSourcesJar()
 }
 
 test {
     systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
+}
+
+publishing {
+    publications {
+        myLibrary(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+sourceSets.configureEach { sourceSet ->
+    tasks.named(sourceSet.compileJavaTaskName).configure {
+        options.annotationProcessorGeneratedSourcesDirectory = file("src/main/java")
+    }
+}
+
+ext {
+    generatedSources = "src/java/main"
 }

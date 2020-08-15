@@ -17,6 +17,11 @@
 
 package de.kaiserpfalz.rpg.traveller.solarsystem.basic.data;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.github.zafarkhaja.semver.Version;
+import de.kaiserpfalzedv.rpg.base.Immutable;
+import de.kaiserpfalzedv.rpg.base.data.DataSet;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
@@ -25,14 +30,23 @@ import java.io.Serializable;
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2020-08-12
  */
+@Immutable
 @Value.Immutable
-public abstract class SolarSystem implements Serializable {
-    public abstract String name();
+@JsonSerialize(as = SolarSystemImmutable.class)
+@JsonDeserialize(builder = SolarSystemImmutable.Builder.class)
+public interface SolarSystem extends DataSet<SolarSystemData> {
+    String KIND = "de.kaiserpfalz-edv.rpg.traveller/solar-system";
+    Version VERSION = Version.valueOf("0.1.0");
 
-    public abstract int spacePortClass();
-    public abstract boolean fleetBase();
-    public abstract boolean scoutServiceBase();
-    public abstract boolean gasGiant();
+    @Override
+    @Value.Default
+    default String kind() {
+        return KIND;
+    }
 
-    public abstract String nameMainWorld();
+    @Override
+    @Value.Default
+    default Version version() {
+        return VERSION;
+    }
 }

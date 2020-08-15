@@ -16,6 +16,7 @@
 
 plugins {
     id 'java-library'
+    id 'java'
     id 'maven-publish'
 }
 
@@ -24,6 +25,8 @@ dependencies {
     api project(':rpg-base-api')
 
     implementation 'org.immutables:value:2.8.8'
+    implementation 'org.immutables:value:2.8.8:annotations'
+    annotationProcessor 'org.immutables:value:2.8.8'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
@@ -47,11 +50,6 @@ java {
     withSourcesJar()
 }
 
-javadoc {
-    source = sourceSets.main.allJava
-    classpath = sourceSets.main.runtimeClasspath
-}
-
 test {
     useJUnitPlatform()
 }
@@ -64,8 +62,12 @@ publishing {
     }
 }
 
-sourceSets {
-    build {
-        java.srcDir file('src/main/java')
+sourceSets.configureEach { sourceSet ->
+    tasks.named(sourceSet.compileJavaTaskName).configure {
+        options.annotationProcessorGeneratedSourcesDirectory = file("src/main/java")
     }
+}
+
+ext {
+    generatedSources = "src/java/main"
 }

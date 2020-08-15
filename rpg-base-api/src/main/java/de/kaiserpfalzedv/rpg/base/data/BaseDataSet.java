@@ -18,8 +18,11 @@ package de.kaiserpfalzedv.rpg.base.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.github.zafarkhaja.semver.Version;
 import de.kaiserpfalzedv.rpg.base.Immutable;
 import org.immutables.value.Value;
+
+import java.io.Serializable;
 
 /**
  * A generic base definition for datasets. This base does not contain any data
@@ -29,7 +32,7 @@ import org.immutables.value.Value;
  * @version 1.0.0 2020-08-15
  * @since 1.0.0 2020-08-15
  */
-public interface BaseDataSet {
+public interface BaseDataSet extends Serializable {
     /**
      * The type of dataset. Needs to be unique.
      * @return the type of this dataset.
@@ -41,7 +44,7 @@ public interface BaseDataSet {
      * versions of this kind.
      * @return the version of the dataset defintion.
      */
-    String version();
+    Version version();
 
     /**
      * The metadata of the dataset.
