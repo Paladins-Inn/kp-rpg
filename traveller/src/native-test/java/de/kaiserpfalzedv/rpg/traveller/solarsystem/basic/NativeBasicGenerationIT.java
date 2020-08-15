@@ -1,5 +1,6 @@
-package de.kaiserpfalz.rpg.traveller.solarsystem.basic;
+package de.kaiserpfalzedv.rpg.traveller.solarsystem.basic;
 
+import de.kaiserpfalzedv.rpg.traveller.solarsystem.BasicGenerationTest;
 import io.quarkus.test.junit.NativeImageTest;
 
 @NativeImageTest

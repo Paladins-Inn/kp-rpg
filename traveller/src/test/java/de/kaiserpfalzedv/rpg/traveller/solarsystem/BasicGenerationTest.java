@@ -15,7 +15,7 @@
  *
  */
 
-package de.kaiserpfalz.rpg.traveller.solarsystem.basic;
+package de.kaiserpfalzedv.rpg.traveller.solarsystem;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class BasicGenerationTest {
     @Test
     public void testHelloEndpoint() {
         given()
-          .when().get("/hello")
+          .when().get("/api/solarsystem/generation")
           .then()
              .statusCode(200)
              .body(is("hello"));

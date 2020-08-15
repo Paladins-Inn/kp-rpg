@@ -15,7 +15,7 @@
  *
  */
 
-package de.kaiserpfalz.rpg.traveller.solarsystem.basic.data;
+package de.kaiserpfalzedv.rpg.traveller.solarsystem.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -24,14 +24,16 @@ import de.kaiserpfalzedv.rpg.base.Immutable;
 import de.kaiserpfalzedv.rpg.base.data.DataSet;
 import org.immutables.value.Value;
 
-import java.io.Serializable;
-
 /**
+ * A solar system in the universe of traveller. It will be cartographed inside a
+ * {@link SubSector} wich will be the owner of this solar system.
+ *
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2020-08-12
  */
 @Immutable
 @Value.Immutable
+@Value.Modifiable
 @JsonSerialize(as = SolarSystemImmutable.class)
 @JsonDeserialize(builder = SolarSystemImmutable.Builder.class)
 public interface SolarSystem extends DataSet<SolarSystemData> {

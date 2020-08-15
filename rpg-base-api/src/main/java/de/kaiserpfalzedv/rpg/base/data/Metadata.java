@@ -53,6 +53,11 @@ public interface Metadata {
     };
 
     /**
+     * @return the name of the dataset
+     */
+    String name();
+
+    /**
      * @return a version of this object.
      */
     @Nullable

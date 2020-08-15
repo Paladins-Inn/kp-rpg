@@ -15,16 +15,19 @@
  *
  */
 
-package de.kaiserpfalz.rpg.traveller.solarsystem.basic.data;
+package de.kaiserpfalzedv.rpg.traveller.solarsystem;
 
-import org.immutables.value.Value;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-import java.io.Serializable;
+@Path("/api/solarsystem/generation")
+public class BasicGeneration {
 
-/**
- * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 2020-08-12
- */
-public enum SystemTravelzone {
-
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        return "hello";
+    }
 }
