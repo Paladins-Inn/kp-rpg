@@ -1,5 +1,5 @@
-module de.kaiserpfalzedv.rpg.bot.torg {
-    exports de.kaiserpfalzedv.rpg.bot.torg;
+module de.kaiserpfalzedv.rpg.bot {
+    exports de.kaiserpfalzedv.rpg.bot;
 
     requires org.slf4j;
     requires de.kaiserpfalzedv.rpg.torg;
@@ -7,4 +7,5 @@ module de.kaiserpfalzedv.rpg.bot.torg {
     requires microprofile.config.api;
     requires java.annotation;
     requires jakarta.inject.api;
+    requires java.ws.rs;
 }

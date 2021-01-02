@@ -418,6 +418,7 @@
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-smallrye-health</artifactId>
         </dependency>
+
         <dependency>
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-junit5</artifactId>
@@ -463,6 +464,8 @@
         </plugins>
       </build>
     </profile>
+
+
     <profile>
       <id>native</id>
       <activation>
@@ -474,7 +477,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-failsafe-plugin</artifactId>
-            <version>${surefire-plugin.version}</version>
+            <version>3.0.0-M5</version>
             <executions>
               <execution>
                 <goals>

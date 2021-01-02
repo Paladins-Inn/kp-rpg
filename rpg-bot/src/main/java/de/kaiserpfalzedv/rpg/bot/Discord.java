@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.torg;
+package de.kaiserpfalzedv.rpg.bot;
 
 
 import net.dv8tion.jda.core.AccountType;
@@ -32,8 +32,8 @@ import javax.inject.Singleton;
 import javax.security.auth.login.LoginException;
 
 @Singleton
-public class Main extends ListenerAdapter {
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+public class Discord extends ListenerAdapter {
+    private static final Logger LOG = LoggerFactory.getLogger(Discord.class);
 
     @ConfigProperty(name = "discord.token", defaultValue = "")
     String discordToken;
