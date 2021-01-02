@@ -10,6 +10,12 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>rpg-bot</artifactId>
+  <name>KP RPG :: Discord Bot</name>
+  <description>The discord services as a bot.</description>
+
+  <properties>
+    <activate.jcenter>true</activate.jcenter>
+  </properties>
 
   <dependencies>
     <dependency>

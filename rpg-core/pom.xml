@@ -11,10 +11,13 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>rpg-core</artifactId>
+  <name>KP RPG :: Core Services</name>
+  <description>The services used by almost all role playing systems.</description>
 
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <argLine>--add-opens de.kaiserpfalzedv.rpg.core/de.kaiserpfalzedv.rpg.core.dice=ALL-UNNAMED</argLine>

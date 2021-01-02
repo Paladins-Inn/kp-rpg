@@ -11,6 +11,15 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>rpg-torg</artifactId>
+  <name>KP RPG :: TORG:Eternity</name>
+  <description>The TORG:Eternity special services.</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>de.kaiserpfalz-edv.rpg</groupId>
+      <artifactId>rpg-core</artifactId>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
