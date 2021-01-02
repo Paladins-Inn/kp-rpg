@@ -87,9 +87,9 @@ There are three important things to know:
 ### Contributor License Agreement
 
 When you contribute (code, documentation, or anything else), you have to be aware that your contribution is covered by the 
-same [LGPL 3.0](https://www.gnu.org/licenses/lgpl-3.0.txt) that is applied to kp-rpg itself.
+same [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.txt) that is applied to kp-rpg itself.
 If you want to contribute to parts not licensed on LGPL then you need to agree to the license given for that part of the 
-software. Please contact [Support](support@kaiserpfalz-edv.de) for this.
+software. Please contact [Support](mailto:support@kaiserpfalz-edv.de) for this.
 In particular you need to agree to the Individual Contributor License Agreement,
 which can be [found here](https://gist.github.com/klenkes74/b76f623edb7830b4344ef2d5e373075e).
 (This applies to all contributors, including those contributing on behalf of a company). If you agree to its content, you 
