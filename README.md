@@ -14,7 +14,7 @@ The license for the software is LGPL 3.0 or newer.
 ## Architecture
 
 tl;dr (ok, only the bullshit bingo words):
-- Immutable Objects
+- Immutable Objects (where frameworks allow)
 - Relying heavily on generated code
 - 100 % test coverage of human generated code
 - Every line of code not written is bug free!
