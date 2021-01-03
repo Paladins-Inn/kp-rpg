@@ -15,27 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 /**
- * Admin-Service of the KP RPG service.
+ * de.kaiserpfalzedv.rpg.torg -- The TORG:Eternity module of the KP RPG framework.
+ *
+ * This package contains all specific code for playing TORG:Eternity with computer support.
  *
  * @author klenkes74
- * @since 2020-01-02
+ * @since 2020-01-03
  */
-@Path("/admin")
-public class AdminService {
-
-    @GET
-    @Path("/")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response ping() {
-        return Response.ok("pong").build();
-    }
-}
+package de.kaiserpfalzedv.rpg.torg;

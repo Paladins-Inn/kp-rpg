@@ -18,15 +18,17 @@
 package de.kaiserpfalzedv.rpg.torg.dice;
 
 import de.kaiserpfalzedv.rpg.core.dice.Die;
+import de.kaiserpfalzedv.rpg.torg.BonusChart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
- * This is the exploding D20 with a min add.
+ * This is the exploding BD or D20 with a min add. The min add can be set to 0 for a default D20 in TORG.
  *
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2021-01-02
@@ -38,7 +40,10 @@ class TorgExplodingDie implements TorgDie {
     private final Die baseDie;
     private final int min;
 
-    protected TorgExplodingDie(final Die baseDie, final int min) {
+    @Inject
+    BonusChart bonusChart;
+
+    protected TorgExplodingDie(final TorgDie baseDie, final int min) {
         this.min = min;
         this.baseDie = baseDie;
     }
@@ -88,54 +93,10 @@ class TorgExplodingDie implements TorgDie {
             result += add;
         } while (roll == 10 || roll == 20);
 
-        return lookupBonus(result);
+        return bonusChart.lookupBonus(result);
     }
 
-    private int lookupBonus(final int roll) {
-        int result = 0;
 
-        switch (roll) {
-            case 14:
-            case 13:
-                result = 1;
-                break;
-            case 12:
-            case 11:
-                result = 0;
-                break;
-            case 10:
-            case 9:
-                result = -1;
-                break;
-            case 8:
-            case 7:
-                result = -2;
-                break;
-            case 6:
-            case 5:
-                result = -4;
-                break;
-            case 4:
-            case 3:
-                result = -6;
-                break;
-            case 2:
-                result = -8;
-                break;
-            case 1:
-                result = -10;
-                break;
-            default:
-                if (roll >= 20) {
-                    result = 7 + (roll-20) % 5;
-                } else if (roll >= 15) {
-                    result = 2 + (roll-15) % 5;
-                }
-                break;
-        }
-
-        return result;
-    }
 
     @Override
     public Integer[] roll(final int number) {
