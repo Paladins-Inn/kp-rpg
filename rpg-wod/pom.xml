@@ -27,9 +27,9 @@
     <version>1.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>rpg-torg</artifactId>
-  <name>KP RPG :: TORG:Eternity</name>
-  <description>The TORG:Eternity special services.</description>
+  <artifactId>rpg-wod</artifactId>
+  <name>KP RPG :: World of Darkness</name>
+  <description>The WoD special services.</description>
 
   <dependencies>
     <dependency>
@@ -52,7 +52,7 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>--add-opens de.kaiserpfalzedv.rpg.torg/de.kaiserpfalzedv.rpg.torg.dice=ALL-UNNAMED</argLine>
+          <argLine>--add-opens de.kaiserpfalzedv.rpg.wod/de.kaiserpfalzedv.rpg.wod=ALL-UNNAMED</argLine>
         </configuration>
       </plugin>
     </plugins>
