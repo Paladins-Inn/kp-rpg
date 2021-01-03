@@ -35,9 +35,9 @@ public class DiceParser {
 
     static private final String DICE_PATTERN =
             "(?<amount>\\d+)?"
-            +"(?<dieType>[dD][0-9A-Za-z]+)"
+            +"(?<dieType>([dD])?[A-Za-z][0-9A-Za-z]+)"
             +"(?<add>[+-](?<D>\\d+))?"
-            +"(?<mult>[*x:\\/](?<C>\\d+))?";
+            +"((?<mult>[*x:\\/])(?<C>\\d+))?";
 
     static private final Pattern PATTERN = Pattern.compile(DICE_PATTERN);
 
@@ -77,8 +77,8 @@ public class DiceParser {
             }
 
             int amount = Integer.parseInt(amountDiceString);
-            double multiplier = Double.parseDouble(multiplierString);
             int add = Integer.parseInt(addString);
+            double multiplier = Double.parseDouble(multiplierString);
 
             String multiOrDivide = m.group("mult");
             if ("/".equals(multiOrDivide) || ":".equals(multiOrDivide)) {

@@ -94,41 +94,34 @@ public class Roller implements BotPlugin {
         Die die;
 
         switch (roll.getDieIdentifier().toUpperCase()) {
-            case "D2": die = new D2();
-            break;
+            case "D2": die = new D2(); break;
+            case "D4": die = new D4(); break;
+            case "D6": die = new D6(); break;
+            case "D8": die = new D8(); break;
+            case "D10": die = new D10(); break;
+            case "D12": die = new D12(); break;
+            case "D20": die = new D20(); break;
+            case "D100": die = new D100(); break;
 
-            case "D4": die = new D4();
-            break;
+            case "DBD":
+            case "BD":
+                die = new BD();
+                break;
 
-            case "D6": die = new D6();
-            break;
+            case "DT20":
+            case "T20":
+                die = new T20();
+                break;
 
-            case "D8": die = new D8();
-            break;
+            case "DT20M":
+            case "T20M":
+                die = new T20M();
+                break;
 
-            case "D10": die = new D10();
-            break;
-
-            case "D12": die = new D12();
-            break;
-
-            case "D20": die = new D20();
-            break;
-
-            case "D100": die = new D100();
-            break;
-
-            case "DBD": die = new BD();
-            break;
-
-            case "DT20": die = new T20();
-            break;
-
-            case "DT20M": die = new T20M();
-            break;
-
-            default: die = new BasicDie(Integer.parseInt(roll.getDieIdentifier().substring(2)));
+            default:
+                die = new BasicDie(Integer.parseInt(roll.getDieIdentifier().substring(1)));
         }
+        LOG.debug("Using die type: {}", die);
 
         Integer[] result = die.roll(roll.getNumberOfDice());
         result[0] = (int) Math.round((result[0] + roll.getAdd()) * roll.getMultiply());
