@@ -36,7 +36,7 @@ class TorgExplodingDie implements TorgDie {
     static private final int MAX = Integer.MAX_VALUE;
 
     private final Die baseDie;
-    private int min = 0;
+    private final int min;
 
     protected TorgExplodingDie(final Die baseDie, final int min) {
         this.min = min;
@@ -55,7 +55,7 @@ class TorgExplodingDie implements TorgDie {
         }
 
 
-        LOG.debug("TORG D20 result: {}", result);
+        LOG.debug("TORG Die({}): total={}", baseDie.getMax(), result);
         return result;
     }
 
@@ -67,7 +67,7 @@ class TorgExplodingDie implements TorgDie {
             roll = baseDie.roll();
             add = Math.min(roll, 5);
 
-            LOG.trace("TORG Die({}): result={}, roll={}, add={}", baseDie.getMax(), result, roll, add);
+            LOG.trace("TORG Die({}): total={}, roll={}, add={}", baseDie.getMax(), result, roll, add);
 
             result += add;
         } while (roll == 6);

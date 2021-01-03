@@ -29,7 +29,7 @@ import org.slf4j.MDC;
 public class TestDice {
     static final private Logger LOGGER = LoggerFactory.getLogger(TestDice.class);
 
-    private Die dice[] = {
+    private final Die[] dice = {
             new D2(),
             new D4(),
             new D6(),
@@ -37,7 +37,8 @@ public class TestDice {
             new D10(),
             new D12(),
             new D20(),
-            new D100()
+            new D100(),
+            new BasicDie(3)
     };
 
     @Test
@@ -77,13 +78,14 @@ public class TestDice {
     public void ShouldReturnAHash() {
         MDC.put("test", "check-hashcode");
 
-        Assertions.assertEquals(33, dice[0].hashCode(), "Wrong hash code");
-        Assertions.assertEquals(35, dice[1].hashCode(), "Wrong hash code");
-        Assertions.assertEquals(37, dice[2].hashCode(), "Wrong hash code");
-        Assertions.assertEquals(39, dice[3].hashCode(), "Wrong hash code");
-        Assertions.assertEquals(41, dice[4].hashCode(), "Wrong hash code");
-        Assertions.assertEquals(43, dice[5].hashCode(), "Wrong hash code");
-        Assertions.assertEquals(51, dice[6].hashCode(), "Wrong hash code");
+        Assertions.assertEquals(33, dice[0].hashCode(), "Wrong hash code for " + dice[0].getClass().getSimpleName());
+        Assertions.assertEquals(35, dice[1].hashCode(), "Wrong hash code for " + dice[1].getClass().getSimpleName());
+        Assertions.assertEquals(37, dice[2].hashCode(), "Wrong hash code for " + dice[2].getClass().getSimpleName());
+        Assertions.assertEquals(39, dice[3].hashCode(), "Wrong hash code for " + dice[3].getClass().getSimpleName());
+        Assertions.assertEquals(41, dice[4].hashCode(), "Wrong hash code for " + dice[4].getClass().getSimpleName());
+        Assertions.assertEquals(43, dice[5].hashCode(), "Wrong hash code for " + dice[5].getClass().getSimpleName());
+        Assertions.assertEquals(51, dice[6].hashCode(), "Wrong hash code for " + dice[6].getClass().getSimpleName());
+        Assertions.assertEquals(131, dice[7].hashCode(), "Wrong hash code for " + dice[7].getClass().getSimpleName());
     }
 
     @Test
@@ -94,7 +96,7 @@ public class TestDice {
             String result = dice[i].toString();
             int max = dice[i].getMax();
 
-            Assertions.assertTrue(result.startsWith("BasicDie@"));
+            Assertions.assertTrue(result.startsWith(dice[i].getClass().getSimpleName() + "@"));
             Assertions.assertTrue(result.endsWith("[max=" + max + "]"));
         }
     }

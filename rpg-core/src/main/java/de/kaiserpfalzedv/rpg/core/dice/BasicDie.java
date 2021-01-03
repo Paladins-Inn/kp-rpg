@@ -91,7 +91,7 @@ public class BasicDie implements Die {
     @Override
     public final String toString() {
         return new StringJoiner(", ",
-                BasicDie.class.getSimpleName() + "@" + System.identityHashCode(this) + "[",
+                getClass().getSimpleName() + "@" + System.identityHashCode(this) + "[",
                 "]")
                 .add("max=" + max)
                 .toString();

@@ -114,6 +114,17 @@ public class TestDiceParser {
         checkResult(result, 8, "D10", 5, 6d);
     }
 
+    @Test
+    public void ShouldParseDieWhenTypeOfDieAndDivisorIsDefined() {
+        MDC.put("test", "type-divisor");
+
+        String input = "D10/2";
+
+        Optional<DieRoll> result = sut.parse(input);
+
+        checkResult(result, 1, "D10", 0, 0.5d);
+    }
+
     /**
      * Checks the result against the given parameters.
      *
