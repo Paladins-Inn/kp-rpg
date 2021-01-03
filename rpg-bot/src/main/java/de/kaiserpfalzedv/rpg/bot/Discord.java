@@ -15,9 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.torg;
+package de.kaiserpfalzedv.rpg.bot;
 
 
+import de.kaiserpfalzedv.rpg.bot.dice.Roller;
+import io.quarkus.runtime.StartupEvent;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -27,39 +29,52 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.security.auth.login.LoginException;
 
-@Singleton
-public class Main extends ListenerAdapter {
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+@ApplicationScoped
+public class Discord extends ListenerAdapter {
+    private static final Logger LOG = LoggerFactory.getLogger(Discord.class);
 
     @ConfigProperty(name = "discord.token", defaultValue = "")
     String discordToken;
 
     JDA bot;
 
-    @PostConstruct
-    void initializeBot() throws LoginException {
+    BotPlugin[] plugins = {new Roller()};
+
+    private long requests = 0;
+
+    void startup(@Observes StartupEvent event) throws LoginException {
         JDABuilder builder = new JDABuilder(AccountType.BOT);
         builder.setToken(discordToken);
         builder.addEventListener(this);
         bot = builder.buildAsync();
 
-        LOG.trace("Created BOT: token={}", discordToken);
+        LOG.info("Created BOT: bot={}, plugins.count={}", bot.asBot().getInviteUrl(), plugins.length);
+
+        for (BotPlugin p : plugins) {
+            LOG.debug("- Plugin: {}", p);
+        }
     }
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        LOG.debug("Received message: topic={}, from={}, message={}",
-                event.getTextChannel().getTopic(),
+        LOG.debug("Received message: channel.id='{}', from='{}', message='{}'",
+                event.getTextChannel().getId(),
                 event.getAuthor().getName(),
-                event.getMessage().getContentDisplay()
+                event.getMessage().getContentRaw()
         );
 
-        if (event.getMessage().getContentRaw().equals("!ping")) {
-            event.getChannel().sendMessage("/tts pong!");
+        requests++;
+
+        for (BotPlugin p : plugins) {
+            p.work(event);
         }
+    }
+
+    public long getRequests() {
+        return requests;
     }
 }

@@ -15,21 +15,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.dice;
+package de.kaiserpfalzedv.rpg.bot;
 
-import de.kaiserpfalzedv.rpg.core.dice.D6;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-/**
- * BD is an exploding D6.
- *
- * If a 6 is rolled, it is added as 5 and another die is rolled and added. If a 6 is rolled again, 5 will be added and
- * another die is rolled again. You recognize the pattern.
- *
- * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 2021-01-02
- */
-public class BD extends TorgExplodingDie implements TorgDie {
-    public BD() {
-        super(new D6(), 0);
+@Path("/admin")
+public class AdminService {
+
+    @Inject
+    Discord discordBot;
+
+    @GET
+    @Path("/")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response ping() {
+        return Response.ok("pong: " + discordBot.getRequests())
+                .build();
     }
 }

@@ -124,8 +124,8 @@
     <maven-checkstyle-plugin>3.1.1</maven-checkstyle-plugin>
 
     <maven.compiler.parameters>true</maven.compiler.parameters>
-    <maven.compiler.source>15</maven.compiler.source>
-    <maven.compiler.target>15</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -418,6 +418,7 @@
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-smallrye-health</artifactId>
         </dependency>
+
         <dependency>
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-junit5</artifactId>
@@ -463,6 +464,8 @@
         </plugins>
       </build>
     </profile>
+
+
     <profile>
       <id>native</id>
       <activation>
@@ -474,7 +477,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-failsafe-plugin</artifactId>
-            <version>${surefire-plugin.version}</version>
+            <version>3.0.0-M5</version>
             <executions>
               <execution>
                 <goals>

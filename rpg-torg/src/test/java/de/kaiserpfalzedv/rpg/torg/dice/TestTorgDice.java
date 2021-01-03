@@ -31,8 +31,8 @@ public class TestTorgDice {
 
     private final TorgDie[] dice = {
             new BD(),
-            new TD20(),
-            new TD20min()
+            new T20(),
+            new T20M()
     };
 
 
@@ -87,7 +87,7 @@ public class TestTorgDice {
 
             LOGGER.debug("max={}, string={}", max, result);
 
-            Assertions.assertTrue(result.startsWith("DTorg@"));
+            Assertions.assertTrue(result.startsWith(TorgExplodingDie.class.getSimpleName() + "@"));
             Assertions.assertTrue(result.endsWith("[max=" + max + ", min=" + min + "]"));
         }
     }

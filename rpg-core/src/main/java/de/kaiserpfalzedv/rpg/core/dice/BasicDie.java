@@ -38,7 +38,7 @@ public class BasicDie implements Die {
      */
     private final int max;
 
-    protected BasicDie(final int max) {
+    public BasicDie(final int max) {
         this.max = max;
     }
 

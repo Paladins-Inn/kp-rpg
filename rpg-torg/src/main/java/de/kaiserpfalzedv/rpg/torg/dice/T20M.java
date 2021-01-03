@@ -20,13 +20,16 @@ package de.kaiserpfalzedv.rpg.torg.dice;
 import de.kaiserpfalzedv.rpg.core.dice.D20;
 
 /**
- * This is an exploding D20 with no minimum value when exploding.
+ * This is an exploding D20 with a minimum of 10 when exploding.
+ *
+ * Every 10 and 20 is rerolled and added until no 10 or 20 is rolled. If the last roll is less than 10, then at least 10
+ * is added.
  *
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2021-01-02
  */
-public class TD20 extends DTorg implements TorgDie {
-    public TD20() {
-        super(new D20(), 0);
+public class T20M extends TorgExplodingDie implements TorgDie {
+    public T20M() {
+        super(new D20(), 10);
     }
 }

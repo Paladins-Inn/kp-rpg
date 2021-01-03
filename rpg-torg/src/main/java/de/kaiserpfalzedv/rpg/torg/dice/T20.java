@@ -17,19 +17,18 @@
 
 package de.kaiserpfalzedv.rpg.torg.dice;
 
-import de.kaiserpfalzedv.rpg.core.dice.D6;
+import de.kaiserpfalzedv.rpg.core.dice.D20;
 
 /**
- * BD is an exploding D6.
+ * This is an exploding D20 with no minimum value when exploding.
  *
- * If a 6 is rolled, it is added as 5 and another die is rolled and added. If a 6 is rolled again, 5 will be added and
- * another die is rolled again. You recognize the pattern.
+ * Every 10 and 20 is rerolled until no 10 or 20 is rolled any more.
  *
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2021-01-02
  */
-public class BD extends TorgExplodingDie implements TorgDie {
-    public BD() {
-        super(new D6(), 0);
+public class T20 extends TorgExplodingDie implements TorgDie {
+    public T20() {
+        super(new D20(), 0);
     }
 }
