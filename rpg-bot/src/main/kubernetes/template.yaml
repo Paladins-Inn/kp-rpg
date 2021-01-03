@@ -200,7 +200,7 @@ objects:
               scheme: HTTP
             periodSeconds: 20
             timeoutSeconds: 5
-            initialDelaySeconds: 40
+            initialDelaySeconds: 10
             successThreshold: 1
             failureThreshold: 3
           readinessProbe:
@@ -210,7 +210,7 @@ objects:
               scheme: HTTP
             periodSeconds: 20
             timeoutSeconds: 5
-            initialDelaySeconds: 40
+            initialDelaySeconds: 10
             successThreshold: 1
             failureThreshold: 1
           volumeMounts:

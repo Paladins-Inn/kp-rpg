@@ -31,14 +31,14 @@ import java.util.StringJoiner;
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2021-01-02
  */
-class DTorg implements TorgDie {
-    static private final Logger LOG = LoggerFactory.getLogger(DTorg.class);
+class TorgExplodingDie implements TorgDie {
+    static private final Logger LOG = LoggerFactory.getLogger(TorgExplodingDie.class);
     static private final int MAX = Integer.MAX_VALUE;
 
-    private Die baseDie;
+    private final Die baseDie;
     private int min = 0;
 
-    protected DTorg(final Die baseDie, final int min) {
+    protected TorgExplodingDie(final Die baseDie, final int min) {
         this.min = min;
         this.baseDie = baseDie;
     }
@@ -88,16 +88,67 @@ class DTorg implements TorgDie {
             result += add;
         } while (roll == 10 || roll == 20);
 
+        return lookupBonus(result);
+    }
+
+    private int lookupBonus(final int roll) {
+        int result = 0;
+
+        switch (roll) {
+            case 14:
+            case 13:
+                result = 1;
+                break;
+            case 12:
+            case 11:
+                result = 0;
+                break;
+            case 10:
+            case 9:
+                result = -1;
+                break;
+            case 8:
+            case 7:
+                result = -2;
+                break;
+            case 6:
+            case 5:
+                result = -4;
+                break;
+            case 4:
+            case 3:
+                result = -6;
+                break;
+            case 2:
+                result = -8;
+                break;
+            case 1:
+                result = -10;
+                break;
+            default:
+                if (roll >= 20) {
+                    result = 7 + (roll-20) % 5;
+                } else if (roll >= 15) {
+                    result = 2 + (roll-15) % 5;
+                }
+                break;
+        }
+
         return result;
     }
 
     @Override
     public Integer[] roll(final int number) {
         ArrayList<Integer> result = new ArrayList<>();
+        result.add(0); // reserve the first element for the total
 
+        int total = 0;
         for (int i = 0; i < number; i++) {
-            result.add(roll());
+            int roll = roll();
+            total += roll;
+            result.add(roll);
         }
+        result.set(0, total);
 
         return result.toArray(new Integer[0]);
     }
@@ -114,9 +165,9 @@ class DTorg implements TorgDie {
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DTorg)) return false;
+        if (!(o instanceof TorgExplodingDie)) return false;
 
-        DTorg other = (DTorg) o;
+        TorgExplodingDie other = (TorgExplodingDie) o;
 
         LOG.trace("min={}, other.min={}", min, other.min);
         if (min != other.min) return false;
@@ -131,7 +182,7 @@ class DTorg implements TorgDie {
     @Override
     public final String toString() {
         return new StringJoiner(", ",
-                DTorg.class.getSimpleName() + "@" + System.identityHashCode(this) + "[",
+                TorgExplodingDie.class.getSimpleName() + "@" + System.identityHashCode(this) + "[",
                 "]")
                 .add("max=" + MAX)
                 .add("min=" + min)

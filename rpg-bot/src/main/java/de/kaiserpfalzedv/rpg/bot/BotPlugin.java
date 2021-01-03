@@ -15,18 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.dice;
+package de.kaiserpfalzedv.rpg.bot;
 
-import de.kaiserpfalzedv.rpg.core.dice.D20;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 /**
- * This is an exploding D20 with a minimum of 10 when exploding.
- *
- * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 2021-01-02
+ * The interface for all plugins.
+ * @author klenkes74
+ * @since 2020-01-02
  */
-public class TD20min extends DTorg implements TorgDie {
-    public TD20min() {
-        super(new D20(), 10);
-    }
+public interface BotPlugin {
+    /**
+     *
+     * @param event The event to work on.
+     */
+    void work(final MessageReceivedEvent event);
 }
