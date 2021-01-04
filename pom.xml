@@ -25,9 +25,22 @@
   <artifactId>kp-rpg</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-
   <name>KP RPG :: Base</name>
   <description>kp-rpg is a framework for tabletop RPG supporting function and services.</description>
+
+  <modules>
+    <module>rpg-core</module>
+    <module>rpg-torg</module>
+    <module>rpg-traveller</module>
+    <module>rpg-hexxen</module>
+    <module>rpg-fate</module>
+    <module>rpg-wod</module>
+    <module>rpg-saga</module>
+    <module>rpg-dsa5</module>
+    <module>rpg-bot</module>
+  </modules>
+
+
   <inceptionYear>2020</inceptionYear>
 
   <licenses>
@@ -75,12 +88,6 @@
     <developerConnection>scm:git:git@github.com:klenkes74/kp-rpg.git</developerConnection>
   </scm>
 
-  <modules>
-    <module>rpg-core</module>
-    <module>rpg-torg</module>
-    <module>rpg-bot</module>
-  </modules>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -92,6 +99,14 @@
         <groupId>de.kaiserpfalz-edv.rpg</groupId>
         <artifactId>rpg-torg</artifactId>
         <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>${quarkus.platform.artifact-id}</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
 
       <dependency>
@@ -405,19 +420,6 @@
     <profile>
       <id>quarkus</id>
       <activation><file><exists>src/main/resources/application.properties</exists></file></activation>
-
-      <dependencyManagement>
-        <dependencies>
-          <dependency>
-            <groupId>${quarkus.platform.group-id}</groupId>
-            <artifactId>${quarkus.platform.artifact-id}</artifactId>
-            <version>${quarkus.platform.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-          </dependency>
-        </dependencies>
-      </dependencyManagement>
-
 
       <dependencies>
         <dependency>
