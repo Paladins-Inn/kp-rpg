@@ -15,66 +15,55 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot;
+package de.kaiserpfalzedv.rpg.bot.discord.dice;
 
-
-import de.kaiserpfalzedv.rpg.bot.dice.Roller;
+import de.kaiserpfalzedv.rpg.bot.discord.DiscordDispatcher;
 import io.quarkus.runtime.StartupEvent;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.security.auth.login.LoginException;
+import java.util.StringJoiner;
 
-@ApplicationScoped
-public class Discord extends ListenerAdapter {
-    private static final Logger LOG = LoggerFactory.getLogger(Discord.class);
+@Singleton
+public class DiscordBotConnector {
+    private static final Logger LOG = LoggerFactory.getLogger(DiscordBotConnector.class);
+
+    private static JDA bot;
 
     @ConfigProperty(name = "discord.token", defaultValue = "")
     String discordToken;
 
-    JDA bot;
+    @Inject
+    DiscordDispatcher dispatcher;
 
-    BotPlugin[] plugins = {new Roller()};
-
-    private long requests = 0;
-
-    void startup(@Observes StartupEvent event) throws LoginException {
+    void startup(@Observes StartupEvent event) {
         JDABuilder builder = new JDABuilder(AccountType.BOT);
         builder.setToken(discordToken);
-        builder.addEventListener(this);
-        bot = builder.buildAsync();
+        builder.addEventListener(dispatcher);
 
-        LOG.info("Created BOT: bot={}, plugins.count={}", bot.asBot().getInviteUrl(), plugins.length);
+        try {
+            bot = builder.buildAsync();
+        } catch (LoginException e) {
+            LOG.error("Could not login to Discord: " + e.getMessage(), e);
 
-        for (BotPlugin p : plugins) {
-            LOG.debug("- Plugin: {}", p);
+            throw new IllegalStateException("Login to Discord failed: " + e.getMessage());
         }
+
+        LOG.info("Created Discord connect: {}", bot.asBot().getInviteUrl());
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
-        LOG.debug("Received message: channel.id='{}', from='{}', message='{}'",
-                event.getTextChannel().getId(),
-                event.getAuthor().getName(),
-                event.getMessage().getContentRaw()
-        );
-
-        requests++;
-
-        for (BotPlugin p : plugins) {
-            p.work(event);
-        }
-    }
-
-    public long getRequests() {
-        return requests;
+    public String toString() {
+        return new StringJoiner(", ", getClass().getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")
+                .add("dispatcher=" + dispatcher)
+                .toString();
     }
 }

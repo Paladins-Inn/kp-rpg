@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg.dice;
 
+import de.kaiserpfalzedv.rpg.torg.BonusChart;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +28,9 @@ import org.slf4j.MDC;
  * @since 2020-08-12
  */
 public class TestTorgDice {
-    static final private Logger LOGGER = LoggerFactory.getLogger(TestTorgDice.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TestTorgDice.class);
 
-    private final TorgDie[] dice = {
+    private static final TorgDie[] dice = {
             new BD(),
             new T20(),
             new T20M()
@@ -40,8 +41,9 @@ public class TestTorgDice {
     public void ShouldBeEqualWhenCompatibleDiceAreCompared() {
         MDC.put("test", "equals-compatible-dice");
 
-        Assertions.assertEquals(dice[0], dice[0]);
-        Assertions.assertEquals(dice[1], dice[1]);
+        for(TorgDie die : dice) {
+            Assertions.assertEquals(die, die, "Dice '" + die.getDieType() + "' should be equal to '" + die.getDieType() + "'.");
+        }
     }
 
     @Test
@@ -49,11 +51,13 @@ public class TestTorgDice {
         MDC.put("test", "test-throws");
 
         for (TorgDie die : dice) {
+            LOG.trace("Testing rolling die: {}", die);
+
             int result = die.roll();
 
             Integer[] results = die.roll(10);
 
-            LOGGER.info("die={}, result={}, results={}", die.getClass().getSimpleName(), result, results);
+            LOG.info("die={}, result={}, results={}", die.getClass().getSimpleName(), result, results);
         }
     }
 
@@ -61,7 +65,7 @@ public class TestTorgDice {
     public void ShouldNotBeEqualWhenDifferentDiceAreCompared() {
         MDC.put("test", "not-equal-dice");
 
-        LOGGER.trace("equals: dice[1]={}, dice[0]={}", dice[1].hashCode(), dice[0].hashCode());
+        LOG.trace("equals: dice[1]={}, dice[0]={}", dice[1].hashCode(), dice[0].hashCode());
 
         Assertions.assertNotEquals(dice[1], dice[0]);
         Assertions.assertNotEquals(dice[0], dice[1]);
@@ -85,9 +89,9 @@ public class TestTorgDice {
             int max = die.getMax();
             int min = die.getMin();
 
-            LOGGER.debug("max={}, string={}", max, result);
+            LOG.debug("max={}, string={}", max, result);
 
-            Assertions.assertTrue(result.startsWith(TorgExplodingDie.class.getSimpleName() + "@"));
+            Assertions.assertTrue(result.startsWith(die.getClass().getSimpleName() + "@"));
             Assertions.assertTrue(result.endsWith("[max=" + max + ", min=" + min + "]"));
         }
     }
@@ -100,6 +104,10 @@ public class TestTorgDice {
     @BeforeAll
     static void setUp() {
         MDC.put("test-class", TestTorgDice.class.getSimpleName());
+
+        BonusChart bonusChart = new BonusChart();
+        ((T20)dice[1]).bonusChart = bonusChart;
+        ((T20M)dice[2]).bonusChart = bonusChart;
     }
 
     @AfterAll

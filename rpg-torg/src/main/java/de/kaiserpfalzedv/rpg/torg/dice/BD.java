@@ -19,6 +19,8 @@ package de.kaiserpfalzedv.rpg.torg.dice;
 
 import de.kaiserpfalzedv.rpg.core.dice.D6;
 
+import javax.enterprise.context.Dependent;
+
 /**
  * BD is an exploding D6.
  *
@@ -28,6 +30,7 @@ import de.kaiserpfalzedv.rpg.core.dice.D6;
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2021-01-02
  */
+@Dependent
 public class BD extends TorgExplodingDie implements TorgDie {
     public BD() {
         super(new D6(), 0);

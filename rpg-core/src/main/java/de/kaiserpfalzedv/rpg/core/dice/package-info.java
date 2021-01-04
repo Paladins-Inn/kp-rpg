@@ -15,19 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot;
-
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-
 /**
- * The interface for all plugins.
+ * de-kaiserpfalzedv.rpg.core.dice -- The basics of die rolls.
+ *
+ * The package contains the basic die type rolled during roll play.
+ *
  * @author klenkes74
- * @since 2020-01-02
+ * @since 1.0.0 2020-01-02
  */
-public interface BotPlugin {
-    /**
-     *
-     * @param event The event to work on.
-     */
-    void work(final MessageReceivedEvent event);
-}
+package de.kaiserpfalzedv.rpg.core.dice;

@@ -32,9 +32,10 @@ public class DieRoll {
     private final int add;
     private final double multiply;
 
-    public DieRoll(int numberOfDice, String dieIdentifier, int add, double multiply) {
+
+    public DieRoll(final int numberOfDice, final String dieIdentifier, final int add, final double multiply) {
         this.numberOfDice = numberOfDice;
-        this.dieIdentifier = dieIdentifier;
+        this.dieIdentifier = dieIdentifier.toUpperCase();
         this.add = add;
         this.multiply = multiply;
     }
@@ -73,7 +74,7 @@ public class DieRoll {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", DieRoll.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", getClass().getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")
                 .add("numberOfDice=" + numberOfDice)
                 .add("dieIdentifier='" + dieIdentifier + "'")
                 .add("add=" + add)

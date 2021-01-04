@@ -17,10 +17,13 @@
 
 package de.kaiserpfalzedv.rpg.core.dice;
 
+import javax.enterprise.context.Dependent;
+
 /**
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2020-08-12
  */
+@Dependent
 public class D8 extends BasicDie {
     public static final int MAX = 8;
 

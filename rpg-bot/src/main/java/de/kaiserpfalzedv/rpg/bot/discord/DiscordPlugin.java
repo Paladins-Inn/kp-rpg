@@ -15,19 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.dice;
+package de.kaiserpfalzedv.rpg.bot.discord;
 
-import javax.enterprise.context.Dependent;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 /**
- * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 2020-08-12
+ * The interface for all plugins.
+ * @author klenkes74
+ * @since 2020-01-02
  */
-@Dependent
-public class D12 extends BasicDie {
-    public static final int MAX = 12;
-
-    public D12() {
-        super(MAX);
-    }
+public interface DiscordPlugin {
+    /**
+     *
+     * @param event The event to work on.
+     */
+    void work(final MessageReceivedEvent event);
 }

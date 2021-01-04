@@ -29,15 +29,19 @@
   <description>kp-rpg is a framework for tabletop RPG supporting function and services.</description>
 
   <modules>
+    <module>rpg-bot</module>
+
     <module>rpg-core</module>
     <module>rpg-torg</module>
+
+<!--
     <module>rpg-traveller</module>
     <module>rpg-hexxen</module>
     <module>rpg-fate</module>
     <module>rpg-wod</module>
     <module>rpg-saga</module>
     <module>rpg-dsa5</module>
-    <module>rpg-bot</module>
+-->
   </modules>
 
 

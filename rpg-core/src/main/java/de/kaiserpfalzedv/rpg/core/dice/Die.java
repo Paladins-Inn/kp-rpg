@@ -17,8 +17,6 @@
 
 package de.kaiserpfalzedv.rpg.core.dice;
 
-import java.io.Serializable;
-
 /**
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2020-08-12
@@ -43,4 +41,11 @@ public interface Die {
      * @return the maximum number on this die.
      */
     int getMax();
+
+    /**
+     * @return The name of the die.
+     */
+    default String getDieType() {
+        return getClass().getSimpleName();
+    }
 }
