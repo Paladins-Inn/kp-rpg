@@ -20,7 +20,9 @@ package de.kaiserpfalzedv.rpg.core.dice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.context.Dependent;
 import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +32,7 @@ import java.util.regex.Pattern;
  * @author klenkes74
  * @since 2020-01-03
  */
+@Dependent
 public class DiceParser {
     static private final Logger LOG = LoggerFactory.getLogger(DiceParser.class);
 
@@ -89,5 +92,11 @@ public class DiceParser {
         }
 
         return Optional.ofNullable(result);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", DiceParser.class.getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")
+                .toString();
     }
 }

@@ -43,7 +43,7 @@ class TorgExplodingDie implements TorgDie {
     @Inject
     BonusChart bonusChart;
 
-    protected TorgExplodingDie(final TorgDie baseDie, final int min) {
+    protected TorgExplodingDie(final Die baseDie, final int min) {
         this.min = min;
         this.baseDie = baseDie;
     }
@@ -143,7 +143,7 @@ class TorgExplodingDie implements TorgDie {
     @Override
     public final String toString() {
         return new StringJoiner(", ",
-                TorgExplodingDie.class.getSimpleName() + "@" + System.identityHashCode(this) + "[",
+                getClass().getSimpleName() + "@" + System.identityHashCode(this) + "[",
                 "]")
                 .add("max=" + MAX)
                 .add("min=" + min)

@@ -19,6 +19,8 @@ package de.kaiserpfalzedv.rpg.torg.dice;
 
 import de.kaiserpfalzedv.rpg.core.dice.D20;
 
+import javax.enterprise.context.Dependent;
+
 /**
  * This is an exploding D20 with a minimum of 10 when exploding.
  *
@@ -28,6 +30,7 @@ import de.kaiserpfalzedv.rpg.core.dice.D20;
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2021-01-02
  */
+@Dependent
 public class T20M extends TorgExplodingDie implements TorgDie {
     public T20M() {
         super(new D20(), 10);
