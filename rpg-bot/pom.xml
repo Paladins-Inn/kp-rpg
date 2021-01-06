@@ -41,6 +41,30 @@
     </dependency>
     <dependency>
       <groupId>de.kaiserpfalz-edv.rpg</groupId>
+      <artifactId>rpg-traveller</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.kaiserpfalz-edv.rpg</groupId>
+      <artifactId>rpg-dsa5</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.kaiserpfalz-edv.rpg</groupId>
+      <artifactId>rpg-fate</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.kaiserpfalz-edv.rpg</groupId>
+      <artifactId>rpg-hexxen</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.kaiserpfalz-edv.rpg</groupId>
+      <artifactId>rpg-saga</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.kaiserpfalz-edv.rpg</groupId>
+      <artifactId>rpg-wod</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.kaiserpfalz-edv.rpg</groupId>
       <artifactId>rpg-torg</artifactId>
     </dependency>
 
@@ -53,6 +77,14 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-vertx</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-elytron-security-oauth2</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

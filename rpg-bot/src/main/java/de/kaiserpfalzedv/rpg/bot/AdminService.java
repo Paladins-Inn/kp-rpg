@@ -17,6 +17,8 @@
 
 package de.kaiserpfalzedv.rpg.bot;
 
+import javax.annotation.security.RolesAllowed;
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -30,6 +32,8 @@ import javax.ws.rs.core.Response;
  * @since 2020-01-02
  */
 @Path("/admin")
+@RolesAllowed({"admin"})
+@ApplicationScoped
 public class AdminService {
 
     @GET

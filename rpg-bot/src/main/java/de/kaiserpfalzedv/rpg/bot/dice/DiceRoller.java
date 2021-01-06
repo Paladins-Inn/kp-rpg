@@ -22,23 +22,28 @@ import de.kaiserpfalzedv.rpg.core.dice.DiceParser;
 import de.kaiserpfalzedv.rpg.core.dice.Die;
 import de.kaiserpfalzedv.rpg.core.dice.DieRoll;
 import io.quarkus.runtime.StartupEvent;
+import io.quarkus.vertx.ConsumeEvent;
+import io.vertx.mutiny.core.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.StringJoiner;
 
-@Singleton
+@ApplicationScoped
 public class DiceRoller {
     static private final Logger LOG = LoggerFactory.getLogger(DiceRoller.class);
 
     @Inject
     DiceParser parser;
+
+    @Inject
+    EventBus bus;
 
     @Inject
     Instance<Die> diceInstances;
@@ -50,6 +55,7 @@ public class DiceRoller {
         LOG.info("Created die roller plugin {}: parser={}, dice={}", this, parser, dice);
     }
 
+    @ConsumeEvent("throw-dice")
     public String work(final String dieRollString) {
         StringBuilder textBuilder = new StringBuilder();
 

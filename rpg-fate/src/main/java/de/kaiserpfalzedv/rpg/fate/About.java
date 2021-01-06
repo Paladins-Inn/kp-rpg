@@ -15,23 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.discord;
+package de.kaiserpfalzedv.rpg.fate;
 
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import java.util.StringJoiner;
 
 /**
- * The plugin for all Discord plugins. The plugin has to create the answer and send it.
- * This is a "fire and forget" interface.
  *
  * @author klenkes74
- * @since 1.0.0 2021-01-06
+ * @since 1.0.0 2021-01-05
  */
-public interface DiscordPlugin {
-    /**
-     * The command execution of this plugin. All plugins get all events and have to decide to react on it or not.
-     *
-     * @param event The event to work on.
-     * @throws DiscordPluginException If any problem occurred.
-     */
-    void work(MessageReceivedEvent event) throws DiscordPluginException;
+public class About {
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", About.class.getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")
+                .toString();
+    }
 }

@@ -15,26 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.dice;
+package de.kaiserpfalzedv.rpg.fate.dice;
 
+import de.kaiserpfalzedv.rpg.core.dice.D2;
+import de.kaiserpfalzedv.rpg.core.dice.Die;
 import org.junit.jupiter.api.*;
 import org.slf4j.MDC;
 
-/**
- * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 2020-08-12
- */
 public class TestDice {
     private final Die[] dice = {
-            new D2(),
-            new D4(),
-            new D6(),
-            new D8(),
-            new D10(),
-            new D12(),
-            new D20(),
-            new D100(),
-            new BasicDie(3)
+            new FATE(),
+            new D2()
     };
 
     @Test
@@ -48,7 +39,7 @@ public class TestDice {
             for (int j = 1; j < result.length; j++) {
                 sum += result[j];
                 Assertions.assertTrue(result[j] <= die.getMax(), "No die roll should be above " + die.getMax());
-                Assertions.assertTrue(result[j] >= 1, "No die roll should be below 1");
+                Assertions.assertTrue(result[j] >= -1, "No die roll should be below -1");
             }
 
             Assertions.assertEquals(sum, result[0], "The result should match.");
@@ -59,7 +50,7 @@ public class TestDice {
     public void ShouldBeEqualWhenCompatibleDiceAreCompared() {
         MDC.put("test", "equals-compatible-dice");
 
-        Assertions.assertEquals(dice[1], dice[1]);
+        Assertions.assertEquals(dice[0], dice[0]);
     }
 
 
@@ -67,21 +58,14 @@ public class TestDice {
     public void ShouldNotBeEqualWhenDifferentDiceAreCompared() {
         MDC.put("test", "not-equal-dice");
 
-        Assertions.assertNotEquals(dice[1], dice[2]);
+        Assertions.assertNotEquals(dice[0], dice[1]);
     }
 
     @Test
     public void ShouldReturnAHash() {
         MDC.put("test", "check-hashcode");
 
-        Assertions.assertEquals(33, dice[0].hashCode(), "Wrong hash code for " + dice[0].getClass().getSimpleName());
-        Assertions.assertEquals(35, dice[1].hashCode(), "Wrong hash code for " + dice[1].getClass().getSimpleName());
-        Assertions.assertEquals(37, dice[2].hashCode(), "Wrong hash code for " + dice[2].getClass().getSimpleName());
-        Assertions.assertEquals(39, dice[3].hashCode(), "Wrong hash code for " + dice[3].getClass().getSimpleName());
-        Assertions.assertEquals(41, dice[4].hashCode(), "Wrong hash code for " + dice[4].getClass().getSimpleName());
-        Assertions.assertEquals(43, dice[5].hashCode(), "Wrong hash code for " + dice[5].getClass().getSimpleName());
-        Assertions.assertEquals(51, dice[6].hashCode(), "Wrong hash code for " + dice[6].getClass().getSimpleName());
-        Assertions.assertEquals(131, dice[7].hashCode(), "Wrong hash code for " + dice[7].getClass().getSimpleName());
+        Assertions.assertEquals(34, dice[0].hashCode(), "Wrong hash code for " + dice[0].getClass().getSimpleName());
     }
 
     @Test

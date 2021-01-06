@@ -52,7 +52,10 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>--add-opens de.kaiserpfalzedv.rpg.fate/de.kaiserpfalzedv.rpg.fate=ALL-UNNAMED</argLine>
+          <argLine>
+            --add-opens de.kaiserpfalzedv.rpg.fate/de.kaiserpfalzedv.rpg.fate=ALL-UNNAMED
+            --add-opens de.kaiserpfalzedv.rpg.fate/de.kaiserpfalzedv.rpg.fate.dice=ALL-UNNAMED
+          </argLine>
         </configuration>
       </plugin>
     </plugins>

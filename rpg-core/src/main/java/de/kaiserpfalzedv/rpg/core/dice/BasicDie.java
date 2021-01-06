@@ -48,7 +48,7 @@ public class BasicDie implements Die {
     }
 
     @Override
-    public final int roll() {
+    public int roll() {
         return (int) (Math.random( ) * max + 1);
     }
 

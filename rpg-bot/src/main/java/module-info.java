@@ -13,7 +13,12 @@ module de.kaiserpfalzedv.rpg.bot {
     requires quarkus.core;
     requires microprofile.config.api;
     requires java.ws.rs;
+    requires java.annotation;
     requires jakarta.inject.api;
     requires jakarta.enterprise.cdi.api;
     requires jakarta.interceptor.api;
+    requires quarkus.vertx;
+    requires smallrye.common.annotation;
+    requires smallrye.mutiny.vertx.core;
+    requires io.smallrye.mutiny;
 }

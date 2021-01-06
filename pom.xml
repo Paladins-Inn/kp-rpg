@@ -30,18 +30,15 @@
 
   <modules>
     <module>rpg-bot</module>
-
     <module>rpg-core</module>
-    <module>rpg-torg</module>
 
-<!--
-    <module>rpg-traveller</module>
+    <module>rpg-torg</module>
     <module>rpg-hexxen</module>
-    <module>rpg-fate</module>
-    <module>rpg-wod</module>
     <module>rpg-saga</module>
+    <module>rpg-fate</module>
+    <module>rpg-traveller</module>
     <module>rpg-dsa5</module>
--->
+    <module>rpg-wod</module>
   </modules>
 
 
@@ -102,6 +99,36 @@
       <dependency>
         <groupId>de.kaiserpfalz-edv.rpg</groupId>
         <artifactId>rpg-torg</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <artifactId>rpg-traveller</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <artifactId>rpg-dsa5</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <artifactId>rpg-fate</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <artifactId>rpg-hexxen</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <artifactId>rpg-saga</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <artifactId>rpg-wod</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
 
