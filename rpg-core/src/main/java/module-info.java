@@ -4,4 +4,6 @@ module de.kaiserpfalzedv.rpg.core {
     requires org.slf4j;
     requires jakarta.inject.api;
     requires jakarta.enterprise.cdi.api;
+
+    requires exp4j;
 }

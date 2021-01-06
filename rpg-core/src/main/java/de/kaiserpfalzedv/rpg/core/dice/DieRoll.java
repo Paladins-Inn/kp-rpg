@@ -17,43 +17,58 @@
 
 package de.kaiserpfalzedv.rpg.core.dice;
 
+import net.objecthunter.exp4j.Expression;
+
 import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
  * DiceRollCommand -- A generic die roll command object.
  *
- * This is a generic die roll. It specifies how many dice should be thrown and what amount should be added (or
- * subtracted). The result then will be multiplied (or divided) by the multiply value.
+ * This is a generic die roll. It specifies a die type and an expression to be evaluated after the die roll is
+ * put as "x" into the equation:
+ *
+ * <code>
+ *      DieRoll roll = ...
+ *      int result = roll.eval(&lt;die roll total&gt;);
+ * </code>
  */
 public class DieRoll {
-    private final int numberOfDice;
     private final String dieIdentifier;
-    private final int add;
-    private final double multiply;
+    private final int amountOfDice;
+    private final Expression expression;
 
 
-    public DieRoll(final int numberOfDice, final String dieIdentifier, final int add, final double multiply) {
-        this.numberOfDice = numberOfDice;
-        this.dieIdentifier = dieIdentifier.toUpperCase();
-        this.add = add;
-        this.multiply = multiply;
+    public DieRoll(final String dieType, final int amountOfDice, final Expression expression) {
+        this.dieIdentifier = dieType.toUpperCase();
+        this.amountOfDice = amountOfDice;
+        this.expression = expression;
     }
 
-    public int getNumberOfDice() {
-        return numberOfDice;
+    /**
+     * This function evaluates the whole die expression and rounds according to mathematical rules.
+     *
+     * @param die Die to roll.
+     * @return The total of the die roll.
+     */
+    public Integer[] eval(final Die die) {
+        Integer[] result = die.roll(amountOfDice);
+
+        result[0] = (int) Math.round(expression.setVariable("x", result[0]).evaluate());
+
+        return result;
     }
 
     public String getDieIdentifier() {
         return dieIdentifier;
     }
 
-    public int getAdd() {
-        return add;
+    public int getAmountOfDice() {
+        return amountOfDice;
     }
 
-    public double getMultiply() {
-        return multiply;
+    public Expression getExpression() {
+        return expression;
     }
 
     @Override
@@ -61,24 +76,20 @@ public class DieRoll {
         if (this == o) return true;
         if (!(o instanceof DieRoll)) return false;
         DieRoll dieRoll = (DieRoll) o;
-        return getNumberOfDice() == dieRoll.getNumberOfDice() &&
-                getAdd() == dieRoll.getAdd() &&
-                getMultiply() == dieRoll.getMultiply() &&
+        return getExpression() == dieRoll.getExpression() &&
                 getDieIdentifier().equals(dieRoll.getDieIdentifier());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getNumberOfDice(), getDieIdentifier(), getAdd(), getMultiply());
+        return Objects.hash(getExpression(), getDieIdentifier());
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", getClass().getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")
-                .add("numberOfDice=" + numberOfDice)
                 .add("dieIdentifier='" + dieIdentifier + "'")
-                .add("add=" + add)
-                .add("multiply=" + multiply)
+                .add("expression=" + expression)
                 .toString();
     }
 }

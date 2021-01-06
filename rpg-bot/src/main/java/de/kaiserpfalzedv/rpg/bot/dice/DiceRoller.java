@@ -23,7 +23,6 @@ import de.kaiserpfalzedv.rpg.core.dice.Die;
 import de.kaiserpfalzedv.rpg.core.dice.DieRoll;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.vertx.ConsumeEvent;
-import io.vertx.mutiny.core.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,9 +40,6 @@ public class DiceRoller {
 
     @Inject
     DiceParser parser;
-
-    @Inject
-    EventBus bus;
 
     @Inject
     Instance<Die> diceInstances;
@@ -81,8 +77,6 @@ public class DiceRoller {
             textBuilder.append(singleResults.substring(3)).append("]");
         }
 
-        textBuilder.toString();
-
         return textBuilder.toString();
     }
 
@@ -90,10 +84,7 @@ public class DiceRoller {
         Die die = selectDieType(roll.getDieIdentifier());
 
         LOG.trace("Roll: die={}, roll={}", die, roll);
-        Integer[] result = die.roll(roll.getNumberOfDice());
-        result[0] = (int) Math.round((result[0] + roll.getAdd()) * roll.getMultiply());
-
-        return result;
+        return roll.eval(die);
     }
 
     private Die selectDieType(final String qualifier) {
