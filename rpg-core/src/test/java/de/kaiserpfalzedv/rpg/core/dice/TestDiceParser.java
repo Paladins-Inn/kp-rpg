@@ -17,137 +17,77 @@
 
 package de.kaiserpfalzedv.rpg.core.dice;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.slf4j.MDC;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class TestDiceParser {
+    private static final int DEFAULT_THROW = 2;
+    private static final DieResult[] tests = {
+            new DieResult("(W20+5+2)/2", "D20", 1, 5),
+            new DieResult("(2d6+2)/2", "D6", 2, 3),
+            new DieResult("1D6", "D6", 1,2),
+            new DieResult("2D6", "D6", 2,4),
+            new DieResult("D6", "D6", 1,2),
+            new DieResult("d6", "D6", 1,2),
+            new DieResult("W6", "D6", 1,2),
+            new DieResult("w6", "D6", 1,2),
+            new DieResult("D10+5", "D10", 1,7),
+            new DieResult("D10-6", "D10", 1, -4),
+            new DieResult("D10+2+5", "D10", 1, 9),
+            new DieResult("D10*10", "D10", 1, 20),
+            new DieResult("D10*2*2", "D10", 1, 8),
+            new DieResult("D10*2+8", "D10", 1, 12),
+            new DieResult("D10*(2+8)", "D10", 1, 20),
+            new DieResult("D10/2", "D10", 1, 1)
+    };
+    private static final Die TEST_DIE = new TestDie();
+
+
     private final DiceParser sut = new DiceParser();
 
     @Test
-    public void ShouldParseDieWhenOnlyDieTypeIsDefined() {
-        MDC.put("test", "type");
+    public void ShouldDeliverResultsWhenValidExpressionsAreGiven() {
+        MDC.put("test", "valid-expression");
 
-        String input = "D3";
+        for (DieResult testInput : tests) {
+            Optional<DieRoll> result = sut.parse(testInput.input);
 
-        Optional<DieRoll> result = sut.parse(input);
-
-        checkResult(result, 1, input, 0, 1d);
+            checkValidResult(result, testInput);
+        }
     }
 
     @Test
-    public void ShouldParseDieWhenAmountOfDiceIsDefined() {
-        MDC.put("test", "number-type");
+    public void ShouldReturnNoDieRollWhenInvalidExpressionIsGiven() {
+        MDC.put("test", "invalid-expression");
 
-        String input = "5D10";
+        Optional<DieRoll> result = sut.parse("(d8+*9");
 
-        Optional<DieRoll> result = sut.parse(input);
-
-        checkResult(result, 5, "D10", 0, 1d);
+        assertFalse(result.isPresent(), "The string '(d8+*9' should not generate a result!");
     }
 
-    @Test
-    public void ShouldParseDieWhenTypeOfDieAndAddIsDefined() {
-        MDC.put("test", "type-add");
-
-        String input = "D10+5";
-
-        Optional<DieRoll> result = sut.parse(input);
-
-        checkResult(result, 1, "D10", 5, 1d);
-    }
-
-    @Test
-    public void ShouldParseDieWhenNumberOfDieAndTypeOfDieAndAddIsDefined() {
-        MDC.put("test", "number-type-add");
-
-        String input = "8D10+5";
-
-        Optional<DieRoll> result = sut.parse(input);
-
-        checkResult(result, 8, "D10", 5, 1d);
-    }
-
-
-    @Test
-    public void ShouldParseDieWhenTypeOfDieAndMultiplierIsDefined() {
-        MDC.put("test", "type-multi");
-
-        String input = "D10*6";
-
-        Optional<DieRoll> result = sut.parse(input);
-
-        checkResult(result, 1, "D10", 0, 6d);
-    }
-
-    @Test
-    public void ShouldParseDieWhenTypeOfDieAndAddAndMultiplierIsDefined() {
-        MDC.put("test", "type-add-multi");
-
-        String input = "D10+5*6";
-
-        Optional<DieRoll> result = sut.parse(input);
-
-        checkResult(result, 1, "D10", 5, 6d);
-    }
-
-    @Test
-    public void ShouldParseDieWhenNumberOfDieAndTypeOfDieAndMultiplierIsDefined() {
-        MDC.put("test", "number-type-multi");
-
-        String input = "8D10*6";
-
-        Optional<DieRoll> result = sut.parse(input);
-
-        checkResult(result, 8, "D10", 0, 6d);
-    }
-
-    @Test
-    public void ShouldParseDieWhenNumberOfDieAndTypeOfDieAndAddAndMultiplierIsDefined() {
-        MDC.put("test", "number-type-add-multi");
-
-        String input = "8D10+5*6";
-
-        Optional<DieRoll> result = sut.parse(input);
-
-        checkResult(result, 8, "D10", 5, 6d);
-    }
-
-    @Test
-    public void ShouldParseDieWhenTypeOfDieAndDivisorIsDefined() {
-        MDC.put("test", "type-divisor");
-
-        String input = "D10/2";
-
-        Optional<DieRoll> result = sut.parse(input);
-
-        checkResult(result, 1, "D10", 0, 0.5d);
-    }
 
     /**
      * Checks the result against the given parameters.
      *
      * @param result The optional result.
-     * @param amountOfDice The number of die expected.
-     * @param dieType The type of die expected.
-     * @param add The add/subtract expected.
-     * @param multiplier The expected multiplier.
+     * @param testInput The predefined test input.
      */
-    private void checkResult(
+    private void checkValidResult(
             @SuppressWarnings("OptionalUsedAsFieldOrParameterType") final Optional<DieRoll> result,
-            final int amountOfDice,
-            final String dieType,
-            final int add,
-            final double multiplier
+            final DieResult testInput
     ) {
-        Assertions.assertTrue(result.isPresent(), "There should be a DiceRollCommand!");
+        assertTrue(result.isPresent(), "There should be a DiceRollCommand for '" + testInput.input + "'!");
         DieRoll roll = result.get();
 
-        Assertions.assertEquals(amountOfDice, roll.getNumberOfDice(), "The number of dice should be " + amountOfDice);
-        Assertions.assertEquals(dieType, roll.getDieIdentifier(), "The die type should be '" + dieType + "'");
-        Assertions.assertEquals(add, roll.getAdd(), "'" + add + "' should be added/subtracted.");
-        Assertions.assertEquals(multiplier, roll.getMultiply(), "The multiplier should be '" + multiplier + "'");
+        assertEquals(testInput.dieType, roll.getDieIdentifier(), "The die type of '" + testInput.input + "' should be '" + testInput.dieType + "'");
+        assertEquals(testInput.result, roll.eval(TEST_DIE)[0], "The result of '" + testInput.input + "' should be: " + testInput.result);
     }
 
 
@@ -164,5 +104,31 @@ public class TestDiceParser {
     @AfterAll
     static void tearDown() {
         MDC.clear();
+    }
+
+
+    private static class DieResult {
+        final String input;
+        final String dieType;
+        final int amount;
+        final Integer result;
+
+        DieResult(final String input, final String dieType, final int amount, final int result) {
+            this.input = input;
+            this.dieType = dieType;
+            this.amount = amount;
+            this.result = result;
+        }
+    }
+
+    private static class TestDie extends BasicDie {
+        public TestDie() {
+            super(DEFAULT_THROW);
+        }
+
+        @Override
+        public int roll() {
+            return DEFAULT_THROW;
+        }
     }
 }

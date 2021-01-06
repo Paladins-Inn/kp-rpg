@@ -17,6 +17,8 @@
 
 package de.kaiserpfalzedv.rpg.core.dice;
 
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,10 +39,10 @@ public class DiceParser {
     static private final Logger LOG = LoggerFactory.getLogger(DiceParser.class);
 
     static private final String DICE_PATTERN =
-            "(?<amount>\\d+)?"
-            +"(?<dieType>([dD])?[A-Za-z][0-9A-Za-z]+)"
-            +"(?<add>[+-](?<D>\\d+))?"
-            +"((?<mult>[*x:\\/])(?<C>\\d+))?";
+            "(?<pre>([(])?)?"
+            +"(?<amount>\\d+)?"
+            +"(?<type>([dD])?[A-Za-z][0-9A-Za-z]+)"
+            +"(?<post>.*)?";
 
     static private final Pattern PATTERN = Pattern.compile(DICE_PATTERN);
 
@@ -55,40 +57,47 @@ public class DiceParser {
         DieRoll result = null;
 
         if (m.matches()) {
-            String amountDiceString = m.group("amount");
-            if (amountDiceString == null) {
-                amountDiceString = "1";
+            String pre = m.group("pre");
+            if (pre == null || pre.isBlank()) {
+                pre = "";
             }
 
-            String dieIdentifier = m.group("dieType");
+            String amountString = m.group("amount");
+            int amount = 1;
+            if (amountString != null && !amountString.isBlank()) {
+                amount = Integer.parseInt(amountString);
+            }
+
+            String dieIdentifier = m.group("type");
             if (dieIdentifier == null) {
                 dieIdentifier = "D6";
             }
 
-            String addString = m.group("D");
-            if (addString == null) {
-                addString = "0";
-            }
-            String addOrDel = m.group("add");
-            if ("-".equals(addOrDel)) {
-                addString = addOrDel + addString;
+            if (dieIdentifier.startsWith("w") || dieIdentifier.startsWith("W")) {
+                dieIdentifier  = "D" + dieIdentifier.substring(1);
             }
 
-            String multiplierString = m.group("C");
-            if (multiplierString == null) {
-                multiplierString = "1";
+            String post = m.group("post");
+            if (post != null && post.isBlank()) {
+                post = "";
             }
 
-            int amount = Integer.parseInt(amountDiceString);
-            int add = Integer.parseInt(addString);
-            double multiplier = Double.parseDouble(multiplierString);
-
-            String multiOrDivide = m.group("mult");
-            if ("/".equals(multiOrDivide) || ":".equals(multiOrDivide)) {
-                multiplier = 1 / multiplier;
+            StringBuilder expressionString = new StringBuilder();
+            if (! pre.isBlank()) {
+                expressionString.append(pre).append("x").append(post);
+            } else {
+                expressionString.append("x").append(post);
             }
 
-            result = new DieRoll(amount, dieIdentifier, add, multiplier);
+            String expression = expressionString.toString();
+            LOG.trace("Die roll expression: input='{}', amount={}, expression='{}'", diceString, amount, expression);
+
+            try {
+                Expression e = new ExpressionBuilder(expression).variable("x").build();
+                result = new DieRoll(dieIdentifier, amount, e);
+            } catch (IllegalArgumentException e) {
+                LOG.warn("Expression '" + diceString + "' is not valid: " + e.getMessage());
+            }
         }
 
         return Optional.ofNullable(result);
