@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 /**
  * ParseDiceString -- Parses a string to the DiceRollCommand.
  *
- * @author klenkes74
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2020-01-03
  */
 @Dependent

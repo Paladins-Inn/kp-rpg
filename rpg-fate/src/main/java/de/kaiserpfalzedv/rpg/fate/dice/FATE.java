@@ -25,7 +25,7 @@ import javax.enterprise.context.Dependent;
 /**
  * A FATE die only knows +, (empty) and -. We translate it to 1, 0 and -1.
  *
- * @author klenkes74
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06
  */
 @Dependent

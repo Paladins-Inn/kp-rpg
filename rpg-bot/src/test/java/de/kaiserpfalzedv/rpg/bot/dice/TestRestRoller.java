@@ -15,23 +15,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.discord;
+package de.kaiserpfalzedv.rpg.bot.dice;
 
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
 
-/**
- * The plugin for all Discord plugins. The plugin has to create the answer and send it.
- * This is a "fire and forget" interface.
- *
- * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.0.0 2021-01-06
- */
-public interface DiscordPlugin {
-    /**
-     * The command execution of this plugin. All plugins get all events and have to decide to react on it or not.
-     *
-     * @param event The event to work on.
-     * @throws DiscordPluginException If any problem occurred.
-     */
-    void work(MessageReceivedEvent event) throws DiscordPluginException;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.containsString;
+
+@QuarkusTest
+public class TestRestRoller {
+    @Test
+    public void shouldReturnARollWhenD6IsRolled() {
+        given()
+            .when()
+                .get("/apis/dice/v1/roll/D6")
+            .prettyPeek()
+            .then()
+                .statusCode(200)
+                .body(containsString("D6"));
+
+    }
 }

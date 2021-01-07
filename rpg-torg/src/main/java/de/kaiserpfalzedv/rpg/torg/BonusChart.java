@@ -27,7 +27,7 @@ import javax.enterprise.context.Dependent;
  *
  * The bonus chart translates an exploded roll into a bonus for a test.
  *
- * @author klenkes74
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2020-01-03
  */
 @Dependent

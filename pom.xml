@@ -91,47 +91,49 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- KP RPG modules -->
       <dependency>
-        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>rpg-core</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>rpg-torg</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>rpg-traveller</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>rpg-dsa5</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>rpg-fate</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>rpg-hexxen</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>rpg-saga</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>rpg-wod</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
 
+      <!-- quarkus -->
       <dependency>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>${quarkus.platform.artifact-id}</artifactId>
@@ -140,6 +142,34 @@
         <scope>import</scope>
       </dependency>
 
+      <!-- Handling immutable generation -->
+      <dependency>
+        <groupId>org.immutables</groupId>
+        <artifactId>value</artifactId>
+        <version>2.5.6</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.immutables</groupId>
+        <artifactId>builder</artifactId>
+        <version>2.8.2</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>javax.annotation</groupId>
+        <artifactId>jsr250-api</artifactId>
+        <version>1.0</version>
+      </dependency>
+
+      <!-- Evaluate mathematical expressions -->
+      <dependency>
+        <groupId>net.objecthunter</groupId>
+        <artifactId>exp4j</artifactId>
+        <version>0.4.8</version>
+      </dependency>
+
+
+      <!-- testing -->
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
@@ -224,6 +254,13 @@
             <parameters>${maven.compiler.parameters}</parameters>
             <source>${maven.compiler.source}</source>
             <target>${maven.compiler.target}</target>
+            <annotationProcessorPaths>
+              <dependency>
+                <groupId>org.immutables</groupId>
+                <artifactId>value</artifactId>
+                <version>2.5.6</version>
+              </dependency>
+            </annotationProcessorPaths>
           </configuration>
         </plugin>
         <plugin>
@@ -277,8 +314,56 @@
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>3.0.0-M5</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>${maven-site-plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.basepom.maven</groupId>
+          <artifactId>duplicate-finder-maven-plugin</artifactId>
+          <version>1.5.1-SNAPSHOT</version>
+          <executions>
+            <execution>
+              <id>default</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <printEqualFiles>false</printEqualFiles>
+            <failBuildInCaseOfDifferentContentConflict>false</failBuildInCaseOfDifferentContentConflict>
+            <failBuildInCaseOfEqualContentConflict>false</failBuildInCaseOfEqualContentConflict>
+            <failBuildInCaseOfConflict>true</failBuildInCaseOfConflict>
+            <checkCompileClasspath>true</checkCompileClasspath>
+            <checkRuntimeClasspath>true</checkRuntimeClasspath>
+            <checkTestClasspath>true</checkTestClasspath>
+            <skip>false</skip>
+            <quiet>true</quiet>
+            <preferLocal>true</preferLocal>
+            <useResultFile>true</useResultFile>
+            <resultFileMinClasspathCount>2</resultFileMinClasspathCount>
+            <resultFile>${project.build.directory}/duplicate-finder-result.xml</resultFile>
+            <includeBootClasspath>false</includeBootClasspath>
+            <bootClasspathProperty>sun.boot.class.path</bootClasspathProperty>
+            <useDefaultResourceIgnoreList>true</useDefaultResourceIgnoreList>
+            <includePomProjects>false</includePomProjects>
+            <!-- <ignoredDependencies/> -->
+            <ignoredResourcePatterns>
+              <ignoredResourcePattern>log4j2.xml</ignoredResourcePattern>
+              <ignoredResourcePattern>mozilla/public-suffix-list.txt</ignoredResourcePattern>
+              <ignoredResourcePattern>.*\.properties</ignoredResourcePattern>
+              <ignoredResourcePattern>.*\.txt</ignoredResourcePattern>
+              <ignoredResourcePattern>.*\.html</ignoredResourcePattern>
+            </ignoredResourcePatterns>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -359,6 +444,17 @@
         </dependency>
 
         <dependency>
+          <groupId>org.immutables</groupId>
+          <artifactId>value</artifactId>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.immutables</groupId>
+          <artifactId>builder</artifactId>
+          <scope>provided</scope>
+        </dependency>
+
+        <dependency>
           <groupId>jakarta.annotation</groupId>
           <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
@@ -400,8 +496,8 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>${compiler-plugin.version}</version>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -420,6 +516,11 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-site-plugin</artifactId>
           </plugin>
+
+          <plugin>
+            <groupId>org.basepom.maven</groupId>
+            <artifactId>duplicate-finder-maven-plugin</artifactId>
+          </plugin>
         </plugins>
       </build>
     </profile>
@@ -430,10 +531,38 @@
 
       <dependencies>
         <dependency>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-slf4j-impl</artifactId>
-          <scope>test</scope>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-jackson</artifactId>
         </dependency>
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-smallrye-openapi</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>com.fasterxml.jackson.datatype</groupId>
+          <artifactId>jackson-datatype-jdk8</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.codehaus.jackson</groupId>
+          <artifactId>jackson-jaxrs</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>com.fasterxml.jackson.jaxrs</groupId>
+          <artifactId>jackson-jaxrs-json-provider</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.jboss.spec.javax.ws.rs</groupId>
+          <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+        </dependency>
+
         <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-api</artifactId>
@@ -465,12 +594,75 @@
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-smallrye-health</artifactId>
         </dependency>
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-jackson</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-vertx</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-elytron-security-oauth2</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-resteasy-jackson</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-resteasy-multipart</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-micrometer</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.micrometer</groupId>
+          <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-smallrye-openapi</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-smallrye-opentracing</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>javax.ws.rs</groupId>
+          <artifactId>javax.ws.rs-api</artifactId>
+          <version>2.0.1</version>
+        </dependency>
+        <dependency>
+          <groupId>jakarta.annotation</groupId>
+          <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>jakarta.inject</groupId>
+          <artifactId>jakarta.inject-api</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>jakarta.enterprise</groupId>
+          <artifactId>jakarta.enterprise.cdi-api</artifactId>
+        </dependency>
 
         <dependency>
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-junit5</artifactId>
           <scope>test</scope>
         </dependency>
+        <dependency>
+          <groupId>io.rest-assured</groupId>
+          <artifactId>rest-assured</artifactId>
+          <scope>test</scope>
+        </dependency>
+
         <dependency>
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-container-image-docker</artifactId>
@@ -494,12 +686,12 @@
             </executions>
           </plugin>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>${compiler-plugin.version}</version>
           </plugin>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>${surefire-plugin.version}</version>
             <configuration>
               <systemPropertyVariables>
                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
@@ -512,7 +704,6 @@
       </build>
     </profile>
 
-
     <profile>
       <id>native</id>
       <activation>
@@ -523,8 +714,9 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <!--suppress MavenModelInspection -->
             <artifactId>maven-failsafe-plugin</artifactId>
-            <version>3.0.0-M5</version>
             <executions>
               <execution>
                 <goals>
@@ -544,6 +736,7 @@
           </plugin>
         </plugins>
       </build>
+
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
       </properties>

@@ -1,8 +1,8 @@
 /**
- * @author klenkes74
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-03
  */
-module de.kaiserpfalzedv.rpg.fate {
+module de.kaiserpfalzedv.rpg.dsa5 {
     requires de.kaiserpfalzedv.rpg.core;
     requires org.slf4j;
     requires jakarta.inject.api;

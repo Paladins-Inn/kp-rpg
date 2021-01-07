@@ -1,5 +1,5 @@
 /**
- * @author klenkes74
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-03
  */
 module de.kaiserpfalzedv.rpg.traveller {

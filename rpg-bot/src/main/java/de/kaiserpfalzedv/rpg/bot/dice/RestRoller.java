@@ -15,23 +15,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.discord;
+package de.kaiserpfalzedv.rpg.bot.dice;
 
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- * The plugin for all Discord plugins. The plugin has to create the answer and send it.
- * This is a "fire and forget" interface.
- *
- * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.0.0 2021-01-06
- */
-public interface DiscordPlugin {
-    /**
-     * The command execution of this plugin. All plugins get all events and have to decide to react on it or not.
-     *
-     * @param event The event to work on.
-     * @throws DiscordPluginException If any problem occurred.
-     */
-    void work(MessageReceivedEvent event) throws DiscordPluginException;
+import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+
+@Path("/apis/die/v1")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public class RestRoller {
+    private static final Logger LOG = LoggerFactory.getLogger(RestRoller.class);
+    @Inject
+    DiceRoller roller;
+
+    @GET
+    @Path("/roll/{roll}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String roll(@PathParam("roll") final String roll) {
+        return roller.work(roll);
+    }
 }

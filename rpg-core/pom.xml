@@ -36,7 +36,6 @@
     <dependency>
       <groupId>net.objecthunter</groupId>
       <artifactId>exp4j</artifactId>
-      <version>0.4.8</version>
     </dependency>
   </dependencies>
 
@@ -48,6 +47,7 @@
         <configuration>
           <argLine>
             --add-opens de.kaiserpfalzedv.rpg.core/de.kaiserpfalzedv.rpg.core.dice=ALL-UNNAMED
+            --add-opens de.kaiserpfalzedv.rpg.core/de.kaiserpfalzedv.rpg.core.resources=ALL-UNNAMED
           </argLine>
         </configuration>
       </plugin>
