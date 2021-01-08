@@ -15,35 +15,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.discord;
-
-import org.eclipse.microprofile.health.HealthCheck;
-import org.eclipse.microprofile.health.HealthCheckResponse;
-import org.eclipse.microprofile.health.Liveness;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
 /**
- * The liveness check for the discord bot.
+ * de.kaiserpfalzedv.rpg.bot.discord -- The technical parts of the discord bot.
  *
- * If the liveness check using {@link DiscordBot#discordOK()} fails, the liveness is reported as down.
+ * <p>This package contains the technical gear of the discord connector. It connects to discord
+ * and dispatches all discord bot messages via {@link de.kaiserpfalzedv.rpg.bot.discord.DiscordDispatcher} to all
+ * services implementing the {@link de.kaiserpfalzedv.rpg.bot.discord.DiscordPlugin}.</p>
+ *
+ * <p>It's a fire-and-forget usage of the plugin. Every plugin gets the message and decides how to react on it. Handling
+ * the outgoing message is the responsibility of the plugin.</p>
+ *
+ * <p>The {@link de.kaiserpfalzedv.rpg.bot.discord.DiscordLivenessCheck} will end in the liveness check of the quarkus
+ * app.</p>
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-08
  */
-@Liveness
-@ApplicationScoped
-public class DiscordLivenessCheck implements HealthCheck {
-    @Inject
-    DiscordBot bot;
-
-    @Override
-    public HealthCheckResponse call() {
-        if (bot.discordOK()) {
-            return HealthCheckResponse.up(DiscordBot.SERVICE_NAME);
-        } else {
-            return HealthCheckResponse.down(DiscordBot.SERVICE_NAME);
-        }
-    }
-}
+package de.kaiserpfalzedv.rpg.bot.discord;

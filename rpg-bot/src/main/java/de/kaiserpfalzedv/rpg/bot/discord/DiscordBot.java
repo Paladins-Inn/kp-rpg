@@ -38,6 +38,7 @@ public class DiscordBot {
     public static final String SERVICE_NAME = "Discord Connector";
 
     private static final Logger LOG = LoggerFactory.getLogger(DiscordBot.class);
+    public static final long MAX_OK_PING = 500L;
 
     private static JDA bot;
 
@@ -103,10 +104,24 @@ public class DiscordBot {
         return bot.getPing();
     }
 
+    /**
+     * Checks if the bot is auto-reconnecting, initialized and the ping is below {@link #MAX_OK_PING}
+     * ({@value #MAX_OK_PING}).
+     *
+     * If the status is not ok, then it tries to reconnect to discord.
+     *
+     * @return true, if everything is ok.
+     */
     public boolean discordOK() {
         JDA.Status status = bot.getStatus();
 
-        return bot.isAutoReconnect() && status.isInit() && discordPing() <= 500L;
+        if (bot.isAutoReconnect() && status.isInit() && discordPing() <= MAX_OK_PING) {
+            return true;
+        } else {
+            reconnect();
+
+            return false;
+        }
     }
 
     @Override
