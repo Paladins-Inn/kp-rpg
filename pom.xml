@@ -355,7 +355,17 @@
             <bootClasspathProperty>sun.boot.class.path</bootClasspathProperty>
             <useDefaultResourceIgnoreList>true</useDefaultResourceIgnoreList>
             <includePomProjects>false</includePomProjects>
-            <!-- <ignoredDependencies/> -->
+            <!-- xmlpull and xpp3 are still incapable of solving the java module system. -->
+            <ignoredDependencies>
+              <ignoredDependency>
+                <groupId>xmlpull</groupId>
+                <artifactId>xmlpull</artifactId>
+              </ignoredDependency>
+              <ignoredDependency>
+                <groupId>xpp3</groupId>
+                <artifactId>xpp3_min</artifactId>
+              </ignoredDependency>
+            </ignoredDependencies>
             <ignoredResourcePatterns>
               <ignoredResourcePattern>log4j2.xml</ignoredResourcePattern>
               <ignoredResourcePattern>mozilla/public-suffix-list.txt</ignoredResourcePattern>
@@ -609,10 +619,30 @@
         <dependency>
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-resteasy-jackson</artifactId>
+          <exclusions>
+            <exclusion>
+              <groupId>com.sun.activation</groupId>
+              <artifactId>jakarta.activation</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.jboss.spec.javax.xml.bind</groupId>
+              <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
         <dependency>
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-resteasy-multipart</artifactId>
+          <exclusions>
+            <exclusion>
+              <groupId>com.sun.activation</groupId>
+              <artifactId>jakarta.activation</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.jboss.spec.javax.xml.bind</groupId>
+              <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
         <dependency>
           <groupId>io.quarkus</groupId>
@@ -625,6 +655,12 @@
         <dependency>
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
+          <exclusions>
+            <exclusion>
+              <groupId>io.smallrye</groupId>
+              <artifactId>smallrye-metrics-api</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
         <dependency>
           <groupId>io.quarkus</groupId>
@@ -633,11 +669,6 @@
         <dependency>
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-smallrye-opentracing</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>javax.ws.rs</groupId>
-          <artifactId>javax.ws.rs-api</artifactId>
-          <version>2.0.1</version>
         </dependency>
         <dependency>
           <groupId>jakarta.annotation</groupId>
@@ -651,21 +682,51 @@
           <groupId>jakarta.enterprise</groupId>
           <artifactId>jakarta.enterprise.cdi-api</artifactId>
         </dependency>
+        <dependency>
+          <groupId>jakarta.xml.bind</groupId>
+          <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
 
         <dependency>
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-junit5</artifactId>
+          <scope>test</scope>
+          <exclusions>
+            <exclusion>
+              <groupId>com.thoughtworks.xstream</groupId>
+              <artifactId>xstream</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+        <dependency>
+          <groupId>com.thoughtworks.xstream</groupId>
+          <artifactId>xstream</artifactId>
+          <version>1.4.15</version>
           <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>io.rest-assured</groupId>
           <artifactId>rest-assured</artifactId>
           <scope>test</scope>
+          <exclusions>
+            <exclusion>
+              <groupId>com.sun.xml.bind</groupId>
+              <artifactId>jaxb-impl</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
 
         <dependency>
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-container-image-docker</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-openshift</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-kubernetes</artifactId>
         </dependency>
       </dependencies>
 

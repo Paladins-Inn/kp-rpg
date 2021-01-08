@@ -73,8 +73,6 @@
             <artifactId>JDA</artifactId>
             <version>3.5.0_329</version>
         </dependency>
-
-
     </dependencies>
 
     <build>
@@ -82,7 +80,9 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine>@{argLine} --add-opens de.kaiserpfalzedv.rpg.bot/ALL=ALL-UNNAMED</argLine>
+                    <argLine>
+                        --add-opens de.kaiserpfalzedv.rpg.bot/ALL=ALL-UNNAMED
+                    </argLine>
                     <systemPropertyVariables>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         <!--suppress UnresolvedMavenProperty -->

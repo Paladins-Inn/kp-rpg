@@ -15,10 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.discord.dice;
+package de.kaiserpfalzedv.rpg.bot.discord;
 
-import de.kaiserpfalzedv.rpg.bot.discord.DiscordDispatcher;
+import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
+import io.quarkus.runtime.configuration.ProfileManager;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -45,6 +46,11 @@ public class DiscordBotConnector {
     DiscordDispatcher dispatcher;
 
     void startup(@Observes StartupEvent event) {
+        if (dontRegisterToDiscord()) {
+            LOG.info("Discord connection will not be created.");
+            return;
+        }
+
         JDABuilder builder = new JDABuilder(AccountType.BOT);
         builder.setToken(discordToken);
         builder.addEventListener(dispatcher);
@@ -58,6 +64,21 @@ public class DiscordBotConnector {
         }
 
         LOG.info("Created Discord connect: {}", bot.asBot().getInviteUrl());
+    }
+
+    void onStop(@Observes ShutdownEvent event) {
+        if (dontRegisterToDiscord()) {
+            LOG.info("No Discord disconnect on shutdown since it has not been registered in the first place.");
+            return;
+        }
+
+        bot.shutdownNow();
+        LOG.info("Bot shut down.");
+    }
+
+    private boolean dontRegisterToDiscord() {
+        String profile = ProfileManager.getActiveProfile();
+        return "dev".equals(profile) || "test".equals(profile);
     }
 
     @Override

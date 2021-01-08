@@ -36,6 +36,6 @@ public class RestRoller {
     @Path("/roll/{roll}")
     @Produces(MediaType.TEXT_PLAIN)
     public String roll(@PathParam("roll") final String roll) {
-        return roller.work(roll);
+        return roll + ": " + roller.work(roll);
     }
 }

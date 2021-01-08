@@ -29,7 +29,7 @@ public class TestRestRoller {
     public void shouldReturnARollWhenD6IsRolled() {
         given()
             .when()
-                .get("/apis/dice/v1/roll/D6")
+                .get("/apis/die/v1/roll/D6")
             .prettyPeek()
             .then()
                 .statusCode(200)
