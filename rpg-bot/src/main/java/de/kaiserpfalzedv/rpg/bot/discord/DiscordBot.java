@@ -34,8 +34,10 @@ import javax.security.auth.login.LoginException;
 import java.util.StringJoiner;
 
 @Singleton
-public class DiscordBotConnector {
-    private static final Logger LOG = LoggerFactory.getLogger(DiscordBotConnector.class);
+public class DiscordBot {
+    public static final String SERVICE_NAME = "Discord Connector";
+
+    private static final Logger LOG = LoggerFactory.getLogger(DiscordBot.class);
 
     private static JDA bot;
 
@@ -46,6 +48,19 @@ public class DiscordBotConnector {
     DiscordDispatcher dispatcher;
 
     void startup(@Observes StartupEvent event) {
+        registerToDiscord();
+    }
+
+    void onStop(@Observes ShutdownEvent event) {
+        unregisterFromDiscord();
+    }
+
+    void reconnect() {
+        unregisterFromDiscord();
+        registerToDiscord();
+    }
+
+    private void registerToDiscord() {
         if (dontRegisterToDiscord()) {
             LOG.info("Discord connection will not be created.");
             return;
@@ -66,7 +81,7 @@ public class DiscordBotConnector {
         LOG.info("Created Discord connect: {}", bot.asBot().getInviteUrl());
     }
 
-    void onStop(@Observes ShutdownEvent event) {
+    private void unregisterFromDiscord() {
         if (dontRegisterToDiscord()) {
             LOG.info("No Discord disconnect on shutdown since it has not been registered in the first place.");
             return;
@@ -79,6 +94,19 @@ public class DiscordBotConnector {
     private boolean dontRegisterToDiscord() {
         String profile = ProfileManager.getActiveProfile();
         return "dev".equals(profile) || "test".equals(profile);
+    }
+
+    /**
+     * @return The ping to discord in ms.
+     */
+    public long discordPing() {
+        return bot.getPing();
+    }
+
+    public boolean discordOK() {
+        JDA.Status status = bot.getStatus();
+
+        return bot.isAutoReconnect() && status.isInit() && discordPing() <= 500L;
     }
 
     @Override

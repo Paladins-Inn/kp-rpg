@@ -367,6 +367,7 @@
               </ignoredDependency>
             </ignoredDependencies>
             <ignoredResourcePatterns>
+              <ignoredResourcePattern>checkstyle\.xml</ignoredResourcePattern>
               <ignoredResourcePattern>log4j2.xml</ignoredResourcePattern>
               <ignoredResourcePattern>mozilla/public-suffix-list.txt</ignoredResourcePattern>
               <ignoredResourcePattern>.*\.properties</ignoredResourcePattern>

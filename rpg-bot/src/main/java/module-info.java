@@ -23,12 +23,14 @@ module de.kaiserpfalzedv.rpg.bot {
     requires quarkus.resteasy;
     requires quarkus.resteasy.jackson;
     requires quarkus.resteasy.multipart;
+    requires quarkus.scheduler;
     requires smallrye.common.annotation;
     requires smallrye.mutiny.vertx.core;
     requires io.smallrye.mutiny;
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.databind;
     requires microprofile.config.api;
+    requires microprofile.health.api;
     requires microprofile.openapi.api;
     requires java.ws.rs;
     requires java.annotation;

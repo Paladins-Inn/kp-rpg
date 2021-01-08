@@ -15,9 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.discord.dice;
+package de.kaiserpfalzedv.rpg.bot.dice;
 
-import de.kaiserpfalzedv.rpg.bot.dice.DiceRoller;
 import de.kaiserpfalzedv.rpg.bot.discord.DiscordPlugin;
 import io.quarkus.runtime.StartupEvent;
 import net.dv8tion.jda.core.entities.Message;
