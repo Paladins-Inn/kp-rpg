@@ -39,6 +39,7 @@ import java.util.UUID;
 @JsonSerialize(as = ImmutableResourceMetadata.class)
 @JsonDeserialize(builder = ImmutableResourceMetadata.Builder.class)
 @JsonPropertyOrder({"uid,generation,owner,created,deleted,annotations,labels"})
+@Schema(name = "ResourceMetadata", description = "The metadata of a resource.")
 public interface ResourceMetadata extends ResourcePointer {
     /**
      * @return a unique id for this resource.

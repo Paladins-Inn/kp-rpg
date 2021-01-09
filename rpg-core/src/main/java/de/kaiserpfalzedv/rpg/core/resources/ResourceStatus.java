@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
@@ -32,6 +33,9 @@ import java.util.List;
  * ResourceStatus -- The state of the managed resource.
  *
  * @param <H> Type of the additional history data.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.0.0 2021-01-07
  */
 @Value.Immutable
 @Value.Modifiable
@@ -39,8 +43,18 @@ import java.util.List;
 @JsonSerialize(as = ImmutableResourceStatus.class)
 @JsonDeserialize(builder = ImmutableResourceStatus.Builder.class)
 @JsonPropertyOrder({"observedGeneration,history"})
+@Schema(name = "ResourceStatus", description = "The status of a resource.")
 public interface ResourceStatus<H extends Serializable> extends Serializable {
+    /**
+     * @return the generation of the resource this history is generated for.
+     */
+    @Schema(name = "ObservedGeneration", description = "The generation of this resource which is observed.", required = true)
     Long getObservedGeneration();
+
+    /**
+     * @return a list of changes.
+     */
+    @Schema(name = "History", description = "A list of changes of the resource status.")
     List<ResourceHistory<H>> getHistory();
 
     /**
@@ -64,6 +78,13 @@ public interface ResourceStatus<H extends Serializable> extends Serializable {
         return this;
     }
 
+    /**
+     * Adds a new history entry.
+     *
+     * @param status The status of this entry.
+     * @param message The generic message for this history entry.
+     * @return TRUE if the history could be added.
+     */
     default ResourceStatus<H>  addHistory(final String status, final String message) {
         getHistory().add(
                 ImmutableResourceHistory.<H>builder()

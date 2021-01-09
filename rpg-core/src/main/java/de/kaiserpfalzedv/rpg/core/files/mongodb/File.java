@@ -17,12 +17,17 @@
 
 package de.kaiserpfalzedv.rpg.core.files.mongodb;
 
+import de.kaiserpfalzedv.rpg.core.files.FileData;
+import de.kaiserpfalzedv.rpg.core.files.FileResource;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 
+import java.beans.Transient;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -32,7 +37,7 @@ import java.util.UUID;
  * @since 1.0.0 2021-01-09
  */
 @MongoEntity
-public class File extends PanacheMongoEntityBase {
+public class File extends PanacheMongoEntityBase implements FileResource {
     /** ID of the document. */
     @BsonId
     public UUID uid;
@@ -42,4 +47,26 @@ public class File extends PanacheMongoEntityBase {
 
     /** The status of the resource. */
     public ResourceStatus<String> status;
+
+
+    @BsonIgnore
+    @Transient
+    @Override
+    public ResourceMetadata getMetadata() {
+        return metadata;
+    }
+
+    @BsonIgnore
+    @Transient
+    @Override
+    public Optional<FileData> getSpec() {
+        return Optional.empty();
+    }
+
+    @BsonIgnore
+    @Transient
+    @Override
+    public Optional<ResourceStatus<String>> getStatus() {
+        return Optional.ofNullable(status);
+    }
 }

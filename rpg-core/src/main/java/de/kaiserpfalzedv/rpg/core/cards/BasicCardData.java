@@ -39,6 +39,6 @@ import java.io.Serializable;
 @JsonDeserialize(builder = ImmutableBasicCardData.Builder.class)
 @Schema(name="card", description = "Card Definition for card play.")
 public interface BasicCardData extends Serializable {
-    @Schema(name = "picature", description="The resource address of the picture of this card.")
+    @Schema(name = "picture", description="The resource address of the picture of this card.")
     ResourceAddress getPicture();
 }

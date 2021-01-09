@@ -26,14 +26,28 @@ import java.util.UUID;
  * @since 1.0.0 2021-01-08
  */
 public class FileNotFoundException extends FileHandlingException {
+    /**
+     * @param uid UID of the file.
+     * @param message the failure message.
+     */
+    @SuppressWarnings("CdiInjectionPointsInspection")
     public FileNotFoundException(final UUID uid, final String message) {
         super(uid, message);
     }
 
+    /**
+     * @param uid UID of the file.
+     * @param cause The failure cause.
+     */
     public FileNotFoundException(final UUID uid, final Throwable cause) {
         super(uid, cause);
     }
 
+    /**
+     * @param uid UID of the file.
+     * @param message a failure message.
+     * @param cause the failure cause.
+     */
     public FileNotFoundException(final UUID uid, final String message, final Throwable cause) {
         super(uid, message, cause);
     }

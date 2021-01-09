@@ -20,12 +20,19 @@ package de.kaiserpfalzedv.rpg.core.resources;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
+/**
+ * ResourceAddress -- The unique address of a resource.
+ *
+ * With this data, every resource can be addressed. It is like an URL within the supported system.
+ */
 @Value.Immutable
 @Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableResourceAddress.class)
 @JsonDeserialize(builder = ImmutableResourceAddress.Builder.class)
+@Schema(name = "ResourceAddress", description = "The unique address of a resource.")
 public interface ResourceAddress extends ResourcePointer {
 }

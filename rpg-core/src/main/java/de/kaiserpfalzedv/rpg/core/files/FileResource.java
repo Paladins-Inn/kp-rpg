@@ -24,10 +24,11 @@ import de.kaiserpfalzedv.rpg.core.resources.Resource;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
-import java.io.Serializable;
-
 /**
- * A stored file in the resource server.
+ * FileResource -- A stored file in the resource server.
+ *
+ * This is the data set of a file resource. It can also be filled with the data itself but may also using the file
+ * service endpoint to provide the file data. Then the file endpoint can be used with the UID of the FileResource here.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-07
@@ -35,10 +36,10 @@ import java.io.Serializable;
 @Value.Immutable
 @Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableFile.class)
-@JsonDeserialize(builder = ImmutableFile.Builder.class)
+@JsonSerialize(as = ImmutableFileResource.class)
+@JsonDeserialize(builder = ImmutableFileResource.Builder.class)
 @Schema(name = "file", description = "File resource containting the data")
-public interface File extends Resource<FileData, Serializable> {
+public interface FileResource extends Resource<FileData, String> {
     String API_VERSION = "v1";
     String KIND = "File";
 }

@@ -26,14 +26,28 @@ import java.util.UUID;
  * @since 1.0.0 2021-01-08
  */
 public class FileCouldNotBeSavedException extends FileHandlingException {
+    /**
+     * @param uid UID of the file resource.
+     * @param message the failure message.
+     */
+    @SuppressWarnings("CdiInjectionPointsInspection")
     public FileCouldNotBeSavedException(final UUID uid, final String message) {
         super(uid, message);
     }
 
+    /**
+     * @param uid UID of the file resource.
+     * @param cause The failure cause.
+     */
     public FileCouldNotBeSavedException(final UUID uid, final Throwable cause) {
         super(uid, cause);
     }
 
+    /**
+     * @param uid UID of the file resource.
+     * @param message The failure message.
+     * @param cause The failure cause.
+     */
     public FileCouldNotBeSavedException(final UUID uid, final String message, final Throwable cause) {
         super(uid, message, cause);
     }

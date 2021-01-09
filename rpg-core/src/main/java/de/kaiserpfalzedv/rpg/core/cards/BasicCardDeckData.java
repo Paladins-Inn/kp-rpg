@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceAddress;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
@@ -37,24 +38,29 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableBasicCardDeckData.class)
 @JsonDeserialize(builder = ImmutableBasicCardDeckData.Builder.class)
+@Schema(name = "BasicCardDeckData", description = "Data for the card deck.")
 public interface BasicCardDeckData extends Serializable {
     /**
      * @return The width of the cards of this deck.
      */
+    @Schema(name = "Width", description = "Width of a single card of the deck.", required = true)
     int getWidth();
 
     /**
      * @return The height of the cards of this deck.
      */
+    @Schema(name = "Height", description = "Height of a single card of the deck.", required = true)
     int getHeight();
 
     /**
      * @return A picture of the backside of the cards.
      */
+    @Schema(name = "BackOfCard", description = "The definition of the picture of the backside of the card.", required = true)
     ResourceAddress getBackOfCard();
 
     /**
      * @return All cards of this deck.
      */
+    @Schema(name = "Cards", description = "A list of all cards of this deck.", required = true)
     List<ResourceAddress> getCards();
 }

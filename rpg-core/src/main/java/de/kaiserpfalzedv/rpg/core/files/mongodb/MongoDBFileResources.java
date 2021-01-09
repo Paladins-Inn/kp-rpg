@@ -42,6 +42,9 @@ import java.util.UUID;
 @ApplicationScoped
 public class MongoDBFileResources implements FileResourceService {
 
+    /**
+     * The GridFS bucket for storing files.
+     */
     @Inject
     GridFSBucket store;
 

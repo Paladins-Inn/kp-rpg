@@ -25,25 +25,43 @@ import java.util.UUID;
 /**
  * FileHandlingException -- Some problems occurred while handling file resources.
  *
+ * Please use one of the derived classes.
+ *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-08
  */
-public class FileHandlingException extends BaseException {
+public abstract class FileHandlingException extends BaseException {
+    /**
+     * UID of the file resource this exception is generated for.
+     */
     final UUID uid;
 
-
+    /**
+     * @param uid UID of the file resource.
+     * @param message the failure message.
+     */
+    @SuppressWarnings("CdiInjectionPointsInspection")
     public FileHandlingException(final UUID uid, final String message) {
         super(message);
 
         this.uid = uid;
     }
 
+    /**
+     * @param uid UID of the file resource.
+     * @param cause the failure cause.
+     */
     public FileHandlingException(final UUID uid, final Throwable cause) {
-        super(cause);
+        super(cause.getMessage(), cause);
 
         this.uid = uid;
     }
 
+    /**
+     * @param uid UID of the file resource.
+     * @param message the failure message.
+     * @param cause the failure cause.
+     */
     public FileHandlingException(final UUID uid, final String message, final Throwable cause) {
         super(message, cause);
 

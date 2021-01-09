@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.core.resources;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
@@ -37,10 +38,29 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableResourceHistory.class)
 @JsonDeserialize(builder = ImmutableResourceHistory.Builder.class)
+@Schema(name = "ResourceHistory", description = "A single history entry of a change.")
 public interface ResourceHistory<T extends Serializable> extends Serializable {
+    /**
+     * @return Timestamp of this history entry.
+     */
+    @Schema(name = "TimeStamp", description = "The timestamp of the change.", required = true)
     OffsetDateTime getTimeStamp();
+
+    /**
+     * @return Status of the resource after this change.
+     */
+    @Schema(name = "Status", description = "The resource status after the change.", required = true)
     String getStatus();
+
+    /**
+     * @return Human readable message for this change (if any).
+     */
+    @Schema(name = "Message", description = "The human readable description of the change.")
     Optional<String> getMessage();
-    Optional<ResourceAddress> getReference();
+
+    /**
+     * @return The serializable additional data (if any).
+     */
+    @Schema(name = "Data", description = "A serializable data block of the change.")
     Optional<T> getData();
 }

@@ -35,6 +35,10 @@ import javax.inject.Inject;
 public class FileDateabase {
     private static final String FILE_DATABASE_NAME = "files";
 
+    /**
+     * The mongo db client used for creating the GridFS bucket.
+     */
+    @SuppressWarnings("CdiInjectionPointsInspection")
     @Inject
     MongoClient client;
 

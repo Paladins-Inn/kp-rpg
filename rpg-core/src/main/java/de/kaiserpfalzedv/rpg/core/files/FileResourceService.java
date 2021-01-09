@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.util.UUID;
 
 /**
+ * FileResourceService -- The anti corruption interface for storing files.
+ *
  * This is the interface of the file resource handling service. This interface encapsulates the technical details of the
  * datastore.
  *
@@ -44,7 +46,7 @@ public interface FileResourceService {
      *
      * @param id The UID to retrieve
      * @throws FileNotFoundException The file resource could not be found.
-     * @return
+     * @return The file data as input stream.
      */
     InputStream retrieve(final UUID id) throws FileNotFoundException;
 

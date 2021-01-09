@@ -25,9 +25,9 @@ import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.kaiserpfalzedv.rpg.core.dice.TestDice;
-import de.kaiserpfalzedv.rpg.core.files.File;
-import de.kaiserpfalzedv.rpg.core.files.ImmutableFile;
+import de.kaiserpfalzedv.rpg.core.files.FileResource;
 import de.kaiserpfalzedv.rpg.core.files.ImmutableFileData;
+import de.kaiserpfalzedv.rpg.core.files.ImmutableFileResource;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,17 +47,17 @@ public class TestResource {
     private static final UUID UID = UUID.fromString("7ee3f57b-ed6c-400e-84f4-253afe0c56c0");
     private static final OffsetDateTime CREATED = OffsetDateTime.parse("2021-01-07T18:10:20.168433Z");
 
-    private final File sut = ImmutableFile.builder()
+    private final FileResource sut = ImmutableFileResource.builder()
             .metadata(
                     ImmutableResourceMetadata.builder()
-                            .kind(File.KIND)
-                            .apiVersion(File.API_VERSION)
+                            .kind(FileResource.KIND)
+                            .apiVersion(FileResource.API_VERSION)
                             .created(CREATED)
                             .generation(1L)
                             .namespace("test")
                             .name("TestFile")
                             .uid(UID)
-                            .selfLink("/apis/files/v1/namespaces/test/" + File.KIND + "/" + UID.toString())
+                            .selfLink("/apis/files/v1/namespaces/test/" + FileResource.KIND + "/" + UID.toString())
                             .build()
             )
             .spec(
@@ -97,7 +97,7 @@ public class TestResource {
 
     @Test
     public void ShouldReadTheObjectWhenANiceStringIsGiven() throws JsonProcessingException {
-        File result = mapper.readerFor(File.class).readValue(JSON_STRING);
+        FileResource result = mapper.readerFor(FileResource.class).readValue(JSON_STRING);
 
         assertEquals(sut, result);
     }
