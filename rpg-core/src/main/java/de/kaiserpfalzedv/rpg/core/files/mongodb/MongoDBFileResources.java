@@ -28,10 +28,9 @@ import org.bson.BsonValue;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.UUID;
 
 /**
@@ -56,25 +55,16 @@ public class MongoDBFileResources implements FileResourceService {
     }
 
     @Override
-    public OutputStream retrieve(final UUID uid) throws FileNotFoundException {
-        OutputStream result = new BufferedOutputStream(new ByteArrayOutputStream());
+    public InputStream retrieve(final UUID uid) throws FileNotFoundException {
+        ByteArrayOutputStream data = new ByteArrayOutputStream();
 
         try {
-            store.downloadToStream(mongofyUUID(uid), result);
+            store.downloadToStream(mongofyUUID(uid), data);
         } catch (MongoGridFSException e) {
             throw new FileNotFoundException(uid, e.getCause());
         }
 
-        return result;
-    }
-
-    @Override
-    public void rename(final UUID uid, final String fileName) throws FileCouldNotBeSavedException {
-        try {
-            store.rename(mongofyUUID(uid), fileName);
-        } catch (MongoGridFSException e) {
-            throw new FileCouldNotBeSavedException(uid, e.getCause());
-        }
+        return new ByteArrayInputStream(data.toByteArray());
     }
 
     @Override

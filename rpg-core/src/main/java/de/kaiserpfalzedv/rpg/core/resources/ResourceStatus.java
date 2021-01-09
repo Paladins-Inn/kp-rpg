@@ -24,10 +24,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 /**
- * The
+ * ResourceStatus -- The state of the managed resource.
+ *
+ * @param <H> Type of the additional history data.
  */
 @Value.Immutable
 @Value.Modifiable
@@ -38,4 +42,37 @@ import java.util.List;
 public interface ResourceStatus<H extends Serializable> extends Serializable {
     Long getObservedGeneration();
     List<ResourceHistory<H>> getHistory();
+
+    /**
+     * Adds a new history entry.
+     *
+     * @param status The status of this entry.
+     * @param message The generic message for this history entry.
+     * @param add Additional data.
+     * @return TRUE if the history could be added.
+     */
+    default ResourceStatus<H> addHistory(final String status, final String message, final H add) {
+        getHistory().add(
+                ImmutableResourceHistory.<H>builder()
+                        .status(status)
+                        .timeStamp(OffsetDateTime.now(ZoneOffset.UTC))
+                        .message(message)
+                        .data(add)
+                        .build()
+        );
+
+        return this;
+    }
+
+    default ResourceStatus<H>  addHistory(final String status, final String message) {
+        getHistory().add(
+                ImmutableResourceHistory.<H>builder()
+                        .status(status)
+                        .timeStamp(OffsetDateTime.now(ZoneOffset.UTC))
+                        .message(message)
+                        .build()
+        );
+
+        return this;
+    }
 }

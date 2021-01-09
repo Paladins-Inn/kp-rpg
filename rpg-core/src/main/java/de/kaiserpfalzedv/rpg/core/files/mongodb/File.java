@@ -17,16 +17,29 @@
 
 package de.kaiserpfalzedv.rpg.core.files.mongodb;
 
+import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.codecs.pojo.annotations.BsonId;
 
 import java.util.UUID;
 
+/**
+ * File -- The entity for storing the file resource.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.0.0 2021-01-09
+ */
 @MongoEntity
 public class File extends PanacheMongoEntityBase {
+    /** ID of the document. */
     @BsonId
     public UUID uid;
 
+    /** The resource meta data. */
+    public ResourceMetadata metadata;
 
+    /** The status of the resource. */
+    public ResourceStatus<String> status;
 }

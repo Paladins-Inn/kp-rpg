@@ -18,7 +18,6 @@
 package de.kaiserpfalzedv.rpg.core.files;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.UUID;
 
 /**
@@ -45,18 +44,9 @@ public interface FileResourceService {
      *
      * @param id The UID to retrieve
      * @throws FileNotFoundException The file resource could not be found.
+     * @return
      */
-    OutputStream retrieve(final UUID id) throws FileNotFoundException;
-
-    /**
-     * Updates a file resource.
-     *
-     * @param uid The file resource uid.
-     * @param fileName The new file name of this resource.
-     * @throws FileNotFoundException The file with this UID was not found.
-     * @throws FileCouldNotBeSavedException The file name could not be changed.
-     */
-    void rename(final UUID uid, final String fileName) throws FileNotFoundException, FileCouldNotBeSavedException;
+    InputStream retrieve(final UUID id) throws FileNotFoundException;
 
     /**
      * Deletes the file resource by UID. If the file resource does not exists, nothing will be reported.

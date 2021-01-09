@@ -228,7 +228,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${maven-javadoc-plugin.version}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -310,71 +309,32 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>3.0.0-M5</version>
+          <configuration>
+            <systemPropertyVariables>
+              <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+              <!--suppress UnresolvedMavenProperty -->
+              <maven.home>${maven.home}</maven.home>
+            </systemPropertyVariables>
+          </configuration>
         </plugin>
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
           <version>3.0.0-M5</version>
+          <configuration>
+            <systemPropertyVariables>
+              <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+              <!--suppress UnresolvedMavenProperty -->
+              <maven.home>${maven.home}</maven.home>
+            </systemPropertyVariables>
+          </configuration>
         </plugin>
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>${maven-site-plugin.version}</version>
-        </plugin>
-
-        <plugin>
-          <groupId>org.basepom.maven</groupId>
-          <artifactId>duplicate-finder-maven-plugin</artifactId>
-          <version>1.5.1-SNAPSHOT</version>
-          <executions>
-            <execution>
-              <id>default</id>
-              <phase>verify</phase>
-              <goals>
-                <goal>check</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <printEqualFiles>false</printEqualFiles>
-            <failBuildInCaseOfDifferentContentConflict>false</failBuildInCaseOfDifferentContentConflict>
-            <failBuildInCaseOfEqualContentConflict>false</failBuildInCaseOfEqualContentConflict>
-            <failBuildInCaseOfConflict>true</failBuildInCaseOfConflict>
-            <checkCompileClasspath>true</checkCompileClasspath>
-            <checkRuntimeClasspath>true</checkRuntimeClasspath>
-            <checkTestClasspath>true</checkTestClasspath>
-            <skip>false</skip>
-            <quiet>true</quiet>
-            <preferLocal>true</preferLocal>
-            <useResultFile>true</useResultFile>
-            <resultFileMinClasspathCount>2</resultFileMinClasspathCount>
-            <resultFile>${project.build.directory}/duplicate-finder-result.xml</resultFile>
-            <includeBootClasspath>false</includeBootClasspath>
-            <bootClasspathProperty>sun.boot.class.path</bootClasspathProperty>
-            <useDefaultResourceIgnoreList>true</useDefaultResourceIgnoreList>
-            <includePomProjects>false</includePomProjects>
-            <!-- xmlpull and xpp3 are still incapable of solving the java module system. -->
-            <ignoredDependencies>
-              <ignoredDependency>
-                <groupId>xmlpull</groupId>
-                <artifactId>xmlpull</artifactId>
-              </ignoredDependency>
-              <ignoredDependency>
-                <groupId>xpp3</groupId>
-                <artifactId>xpp3_min</artifactId>
-              </ignoredDependency>
-            </ignoredDependencies>
-            <ignoredResourcePatterns>
-              <ignoredResourcePattern>checkstyle\.xml</ignoredResourcePattern>
-              <ignoredResourcePattern>log4j2.xml</ignoredResourcePattern>
-              <ignoredResourcePattern>mozilla/public-suffix-list.txt</ignoredResourcePattern>
-              <ignoredResourcePattern>.*\.properties</ignoredResourcePattern>
-              <ignoredResourcePattern>.*\.txt</ignoredResourcePattern>
-              <ignoredResourcePattern>.*\.html</ignoredResourcePattern>
-            </ignoredResourcePatterns>
-          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -445,7 +405,7 @@
     <profile>
       <id>java</id>
 
-      <activation><file><exists>src/main/java/module-info.java</exists></file></activation>
+      <activation><file><exists>src/main/java</exists></file></activation>
 
       <dependencies>
         <dependency>
@@ -512,6 +472,15 @@
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
           </plugin>
           <plugin>
@@ -526,11 +495,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-site-plugin</artifactId>
-          </plugin>
-
-          <plugin>
-            <groupId>org.basepom.maven</groupId>
-            <artifactId>duplicate-finder-maven-plugin</artifactId>
           </plugin>
         </plugins>
       </build>
@@ -549,39 +513,15 @@
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-smallrye-openapi</artifactId>
         </dependency>
-        <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-annotations</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>com.fasterxml.jackson.datatype</groupId>
-          <artifactId>jackson-datatype-jdk8</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.codehaus.jackson</groupId>
-          <artifactId>jackson-jaxrs</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>com.fasterxml.jackson.jaxrs</groupId>
-          <artifactId>jackson-jaxrs-json-provider</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.jboss.spec.javax.ws.rs</groupId>
-          <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-databind</artifactId>
-        </dependency>
 
         <dependency>
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter-api</artifactId>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-junit5</artifactId>
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.junit.platform</groupId>
-          <artifactId>junit-platform-engine</artifactId>
+          <groupId>io.rest-assured</groupId>
+          <artifactId>rest-assured</artifactId>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -692,29 +632,11 @@
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-junit5</artifactId>
           <scope>test</scope>
-          <exclusions>
-            <exclusion>
-              <groupId>com.thoughtworks.xstream</groupId>
-              <artifactId>xstream</artifactId>
-            </exclusion>
-          </exclusions>
-        </dependency>
-        <dependency>
-          <groupId>com.thoughtworks.xstream</groupId>
-          <artifactId>xstream</artifactId>
-          <version>1.4.15</version>
-          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>io.rest-assured</groupId>
           <artifactId>rest-assured</artifactId>
           <scope>test</scope>
-          <exclusions>
-            <exclusion>
-              <groupId>com.sun.xml.bind</groupId>
-              <artifactId>jaxb-impl</artifactId>
-            </exclusion>
-          </exclusions>
         </dependency>
 
         <dependency>
