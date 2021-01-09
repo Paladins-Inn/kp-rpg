@@ -3,6 +3,7 @@
  * @since 2021-01-04
  */
 module de.kaiserpfalzedv.rpg.core {
+    exports de.kaiserpfalzedv.rpg.core.api;
     exports de.kaiserpfalzedv.rpg.core.cards;
     exports de.kaiserpfalzedv.rpg.core.dice;
     exports de.kaiserpfalzedv.rpg.core.files;
@@ -21,4 +22,11 @@ module de.kaiserpfalzedv.rpg.core {
     requires microprofile.openapi.api;
     requires exp4j;
     requires value;
+
+    requires quarkus.mongodb.client;
+    requires org.mongodb.driver.sync.client;
+    requires quarkus.mongodb.panache;
+    requires quarkus.mongodb.panache.common;
+    requires org.mongodb.bson;
+    requires org.mongodb.driver.core;
 }

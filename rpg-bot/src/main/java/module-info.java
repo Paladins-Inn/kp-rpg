@@ -2,6 +2,7 @@ module de.kaiserpfalzedv.rpg.bot {
     exports de.kaiserpfalzedv.rpg.bot;
     exports de.kaiserpfalzedv.rpg.bot.core;
     exports de.kaiserpfalzedv.rpg.bot.dice;
+    exports de.kaiserpfalzedv.rpg.bot.files;
 
     requires de.kaiserpfalzedv.rpg.core;
     requires de.kaiserpfalzedv.rpg.torg;
@@ -24,7 +25,6 @@ module de.kaiserpfalzedv.rpg.bot {
     requires quarkus.resteasy.jackson;
     requires quarkus.resteasy.multipart;
     requires quarkus.scheduler;
-    requires smallrye.common.annotation;
     requires smallrye.mutiny.vertx.core;
     requires io.smallrye.mutiny;
     requires com.fasterxml.jackson.annotation;

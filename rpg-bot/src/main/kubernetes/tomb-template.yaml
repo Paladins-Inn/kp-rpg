@@ -1,0 +1,438 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  template: tomb-service
+message: |-
+  You installed the TOMB service!
+
+  The service and the mongodb data store have been
+  installed. You can access the service as:
+
+  Service URI: ${ROUTE_URL} (for gitlab)
+  UI URI: tomb.${NAMMONGODBPACE}.svc (for TOMB UI)
+metadata:
+  annotations:
+    description: >-
+      TOMB is the search engine for CER (Customer Engagement Report). You
+      find more information in
+      https://gitlab.consulting.redhat.com/kmo-consulting-engagement-reports/cer-tools/tomb/README.md.
+
+      The system consists of the quarkus based service, a SQL database and an
+      elastic search for the full text data.
+    iconClass: icon-redis
+    openshift.io/display-name: TOMB
+    openshift.io/documentation-url: >-
+      https://gitlab.consulting.redhat.com/kmo-consulting-engagement-reports/cer-tools/tomb/README.md
+    openshift.io/long-description: >-
+      This system provides access to the Customer Engagement Report. The data is
+      stored in persistent volumes.
+    openshift.io/provider-display-name: CER Working Group
+    openshift.io/support-url: >-
+      https://gitlab.consulting.redhat.com/kmo-consulting-engagement-reports/cer-tools/tomb/-/issues
+    tags: 'mariadb,elasticsearch,quarkus'
+  creationTimestamp: '2020-11-14T17:06:55Z'
+  name: tomb-service
+  namespace: tomb-test
+  resourceVersion: '125808347'
+  selfLink: >-
+    /apis/template.openshift.io/v1/namespaces/tomb-test/templates/tomb-service
+  uid: cc5fea08-269b-11eb-af53-0cc47a0755e4
+objects:
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata:
+      labels:
+        delete: tomb-service
+      name: tomb
+    spec:
+      dockerImageRepository: '${BACKEND_IMAGE}'
+      lookupPolicy:
+        local: true
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      labels:
+        delete: tomb-service
+      name: '${SQL_PVC}'
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: '${SQL_DISK_SIZE}'
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      annotations:
+        template.openshift.io/expose-sql_name: '{.data[''name'']}'
+        template.openshift.io/expose-sql_password: '{.data[''password'']}'
+        template.openshift.io/expose-sql_root_password: '{.data[''rootpasswd'']}'
+        template.openshift.io/expose-sql_service: '{.data[''service'']}'
+        template.openshift.io/expose-sql_uri: '{.data[''uri'']}'
+        template.openshift.io/expose-sql_user: '{.data[''username'']}'
+      labels:
+        delete: tomb-service
+      name: tomb-datasource-config
+    stringData:
+      name: '${SQL_DATABASE}'
+      password: '${SQL_PASSWD}'
+      rootpasswd: '${SQL_ROOT_PASSWD}'
+      service: tomb-datastore-sql
+      uri: 'jdbc:mariadb://tomb-datastore-sql:3306/${SQL_DATABASE}'
+      username: '${SQL_USERNAME}'
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        template.openshift.io/expose-uri: 'http://{.spec.clusterIP}:{.spec.ports[?(.name="http")].port}'
+      labels:
+        app.kubernetes.io/name: tomb
+        app.kubernetes.io/runtime: quarkus
+        app.kubernetes.io/version: '${BACKEND_VERSION}'
+        delete: tomb-service
+      name: tomb-service
+    spec:
+      ports:
+        - name: http
+          port: 8080
+          protocol: TCP
+        - name: https
+          port: 8443
+          protocol: TCP
+      selector:
+        app.kubernetes.io/name: tomb
+        app.kubernetes.io/runtime: quarkus
+        app.kubernetes.io/version: '${BACKEND_VERSION}'
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      annotations:
+        template.openshift.io/expose-uri: '${ROUTE_URL}'
+      labels:
+        app.kubernetes.io/name: tomb
+        app.kubernetes.io/runtime: quarkus
+        app.kubernetes.io/version: '${BACKEND_VERSION}'
+        delete: tomb-service
+      name: tomb-service
+    spec:
+      host: '${ROUTE_URL}'
+      port:
+        targetPort: http
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: tomb-service
+        weight: 100
+      wildcardPolicy: None
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: '8080'
+        prometheus.io/scrape: 'true'
+      labels:
+        app.kubernetes.io/name: tomb
+        app.kubernetes.io/runtime: quarkus
+        app.kubernetes.io/version: '${BACKEND_VERSION}'
+        delete: tomb-service
+      name: tomb-service
+    spec:
+      replicas: 1
+      revisionHistoryLimit: 3
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: tomb
+          app.kubernetes.io/runtime: quarkus
+          app.kubernetes.io/version: '${BACKEND_VERSION}'
+      strategy:
+        rollingUpdate:
+          maxSurge: 100%
+          maxUnavailable: 0%
+        type: RollingUpdate
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: tomb
+            app.kubernetes.io/runtime: quarkus
+            app.kubernetes.io/version: '${BACKEND_VERSION}'
+            delete: tomb-service
+        spec:
+          containers:
+            - env:
+                - name: KUBERNETMONGODB_NAMMONGODBPACE
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: metadata.namespace
+                - name: QUARKUS_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: username
+                      name: tomb-datasource-config
+                - name: QUARKUS_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: password
+                      name: tomb-datasource-config
+                - name: QUARKUS_DATASOURCE_JDBC_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: uri
+                      name: tomb-datasource-config
+                - name: QUARKUS_LOG_CONSOLE_JSON
+                  value: 'false'
+                - name: QUARKUS_LOG_LEVEL
+                  value: INFO
+                - name: QUARKUS_LOG_CATEGORY_DE_KAISERPFALZEDV_LEVEL
+                  value: DEBUG
+                - name: QUARKUS_ELASTICSEARCH_HOSTS
+                  valueFrom:
+                    secretKeyRef:
+                      key: uri
+                      name: tomb-es-config
+                - name: FULLTEXT_INDEX
+                  valueFrom:
+                    secretKeyRef:
+                      key: name
+                      name: tomb-es-config
+              image: >-
+                docker-registry.default.svc:5000/${NAMMONGODBPACE}/tomb:${BACKEND_VERSION}
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /health/live
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 40
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 5
+              name: tomb
+              ports:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+                - containerPort: 8443
+                  name: https
+                  protocol: TCP
+              readinessProbe:
+                failureThreshold: 1
+                httpGet:
+                  path: /health/ready
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 40
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 5
+              resources:
+                limits:
+                  cpu: '${BACKEND_CPU_LIMITS}'
+                  memory: '${BACKEND_MEM_LIMITS}'
+                requests:
+                  cpu: '${BACKEND_CPU_REQUMONGODBTS}'
+                  memory: '${BACKEND_MEM_REQUMONGODBTS}'
+          restartPolicy: Always
+  - kind: StatefulSet
+    apiVersion: apps/v1
+    metadata:
+      labels:
+        app: tomb-service
+        app.kubernetes.io/name: tomb
+        app.kubernetes.io/runtime: mongodb
+        app.kubernetes.io/version: 1.0.0-SNAPSHOT
+        delete: tomb-service
+        template: tomb-template
+      name: tomb-mongodb
+      namespace: tomb-test
+    spec:
+      podManagementPolicy: OrderedReady
+      replicas: 1
+      revisionHistoryLimit: 10
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: tomb
+          app.kubernetes.io/runtime: mongodb
+          app.kubernetes.io/version: 1.0.0-SNAPSHOT
+      serviceName: tomb-datastore-mongodb
+      strategy:
+        activeDeadlineSeconds: 21600
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 100%
+          maxUnavailable: 0%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app: tomb-service
+            name: tomb-mongodb
+        spec:
+          containers:
+            - name: mongodb
+              env:
+                - name: MONGODB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-user
+                      name: tomb-mongodb
+                - name: MONGODB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-password
+                      name: tomb-mongodb
+                - name: MONGODB_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-admin-password
+                      name: tomb-mongodb
+                - name: MONGODB_DATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-name
+                      name: tomb-mongodb
+              image: 'registry.redhat.io/rhscl/mongodb-36-rhel7:latest'
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                successThreshold: 1
+                tcpSocket:
+                  port: 27017
+                timeoutSeconds: 1
+              ports:
+                - containerPort: 27017
+                  protocol: TCP
+              readinessProbe:
+                exec:
+                  command:
+                    - /bin/sh
+                    - '-i'
+                    - '-c'
+                    - >-
+                      mongo 127.0.0.1:27017/$MONGODB_DATABASE -u $MONGODB_USER -p
+                      $MONGODB_PASSWORD --eval="quit()"
+                failureThreshold: 3
+                initialDelaySeconds: 3
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              resources:
+                limits:
+                  memory: 512Mi
+              volumeMounts:
+                - mountPath: /var/lib/mongodb/data
+                  name: tomb-mongodb-data
+          dnsPolicy: ClusterFirst
+          imagePullSecrets:
+            - name: 6340056-rlichti-check-pull-secret
+          volumes:
+            - name: tomb-mongodb-data
+              emptyDir: { }
+      triggers:
+        - type: ConfigChange
+parameters:
+  - description: >-
+      The URL for the service.
+    displayName: Service URL
+    name: ROUTE_URL
+    required: true
+  - description: Namespace this software is installed in.
+    displayName: OpenShift Namespace
+    name: NAMMONGODBPACE
+    required: true
+  - description: The domain the UI is running on.
+    displayName: CORS Domain (UI)
+    name: CORS
+    required: true
+    value: tomb
+  - description: Container image for the TOMB backend.
+    name: BACKEND_IMAGE
+    required: true
+    value: quay.io/klenkes74/tomb
+  - description: Container image version of the TOMB backend.
+    displayName: TOMB version
+    name: BACKEND_VERSION
+    required: true
+    value: 1.0.0-SNAPSHOT
+  - description: The requested memory of the TOMB backend.
+    displayName: TOMB Memory (requested)
+    name: BACKEND_MEM_REQUMONGODBTS
+    required: true
+    value: 512Mi
+  - description: The requested CPU of the TOMB backend.
+    displayName: TOMB CPU (requested)
+    name: BACKEND_CPU_REQUMONGODBTS
+    required: true
+    value: 500m
+  - description: The maximum memory of the TOMB backend.
+    displayName: TOMB Memory (max)
+    name: BACKEND_MEM_LIMITS
+    required: true
+    value: 512Mi
+  - description: The maximum CPU of the TOMB backend.
+    displayName: TOMB CPU (max)
+    name: BACKEND_CPU_LIMITS
+    required: true
+    value: 500m
+  - description: Version of the MONGODB container image.
+    displayName: MONGODB Image Version
+    name: MONGODB_VERSION
+    required: true
+    value: 7.10.0
+  - description: The index on the MONGODB datastore..
+    displayName: MONGODB Index
+    from: 'cer_[a-z]{6}'
+    generate: expression
+    name: MONGODB_DATABASE
+    required: true
+  - description: The username to connect to the MONGODB server.
+    displayName: MONGODB User
+    from: 'user[a-aA-Z0-9]{3}'
+    generate: expression
+    name: MONGODB_USERNAME
+    required: true
+  - description: The password to connect as user to the MONGODB server.
+    displayName: MONGODB Password
+    from: '[a-aA-Z0-9]{16}'
+    generate: expression
+    name: MONGODB_PASSWD
+    required: true
+  - description: Number of running MONGODB instances.
+    displayName: MONGODB data replica
+    name: MONGODB_REPLICA
+    required: true
+    value: '1'
+  - description: The requested memory of the MONGODB server.
+    displayName: MONGODB Memory (requested)
+    name: MONGODB_MEM_REQUMONGODBTS
+    required: true
+    value: 512Mi
+  - description: The requested CPU of the MONGODB server.
+    displayName: MONGODB CPU (requested)
+    name: MONGODB_CPU_REQUMONGODBTS
+    required: true
+    value: 500m
+  - description: The maximum memory of the MONGODB server.
+    displayName: MONGODB Memory (max)
+    name: MONGODB_MEM_LIMITS
+    required: true
+    value: 1Gi
+  - description: The maximum CPU of the MONGODB server.
+    displayName: MONGODB CPU (max)
+    name: MONGODB_CPU_LIMITS
+    required: true
+    value: 1000m
+  - description: The size of the MONGODB datastore.
+    displayName: MONGODB Disk (max)
+    name: MONGODB_DISK_SIZE
+    required: true
+    value: 10Gi
