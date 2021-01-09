@@ -80,15 +80,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.eclipse.microprofile.health</groupId>
-            <artifactId>microprofile-health-api</artifactId>
-            <version>2.2</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.enterprise</groupId>
-                    <artifactId>cdi-api</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
+            <artifactId>mongodb-testsupport</artifactId>
         </dependency>
     </dependencies>
 </project>

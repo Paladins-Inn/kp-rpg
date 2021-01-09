@@ -22,46 +22,25 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>kp-rpg</artifactId>
-        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <artifactId>testsupport</artifactId>
+        <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>rpg-core</artifactId>
-    <name>KP RPG :: Core Services</name>
-    <description>The services used by almost all role playing systems.</description>
+    <artifactId>mongodb-testsupport</artifactId>
+    <name>KP RPG :: Test-Suppport :: MongoDB</name>
+    <description>Test support for testing mongodb with quarkus tests.</description>
 
 
     <dependencies>
         <dependency>
-            <groupId>net.objecthunter</groupId>
-            <artifactId>exp4j</artifactId>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mongodb</artifactId>
         </dependency>
 
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-mongodb-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-mongodb-panache</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
-            <artifactId>mongodb-testsupport</artifactId>
+            <artifactId>quarkus-junit5</artifactId>
         </dependency>
     </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers-bom</artifactId>
-                <version>1.15.1</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 </project>

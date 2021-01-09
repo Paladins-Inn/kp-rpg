@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.mongodb;
+package de.kaiserpfalzedv.rpg.test.mongodb;
 
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import org.slf4j.Logger;
@@ -27,10 +27,17 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Produces a mongodb that can be used in {@link io.quarkus.test.junit.QuarkusTest}.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.0.0 2021-01-09
+ */
+@SuppressWarnings({"unused", "rawtypes"})
 public class MongoDBResource implements QuarkusTestResourceLifecycleManager {
     private static final Logger LOG = LoggerFactory.getLogger(MongoDBResource.class);
 
-    private static final String MONGODB_CONTAINER_NAME = "mongo:4.0.10";
+    private static final String MONGODB_CONTAINER_NAME = "mongo:4.4.3";
     private static final int MONGO_PORT = 27017;
 
     private static final String USER = "admin";
@@ -38,24 +45,18 @@ public class MongoDBResource implements QuarkusTestResourceLifecycleManager {
     private static final String DATABASE = "admin";
 
     private static final Network network = Network.newNetwork();
-    private final GenericContainer container = createMongoDbReplicaContainer("M1", "rs0");
+    private final GenericContainer container = createMongoDbReplicaContainer("M1");
 
     @Override
     public Map<String, String> start() {
         container.start();
-        LOG.info("Port bindings: {}", container.getMappedPort(MONGO_PORT));
-
-        Map<String, String> result = new HashMap<>();
-        result.put("quarkus.mongodb.connection-string","mongodb://localhost:" + container.getMappedPort(MONGO_PORT));
-        result.put("quarkus.mongodb.database", DATABASE);
-        result.put("quarkus.mongodb.credentials.username", USER);
-        result.put("quarkus.mongodb.credentials.password", PASSWORD);
-
-        LOG.info("Result: {}", result);
+        Map<String, String> result = createQuarkusConfiguration();
+        LOG.info("Quarkus configuration: {}", result);
         return result;
     }
 
-    private GenericContainer createMongoDbReplicaContainer(final String networkAlias, final String rs) {
+    @SuppressWarnings("SpellCheckingInspection")
+    private GenericContainer createMongoDbReplicaContainer(@SuppressWarnings("SameParameterValue") final String networkAlias) {
         return new GenericContainer(MONGODB_CONTAINER_NAME)
                 .withNetwork(network)
                 .withNetworkAliases(networkAlias)
@@ -64,11 +65,20 @@ public class MongoDBResource implements QuarkusTestResourceLifecycleManager {
                 .withEnv("MONGO_INITDB_ROOT_USERNAME", USER)
                 .withEnv("MONGO_INITDB_ROOT_PASSWORD", PASSWORD)
                 .withCommand("--bind_ip localhost," + networkAlias)
-                .withLogConsumer(new Slf4jLogConsumer(LOG));
+                .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger("container.mongo")));
     }
 
     @Override
     public void stop() {
         container.close();
+    }
+
+    private Map<String, String> createQuarkusConfiguration() {
+        Map<String, String> result = new HashMap<>();
+        result.put("quarkus.mongodb.connection-string","mongodb://localhost:" + container.getMappedPort(MONGO_PORT));
+        result.put("quarkus.mongodb.database", DATABASE);
+        result.put("quarkus.mongodb.credentials.username", USER);
+        result.put("quarkus.mongodb.credentials.password", PASSWORD);
+        return result;
     }
 }

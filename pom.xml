@@ -39,6 +39,8 @@
     <module>rpg-traveller</module>
     <module>rpg-dsa5</module>
     <module>rpg-wod</module>
+
+    <module>testsupport</module>
   </modules>
 
 
@@ -131,6 +133,13 @@
         <groupId>${project.groupId}</groupId>
         <artifactId>rpg-wod</artifactId>
         <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
+        <artifactId>mongodb-testsupport</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
       </dependency>
 
       <!-- quarkus -->

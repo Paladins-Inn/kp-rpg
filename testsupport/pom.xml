@@ -20,6 +20,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <version>1.0.0-SNAPSHOT</version>
 
     <parent>
         <artifactId>kp-rpg</artifactId>
@@ -27,31 +28,17 @@
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>rpg-core</artifactId>
-    <name>KP RPG :: Core Services</name>
-    <description>The services used by almost all role playing systems.</description>
 
+    <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
+    <artifactId>testsupport</artifactId>
+    <name>KP RPG :: Test-Suppport :: Base</name>
+    <packaging>pom</packaging>
 
-    <dependencies>
-        <dependency>
-            <groupId>net.objecthunter</groupId>
-            <artifactId>exp4j</artifactId>
-        </dependency>
+    <description>Test support for testing with quarkus tests.</description>
 
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-mongodb-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-mongodb-panache</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
-            <artifactId>mongodb-testsupport</artifactId>
-        </dependency>
-    </dependencies>
+    <modules>
+      <module>mongodb-testsupport</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>

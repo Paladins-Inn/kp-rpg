@@ -17,6 +17,8 @@
 
 package de.kaiserpfalzedv.rpg.bot.dice;
 
+import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +26,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
 
 @QuarkusTest
+@QuarkusTestResource(MongoDBResource.class)
 public class TestRestRoller {
     @Test
     public void shouldReturnARollWhenD6IsRolled() {
