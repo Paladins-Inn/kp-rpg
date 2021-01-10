@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.files.mongodb;
+package de.kaiserpfalzedv.rpg.core.files.store;
 
 import com.mongodb.MongoGridFSException;
 import com.mongodb.client.gridfs.GridFSBucket;

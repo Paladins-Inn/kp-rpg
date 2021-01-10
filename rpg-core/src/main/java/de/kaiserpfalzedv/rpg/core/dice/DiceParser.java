@@ -39,7 +39,7 @@ public class DiceParser {
     static private final Logger LOG = LoggerFactory.getLogger(DiceParser.class);
 
     static private final String DICE_PATTERN =
-            "(?<pre>([(])?)?"
+            "(?<pre>(([A-Za-z]+)?[(])?)?"
             +"(?<amount>\\d+)?"
             +"(?<type>([dD])?[A-Za-z][0-9A-Za-z]+)"
             +"(?<post>.*)?";

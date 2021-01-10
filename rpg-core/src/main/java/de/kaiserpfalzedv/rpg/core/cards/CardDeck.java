@@ -24,8 +24,6 @@ import de.kaiserpfalzedv.rpg.core.resources.Resource;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
-import java.io.Serializable;
-
 /**
  * A stored file in the resource server.
  *
@@ -38,7 +36,7 @@ import java.io.Serializable;
 @JsonSerialize(as = ImmutableCardDeck.class)
 @JsonDeserialize(builder = ImmutableCardDeck.Builder.class)
 @Schema(name = "cardDeck", description = "A card deck defined by a collection of cards.")
-public interface CardDeck extends Resource<BasicCardDeckData, Serializable> {
+public interface CardDeck extends Resource<BasicCardDeckData, String> {
     String API_VERSION = "v1";
     String KIND = "CardDeck";
 }

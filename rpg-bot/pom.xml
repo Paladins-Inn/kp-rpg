@@ -80,6 +80,15 @@
         </dependency>
 
         <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-openshift</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-kubernetes</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
             <artifactId>mongodb-testsupport</artifactId>
         </dependency>

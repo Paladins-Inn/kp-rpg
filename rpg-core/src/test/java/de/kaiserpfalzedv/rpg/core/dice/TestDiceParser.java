@@ -21,6 +21,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import java.util.Optional;
@@ -28,8 +30,11 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestDiceParser {
+    private static final Logger LOG = LoggerFactory.getLogger(TestDiceParser.class);
+
     private static final int DEFAULT_THROW = 2;
     private static final DieResult[] tests = {
+            new DieResult("sin(d6)", "D6", 1, 1),
             new DieResult("(W20+5+2)/2", "D20", 1, 5),
             new DieResult("(2d6+2)/2", "D6", 2, 3),
             new DieResult("1D6", "D6", 1,2),
@@ -83,6 +88,9 @@ public class TestDiceParser {
             @SuppressWarnings("OptionalUsedAsFieldOrParameterType") final Optional<DieRoll> result,
             final DieResult testInput
     ) {
+        LOG.trace("Checking test: result={}, expected={}, input={}, amount={}, type={}",
+                result, testInput.result, testInput.input, testInput.amount, testInput.dieType);
+
         assertTrue(result.isPresent(), "There should be a DiceRollCommand for '" + testInput.input + "'!");
         DieRoll roll = result.get();
 

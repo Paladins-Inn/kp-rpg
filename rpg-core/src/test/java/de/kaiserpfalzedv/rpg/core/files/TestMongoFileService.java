@@ -18,7 +18,7 @@
 package de.kaiserpfalzedv.rpg.core.files;
 
 import de.kaiserpfalzedv.rpg.core.dice.TestDice;
-import de.kaiserpfalzedv.rpg.core.files.mongodb.MongoDBFileResources;
+import de.kaiserpfalzedv.rpg.core.files.store.MongoDBFileResources;
 import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;

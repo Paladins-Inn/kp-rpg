@@ -67,10 +67,10 @@ public class TestResource {
                             .build()
             )
             .status(
-                ImmutableResourceStatus.builder()
+                ImmutableResourceStatus.<String>builder()
                         .observedGeneration(1L)
                         .addHistory(
-                                ImmutableResourceHistory.builder()
+                                ImmutableResourceHistory.<String>builder()
                                         .status("created")
                                         .timeStamp(CREATED)
                                         .message("File saved.")
