@@ -17,9 +17,9 @@
 
 package de.kaiserpfalzedv.rpg.torg.dice;
 
-import de.kaiserpfalzedv.rpg.core.dice.ImmutableDieResult;
 import de.kaiserpfalzedv.rpg.core.dice.bag.D6;
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
+import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableDieResult;
 
 import javax.enterprise.context.Dependent;
 import java.util.ArrayList;

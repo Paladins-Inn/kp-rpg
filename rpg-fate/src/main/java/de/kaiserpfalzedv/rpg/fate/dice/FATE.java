@@ -17,9 +17,9 @@
 
 package de.kaiserpfalzedv.rpg.fate.dice;
 
-import de.kaiserpfalzedv.rpg.core.dice.ImmutableDieResult;
 import de.kaiserpfalzedv.rpg.core.dice.bag.GenericNumericDie;
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
+import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableDieResult;
 
 import javax.enterprise.context.Dependent;
 

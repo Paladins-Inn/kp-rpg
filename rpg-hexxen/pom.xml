@@ -36,25 +36,5 @@
       <groupId>de.kaiserpfalz-edv.rpg</groupId>
       <artifactId>rpg-core</artifactId>
     </dependency>
-
-    <dependency>
-      <groupId>jakarta.inject</groupId>
-      <artifactId>jakarta.inject-api</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>jakarta.enterprise</groupId>
-        <artifactId>jakarta.enterprise.cdi-api</artifactId>
-    </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <argLine>--add-opens de.kaiserpfalzedv.rpg.hexxen/de.kaiserpfalzedv.rpg.hexxen=ALL-UNNAMED</argLine>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>
