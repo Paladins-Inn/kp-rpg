@@ -22,13 +22,16 @@ import de.kaiserpfalzedv.rpg.core.dice.mat.ExpressionTotal;
 import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableExpressionTotal;
 import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableRollTotal;
 import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
+import io.quarkus.runtime.StartupEvent;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.regex.Matcher;
@@ -55,6 +58,13 @@ public class DiceParser {
     @Inject
     Instance<Die> dice;
 
+
+    public void startUp(@Observes StartupEvent event) {
+        ArrayList<Die> dice = new ArrayList<>();
+        this.dice.forEach(dice::add);
+
+        LOG.debug("Loaded dice: {}", dice);
+    }
 
     public RollTotal parse(final String diceString) {
         String[] dieString = diceString.split("\\s+");
@@ -139,7 +149,7 @@ public class DiceParser {
                     .expression(expression)
                     .build();
 
-            LOG.trace("Parsed die: {}", result);
+            LOG.debug("Parsed die: {}", result);
             return Optional.of(result);
         }
 
@@ -149,7 +159,8 @@ public class DiceParser {
 
     private Die selectDieType(final String qualifier) {
         for (Die die : dice) {
-            if (die.getDieType().equals(qualifier))
+            LOG.trace("Checking die type: qualifier={}, die={}", die.getDieType());
+            if (die.getDieType().equalsIgnoreCase(qualifier))
                 return die;
         }
 

@@ -20,12 +20,15 @@ package de.kaiserpfalzedv.rpg.core.dice.mat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.rpg.core.dice.Die;
+import de.kaiserpfalzedv.rpg.core.dice.LookupTable;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 
@@ -54,7 +57,7 @@ public interface ExpressionTotal extends Serializable {
 
         return new StringBuilder(getExpression().replace("x", getDieIdentifier()))
                 .append(": ")
-                .append(calcuateExpression())
+                .append(calculateExpression())
                 .append(rolls)
                 .toString();
     }
@@ -81,17 +84,26 @@ public interface ExpressionTotal extends Serializable {
      * This calculates the expression. If the die can't be evaluated
      * @return the calculated expression as result of the roll.
      */
-    default String calcuateExpression() {
+    default String calculateExpression() {
+        String result = "";
         if (getRolls().length > 0 && getRolls()[0].getDie().isNumericDie()) {
-            int total = calcuateTotal(getRolls());
+            Die die = getRolls()[0].getDie();
 
-            Expression math = new ExpressionBuilder(getExpression()).variable("x").build()
-                    .setVariable("x", total);
+            int roll = calcuateTotal(getRolls());
 
-            return Integer.toString((int)math.evaluate(), 10);
+            Expression math = new ExpressionBuilder(getExpression()).variable("x").build();
+
+            int total = roll;
+            Optional<LookupTable> table = die.getLookupTable();
+            if (table.isPresent()) {
+                total = table.get().lookup(roll);
+            }
+
+            total = (int) math.setVariable("x", total).evaluate();
+            result = Integer.toString(total, 10) + " | " + Integer.toString(roll, 10);
         }
 
-        return "";
+        return result;
     }
 
     private int calcuateTotal(DieResult[] rolls) {

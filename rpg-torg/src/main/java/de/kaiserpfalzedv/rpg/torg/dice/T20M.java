@@ -17,12 +17,15 @@
 
 package de.kaiserpfalzedv.rpg.torg.dice;
 
+import de.kaiserpfalzedv.rpg.core.dice.LookupTable;
 import de.kaiserpfalzedv.rpg.core.dice.bag.D20;
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
 import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableDieResult;
+import de.kaiserpfalzedv.rpg.torg.BonusChart;
 
 import javax.enterprise.context.Dependent;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * This is an exploding D20 with a minimum of 10 when exploding.
@@ -57,5 +60,10 @@ public class T20M extends D20 {
                 .total(Integer.toString(total, 10))
                 .rolls(rolls.toArray(new String[0]))
                 .build();
+    }
+
+    @Override
+    public Optional<LookupTable> getLookupTable() {
+        return Optional.of(new BonusChart());
     }
 }

@@ -15,27 +15,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.dice;
+package de.kaiserpfalzedv.rpg.core.dice;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-
-@Path("/apis/die/v1")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public class RestRoller {
-    private static final Logger LOG = LoggerFactory.getLogger(RestRoller.class);
-    @Inject
-    DiceRoller roller;
-
-    @GET
-    @Path("/roll/{roll}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String roll(@PathParam("roll") final String roll) {
-        return roller.work(roll);
-    }
+/**
+ * a lookup table to calculate a numeric result from a dice throw.
+ *
+ * @author klenkes74 {@literal <rlichit@kaiserpfalz-edv.de>}
+ * @since 1.0.0 2021-01-09
+ */
+public interface LookupTable {
+    /**
+     * This is a lookup to calculate a result from a die roll.
+     *
+     * @param total The original die roll.
+     * @return The looked up value.
+     */
+    int lookup(int total);
 }

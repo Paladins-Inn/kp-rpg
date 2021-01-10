@@ -60,9 +60,7 @@ public class DiscordDiceRoller implements DiscordPlugin {
 
             String text = new StringBuilder()
                     .append(event.getAuthor().getAsMention())
-                    .append(" rolled ")
-                    .append(command.substring(3))
-                    .append(": ")
+                    .append(" rolled: ")
                     .append(roll)
                     .toString();
 

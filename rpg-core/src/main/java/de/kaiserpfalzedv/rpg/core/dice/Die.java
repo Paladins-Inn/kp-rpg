@@ -19,6 +19,8 @@ package de.kaiserpfalzedv.rpg.core.dice;
 
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
 
+import java.util.Optional;
+
 /**
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2020-08-12
@@ -37,6 +39,13 @@ public interface Die {
      * the results of the single rolls are returned.
      */
     DieResult[] roll(final int number);
+
+    /**
+     * @return returns the lookup table to compare the total to and print as result.
+     */
+    default Optional<LookupTable> getLookupTable() {
+        return Optional.empty();
+    }
 
     /**
      * @return The name of the die.
