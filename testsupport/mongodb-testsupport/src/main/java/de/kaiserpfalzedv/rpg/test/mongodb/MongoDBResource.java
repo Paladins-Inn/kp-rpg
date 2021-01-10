@@ -75,7 +75,8 @@ public class MongoDBResource implements QuarkusTestResourceLifecycleManager {
 
     private Map<String, String> createQuarkusConfiguration() {
         Map<String, String> result = new HashMap<>();
-        result.put("quarkus.mongodb.connection-string","mongodb://localhost:" + container.getMappedPort(MONGO_PORT));
+        result.put("quarkus.mongodb.connection-string","mongodb://localhost:"
+                + container.getMappedPort(MONGO_PORT) + "/?uuidRepresentation=STANDARD");
         result.put("quarkus.mongodb.database", DATABASE);
         result.put("quarkus.mongodb.credentials.username", USER);
         result.put("quarkus.mongodb.credentials.password", PASSWORD);

@@ -17,12 +17,18 @@
 
 package de.kaiserpfalzedv.rpg.core.dice;
 
-import net.objecthunter.exp4j.Expression;
+import de.kaiserpfalzedv.rpg.core.dice.bag.GenericNumericDie;
+import de.kaiserpfalzedv.rpg.core.dice.mat.ExpressionTotal;
+import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableExpressionTotal;
+import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableRollTotal;
+import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.regex.Matcher;
@@ -46,15 +52,33 @@ public class DiceParser {
 
     static private final Pattern PATTERN = Pattern.compile(DICE_PATTERN);
 
+    @Inject
+    Instance<Die> dice;
+
+
+    public RollTotal parse(final String diceString) {
+        String[] dieString = diceString.split("\\s+");
+
+        //noinspection ConfusingArgumentToVarargsMethod
+        LOG.debug("working on di(c)e roll: {}", dieString);
+
+        ImmutableRollTotal.Builder result = ImmutableRollTotal.builder();
+
+        for (String d : dieString) {
+            parseSingleDie(d).ifPresent(result::addExpressions);
+        }
+
+        return result.build();
+    }
+
     /**
-     * Parses the string.
+     * Parses the string of a single die roll.
      *
-     * @param diceString The dice string to parse.
+     * @param dieString The die string to parse.
      * @return The roll preparsed for the services.
      */
-    public Optional<DieRoll> parse(final String diceString) {
-        Matcher m = PATTERN.matcher(diceString);
-        DieRoll result = null;
+    public Optional<ExpressionTotal> parseSingleDie(final String dieString) {
+        Matcher m = PATTERN.matcher(dieString);
 
         if (m.matches()) {
             String pre = m.group("pre");
@@ -76,6 +100,7 @@ public class DiceParser {
             if (dieIdentifier.startsWith("w") || dieIdentifier.startsWith("W")) {
                 dieIdentifier  = "D" + dieIdentifier.substring(1);
             }
+            dieIdentifier = dieIdentifier.toUpperCase();
 
             String post = m.group("post");
             if (post != null && post.isBlank()) {
@@ -90,17 +115,45 @@ public class DiceParser {
             }
 
             String expression = expressionString.toString();
-            LOG.trace("Die roll expression: input='{}', amount={}, expression='{}'", diceString, amount, expression);
+            LOG.trace("Die roll expression: input='{}', amount={}, expression='{}'", dieString, amount, expression);
+
+            Die die;
+            try {
+                die = selectDieType(dieIdentifier);
+            } catch (NumberFormatException e) {
+                LOG.warn("Can't find a valid die for this expression!");
+
+                return Optional.empty();
+            }
 
             try {
-                Expression e = new ExpressionBuilder(expression).variable("x").build();
-                result = new DieRoll(dieIdentifier, amount, e);
+                new ExpressionBuilder(expression).variable("x").build();
             } catch (IllegalArgumentException e) {
-                LOG.warn("Expression '" + diceString + "' is not valid: " + e.getMessage());
+                LOG.warn("Expression '" + dieString + "' is not valid: " + e.getMessage());
+
+                return Optional.empty();
             }
+
+            ExpressionTotal result = ImmutableExpressionTotal.builder()
+                    .rolls(die.roll(amount))
+                    .expression(expression)
+                    .build();
+
+            LOG.trace("Parsed die: {}", result);
+            return Optional.of(result);
         }
 
-        return Optional.ofNullable(result);
+        return Optional.empty();
+    }
+
+
+    private Die selectDieType(final String qualifier) {
+        for (Die die : dice) {
+            if (die.getDieType().equals(qualifier))
+                return die;
+        }
+
+        return new GenericNumericDie(Integer.parseInt(qualifier.substring(1)));
     }
 
     @Override

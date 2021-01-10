@@ -15,17 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.dice;
+package de.kaiserpfalzedv.rpg.core.dice.bag;
 
-import de.kaiserpfalzedv.rpg.core.dice.Die;
+import javax.enterprise.context.Dependent;
 
 /**
- * The special dice for TORG.
- *
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 2021-01-02
+ * @since 2020-08-12
  */
-public interface TorgDie extends Die {
-    /** @return The minimum value for exploded dice. */
-    int getMin();
+@Dependent
+public class D12 extends GenericNumericDie {
+    public static final int MAX = 12;
+
+    public D12() {
+        super(MAX);
+    }
 }

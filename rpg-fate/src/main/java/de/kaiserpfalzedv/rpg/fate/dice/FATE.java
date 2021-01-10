@@ -17,8 +17,9 @@
 
 package de.kaiserpfalzedv.rpg.fate.dice;
 
-import de.kaiserpfalzedv.rpg.core.dice.BasicDie;
-import de.kaiserpfalzedv.rpg.core.dice.Die;
+import de.kaiserpfalzedv.rpg.core.dice.ImmutableDieResult;
+import de.kaiserpfalzedv.rpg.core.dice.bag.GenericNumericDie;
+import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
 
 import javax.enterprise.context.Dependent;
 
@@ -29,13 +30,34 @@ import javax.enterprise.context.Dependent;
  * @since 1.0.0 2021-01-06
  */
 @Dependent
-public class FATE extends BasicDie implements Die {
+public class FATE extends GenericNumericDie {
     public FATE() {
         super(3);
     }
 
     @Override
-    public int roll() {
-        return super.roll() - 2;
+    public DieResult roll() {
+        int roll = rollSingle();
+
+        String result = " ";
+        switch (roll) {
+            case 1:
+                result = "-";
+                break;
+            case 3:
+                result = "+";
+                break;
+        }
+
+        return ImmutableDieResult.builder()
+                .die(this)
+                .total(result)
+                .rolls(result)
+                .build();
+    }
+
+    @Override
+    public boolean isNumericDie() {
+        return false;
     }
 }

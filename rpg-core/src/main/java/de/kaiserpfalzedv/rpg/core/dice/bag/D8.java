@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.dice;
+package de.kaiserpfalzedv.rpg.core.dice.bag;
 
 import javax.enterprise.context.Dependent;
 
@@ -24,10 +24,10 @@ import javax.enterprise.context.Dependent;
  * @since 2020-08-12
  */
 @Dependent
-public class D100 extends BasicDie {
-    public static final int MAX = 100;
+public class D8 extends GenericNumericDie {
+    public static final int MAX = 8;
 
-    public D100() {
+    public D8() {
         super(MAX);
     }
 }
