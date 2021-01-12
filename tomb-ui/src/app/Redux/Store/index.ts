@@ -15,28 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.dice;
+import {combineReducers} from "redux";
+import {combineEpics} from "redux-observable";
+import {diceEpics, diceSlice} from "@app/Redux/Dice";
+import {errorEpics, errorSlice} from "@app/Redux/Errors";
 
-import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+export const rootReducer = combineReducers({
+  dice: diceSlice.reducer,
+  errors: errorSlice.reducer,
+});
 
-@Path("/apis/die/v1")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public class RestRoller {
-    private static final Logger LOG = LoggerFactory.getLogger(RestRoller.class);
-    @Inject
-    DiceRoller roller;
 
-    @GET
-    @Path("/roll/{roll}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public RollTotal roll(@PathParam("roll") final String roll) {
-        return roller.results(roll);
-    }
-}
+export const rootEpics = combineEpics(
+  diceEpics,
+  errorEpics
+)

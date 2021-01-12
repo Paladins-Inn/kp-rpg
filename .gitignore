@@ -1,6 +1,16 @@
+.DS_Store
 .idea/
 docs/generated/
+**/src/app/generated/
+**/npm/cache/
 target/
 .gradle/
 build/
 *.iml
+**/node_modules
+dist
+yarn-error.log
+stats.json
+coverage
+storybook-static
+.env

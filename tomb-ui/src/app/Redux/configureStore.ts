@@ -15,28 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.dice;
+import {applyMiddleware, createStore} from "redux";
+import {createEpicMiddleware} from "redux-observable";
+import {rootEpics, rootReducer} from "@app/Redux/Store";
+import {ApplicationState} from "@app/Redux/Store/ApplicationState";
 
-import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+const epicMiddleware = createEpicMiddleware();
 
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+export const store = createStore(rootReducer, {} as ApplicationState, applyMiddleware(epicMiddleware));
 
-@Path("/apis/die/v1")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public class RestRoller {
-    private static final Logger LOG = LoggerFactory.getLogger(RestRoller.class);
-    @Inject
-    DiceRoller roller;
-
-    @GET
-    @Path("/roll/{roll}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public RollTotal roll(@PathParam("roll") final String roll) {
-        return roller.results(roll);
-    }
-}
+epicMiddleware.run(rootEpics)

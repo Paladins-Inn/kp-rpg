@@ -40,6 +40,8 @@
     <module>rpg-dsa5</module>
     <module>rpg-wod</module>
 
+    <module>tomb-ui</module>
+
     <module>testsupport</module>
   </modules>
 

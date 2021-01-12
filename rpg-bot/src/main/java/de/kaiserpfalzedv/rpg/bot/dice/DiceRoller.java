@@ -46,6 +46,22 @@ public class DiceRoller {
         return roll.getDescription();
     }
 
+    /**
+     * return all results.
+     * 
+     * @param dieRollString The roll to parse.
+     * @return All results instead of a parsed string like in {@link #work(String)}
+     */
+    public RollTotal results(final String dieRollString) {
+        RollTotal roll = parser.parse(dieRollString);
+
+        if (roll.isEmpty()) {
+            throw new IllegalArgumentException("The command '" + dieRollString + "' is no valid die roll!");
+        }
+
+        return roll;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", DiceRoller.class.getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")

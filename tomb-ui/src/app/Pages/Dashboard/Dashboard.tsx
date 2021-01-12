@@ -15,28 +15,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.dice;
+import * as React from 'react';
+import {PageSection, Title} from '@patternfly/react-core';
 
-import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+const Dashboard = () => <PageSection>
+  <Title headingLevel="h1" size="lg">Dashboard Page Title</Title>
 
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+  { store.dice ? <div>Rolled.</div> : <div>store does not include dice roll</div>}
 
-@Path("/apis/die/v1")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public class RestRoller {
-    private static final Logger LOG = LoggerFactory.getLogger(RestRoller.class);
-    @Inject
-    DiceRoller roller;
+  <div>{typeof store.errors}</div>
+</PageSection>;
 
-    @GET
-    @Path("/roll/{roll}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public RollTotal roll(@PathParam("roll") final String roll) {
-        return roller.results(roll);
-    }
-}
+export { Dashboard };

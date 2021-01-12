@@ -15,28 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.dice;
+const path = require('path');
+const express = require('express');
+const app = express();
+const port = 8080;
 
-import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-
-@Path("/apis/die/v1")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public class RestRoller {
-    private static final Logger LOG = LoggerFactory.getLogger(RestRoller.class);
-    @Inject
-    DiceRoller roller;
-
-    @GET
-    @Path("/roll/{roll}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public RollTotal roll(@PathParam("roll") final String roll) {
-        return roller.results(roll);
-    }
-}
+app.use(express.static(path.join(__dirname, '/dist')));
+app.get('*', (req,res) =>{
+  res.sendFile(path.join(__dirname + '/dist/index.html'));
+});
+app.listen(port, () => console.log(`Listening on port ${port}`));
