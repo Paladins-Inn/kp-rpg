@@ -25,6 +25,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * The basic data for every card.
@@ -41,4 +42,7 @@ import java.io.Serializable;
 public interface BasicCardData extends Serializable {
     @Schema(name = "picture", description="The resource address of the picture of this card.")
     ResourceAddress getPicture();
+
+    @Schema(name = "description", description = "A description of the card.")
+    Optional<String> getDescription();
 }

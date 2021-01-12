@@ -31,6 +31,12 @@ import javax.inject.Inject;
 import java.util.StringJoiner;
 import java.util.UUID;
 
+/**
+ * de.kaiserpfalzedv.rpg.bot.dice.DiscordDiceRoller -- The discord bridge for rolling dice.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.0.0 2021-01-11
+ */
 @ApplicationScoped
 public class DiscordDiceRoller implements DiscordPlugin {
     static private final Logger LOG = LoggerFactory.getLogger(DiscordDiceRoller.class);
