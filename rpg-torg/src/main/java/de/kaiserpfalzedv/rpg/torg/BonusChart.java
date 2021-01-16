@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg;
 
+import de.kaiserpfalzedv.rpg.core.dice.LookupTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,14 +28,15 @@ import javax.enterprise.context.Dependent;
  *
  * The bonus chart translates an exploded roll into a bonus for a test.
  *
- * @author klenkes74
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2020-01-03
  */
 @Dependent
-public class BonusChart {
+public class BonusChart implements LookupTable {
     static private final Logger LOG = LoggerFactory.getLogger(BonusChart.class);
 
-    public int lookupBonus(final int roll) {
+    @Override
+    public int lookup(final int roll) {
         int result = 0;
 
         switch (roll) {
@@ -77,7 +79,7 @@ public class BonusChart {
                 break;
         }
 
-        LOG.trace("Bonus chart lookup: roll={}, result={}", roll, result);
+        LOG.debug("Bonus chart lookup: roll={}, result={}", roll, result);
         return result;
     }
 }

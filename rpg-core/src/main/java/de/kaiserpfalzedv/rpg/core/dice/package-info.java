@@ -20,7 +20,7 @@
  *
  * The package contains the basic die type rolled during roll play.
  *
- * @author klenkes74
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2020-01-02
  */
 package de.kaiserpfalzedv.rpg.core.dice;

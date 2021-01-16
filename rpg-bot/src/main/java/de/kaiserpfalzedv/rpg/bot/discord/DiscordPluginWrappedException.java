@@ -23,7 +23,7 @@ import java.io.PrintWriter;
 /**
  * This exception wraps another exception for using in {@link DiscordPlugin}.
  *
- * @author klenkes74
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06
  */
 public class DiscordPluginWrappedException extends DiscordPluginException {

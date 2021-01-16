@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
 /**
  * Admin-Service of the KP RPG service.
  *
- * @author klenkes74
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2020-01-02
  */
 @Path("/admin")

@@ -17,21 +17,14 @@
 
 package de.kaiserpfalzedv.rpg.bot.dice;
 
-import de.kaiserpfalzedv.rpg.core.dice.BasicDie;
 import de.kaiserpfalzedv.rpg.core.dice.DiceParser;
-import de.kaiserpfalzedv.rpg.core.dice.Die;
-import de.kaiserpfalzedv.rpg.core.dice.DieRoll;
-import io.quarkus.runtime.StartupEvent;
+import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
 import io.quarkus.vertx.ConsumeEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Optional;
 import java.util.StringJoiner;
 
 @ApplicationScoped
@@ -41,59 +34,32 @@ public class DiceRoller {
     @Inject
     DiceParser parser;
 
-    @Inject
-    Instance<Die> diceInstances;
-    ArrayList<Die> dice = new ArrayList<>();
-
-    public void startup(@Observes final StartupEvent event) {
-        this.diceInstances.forEach(dice::add);
-
-        LOG.info("Created die roller plugin {}: parser={}, dice={}", this, parser, dice);
-    }
 
     @ConsumeEvent("throw-dice")
     public String work(final String dieRollString) {
-        StringBuilder textBuilder = new StringBuilder();
-
-        Optional<DieRoll> roll = parser.parse(dieRollString);
+        RollTotal roll = parser.parse(dieRollString);
 
         if (roll.isEmpty()) {
             throw new IllegalArgumentException("The command '" + dieRollString + "' is no valid die roll!");
         }
 
-        Integer[] result = roll(roll.get());
-
-        textBuilder.append(result[0]);
-
-        if (result.length >= 2) {
-            textBuilder.append(" [");
-
-            StringBuilder singleResults = new StringBuilder();
-
-            for (int i = 1; i < result.length; i++) {
-                singleResults.append(" | ").append(result[i]);
-            }
-
-            textBuilder.append(singleResults.substring(3)).append("]");
-        }
-
-        return textBuilder.toString();
+        return roll.getDescription();
     }
 
-    private Integer[] roll(final DieRoll roll) {
-        Die die = selectDieType(roll.getDieIdentifier());
+    /**
+     * return all results.
+     * 
+     * @param dieRollString The roll to parse.
+     * @return All results instead of a parsed string like in {@link #work(String)}
+     */
+    public RollTotal results(final String dieRollString) {
+        RollTotal roll = parser.parse(dieRollString);
 
-        LOG.trace("Roll: die={}, roll={}", die, roll);
-        return roll.eval(die);
-    }
-
-    private Die selectDieType(final String qualifier) {
-        for (Die die : dice) {
-            if (die.getDieType().equals(qualifier))
-                return die;
+        if (roll.isEmpty()) {
+            throw new IllegalArgumentException("The command '" + dieRollString + "' is no valid die roll!");
         }
 
-        return new BasicDie(Integer.parseInt(qualifier.substring(1)));
+        return roll;
     }
 
     @Override

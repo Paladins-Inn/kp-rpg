@@ -20,7 +20,7 @@
  *
  * This package contains all specific code for playing TORG:Eternity with computer support.
  *
- * @author klenkes74
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2020-01-03
  */
 package de.kaiserpfalzedv.rpg.torg;

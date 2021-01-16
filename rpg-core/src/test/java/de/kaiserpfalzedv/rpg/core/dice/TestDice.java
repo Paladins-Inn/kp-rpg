@@ -17,15 +17,19 @@
 
 package de.kaiserpfalzedv.rpg.core.dice;
 
+import de.kaiserpfalzedv.rpg.core.dice.bag.*;
+import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
 import org.junit.jupiter.api.*;
 import org.slf4j.MDC;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2020-08-12
  */
 public class TestDice {
-    private final Die[] dice = {
+    private final GenericNumericDie[] dice = {
             new D2(),
             new D4(),
             new D6(),
@@ -34,7 +38,7 @@ public class TestDice {
             new D12(),
             new D20(),
             new D100(),
-            new BasicDie(3)
+            new GenericNumericDie(3)
     };
 
     @Test
@@ -42,16 +46,15 @@ public class TestDice {
         MDC.put("test", "range-match");
 
         for (Die die : dice) {
-            Integer[] result = die.roll(1000);
+            DieResult[] result = die.roll(1000);
 
-            int sum = 0;
             for (int j = 1; j < result.length; j++) {
-                sum += result[j];
-                Assertions.assertTrue(result[j] <= die.getMax(), "No die roll should be above " + die.getMax());
-                Assertions.assertTrue(result[j] >= 1, "No die roll should be below 1");
-            }
+                int roll = Integer.parseInt(result[j].getTotal(), 10);
 
-            Assertions.assertEquals(sum, result[0], "The result should match.");
+                assertTrue(roll >= 1, "No die roll should be below 1");
+                assertTrue(roll <= ((GenericNumericDie) result[j].getDie()).max, "No die roll should be above the maximum of the die");
+
+            }
         }
     }
 
@@ -88,12 +91,11 @@ public class TestDice {
     public void ShouldGiveANiceTostring() {
         MDC.put("test", "check-string");
 
-        for (Die die : dice) {
+        for (GenericNumericDie die : dice) {
             String result = die.toString();
-            int max = die.getMax();
+            int max = die.max;
 
-            Assertions.assertTrue(result.startsWith(die.getClass().getSimpleName() + "@"));
-            Assertions.assertTrue(result.endsWith("[max=" + max + "]"));
+            assertTrue(result.startsWith(die.getClass().getSimpleName() + "["));
         }
     }
 

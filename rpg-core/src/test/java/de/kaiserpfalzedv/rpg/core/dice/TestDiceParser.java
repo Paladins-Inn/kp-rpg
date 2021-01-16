@@ -17,47 +17,57 @@
 
 package de.kaiserpfalzedv.rpg.core.dice;
 
+import de.kaiserpfalzedv.rpg.core.dice.mat.ExpressionTotal;
+import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-import java.util.Optional;
+import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@QuarkusTest
 public class TestDiceParser {
+    private static final Logger LOG = LoggerFactory.getLogger(TestDiceParser.class);
+
     private static final int DEFAULT_THROW = 2;
-    private static final DieResult[] tests = {
-            new DieResult("(W20+5+2)/2", "D20", 1, 5),
-            new DieResult("(2d6+2)/2", "D6", 2, 3),
-            new DieResult("1D6", "D6", 1,2),
-            new DieResult("2D6", "D6", 2,4),
-            new DieResult("D6", "D6", 1,2),
-            new DieResult("d6", "D6", 1,2),
-            new DieResult("W6", "D6", 1,2),
-            new DieResult("w6", "D6", 1,2),
-            new DieResult("D10+5", "D10", 1,7),
-            new DieResult("D10-6", "D10", 1, -4),
-            new DieResult("D10+2+5", "D10", 1, 9),
-            new DieResult("D10*10", "D10", 1, 20),
-            new DieResult("D10*2*2", "D10", 1, 8),
-            new DieResult("D10*2+8", "D10", 1, 12),
-            new DieResult("D10*(2+8)", "D10", 1, 20),
-            new DieResult("D10/2", "D10", 1, 1)
+    private static final DieTestResult[] tests = {
+            new DieTestResult("sin(d6)", "D6", 1),
+            new DieTestResult("(W20+5+2)/2", "D20", 1),
+            new DieTestResult("(2d6+2)/2", "D6", 2),
+            new DieTestResult("1D6", "D6", 1),
+            new DieTestResult("2D6", "D6", 2),
+            new DieTestResult("D6", "D6", 1),
+            new DieTestResult("d6", "D6", 1),
+            new DieTestResult("W6", "D6", 1),
+            new DieTestResult("w6", "D6", 1),
+            new DieTestResult("D10+5", "D10", 1),
+            new DieTestResult("D10-6", "D10", 1),
+            new DieTestResult("D10+2+5", "D10", 1),
+            new DieTestResult("D10*10", "D10", 1),
+            new DieTestResult("D10*2*2", "D10", 1),
+            new DieTestResult("D10*2+8", "D10", 1),
+            new DieTestResult("D10*(2+8)", "D10", 1),
+            new DieTestResult("D10/2", "D10", 1)
     };
-    private static final Die TEST_DIE = new TestDie();
+
+    @Inject
+    DiceParser sut;
 
 
-    private final DiceParser sut = new DiceParser();
 
     @Test
     public void ShouldDeliverResultsWhenValidExpressionsAreGiven() {
         MDC.put("test", "valid-expression");
 
-        for (DieResult testInput : tests) {
-            Optional<DieRoll> result = sut.parse(testInput.input);
+        for (DieTestResult testInput : tests) {
+            RollTotal result = sut.parse(testInput.input);
 
             checkValidResult(result, testInput);
         }
@@ -67,9 +77,10 @@ public class TestDiceParser {
     public void ShouldReturnNoDieRollWhenInvalidExpressionIsGiven() {
         MDC.put("test", "invalid-expression");
 
-        Optional<DieRoll> result = sut.parse("(d8+*9");
 
-        assertFalse(result.isPresent(), "The string '(d8+*9' should not generate a result!");
+        RollTotal result = sut.parse("(d8+*9");
+
+        assertTrue(result.isEmpty(), "The string '(d8+*9' should not generate a result!");
     }
 
 
@@ -80,14 +91,19 @@ public class TestDiceParser {
      * @param testInput The predefined test input.
      */
     private void checkValidResult(
-            @SuppressWarnings("OptionalUsedAsFieldOrParameterType") final Optional<DieRoll> result,
-            final DieResult testInput
+            @SuppressWarnings("OptionalUsedAsFieldOrParameterType") final RollTotal result,
+            final DieTestResult testInput
     ) {
-        assertTrue(result.isPresent(), "There should be a DiceRollCommand for '" + testInput.input + "'!");
-        DieRoll roll = result.get();
+        LOG.trace("Checking test: expected={}, input={}, amount={}, type={}",
+                result, testInput.input, testInput.amount, testInput.dieType);
 
-        assertEquals(testInput.dieType, roll.getDieIdentifier(), "The die type of '" + testInput.input + "' should be '" + testInput.dieType + "'");
-        assertEquals(testInput.result, roll.eval(TEST_DIE)[0], "The result of '" + testInput.input + "' should be: " + testInput.result);
+
+        assertFalse(result.isEmpty(), "There should be one die roll in the result!");
+        assertEquals(result.getExpressions().size(), 1, "There should be exactly ONE roll in the result!");
+
+        ExpressionTotal roll = result.getExpressions().get(0);
+
+        assertEquals(testInput.dieType, roll.getRolls()[0].getDie().getDieType(), "The die type of '" + testInput.input + "' should be '" + testInput.dieType + "'");
     }
 
 
@@ -106,29 +122,15 @@ public class TestDiceParser {
         MDC.clear();
     }
 
-
-    private static class DieResult {
+    private static class DieTestResult {
         final String input;
         final String dieType;
         final int amount;
-        final Integer result;
 
-        DieResult(final String input, final String dieType, final int amount, final int result) {
+        DieTestResult(final String input, final String dieType, final int amount) {
             this.input = input;
             this.dieType = dieType;
             this.amount = amount;
-            this.result = result;
-        }
-    }
-
-    private static class TestDie extends BasicDie {
-        public TestDie() {
-            super(DEFAULT_THROW);
-        }
-
-        @Override
-        public int roll() {
-            return DEFAULT_THROW;
         }
     }
 }

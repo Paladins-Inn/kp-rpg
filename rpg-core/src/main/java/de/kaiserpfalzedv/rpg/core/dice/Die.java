@@ -17,6 +17,10 @@
 
 package de.kaiserpfalzedv.rpg.core.dice;
 
+import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
+
+import java.util.Optional;
+
 /**
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2020-08-12
@@ -26,7 +30,7 @@ public interface Die {
      * a single die roll.
      * @return result of the single die roll.
      */
-    int roll();
+    DieResult roll();
 
     /**
      * the result of multiple dice rolls.
@@ -34,13 +38,14 @@ public interface Die {
      * @return ann array of Integer containing the results. The first element contains the sum, starting with index 1
      * the results of the single rolls are returned.
      */
-    Integer[] roll(final int number);
+    DieResult[] roll(final int number);
 
     /**
-     * The maximum number this die can generate.
-     * @return the maximum number on this die.
+     * @return returns the lookup table to compare the total to and print as result.
      */
-    int getMax();
+    default Optional<LookupTable> getLookupTable() {
+        return Optional.empty();
+    }
 
     /**
      * @return The name of the die.
@@ -48,4 +53,9 @@ public interface Die {
     default String getDieType() {
         return getClass().getSimpleName();
     }
+
+    /**
+     * @return TRUE, if the result can be parsed as integer (and therefore calculations can be done)
+     */
+    boolean isNumericDie();
 }

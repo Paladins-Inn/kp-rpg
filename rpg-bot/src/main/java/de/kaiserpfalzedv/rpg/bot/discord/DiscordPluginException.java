@@ -21,7 +21,7 @@ package de.kaiserpfalzedv.rpg.bot.discord;
  * This is an exception thrown by a discord plugin. All exceptions thrown by any {@link DiscordPlugin} should be at
  * least wrapped in {@link DiscordPluginWrappedException}.
  *
- * @author klenkes74
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06
  */
 public class DiscordPluginException extends Exception {
