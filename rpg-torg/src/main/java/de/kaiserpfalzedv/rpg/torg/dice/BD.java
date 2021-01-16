@@ -17,9 +17,12 @@
 
 package de.kaiserpfalzedv.rpg.torg.dice;
 
-import de.kaiserpfalzedv.rpg.core.dice.D6;
+import de.kaiserpfalzedv.rpg.core.dice.bag.D6;
+import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
+import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableDieResult;
 
 import javax.enterprise.context.Dependent;
+import java.util.ArrayList;
 
 /**
  * BD is an exploding D6.
@@ -31,8 +34,28 @@ import javax.enterprise.context.Dependent;
  * @since 2021-01-02
  */
 @Dependent
-public class BD extends TorgExplodingDie implements TorgDie {
-    public BD() {
-        super(new D6(), 0);
+public class BD extends D6 {
+    @Override
+    public DieResult roll() {
+        int total = 0;
+        ArrayList<String> rolls = new ArrayList<>(5);
+
+        int roll;
+        do {
+            roll = rollSingle();
+
+            if (roll == 6) {
+                total--; // only add 5 to the total instead of 6.
+            }
+
+            total += roll;
+            rolls.add(Integer.toString(roll, 10));
+        } while (roll == 6);
+
+        return ImmutableDieResult.builder()
+                .die(this)
+                .total(Integer.toString(total, 10))
+                .rolls(rolls.toArray(new String[0]))
+                .build();
     }
 }

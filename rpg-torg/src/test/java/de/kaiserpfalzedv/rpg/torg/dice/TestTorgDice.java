@@ -17,11 +17,15 @@
 
 package de.kaiserpfalzedv.rpg.torg.dice;
 
-import de.kaiserpfalzedv.rpg.torg.BonusChart;
+import de.kaiserpfalzedv.rpg.core.dice.Die;
+import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
@@ -30,7 +34,7 @@ import org.slf4j.MDC;
 public class TestTorgDice {
     private static final Logger LOG = LoggerFactory.getLogger(TestTorgDice.class);
 
-    private static final TorgDie[] dice = {
+    private static final Die[] dice = {
             new BD(),
             new T20(),
             new T20M()
@@ -41,8 +45,8 @@ public class TestTorgDice {
     public void ShouldBeEqualWhenCompatibleDiceAreCompared() {
         MDC.put("test", "equals-compatible-dice");
 
-        for(TorgDie die : dice) {
-            Assertions.assertEquals(die, die, "Dice '" + die.getDieType() + "' should be equal to '" + die.getDieType() + "'.");
+        for(Die die : dice) {
+            assertEquals(die, die, "Dice '" + die.getDieType() + "' should be equal to '" + die.getDieType() + "'.");
         }
     }
 
@@ -50,12 +54,11 @@ public class TestTorgDice {
     public void ShouldReturnValidDiceThrows() {
         MDC.put("test", "test-throws");
 
-        for (TorgDie die : dice) {
+        for (Die die : dice) {
             LOG.trace("Testing rolling die: {}", die);
 
-            int result = die.roll();
-
-            Integer[] results = die.roll(10);
+            DieResult result = die.roll();
+            DieResult[] results = die.roll(10);
 
             LOG.info("die={}, result={}, results={}", die.getClass().getSimpleName(), result, results);
         }
@@ -75,24 +78,19 @@ public class TestTorgDice {
     public void ShouldReturnAHash() {
         MDC.put("test", "check-hashcode");
 
-        Assertions.assertEquals(2108, dice[0].hashCode(), "Wrong hash code " + dice[0].getClass().getSimpleName());
-        Assertions.assertEquals(2542, dice[1].hashCode(), "Wrong hash code " + dice[1].getClass().getSimpleName());
-        Assertions.assertEquals(2552, dice[2].hashCode(), "Wrong hash code " + dice[2].getClass().getSimpleName());
+        assertEquals(37, dice[0].hashCode(), "Wrong hash code " + dice[0].getClass().getSimpleName());
+        assertEquals(51, dice[1].hashCode(), "Wrong hash code " + dice[1].getClass().getSimpleName());
+        assertEquals(51, dice[2].hashCode(), "Wrong hash code " + dice[2].getClass().getSimpleName());
     }
 
     @Test
     public void ShouldGiveANiceToString() {
         MDC.put("test", "check-string");
 
-        for (TorgDie die : dice) {
+        for (Die die : dice) {
             String result = die.toString();
-            int max = die.getMax();
-            int min = die.getMin();
 
-            LOG.debug("max={}, string={}", max, result);
-
-            Assertions.assertTrue(result.startsWith(die.getClass().getSimpleName() + "@"));
-            Assertions.assertTrue(result.endsWith("[max=" + max + ", min=" + min + "]"));
+            assertTrue(result.startsWith(die.getClass().getSimpleName() + "["));
         }
     }
 
@@ -104,10 +102,6 @@ public class TestTorgDice {
     @BeforeAll
     static void setUp() {
         MDC.put("test-class", TestTorgDice.class.getSimpleName());
-
-        BonusChart bonusChart = new BonusChart();
-        ((T20)dice[1]).bonusChart = bonusChart;
-        ((T20M)dice[2]).bonusChart = bonusChart;
     }
 
     @AfterAll

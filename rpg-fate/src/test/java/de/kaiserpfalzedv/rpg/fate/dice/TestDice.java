@@ -17,10 +17,14 @@
 
 package de.kaiserpfalzedv.rpg.fate.dice;
 
-import de.kaiserpfalzedv.rpg.core.dice.D2;
 import de.kaiserpfalzedv.rpg.core.dice.Die;
+import de.kaiserpfalzedv.rpg.core.dice.bag.D2;
+import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
 import org.junit.jupiter.api.*;
 import org.slf4j.MDC;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestDice {
     private final Die[] dice = {
@@ -29,57 +33,47 @@ public class TestDice {
     };
 
     @Test
-    public void ShouldReturnOnlyNumbersBetween1andDieSize() {
-        MDC.put("test", "range-match");
+    public void shouldReturnOnlyPlusMinusOrEmpty() {
+        MDC.put("test", "check-valid-results");
 
-        for (Die die : dice) {
-            Integer[] result = die.roll(1000);
+        DieResult result = new FATE().roll();
 
-            int sum = 0;
-            for (int j = 1; j < result.length; j++) {
-                sum += result[j];
-                Assertions.assertTrue(result[j] <= die.getMax(), "No die roll should be above " + die.getMax());
-                Assertions.assertTrue(result[j] >= -1, "No die roll should be below -1");
-            }
-
-            Assertions.assertEquals(sum, result[0], "The result should match.");
-        }
+        assertTrue(result.getShortDisplay().matches("[-+ ]"), "The result should be '+', ' ' or '-'.");
     }
 
     @Test
-    public void ShouldBeEqualWhenCompatibleDiceAreCompared() {
+    public void shouldBeEqualWhenCompatibleDiceAreCompared() {
         MDC.put("test", "equals-compatible-dice");
 
-        Assertions.assertEquals(dice[0], dice[0]);
+        assertEquals(dice[0], dice[0]);
     }
 
 
     @Test
-    public void ShouldNotBeEqualWhenDifferentDiceAreCompared() {
+    public void shouldNotBeEqualWhenDifferentDiceAreCompared() {
         MDC.put("test", "not-equal-dice");
 
         Assertions.assertNotEquals(dice[0], dice[1]);
     }
 
     @Test
-    public void ShouldReturnAHash() {
+    public void shouldReturnAHash() {
         MDC.put("test", "check-hashcode");
 
-        Assertions.assertEquals(34, dice[0].hashCode(), "Wrong hash code for " + dice[0].getClass().getSimpleName());
+        assertEquals(34, dice[0].hashCode(), "Wrong hash code for " + dice[0].getClass().getSimpleName());
     }
 
     @Test
-    public void ShouldGiveANiceTostring() {
+    public void shouldGiveANiceTostring() {
         MDC.put("test", "check-string");
 
         for (Die die : dice) {
             String result = die.toString();
-            int max = die.getMax();
 
-            Assertions.assertTrue(result.startsWith(die.getClass().getSimpleName() + "@"));
-            Assertions.assertTrue(result.endsWith("[max=" + max + "]"));
+            assertTrue(result.startsWith(die.getClass().getSimpleName() + "["));
         }
     }
+
 
     @AfterEach
     void tearDownEach() {
