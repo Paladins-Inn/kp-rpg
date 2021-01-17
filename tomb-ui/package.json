@@ -8,7 +8,7 @@
   "license": "GPL3",
   "private": true,
   "scripts": {
-    "generate-fetcher": "mkdir -p src/app/generated && restful-react import -u https://kp-discord-bot.apps.numma.kaiserpfalz-edv.de/openapi a--output src/app/generated/tomb.d.tsx",
+    "generate-fetcher": "mkdir -p src/app/generated && restful-react import -u https://tomb.apps.numma.kaiserpfalz-edv.de/openapi a--output src/app/generated/tomb.d.tsx",
     "prebuild": "npm run clean",
     "dr:surge": "node dr-surge.js",
     "build": "webpack --config webpack.prod.js && npm run dr:surge",

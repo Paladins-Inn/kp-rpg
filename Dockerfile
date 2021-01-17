@@ -22,13 +22,16 @@
 #
 # TypeScript build stage
 #
-FROM quay.io/centos7/nodejs-10-centos7:latest as npm
+FROM registry.access.redhat.com/ubi8/nodejs-14 as npm
 
 USER root
+
+ENV LANG='en_GB.UTF-8' LANGUAGE='en_GB:en'
 
 RUN mkdir /app-src && cd /app-src
 ADD tomb-ui .
 
+RUN npm run generate-fetcher
 RUN npm run build
 RUN cp -a ./dist /
 
@@ -40,7 +43,7 @@ FROM quay.io/eclipse/che-java11-maven:7.24.2 AS maven
 USER root
 
 COPY . /projects
-RUN mkdir /projects/rpg-bot/src/main/resources/static
+RUN mkdir -p /projects/rpg-bot/src/main/resources/static
 COPY --from=npm /dist/* /projects/rpg-bot/src/main/resources/static
 
 RUN mvn --no-transfer-progress \
