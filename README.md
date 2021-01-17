@@ -23,6 +23,13 @@ Code test coverage for human generated code should be 100%, machinge generated c
 wrong. But every line that needs not be written is a bug free line without need to test it. So aim for not writing code.
 
 
+## Distribution
+The software is distributed via quay.io. You find the images as
+
+* quay.io/klenkes74/kp-rpg-discord-bot:1.0.0 (stable release)
+* quay.io/klenkes74/kp-rpg-discord-bot:latest (bleeding edge)
+
+
 ## Note from the author
 This software is meant do be perfected not finished.
 
