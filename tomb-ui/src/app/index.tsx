@@ -37,10 +37,11 @@ const oauthBaseUrl : String = "https://discord.com/api/oauth2";
 const userManagerConfig : UserManagerSettings = {
   authority: "Discord",
   client_id: "800069820812886036",
-  client_secret: "",
+  response_type: "code",
   scope: "openid connections email identity guilds",
   loadUserInfo: true,
   redirect_uri: "http://0.0.0.0:9000/callback",
+  post_logout_redirect_uri: oauthBaseUrl + "/token/revoke",
   metadata: {
     authorization_endpoint: oauthBaseUrl + "/authorize",
     token_endpoint: oauthBaseUrl + "/token",
