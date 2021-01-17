@@ -32,7 +32,7 @@ RUN mkdir /app-src && cd /app-src
 ADD tomb-ui .
 
 RUN rm -rf npm node_modules package-lock.json
-RUN npm install --save
+RUN npm install --save --force
 RUN npm run generate-fetcher
 RUN npm run build
 RUN cp -a ./dist /
