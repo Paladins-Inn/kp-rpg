@@ -1,11 +1,57 @@
+# Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
 #
-# Build stage
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-FROM quay.io/eclipse/che-java11-maven:7.24.2 AS build
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+# Staged build for building on quay.io.
+#
+# Author: klenkes74 <rlichti@kaiserpfalz-edv.de>
+# Since: 1.1.0 2021-01-18
+
+# Generic labels
+LABEL io.k8s.description="This is a discord bot and connected webservice for supporting RPG tabletop games online without providing a VTT."
+LABEL io.k8s.display-name="TOMB Discord Bot"
+LABEL io.openshift.expose-services="8080/TCP"
+LABEL io.openshift.tags="quarkus rpg discord"
+LABEL maintainer="Kaiserpfalz EDV-Service"
+LABEL summary="Provides a supporting system for online tabletop RPG playing."
+LABEL vendor="Kaiserpfalz EDV-Service"
+LABEL version="1.1.0-SNAPSHOT"
+
+#
+# TypeScript build stage
+#
+FROM quay.io/centos7/nodejs-10-centos7:latest as npm
+
+USER root
+
+RUN mkdir /app-src && cd /app-src
+ADD tomb-ui .
+
+RUN npm run build
+RUN cp -a ./dist /
+
+#
+# Maven Build stage
+#
+FROM quay.io/eclipse/che-java11-maven:7.24.2 AS maven
 
 USER root
 
 COPY . /projects
+RUN mkdir /projects/rpg-bot/src/main/resources/static
+COPY --from=npm /dist/* /projects/rpg-bot/src/main/resources/static
 
 RUN mvn --no-transfer-progress \
     -DskipTests=true -Dmaven.test.skip -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
@@ -24,6 +70,8 @@ RUN mvn --no-transfer-progress \
     -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false \
     -rf :rpg-bot -pl !tomb-ui \
     clean package
+
+COPY rpg-bot/target/*-runner.jar /app.jar
 
 #
 # Package stage
@@ -52,8 +100,7 @@ RUN microdnf install curl ca-certificates ${JAVA_PACKAGE} \
 # Configure the JAVA_OPTIONS, you can add -XshowSettings:vm to also display the heap size.
 ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
 
-COPY --from=build /projects/rpg-bot/target/*-runner.jar /deployments/app.jar
-
+COPY --from=maven /app.jar /deployments/app.jar
 RUN chown 1001 /deployments/app.jar
 
 EXPOSE 8080

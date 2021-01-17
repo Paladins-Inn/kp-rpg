@@ -4,11 +4,18 @@
 >
 > -- Balian, Kingdom of Heaven
 
+[![Docker Repository on Quay](https://quay.io/repository/klenkes74/kp-rpg-discord-bot/status "Docker Repository on Quay")](https://quay.io/repository/klenkes74/kp-rpg-discord-bot)
+
 ## Abstract
+This is a "theatre-of-mind" support for online gaming. It started as pure die rolling bot but aims as support for
+playing online like a VTT without a table. So no battlemaps, but handouts, die rolling and then special support for
+several RPG systems. For the personal use of the maintainer, the systems TORG:Eternity and HeXXen are the main targets,
+but other systems will be added eventually.
 
 
 ## License
-The license for the software is LGPL 3.0 or newer. 
+The license for the software is LGPL 3.0 or newer. Parts of the software may be licensed under other licences like MIT
+or Apache 2.0 - the files are marked appropriately. Patternfly4 is published unter MIT license.
 
 
 ## Architecture
@@ -26,8 +33,20 @@ wrong. But every line that needs not be written is a bug free line without need 
 ## Distribution
 The software is distributed via quay.io. You find the images as
 
-* quay.io/klenkes74/kp-rpg-discord-bot:1.0.0 (stable release)
-* quay.io/klenkes74/kp-rpg-discord-bot:latest (bleeding edge)
+- quay.io/klenkes74/kp-rpg-discord-bot:1.0.0 (stable release)
+- quay.io/klenkes74/kp-rpg-discord-bot:latest (bleeding edge)
+
+The images are prepared for consumption by OpenShift 3.11, so they run without any problems on kubernetes, too.
+They need a mongodb to run.
+
+[Paladins Inn](https://www.paladins-inn.de) operates two instances of the discord bot. They can be invited by anyone as
+
+- [Production (1.0.0)](https://discordapp.com/oauth2/authorize?scope=bot&client_id=794193453403734066) Even if tagged 
+  "Production" the service is provided with out any guarantee. Unless you pay, the service is provided as is and may be 
+  revoked at any time without notice. Having said that, we try to keep it up as best as possible.
+- [Development (1.1.0-SNAPSHOT, latest)](https://discordapp.com/oauth2/authorize?scope=bot&client_id=800069820812886036) 
+  Development means development. It may be behaving strangely or go offline any time for a prolonged time. Use for
+  checking the bleeding edge features.
 
 
 ## Note from the author

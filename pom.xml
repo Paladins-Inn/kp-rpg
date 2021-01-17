@@ -432,6 +432,7 @@
           <exclude>**/*.jpg</exclude>
           <exclude>**/*.gpg</exclude>
           <exclude>**/*.license</exclude>
+          <exclude>src/main/resources/static/*</exclude>
         </excludes>
       </resource>
       <resource>

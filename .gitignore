@@ -1,6 +1,7 @@
 .DS_Store
 .idea/
 docs/generated/
+resources/static/
 **/src/app/generated/
 **/npm/cache/
 target/
@@ -14,3 +15,4 @@ stats.json
 coverage
 storybook-static
 .env
+/rpg-bot/src/main/resources/static/
