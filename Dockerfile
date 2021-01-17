@@ -19,16 +19,6 @@
 # Author: klenkes74 <rlichti@kaiserpfalz-edv.de>
 # Since: 1.1.0 2021-01-18
 
-# Generic labels
-LABEL io.k8s.description="This is a discord bot and connected webservice for supporting RPG tabletop games online without providing a VTT."
-LABEL io.k8s.display-name="TOMB Discord Bot"
-LABEL io.openshift.expose-services="8080/TCP"
-LABEL io.openshift.tags="quarkus rpg discord"
-LABEL maintainer="Kaiserpfalz EDV-Service"
-LABEL summary="Provides a supporting system for online tabletop RPG playing."
-LABEL vendor="Kaiserpfalz EDV-Service"
-LABEL version="1.1.0-SNAPSHOT"
-
 #
 # TypeScript build stage
 #
@@ -77,6 +67,16 @@ COPY rpg-bot/target/*-runner.jar /app.jar
 # Package stage
 #
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.3
+
+LABEL io.k8s.description="This is a discord bot and connected webservice for supporting RPG tabletop games online without providing a VTT."
+LABEL io.k8s.display-name="TOMB Discord Bot"
+LABEL io.openshift.expose-services="8080/TCP"
+LABEL io.openshift.tags="quarkus rpg discord"
+LABEL maintainer="Kaiserpfalz EDV-Service"
+LABEL summary="Provides a supporting system for online tabletop RPG playing."
+LABEL vendor="Kaiserpfalz EDV-Service"
+LABEL version="1.1.0-SNAPSHOT"
+
 
 ARG JAVA_PACKAGE=java-11-openjdk-headless
 ARG RUN_JAVA_VERSION=1.3.8
