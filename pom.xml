@@ -214,6 +214,11 @@
 
 
   <properties>
+    <skip.jar>false</skip.jar>
+    <skip.javadoc>false</skip.javadoc>
+    <skip.source>false</skip.source>
+    <skip.site>false</skip.site>
+
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     <maven-site-plugin.version>3.9.1</maven-site-plugin.version>
@@ -223,6 +228,7 @@
     <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
     <maven-project-info-reports-plugin.version>2.2</maven-project-info-reports-plugin.version>
     <maven-checkstyle-plugin>3.1.1</maven-checkstyle-plugin>
+    <war.output.directory>undefined</war.output.directory>
 
     <maven.compiler.parameters>true</maven.compiler.parameters>
     <maven.compiler.source>11</maven.compiler.source>
@@ -292,6 +298,7 @@
           <artifactId>maven-jar-plugin</artifactId>
           <version>${maven-jar-plugin.version}</version>
           <configuration>
+            <skip>${skip.jar}</skip>
             <archive>
               <manifest>
                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
@@ -304,6 +311,9 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${maven-javadoc-plugin.version}</version>
+          <configuration>
+            <skip>${skip.javadoc}</skip>
+          </configuration>
           <executions>
             <execution>
               <goals>
@@ -316,6 +326,9 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>${maven-source-plugin.version}</version>
+          <configuration>
+            <skipSource>${skip.source}</skipSource>
+          </configuration>
           <executions>
             <execution>
               <goals>
@@ -329,6 +342,20 @@
           <artifactId>maven-resources-plugin</artifactId>
           <version>${maven-resources-plugin.version}</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>2.2</version>
+          <configuration>
+            <failOnMissingWebXml>false</failOnMissingWebXml>
+            <webResources>
+              <resource>
+                <directory>${war.output.directory}</directory>
+              </resource>
+            </webResources>
+          </configuration>
+        </plugin>
+
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -360,6 +387,9 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>${maven-site-plugin.version}</version>
+          <configuration>
+            <skip>${skip.site}</skip>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>

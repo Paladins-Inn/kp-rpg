@@ -32,25 +32,18 @@
 	<packaging>war</packaging>
 
 	<properties>
+    <skipTest>false</skipTest>
+    <skip.tomb-ui>false</skip.tomb-ui>
 		<gulp.output.directory>target/gulp</gulp.output.directory>
 	</properties>
 
 	<build>
 		<plugins>
-			<!-- Standard plugin to generate WAR -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-					<webResources>
-						<resource>
-							<directory>${gulp.output.directory}</directory>
-						</resource>
-					</webResources>
-				</configuration>
-			</plugin>
+      <!-- Standard plugin to generate WAR -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+      </plugin>
 
 
 			<plugin>
@@ -202,6 +195,7 @@
 				</executions>
 
 				<configuration>
+          <skip>${skip.tomb-ui}</skip>
 					<environmentVariables>
 						<!-- The following parameters create an NPM sandbox for CI -->
 						<NPM_CONFIG_PREFIX>${basedir}/npm</NPM_CONFIG_PREFIX>
