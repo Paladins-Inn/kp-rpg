@@ -66,7 +66,7 @@ RUN mvn --no-transfer-progress \
     -rf :rpg-bot -pl !tomb-ui \
     clean package
 
-COPY rpg-bot/target/*-runner.jar /app.jar
+RUN ls -la rpg-bot/target && cp -a rpg-bot/target/app-runner.jar /app.jar
 
 #
 # Package stage
