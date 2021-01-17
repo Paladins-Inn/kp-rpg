@@ -45,8 +45,8 @@ FROM quay.io/eclipse/che-java11-maven:7.24.2 AS maven
 USER root
 
 COPY . /projects
-RUN mkdir -p /projects/rpg-bot/src/main/resources
-COPY --from=npm /dist/* /projects/rpg-bot/src/main/resources/
+RUN mkdir -p /projects/rpg-bot/src/main/resources/META-INF/resources
+COPY --from=npm /dist/* /projects/rpg-bot/src/main/resources/META-INF/resources/
 
 RUN mvn --no-transfer-progress \
     -DskipTests=true -Dmaven.test.skip -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
