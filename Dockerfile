@@ -8,19 +8,19 @@ USER root
 COPY . /projects
 
 RUN mvn --no-transfer-progress \
-    -DskipTests=true -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
+    -DskipTests=true -Dmaven.test.skip -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
     -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false \
     -pl !rpg-dsa5,!rpg-fate,!rpg-hexxen,!rpg-saga,!rpg-torg,!rpg-traveller,!rpg-wod,!rpg-bot,!tomb-ui \
     clean install
 
 RUN mvn --no-transfer-progress \
-    -DskipTests=true -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
+    -DskipTests=true -Dmaven.test.skip -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
     -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false \
     -pl !rpg-core,!rpg-bot,!tomb-ui \
     clean install
 
 RUN mvn --no-transfer-progress \
-    -DskipTests=true -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
+    -DskipTests=true -Dmaven.test.skip -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
     -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false \
     -rf :rpg-bot -pl !tomb-ui \
     clean package
