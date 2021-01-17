@@ -20,16 +20,18 @@ import {Route, RouteComponentProps, Switch} from 'react-router-dom';
 import {Alert, PageSection} from '@patternfly/react-core';
 import {DynamicImport} from '@app/DynamicImport';
 import {accessibleRouteChangeHandler} from '@app/utils/utils';
-import {Dashboard} from '@app/Pages/Dashboard/Dashboard';
-import {GeneralSettings} from '@app/Pages/Settings/General/GeneralSettings';
-import {ProfileSettings} from '@app/Pages/Settings/Profile/ProfileSettings';
-import {NotFound} from '@app/Pages/NotFound/NotFound';
+import {Dashboard} from '@app/Components/Dashboard/Dashboard';
+import {GeneralSettings} from '@app/Components/Settings/General/GeneralSettings';
+import {ProfileSettings} from '@app/Components/Settings/Profile/ProfileSettings';
+import {NotFound} from '@app/Components/NotFound/NotFound';
 import {useDocumentTitle} from '@app/utils/useDocumentTitle';
 import {LastLocationProvider, useLastLocation} from 'react-router-last-location';
+import {Callback} from "react-oidc";
+import {AppWithAuth, userManager} from "@app/index";
 
 let routeFocusTimer: number;
 
-const getSupportModuleAsync = () => () => import(/* webpackChunkName: 'support' */ '@app/Pages/Support/Support');
+const getSupportModuleAsync = () => () => import(/* webpackChunkName: 'support' */ '@app/Components/Support/Support');
 
 const Support = (routeProps: RouteComponentProps): React.ReactElement => {
   const lastNavigation = useLastLocation();
@@ -75,13 +77,28 @@ export interface IAppRouteGroup {
 
 export type AppRouteConfig = IAppRoute | IAppRouteGroup;
 
+const OidcCallback = (routeProps, user) =>
+  <Callback
+    onSuccess={user => {
+      // `user.state` will reflect the state that was passed in via signinArgs.
+      routeProps.history.push('/')
+    }}
+    userManager={userManager}/>
+
+
 const routes: AppRouteConfig[] = [
+  {
+    component: OidcCallback,
+    exact: true,
+    path: '/callback',
+    title: 'OIDC Callback',
+  },
   {
     component: Dashboard,
     exact: true,
     label: 'Dashboard',
     path: '/',
-    title: 'PatternFly Seed | Main Dashboard',
+    title: 'Dashboard',
   },
   {
     component: Support,
@@ -89,7 +106,7 @@ const routes: AppRouteConfig[] = [
     isAsync: true,
     label: 'Support',
     path: '/support',
-    title: 'PatternFly Seed | Support Page',
+    title: 'Support',
   },
   {
     label: 'Settings',
@@ -99,14 +116,14 @@ const routes: AppRouteConfig[] = [
         exact: true,
         label: 'General',
         path: '/settings/general',
-        title: 'PatternFly Seed | General Settings',
+        title: 'General Settings',
       },
       {
         component: ProfileSettings,
         exact: true,
         label: 'Profile',
         path: '/settings/profile',
-        title: 'PatternFly Seed | Profile Settings',
+        title: 'Profile Settings',
       },
     ],
   },

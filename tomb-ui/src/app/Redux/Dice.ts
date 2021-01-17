@@ -18,7 +18,7 @@
 import {Action, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {DieResult, ExpressionTotal, RollTotal} from "@app/generated/tomb.d";
 import {of} from "rxjs";
-import rollDice from "@app/Services/dice/DiceService";
+import rollDice from "@app/Providers/dice/DiceService";
 import {combineEpics, ofType} from "redux-observable";
 import {mergeMap} from "rxjs/operators";
 

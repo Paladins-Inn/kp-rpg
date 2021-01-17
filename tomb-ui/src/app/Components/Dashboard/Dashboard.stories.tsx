@@ -18,7 +18,7 @@
 import * as React from 'react';
 import {storiesOf} from '@storybook/react';
 import {withInfo} from '@storybook/addon-info';
-import {Dashboard} from '@app/Pages/Dashboard/Dashboard';
+import {Dashboard} from '@app/Components/Dashboard/Dashboard';
 
 const stories = storiesOf('Components', module);
 stories.addDecorator(withInfo);

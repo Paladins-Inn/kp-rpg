@@ -15,15 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {configure} from '@storybook/react';
-import '@patternfly/react-core/dist/styles/base.css';
+import * as React from 'react';
+import {PageSection, Title} from '@patternfly/react-core';
 
-// automatically import all files ending in *.stories.tsx
-const req = require.context('../app/Compontents', true, /\.stories\.tsx$/);
+const Dashboard = () => <PageSection>
+  <Title headingLevel="h1" size="lg">Dashboard Page Title</Title>
+</PageSection>;
 
-function loadStories() {
-  req.keys().forEach(req);
-}
-
-configure(loadStories, module);
-
+export { Dashboard };

@@ -21,6 +21,8 @@ import {BrowserRouter as Router} from 'react-router-dom';
 import {AppLayout} from '@app/AppLayout/AppLayout';
 import {AppRoutes} from '@app/routes';
 import '@app/app.css';
+import {makeAuthenticator, makeUserManager} from "react-oidc";
+import {UserManagerSettings} from "oidc-client";
 
 const App = () => (
     <Router>
@@ -30,4 +32,30 @@ const App = () => (
     </Router>
 );
 
-export { App };
+const oauthBaseUrl : String = "https://discord.com/api/oauth2";
+
+const userManagerConfig : UserManagerSettings = {
+  authority: "Discord",
+  client_id: "800069820812886036",
+  client_secret: "09JiGO6PaFXlQq1ysACFJHDt3QIoHEPl",
+  scope: "openid connections email identity guilds",
+  loadUserInfo: true,
+  redirect_uri: "http://0.0.0.0:9000/callback",
+  metadata: {
+    authorization_endpoint: oauthBaseUrl + "/authorize",
+    token_endpoint: oauthBaseUrl + "/token",
+  }
+}
+
+export const userManager = makeUserManager(userManagerConfig);
+const AppWithAuth = makeAuthenticator({
+  userManager: userManager,
+  placeholderComponent: () => {return <div>Not logged in</div>},
+  signinArgs: {
+    state: {
+      foo: 15
+    }
+  }
+})(App)
+
+export { AppWithAuth as App };

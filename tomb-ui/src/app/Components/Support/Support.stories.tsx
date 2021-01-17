@@ -16,14 +16,14 @@
  */
 
 import * as React from 'react';
-import {PageSection, Title} from '@patternfly/react-core';
+import {storiesOf} from '@storybook/react';
+import {withInfo} from '@storybook/addon-info';
+import {Support} from '@app/Components/Support/Support';
 
-const Dashboard = () => <PageSection>
-  <Title headingLevel="h1" size="lg">Dashboard Page Title</Title>
-
-  { store.dice ? <div>Rolled.</div> : <div>store does not include dice roll</div>}
-
-  <div>{typeof store.errors}</div>
-</PageSection>;
-
-export { Dashboard };
+const stories = storiesOf('Components', module);
+stories.addDecorator(withInfo);
+stories.add(
+  'Support',
+  () => <Support />,
+  { info: { inline: true } }
+);

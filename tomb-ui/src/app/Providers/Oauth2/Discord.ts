@@ -15,15 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
-import {storiesOf} from '@storybook/react';
-import {withInfo} from '@storybook/addon-info';
-import {Support} from '@app/Pages/Support/Support';
-
-const stories = storiesOf('Components', module);
-stories.addDecorator(withInfo);
-stories.add(
-  'Support',
-  () => <Support />,
-  { info: { inline: true } }
-);
+const { Issuer } = require('openid-client');
+Issuer.discover('https://discord.com/api/oauth2/') // => Promise
+  .then(function (googleIssuer) {
+    console.log('Discovered issuer %s %O', googleIssuer.issuer, googleIssuer.metadata);
+  });
