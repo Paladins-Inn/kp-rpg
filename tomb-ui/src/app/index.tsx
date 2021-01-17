@@ -37,7 +37,7 @@ const oauthBaseUrl : String = "https://discord.com/api/oauth2";
 const userManagerConfig : UserManagerSettings = {
   authority: "Discord",
   client_id: "800069820812886036",
-  client_secret: "09JiGO6PaFXlQq1ysACFJHDt3QIoHEPl",
+  client_secret: "",
   scope: "openid connections email identity guilds",
   loadUserInfo: true,
   redirect_uri: "http://0.0.0.0:9000/callback",
