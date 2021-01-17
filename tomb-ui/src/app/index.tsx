@@ -21,8 +21,8 @@ import {BrowserRouter as Router} from 'react-router-dom';
 import {AppLayout} from '@app/AppLayout/AppLayout';
 import {AppRoutes} from '@app/routes';
 import '@app/app.css';
-import {makeAuthenticator, makeUserManager} from "react-oidc";
 import {UserManagerSettings} from "oidc-client";
+import {makeAuthenticator, makeUserManager} from "react-oidc";
 
 const App = () => (
     <Router>
