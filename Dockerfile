@@ -31,6 +31,7 @@ ENV LANG='en_GB.UTF-8' LANGUAGE='en_GB:en'
 RUN mkdir /app-src && cd /app-src
 ADD tomb-ui .
 
+RUN npm install --save
 RUN npm run generate-fetcher
 RUN npm run build
 RUN cp -a ./dist /
