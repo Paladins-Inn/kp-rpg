@@ -45,10 +45,11 @@ public class DiscordDiceRoller implements DiscordPlugin {
     static private final Logger LOG = LoggerFactory.getLogger(DiscordDiceRoller.class);
 
     /** Emoji for re-rolling the die roll. */
-    private static final String REROLL_EMOJI = "🎲";
+    private static final String REROLL_EMOJI = "🔁";
 
     /** Emoji for adding to the current die roll. */
-    private static final String ADD_ROLL = "➕";
+    private static final String ADD_ROLL = "⬆️";
+    private static final String ADD_ROLL_A_BIT = "↗️";
 
     @Inject
     DiceRoller roller;

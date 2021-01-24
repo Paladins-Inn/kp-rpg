@@ -56,7 +56,7 @@ public class DiscordDispatcher extends DiscordListenerAdapter {
             return; // do nothing.
         }
 
-        LOG.debug("Received message: guild='{}', channel='{}', author='{}', id='{}', message='{}'",
+        LOG.info("Received message: guild='{}', channel='{}', author='{}', id='{}', message='{}'",
                 event.getGuild().getName(),
                 event.getChannel().getName(),
                 event.getAuthor().getName(),
@@ -131,7 +131,7 @@ public class DiscordDispatcher extends DiscordListenerAdapter {
         MDC.put("user.name", event.getUser().getName());
         MDC.put("user.id", event.getUser().getId());
 
-        LOG.debug("Received event: guild='{}', channel='{}', author='{}', message.id='{}', emote.id='{}', emote.name='{}'",
+        LOG.info("Received event: guild='{}', channel='{}', author='{}', message.id='{}', emote.id='{}', emote.name='{}'",
                 event.getGuild().getName(),
                 event.getChannel().getName(),
                 event.getUser().getName(),
