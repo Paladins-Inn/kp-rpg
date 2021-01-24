@@ -124,6 +124,7 @@ public class DiscordBot {
         }
     }
 
+
     @Override
     public String toString() {
         return new StringJoiner(", ", getClass().getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")

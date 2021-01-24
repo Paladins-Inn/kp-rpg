@@ -26,8 +26,6 @@ import {ProfileSettings} from '@app/Components/Settings/Profile/ProfileSettings'
 import {NotFound} from '@app/Components/NotFound/NotFound';
 import {useDocumentTitle} from '@app/utils/useDocumentTitle';
 import {LastLocationProvider, useLastLocation} from 'react-router-last-location';
-import {Callback} from "react-oidc";
-import {AppWithAuth, userManager} from "@app/index";
 
 let routeFocusTimer: number;
 
@@ -77,22 +75,7 @@ export interface IAppRouteGroup {
 
 export type AppRouteConfig = IAppRoute | IAppRouteGroup;
 
-const OidcCallback = (routeProps, user) =>
-  <Callback
-    onSuccess={user => {
-      // `user.state` will reflect the state that was passed in via signinArgs.
-      routeProps.history.push('/')
-    }}
-    userManager={userManager}/>
-
-
 const routes: AppRouteConfig[] = [
-  {
-    component: OidcCallback,
-    exact: true,
-    path: '/callback',
-    title: 'OIDC Callback',
-  },
   {
     component: Dashboard,
     exact: true,
