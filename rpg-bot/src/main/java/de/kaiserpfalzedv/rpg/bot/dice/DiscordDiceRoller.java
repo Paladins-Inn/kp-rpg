@@ -66,8 +66,11 @@ public class DiscordDiceRoller implements DiscordPlugin {
             }
 
             event.getMessage().addReaction("➕").queue();
+
             Message msg = new DataMessage(false, roll, UUID.randomUUID().toString(), null);
-            event.getChannel().sendMessage(msg).queue();
+            event.getChannel().sendMessage(msg).queue(
+                    message -> message.addReaction("➕").queue()
+            );
         }
     }
 
