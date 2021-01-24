@@ -22,6 +22,7 @@ import io.quarkus.runtime.StartupEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.guild.react.GenericGuildMessageReactionEvent;
 import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -48,7 +49,7 @@ public class DiscordDispatcher extends DiscordListenerAdapter {
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
+    public void onMessageReceived(final MessageReceivedEvent event) {
         addMDCInfo(event);
 
         if (! event.getMessage().getContentRaw().startsWith("/")) {
@@ -76,17 +77,27 @@ public class DiscordDispatcher extends DiscordListenerAdapter {
 
 
     @Override
-    public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event) {
+    public void onGuildMessageReactionAdd(final GuildMessageReactionAddEvent event) {
         addMDCInfo(event);
 
-        LOG.debug("Received event: guild='{}', channel='{}', author='{}', message.id='{}', emote.id='{}', emote.name='{}'",
-                event.getGuild().getName(),
-                event.getChannel().getName(),
-                event.getUser().getName(),
-                event.getMessageId(),
-                event.getReaction().getReactionEmote().getId(),
-                event.getReaction().getReactionEmote().getName()
-        );
+        if (event.getUser().isBot())
+            return;
+
+        for (DiscordPlugin p : plugins) {
+            try {
+                p.work(event);
+            } catch (DiscordPluginException e) {
+                LOG.error("Plugin '" + p.getClass().getSimpleName() + "' complains: " + e.getMessage(), e);
+            }
+        }
+
+        cleanMDC();
+    }
+
+
+    @Override
+    public void onGuildMessageReactionRemove(final GuildMessageReactionRemoveEvent event) {
+        addMDCInfo(event);
 
         if (event.getUser().isBot())
             return;
@@ -119,6 +130,15 @@ public class DiscordDispatcher extends DiscordListenerAdapter {
 
         MDC.put("user.name", event.getUser().getName());
         MDC.put("user.id", event.getUser().getId());
+
+        LOG.debug("Received event: guild='{}', channel='{}', author='{}', message.id='{}', emote.id='{}', emote.name='{}'",
+                event.getGuild().getName(),
+                event.getChannel().getName(),
+                event.getUser().getName(),
+                event.getMessageId(),
+                event.getReaction().getReactionEmote().getId(),
+                event.getReaction().getReactionEmote().getName()
+        );
     }
 
     /**
