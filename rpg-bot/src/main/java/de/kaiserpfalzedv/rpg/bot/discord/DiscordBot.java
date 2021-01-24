@@ -23,6 +23,7 @@ import io.quarkus.runtime.configuration.ProfileManager;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.Permission;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +80,23 @@ public class DiscordBot {
             throw new IllegalStateException("Login to Discord failed: " + e.getMessage());
         }
 
-        LOG.info("Created Discord connect: {}", bot.asBot().getInviteUrl());
+        LOG.info("Created Discord bot: {}", bot.asBot().getInviteUrl(
+                Permission.MANAGE_ROLES,
+                Permission.MANAGE_CHANNEL,
+                Permission.MANAGE_EMOTES,
+                Permission.MANAGE_WEBHOOKS,
+
+                Permission.MESSAGE_READ,
+                Permission.MESSAGE_WRITE,
+                Permission.MESSAGE_TTS,
+                Permission.MESSAGE_ATTACH_FILES,
+                Permission.MESSAGE_EMBED_LINKS,
+                Permission.MESSAGE_ADD_REACTION,
+                Permission.MESSAGE_EXT_EMOJI,
+
+                Permission.VOICE_CONNECT,
+                Permission.VOICE_SPEAK
+        ));
     }
 
     private void unregisterFromDiscord() {
@@ -89,7 +106,7 @@ public class DiscordBot {
         }
 
         bot.shutdownNow();
-        LOG.info("Bot shut down.");
+        LOG.info("Discord bot shut down.");
     }
 
     private boolean dontRegisterToDiscord() {
