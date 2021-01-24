@@ -18,10 +18,12 @@
 package de.kaiserpfalzedv.rpg.bot.dice;
 
 import de.kaiserpfalzedv.rpg.bot.discord.DiscordPlugin;
+import de.kaiserpfalzedv.rpg.bot.discord.DiscordPluginException;
 import io.quarkus.runtime.StartupEvent;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.impl.DataMessage;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,8 +74,14 @@ public class DiscordDiceRoller implements DiscordPlugin {
 
             LOG.trace("Respond: plugin={}, text='{}'", getClass().getSimpleName(), text);
             Message msg = new DataMessage(false, text, UUID.randomUUID().toString(), null);
-            event.getChannel().sendMessage(msg).queue();
+            event.getChannel().sendMessage(msg).queue(message -> {
+                message.addReaction(":heavy_plus_sign:").queue();
+            });
         }
+    }
+
+    @Override
+    public void work(final GuildMessageReactionAddEvent event) throws DiscordPluginException {
     }
 
     @Override
