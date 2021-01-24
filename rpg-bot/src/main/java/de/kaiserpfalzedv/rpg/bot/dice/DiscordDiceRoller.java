@@ -44,6 +44,12 @@ import java.util.UUID;
 public class DiscordDiceRoller implements DiscordPlugin {
     static private final Logger LOG = LoggerFactory.getLogger(DiscordDiceRoller.class);
 
+    /** Emoji for re-rolling the die roll. */
+    private static final String REROLL_EMOJI = "🎲";
+
+    /** Emoji for adding to the current die roll. */
+    private static final String ADD_ROLL = "➕";
+
     @Inject
     DiceRoller roller;
 
@@ -60,16 +66,18 @@ public class DiscordDiceRoller implements DiscordPlugin {
             try {
                 roll = roll(command.substring(3), event.getAuthor());
             } catch (IllegalArgumentException e) {
+                LOG.error("Rolling failed: " + e.getMessage(), e);
+
                 Message msg = new DataMessage(true, event.getAuthor().getAsMention() + " kann nicht richtig würfeln!", UUID.randomUUID().toString(), null);
                 event.getChannel().sendMessage(msg).queue();
                 return;
             }
 
-            event.getMessage().addReaction("➕").queue();
+            event.getMessage().addReaction(REROLL_EMOJI).queue();
 
             Message msg = new DataMessage(false, roll, UUID.randomUUID().toString(), null);
             event.getChannel().sendMessage(msg).queue(
-                    message -> message.addReaction("➕").queue()
+                    message -> message.addReaction(REROLL_EMOJI).queue()
             );
         }
     }
@@ -103,6 +111,8 @@ public class DiscordDiceRoller implements DiscordPlugin {
                         try {
                             roll = roll(command.substring(3), event.getUser());
                         } catch (IllegalArgumentException e) {
+                            LOG.error("Rolling failed: " + e.getMessage(), e);
+
                             Message msg = new DataMessage(true, event.getUser().getAsMention() + " kann nicht richtig würfeln!", UUID.randomUUID().toString(), null);
                             event.getChannel().sendMessage(msg).queue();
                             return;
@@ -110,7 +120,7 @@ public class DiscordDiceRoller implements DiscordPlugin {
 
                         Message msg = new DataMessage(false, roll, UUID.randomUUID().toString(), null);
                         event.getChannel().sendMessage(msg).queue(
-                                m -> m.addReaction("➕").queue()
+                                m -> m.addReaction(REROLL_EMOJI).queue()
                         );
                     }
                 },
@@ -119,7 +129,7 @@ public class DiscordDiceRoller implements DiscordPlugin {
                 }
         );
 
-        event.getChannel().removeReactionById(event.getReaction().getMessageId(), "➕", event.getUser()).queue();
+        event.getChannel().removeReactionById(event.getReaction().getMessageId(), REROLL_EMOJI, event.getUser()).queue();
     }
 
     @Override
