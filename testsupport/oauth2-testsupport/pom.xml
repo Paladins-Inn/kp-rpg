@@ -20,36 +20,29 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <version>1.1.0-SNAPSHOT</version>
 
     <parent>
-        <artifactId>kp-rpg</artifactId>
-        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <artifactId>testsupport</artifactId>
+        <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
         <version>1.1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+    <artifactId>oauth2-testsupport</artifactId>
+    <name>KP RPG :: Test-Suppport :: Oauth2</name>
+    <description>Test support for testing security via oauth2 with quarkus tests.</description>
 
-    <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
-    <artifactId>testsupport</artifactId>
-    <name>KP RPG :: Test-Suppport :: Base</name>
-    <packaging>pom</packaging>
 
-    <description>Test support for testing with quarkus tests.</description>
+    <dependencies>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock-jre8</artifactId>
+            <scope>test</scope>
+            <version>2.27.2</version>
+        </dependency>
 
-    <modules>
-        <module>mongodb-testsupport</module>
-        <module>oauth2-testsupport</module>
-    </modules>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers-bom</artifactId>
-                <version>1.15.1</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+        </dependency>
+    </dependencies>
 </project>
