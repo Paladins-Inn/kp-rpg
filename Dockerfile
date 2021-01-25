@@ -22,20 +22,20 @@
 #
 # TypeScript build stage
 #
-FROM registry.access.redhat.com/ubi8/nodejs-14 as npm
-
-USER root
-
-ENV LANG='en_GB.UTF-8' LANGUAGE='en_GB:en'
-
-RUN mkdir /app-src && cd /app-src
-ADD tomb-ui .
-
-RUN rm -rf npm node_modules package-lock.json
-RUN npm install --save --force
-RUN npm run generate-fetcher
-RUN npm run build
-RUN cp -a ./dist /
+###FROM registry.access.redhat.com/ubi8/nodejs-14 as npm
+###
+###USER root
+###
+###ENV LANG='en_GB.UTF-8' LANGUAGE='en_GB:en'
+###
+###RUN mkdir /app-src && cd /app-src
+###ADD tomb-ui .
+###
+###RUN rm -rf npm node_modules package-lock.json
+###RUN npm install --save --force
+###RUN npm run generate-fetcher
+###RUN npm run build
+###RUN cp -a ./dist /
 
 #
 # Maven Build stage
@@ -46,27 +46,14 @@ USER root
 
 COPY . /projects
 RUN mkdir -p /projects/rpg-bot/src/main/resources/META-INF/resources
-COPY --from=npm /dist/* /projects/rpg-bot/src/main/resources/META-INF/resources/
+###COPY --from=npm /dist/* /projects/rpg-bot/src/main/resources/META-INF/resources/
 
-RUN mvn --no-transfer-progress \
+RUN mvn --batch-mode --no-transfer-progress \
     -DskipTests=true -Dmaven.test.skip -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
     -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false \
-    -pl !rpg-dsa5,!rpg-fate,!rpg-hexxen,!rpg-saga,!rpg-torg,!rpg-traveller,!rpg-wod,!rpg-bot,!tomb-ui \
     clean install
 
-RUN mvn --no-transfer-progress \
-    -DskipTests=true -Dmaven.test.skip -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
-    -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false \
-    -pl !rpg-core,!rpg-bot,!tomb-ui \
-    clean install
-
-RUN mvn --no-transfer-progress \
-    -DskipTests=true -Dmaven.test.skip -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
-    -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false \
-    -rf :rpg-bot -pl !tomb-ui \
-    clean package
-
-RUN ls -la rpg-bot/target && cp -a rpg-bot/target/app-runner.jar /app.jar
+RUN ls -la rpg-server/tomb/target && cp -a rpg-server/tomb/target/app-runner.jar /app.jar
 
 #
 # Package stage
