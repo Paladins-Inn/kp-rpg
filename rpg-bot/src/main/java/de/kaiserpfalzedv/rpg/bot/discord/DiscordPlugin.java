@@ -18,6 +18,8 @@
 package de.kaiserpfalzedv.rpg.bot.discord;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemoveEvent;
 
 /**
  * The plugin for all Discord plugins. The plugin has to create the answer and send it.
@@ -34,4 +36,18 @@ public interface DiscordPlugin {
      * @throws DiscordPluginException If any problem occurred.
      */
     void work(MessageReceivedEvent event) throws DiscordPluginException;
+
+    /**
+     *
+     * @param event
+     * @throws DiscordPluginException
+     */
+    void work(GuildMessageReactionAddEvent event) throws DiscordPluginException;
+
+    /**
+     *
+     * @param event
+     * @throws DiscordPluginException
+     */
+    void work(GuildMessageReactionRemoveEvent event) throws DiscordPluginException;
 }

@@ -1,17 +1,18 @@
 /*
- * Copyright 2021 Kaiserpfalz EDV-Service, Roland T. Lichti
+ * Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package de.kaiserpfalzedv.rpg.bot.discord;
@@ -19,6 +20,9 @@ package de.kaiserpfalzedv.rpg.bot.discord;
 
 import io.quarkus.runtime.StartupEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.guild.react.GenericGuildMessageReactionEvent;
+import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -45,14 +49,14 @@ public class DiscordDispatcher extends DiscordListenerAdapter {
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
+    public void onMessageReceived(final MessageReceivedEvent event) {
         addMDCInfo(event);
 
         if (! event.getMessage().getContentRaw().startsWith("/")) {
             return; // do nothing.
         }
 
-        LOG.debug("Received message: guild='{}', channel='{}', author='{}', id='{}', message='{}'",
+        LOG.info("Received message: guild='{}', channel='{}', author='{}', id='{}', message='{}'",
                 event.getGuild().getName(),
                 event.getChannel().getName(),
                 event.getAuthor().getName(),
@@ -69,6 +73,72 @@ public class DiscordDispatcher extends DiscordListenerAdapter {
         }
 
         cleanMDC();
+    }
+
+
+    @Override
+    public void onGuildMessageReactionAdd(final GuildMessageReactionAddEvent event) {
+        addMDCInfo(event);
+
+        if (event.getUser().isBot())
+            return;
+
+        for (DiscordPlugin p : plugins) {
+            try {
+                p.work(event);
+            } catch (DiscordPluginException e) {
+                LOG.error("Plugin '" + p.getClass().getSimpleName() + "' complains: " + e.getMessage(), e);
+            }
+        }
+
+        cleanMDC();
+    }
+
+
+    @Override
+    public void onGuildMessageReactionRemove(final GuildMessageReactionRemoveEvent event) {
+        addMDCInfo(event);
+
+        if (event.getUser().isBot())
+            return;
+
+        for (DiscordPlugin p : plugins) {
+            try {
+                p.work(event);
+            } catch (DiscordPluginException e) {
+                LOG.error("Plugin '" + p.getClass().getSimpleName() + "' complains: " + e.getMessage(), e);
+            }
+        }
+
+        cleanMDC();
+    }
+
+
+    /**
+     * Adds the information to MDC for logging.
+     *
+     * @param event event to read information from.
+     */
+    private void addMDCInfo(final GenericGuildMessageReactionEvent event) {
+        MDC.put("message.id", event.getMessageId());
+
+        MDC.put("guild.name", event.getGuild().getName());
+        MDC.put("guild.id", event.getGuild().getIconId());
+
+        MDC.put("channel.name", event.getChannel().getName());
+        MDC.put("channel.id", event.getChannel().getId());
+
+        MDC.put("user.name", event.getUser().getName());
+        MDC.put("user.id", event.getUser().getId());
+
+        LOG.info("Received event: guild='{}', channel='{}', author='{}', message.id='{}', emote.id='{}', emote.name='{}'",
+                event.getGuild().getName(),
+                event.getChannel().getName(),
+                event.getUser().getName(),
+                event.getMessageId(),
+                event.getReaction().getReactionEmote().getId(),
+                event.getReaction().getReactionEmote().getName()
+        );
     }
 
     /**
