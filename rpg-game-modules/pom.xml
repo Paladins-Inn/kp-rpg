@@ -19,22 +19,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  <parent>
-    <artifactId>kp-rpg</artifactId>
-    <groupId>de.kaiserpfalz-edv.rpg</groupId>
+    <modelVersion>4.0.0</modelVersion>
     <version>1.1.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
-  <artifactId>rpg-hexxen</artifactId>
-  <name>KP RPG :: HeXXen 1733</name>
-  <description>The HeXXen 1733 special services.</description>
 
-  <dependencies>
-    <dependency>
-      <groupId>de.kaiserpfalz-edv.rpg</groupId>
-      <artifactId>rpg-core</artifactId>
-    </dependency>
-  </dependencies>
+    <parent>
+        <artifactId>kp-rpg</artifactId>
+        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <version>1.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>rpg-game-modules</artifactId>
+    <name>KP RPG :: Game Modules</name>
+    <packaging>pom</packaging>
+
+    <description>The modules for the different RPG systems.</description>
+
+    <modules>
+        <module>rpg-dsa5</module>
+        <module>rpg-fate</module>
+        <module>rpg-hexxen</module>
+        <module>rpg-saga</module>
+        <module>rpg-torg</module>
+        <module>rpg-traveller</module>
+        <module>rpg-wod</module>
+    </modules>
 </project>

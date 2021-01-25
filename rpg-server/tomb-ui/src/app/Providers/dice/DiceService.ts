@@ -16,7 +16,6 @@
  */
 
 import {RollTotal, useRoll} from "@app/generated/tomb.d";
-import {Observable, of} from "rxjs";
 
 export default function rollDice(dice: string) : RollTotal {
   const { data: total } = useRoll({ roll: dice, pathParams: { roll: dice }})
