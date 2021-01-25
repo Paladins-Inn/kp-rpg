@@ -74,12 +74,11 @@ public class DiscordDiceRoller implements DiscordPlugin {
                 return;
             }
 
+            // ad the re-roll reaction to the original message.
             event.getMessage().addReaction(REROLL_EMOJI).queue();
 
             Message msg = new DataMessage(false, roll, UUID.randomUUID().toString(), null);
-            event.getChannel().sendMessage(msg).queue(
-                    message -> message.addReaction(REROLL_EMOJI).queue()
-            );
+            event.getChannel().sendMessage(msg).queue();
         }
     }
 
@@ -130,6 +129,7 @@ public class DiscordDiceRoller implements DiscordPlugin {
                 }
         );
 
+        // remove the count on the original re-roll reaction to keep it nice and tidy at 1 ...
         event.getChannel().removeReactionById(event.getReaction().getMessageId(), REROLL_EMOJI, event.getUser()).queue();
     }
 

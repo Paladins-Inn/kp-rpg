@@ -44,6 +44,16 @@ public class TestDiceRoller {
     DiceRoller sut;
 
     @Test
+    public void shouldReturnTheResultIfNoCommentIsGiven() {
+        MDC.put("test", "check-roll-without-comment");
+
+        String input = "1d12";
+        String result = sut.work(input);
+
+        assertTrue(result.startsWith("D12:"));
+    }
+
+    @Test
     public void shouldReturnTheCommentIfACommentIsGiven() {
         MDC.put("test", "check-comment");
 
