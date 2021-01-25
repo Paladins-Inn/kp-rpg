@@ -131,14 +131,12 @@ public class DiscordDispatcher extends DiscordListenerAdapter {
         MDC.put("user.name", event.getUser().getName());
         MDC.put("user.id", event.getUser().getId());
 
-        LOG.info("Received event: guild='{}', channel='{}', author='{}', message.id='{}', emote='{}', emote.id='{}', emote.name='{}'",
+        LOG.info("Received event: guild='{}', channel='{}', author='{}', message.id='{}', emote='{}'",
                 event.getGuild().getName(),
                 event.getChannel().getName(),
                 event.getUser().getName(),
                 event.getMessageId(),
-                event.getReaction().getReactionEmote().toString(),
-                event.getReaction().getReactionEmote().getId(),
-                event.getReaction().getReactionEmote().getName()
+                event.getReaction().getReactionEmote().toString()
         );
     }
 
