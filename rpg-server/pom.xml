@@ -37,6 +37,5 @@
 
     <modules>
         <module>tomb</module>
-        <module>tomb-ui</module>
     </modules>
 </project>

@@ -48,25 +48,12 @@ COPY . /projects
 RUN mkdir -p /projects/rpg-bot/src/main/resources/META-INF/resources
 ###COPY --from=npm /dist/* /projects/rpg-bot/src/main/resources/META-INF/resources/
 
-RUN mvn --no-transfer-progress \
+RUN mvn --batch --no-transfer-progress \
     -DskipTests=true -Dmaven.test.skip -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
     -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false \
-    -pl !rpg-game-modules,!rpg-server \
     clean install
 
-RUN mvn --no-transfer-progress \
-    -DskipTests=true -Dmaven.test.skip -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
-    -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false \
-    -rf :rpg-game-modules -pl !rpg-server \
-    clean install
-
-RUN mvn --no-transfer-progress \
-    -DskipTests=true -Dmaven.test.skip -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
-    -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false \
-    -rf :rpg-server -pl !tomb-ui \
-    clean package
-
-RUN ls -la rpg-bot/target && cp -a rpg-bot/target/app-runner.jar /app.jar
+RUN ls -la rpg-server/tomb/target && cp -a rpg-seerver/tomb/target/app-runner.jar /app.jar
 
 #
 # Package stage
