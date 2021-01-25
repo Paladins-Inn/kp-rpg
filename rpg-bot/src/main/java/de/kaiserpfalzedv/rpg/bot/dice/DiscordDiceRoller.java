@@ -119,9 +119,7 @@ public class DiscordDiceRoller implements DiscordPlugin {
                         }
 
                         Message msg = new DataMessage(false, roll, UUID.randomUUID().toString(), null);
-                        event.getChannel().sendMessage(msg).queue(
-                                m -> m.addReaction(REROLL_EMOJI).queue()
-                        );
+                        event.getChannel().sendMessage(msg).queue();
                     }
                 },
                 (failure) -> {
