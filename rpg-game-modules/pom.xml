@@ -18,27 +18,28 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <version>1.1.0</version>
 
     <parent>
-        <artifactId>testsupport</artifactId>
-        <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
+        <artifactId>kp-rpg</artifactId>
+        <groupId>de.kaiserpfalz-edv.rpg</groupId>
         <version>1.1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mongodb-testsupport</artifactId>
-    <name>KP RPG :: Test-Suppport :: MongoDB</name>
-    <description>Test support for testing mongodb with quarkus tests.</description>
 
+    <artifactId>rpg-game-modules</artifactId>
+    <name>KP RPG :: Game Modules</name>
+    <packaging>pom</packaging>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>mongodb</artifactId>
-        </dependency>
+    <description>The modules for the different RPG systems.</description>
 
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-junit5</artifactId>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>rpg-dsa5</module>
+        <module>rpg-fate</module>
+        <module>rpg-hexxen</module>
+        <module>rpg-saga</module>
+        <module>rpg-torg</module>
+        <module>rpg-traveller</module>
+        <module>rpg-wod</module>
+    </modules>
 </project>
