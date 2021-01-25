@@ -33,7 +33,7 @@ wrong. But every line that needs not be written is a bug free line without need 
 ## Distribution
 The software is distributed via quay.io. You find the images as
 
-- quay.io/klenkes74/kp-rpg-discord-bot:1.0.0 (stable release)
+- quay.io/klenkes74/kp-rpg-discord-bot:1.1.0 (stable release)
 - quay.io/klenkes74/kp-rpg-discord-bot:latest (bleeding edge)
 
 The images are prepared for consumption by OpenShift 3.11, so they run without any problems on kubernetes, too.
@@ -41,10 +41,10 @@ They need a mongodb to run.
 
 [Paladins Inn](https://www.paladins-inn.de) operates two instances of the discord bot. They can be invited by anyone as
 
-- [Production (1.0.0)](https://discordapp.com/oauth2/authorize?scope=bot&client_id=794193453403734066) Even if tagged 
-  "Production" the service is provided with out any guarantee. Unless you pay, the service is provided as is and may be 
-  revoked at any time without notice. Having said that, we try to keep it up as best as possible.
-- [Development (1.1.0-SNAPSHOT, latest)](https://discordapp.com/oauth2/authorize?scope=bot&client_id=800069820812886036) 
+- [Production (1.1.0)](https://discordapp.com/oauth2/authorize?scope=bot&client_id=794193453403734066&permissions=1882512464)
+  Even if tagged "Production" the service is provided with out any guarantee. Unless you pay, the service is provided as
+  is and may be revoked at any time without notice. Having said that, we try to keep it up as best as possible.
+- [Development (1.2.0-SNAPSHOT, latest)](https://discordapp.com/oauth2/authorize?scope=bot&client_id=800069820812886036&permissions=1882512464) 
   Development means development. It may be behaving strangely or go offline any time for a prolonged time. Use for
   checking the bleeding edge features.
 
