@@ -85,7 +85,7 @@ public class DiscordDiceRoller implements DiscordPlugin {
     private String roll(final String command, final User user) throws IllegalArgumentException {
         LOG.debug("{} working on: command={}, roller={}", this, command, roller);
 
-        String roll = roller.work(command.substring(3));
+        String roll = roller.work(command);
 
         //noinspection StringBufferReplaceableByString
         String text = new StringBuilder()
