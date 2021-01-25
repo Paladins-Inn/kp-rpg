@@ -20,10 +20,10 @@ package de.kaiserpfalzedv.rpg.bot.discord;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.runtime.configuration.ProfileManager;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.Permission;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,17 +70,17 @@ public class DiscordBot {
 
         JDABuilder builder = new JDABuilder(AccountType.BOT);
         builder.setToken(discordToken);
-        builder.addEventListener(dispatcher);
+        builder.addEventListeners(dispatcher);
 
         try {
-            bot = builder.buildAsync();
+            bot = builder.build();
         } catch (LoginException e) {
             LOG.error("Could not login to Discord: " + e.getMessage(), e);
 
             throw new IllegalStateException("Login to Discord failed: " + e.getMessage());
         }
 
-        LOG.info("Created Discord bot: {}", bot.asBot().getInviteUrl(
+        LOG.info("Created Discord bot: {}", bot.getInviteUrl(
                 Permission.MANAGE_ROLES,
                 Permission.MANAGE_CHANNEL,
                 Permission.MANAGE_EMOTES,
@@ -118,7 +118,7 @@ public class DiscordBot {
      * @return The ping to discord in ms.
      */
     public long discordPing() {
-        return bot.getPing();
+        return bot.getGatewayPing();
     }
 
     /**

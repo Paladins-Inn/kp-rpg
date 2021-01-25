@@ -18,7 +18,7 @@
 package de.kaiserpfalzedv.rpg.bot.discord;
 
 import de.kaiserpfalzedv.rpg.bot.text.MarkdownConverter;
-import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageChannel;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

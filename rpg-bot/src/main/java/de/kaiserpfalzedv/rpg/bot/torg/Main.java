@@ -18,11 +18,11 @@
 package de.kaiserpfalzedv.rpg.bot.torg;
 
 
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +44,8 @@ public class Main extends ListenerAdapter {
     void initializeBot() throws LoginException {
         JDABuilder builder = new JDABuilder(AccountType.BOT);
         builder.setToken(discordToken);
-        builder.addEventListener(this);
-        bot = builder.buildAsync();
+        builder.addEventListeners(this);
+        bot = builder.build();
 
         LOG.trace("Created BOT: token={}", discordToken);
     }

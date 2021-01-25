@@ -16,80 +16,62 @@
 
 package de.kaiserpfalzedv.rpg.bot.discord;
 
-import net.dv8tion.jda.client.events.call.CallCreateEvent;
-import net.dv8tion.jda.client.events.call.CallDeleteEvent;
-import net.dv8tion.jda.client.events.call.GenericCallEvent;
-import net.dv8tion.jda.client.events.call.update.CallUpdateRegionEvent;
-import net.dv8tion.jda.client.events.call.update.CallUpdateRingingUsersEvent;
-import net.dv8tion.jda.client.events.call.update.GenericCallUpdateEvent;
-import net.dv8tion.jda.client.events.call.voice.*;
-import net.dv8tion.jda.client.events.group.*;
-import net.dv8tion.jda.client.events.group.update.GenericGroupUpdateEvent;
-import net.dv8tion.jda.client.events.group.update.GroupUpdateIconEvent;
-import net.dv8tion.jda.client.events.group.update.GroupUpdateNameEvent;
-import net.dv8tion.jda.client.events.group.update.GroupUpdateOwnerEvent;
-import net.dv8tion.jda.client.events.message.group.*;
-import net.dv8tion.jda.client.events.message.group.react.GenericGroupMessageReactionEvent;
-import net.dv8tion.jda.client.events.message.group.react.GroupMessageReactionAddEvent;
-import net.dv8tion.jda.client.events.message.group.react.GroupMessageReactionRemoveAllEvent;
-import net.dv8tion.jda.client.events.message.group.react.GroupMessageReactionRemoveEvent;
-import net.dv8tion.jda.client.events.relationship.*;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.events.*;
-import net.dv8tion.jda.core.events.channel.category.CategoryCreateEvent;
-import net.dv8tion.jda.core.events.channel.category.CategoryDeleteEvent;
-import net.dv8tion.jda.core.events.channel.category.GenericCategoryEvent;
-import net.dv8tion.jda.core.events.channel.category.update.CategoryUpdateNameEvent;
-import net.dv8tion.jda.core.events.channel.category.update.CategoryUpdatePermissionsEvent;
-import net.dv8tion.jda.core.events.channel.category.update.CategoryUpdatePositionEvent;
-import net.dv8tion.jda.core.events.channel.category.update.GenericCategoryUpdateEvent;
-import net.dv8tion.jda.core.events.channel.priv.PrivateChannelCreateEvent;
-import net.dv8tion.jda.core.events.channel.priv.PrivateChannelDeleteEvent;
-import net.dv8tion.jda.core.events.channel.text.GenericTextChannelEvent;
-import net.dv8tion.jda.core.events.channel.text.TextChannelCreateEvent;
-import net.dv8tion.jda.core.events.channel.text.TextChannelDeleteEvent;
-import net.dv8tion.jda.core.events.channel.text.update.*;
-import net.dv8tion.jda.core.events.channel.voice.GenericVoiceChannelEvent;
-import net.dv8tion.jda.core.events.channel.voice.VoiceChannelCreateEvent;
-import net.dv8tion.jda.core.events.channel.voice.VoiceChannelDeleteEvent;
-import net.dv8tion.jda.core.events.channel.voice.update.*;
-import net.dv8tion.jda.core.events.emote.EmoteAddedEvent;
-import net.dv8tion.jda.core.events.emote.EmoteRemovedEvent;
-import net.dv8tion.jda.core.events.emote.GenericEmoteEvent;
-import net.dv8tion.jda.core.events.emote.update.EmoteUpdateNameEvent;
-import net.dv8tion.jda.core.events.emote.update.EmoteUpdateRolesEvent;
-import net.dv8tion.jda.core.events.emote.update.GenericEmoteUpdateEvent;
-import net.dv8tion.jda.core.events.guild.*;
-import net.dv8tion.jda.core.events.guild.member.*;
-import net.dv8tion.jda.core.events.guild.update.*;
-import net.dv8tion.jda.core.events.guild.voice.*;
-import net.dv8tion.jda.core.events.http.HttpRequestEvent;
-import net.dv8tion.jda.core.events.message.*;
-import net.dv8tion.jda.core.events.message.guild.*;
-import net.dv8tion.jda.core.events.message.guild.react.GenericGuildMessageReactionEvent;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemoveAllEvent;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemoveEvent;
-import net.dv8tion.jda.core.events.message.priv.*;
-import net.dv8tion.jda.core.events.message.priv.react.GenericPrivateMessageReactionEvent;
-import net.dv8tion.jda.core.events.message.priv.react.PrivateMessageReactionAddEvent;
-import net.dv8tion.jda.core.events.message.priv.react.PrivateMessageReactionRemoveEvent;
-import net.dv8tion.jda.core.events.message.react.GenericMessageReactionEvent;
-import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveAllEvent;
-import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveEvent;
-import net.dv8tion.jda.core.events.role.GenericRoleEvent;
-import net.dv8tion.jda.core.events.role.RoleCreateEvent;
-import net.dv8tion.jda.core.events.role.RoleDeleteEvent;
-import net.dv8tion.jda.core.events.role.update.*;
-import net.dv8tion.jda.core.events.self.*;
-import net.dv8tion.jda.core.events.user.*;
-import net.dv8tion.jda.core.hooks.EventListener;
+import net.dv8tion.jda.api.events.*;
+import net.dv8tion.jda.api.events.channel.category.CategoryCreateEvent;
+import net.dv8tion.jda.api.events.channel.category.CategoryDeleteEvent;
+import net.dv8tion.jda.api.events.channel.category.GenericCategoryEvent;
+import net.dv8tion.jda.api.events.channel.category.update.CategoryUpdateNameEvent;
+import net.dv8tion.jda.api.events.channel.category.update.CategoryUpdatePermissionsEvent;
+import net.dv8tion.jda.api.events.channel.category.update.CategoryUpdatePositionEvent;
+import net.dv8tion.jda.api.events.channel.category.update.GenericCategoryUpdateEvent;
+import net.dv8tion.jda.api.events.channel.priv.PrivateChannelCreateEvent;
+import net.dv8tion.jda.api.events.channel.priv.PrivateChannelDeleteEvent;
+import net.dv8tion.jda.api.events.channel.text.GenericTextChannelEvent;
+import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
+import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
+import net.dv8tion.jda.api.events.channel.text.update.*;
+import net.dv8tion.jda.api.events.channel.voice.GenericVoiceChannelEvent;
+import net.dv8tion.jda.api.events.channel.voice.VoiceChannelCreateEvent;
+import net.dv8tion.jda.api.events.channel.voice.VoiceChannelDeleteEvent;
+import net.dv8tion.jda.api.events.channel.voice.update.*;
+import net.dv8tion.jda.api.events.emote.EmoteAddedEvent;
+import net.dv8tion.jda.api.events.emote.EmoteRemovedEvent;
+import net.dv8tion.jda.api.events.emote.GenericEmoteEvent;
+import net.dv8tion.jda.api.events.emote.update.EmoteUpdateNameEvent;
+import net.dv8tion.jda.api.events.emote.update.EmoteUpdateRolesEvent;
+import net.dv8tion.jda.api.events.emote.update.GenericEmoteUpdateEvent;
+import net.dv8tion.jda.api.events.guild.*;
+import net.dv8tion.jda.api.events.guild.member.*;
+import net.dv8tion.jda.api.events.guild.update.*;
+import net.dv8tion.jda.api.events.guild.voice.*;
+import net.dv8tion.jda.api.events.http.HttpRequestEvent;
+import net.dv8tion.jda.api.events.message.*;
+import net.dv8tion.jda.api.events.message.guild.*;
+import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveAllEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
+import net.dv8tion.jda.api.events.message.priv.*;
+import net.dv8tion.jda.api.events.message.priv.react.GenericPrivateMessageReactionEvent;
+import net.dv8tion.jda.api.events.message.priv.react.PrivateMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.priv.react.PrivateMessageReactionRemoveEvent;
+import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveAllEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
+import net.dv8tion.jda.api.events.role.GenericRoleEvent;
+import net.dv8tion.jda.api.events.role.RoleCreateEvent;
+import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
+import net.dv8tion.jda.api.events.role.update.*;
+import net.dv8tion.jda.api.events.self.*;
+import net.dv8tion.jda.api.events.user.GenericUserEvent;
+import net.dv8tion.jda.api.events.user.update.GenericUserPresenceEvent;
+import net.dv8tion.jda.api.hooks.EventListener;
 
 import java.util.StringJoiner;
 
 /**
- * This is a full copy of the {@link net.dv8tion.jda.core.hooks.ListenerAdapter} class to remove the {@literal final}
+ * This is a full copy of the {@link net.dv8tion.jda.api.hooks.ListenerAdapter} class to remove the {@literal final}
  * qualifier (to enable the use via proxies).
  *
  * @since 1.0.0 2021-01-04
@@ -106,13 +88,6 @@ public abstract class DiscordListenerAdapter implements EventListener
     public void onShutdown(ShutdownEvent event) {}
     public void onStatusChange(StatusChangeEvent event) {}
     public void onException(ExceptionEvent event) {}
-
-    //User Events
-    public void onUserNameUpdate(UserNameUpdateEvent event) {}
-    public void onUserAvatarUpdate(UserAvatarUpdateEvent event) {}
-    public void onUserOnlineStatusUpdate(UserOnlineStatusUpdateEvent event) {}
-    public void onUserGameUpdate(UserGameUpdateEvent event) {}
-    public void onUserTyping(UserTypingEvent event) {}
 
     //Self Events. Fires only in relation to the currently logged in account.
     public void onSelfUpdateAvatar(SelfUpdateAvatarEvent event) {}
@@ -209,7 +184,6 @@ public abstract class DiscordListenerAdapter implements EventListener
     public void onGuildMemberLeave(GuildMemberLeaveEvent event) {}
     public void onGuildMemberRoleAdd(GuildMemberRoleAddEvent event) {}
     public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event) {}
-    public void onGuildMemberNickChange(GuildMemberNickChangeEvent event) {}
 
     //Guild Voice Events
     public void onGuildVoiceUpdate(GuildVoiceUpdateEvent event) {}
@@ -276,66 +250,9 @@ public abstract class DiscordListenerAdapter implements EventListener
     // |                                   Client Only Events                                   |
     // ==========================================================================================
 
-    //Relationship Events
-    public void onFriendAdded(FriendAddedEvent event) {}
-    public void onFriendRemoved(FriendRemovedEvent event) {}
-    public void onUserBlocked(UserBlockedEvent event) {}
-    public void onUserUnblocked(UserUnblockedEvent event) {}
-    public void onFriendRequestSent(FriendRequestSentEvent event) {}
-    public void onFriendRequestCanceled(FriendRequestCanceledEvent event) {}
-    public void onFriendRequestReceived(FriendRequestReceivedEvent event) {}
-    public void onFriendRequestIgnored(FriendRequestIgnoredEvent event) {}
-
-    //Group Events
-    public void onGroupJoin(GroupJoinEvent event) {}
-    public void onGroupLeave(GroupLeaveEvent event) {}
-    public void onGroupUserJoin(GroupUserJoinEvent event) {}
-    public void onGroupUserLeave(GroupUserLeaveEvent event) {}
-
-    //Group Message Events
-    public void onGroupMessageReceived(GroupMessageReceivedEvent event) {}
-    public void onGroupMessageUpdate(GroupMessageUpdateEvent event) {}
-    public void onGroupMessageDelete(GroupMessageDeleteEvent event) {}
-    public void onGroupMessageEmbed(GroupMessageEmbedEvent event) {}
-    public void onGroupMessageReactionAdd(GroupMessageReactionAddEvent event) {}
-    public void onGroupMessageReactionRemove(GroupMessageReactionRemoveEvent event) {}
-    public void onGroupMessageReactionRemoveAll(GroupMessageReactionRemoveAllEvent event) {}
-
-    //Group Update Events
-    public void onGroupUpdateIcon(GroupUpdateIconEvent event) {}
-    public void onGroupUpdateName(GroupUpdateNameEvent event){}
-    public void onGroupUpdateOwner(GroupUpdateOwnerEvent event) {}
-
-    //Call Events
-    public void onCallCreate(CallCreateEvent event) {}
-    public void onCallDelete(CallDeleteEvent event) {}
-
-    //Call Update Events
-    public void onCallUpdateRegion(CallUpdateRegionEvent event) {}
-    public void onCallUpdateRingingUsers(CallUpdateRingingUsersEvent event) {}
-
-    //Call Voice Events
-    public void onCallVoiceJoin(CallVoiceJoinEvent event) {}
-    public void onCallVoiceLeave(CallVoiceLeaveEvent event) {}
-    public void onCallVoiceSelfMute(CallVoiceSelfMuteEvent event) {}
-    public void onCallVoiceSelfDeafen(CallVoiceSelfDeafenEvent event) {}
-
-    //Client Only Generic Events
-    public void onGenericRelationship(GenericRelationshipEvent event) {}
-    public void onGenericRelationshipAdd(GenericRelationshipAddEvent event) {}
-    public void onGenericRelationshipRemove(GenericRelationshipRemoveEvent event) {}
-    public void onGenericGroup(GenericGroupEvent event) {}
-    public void onGenericGroupMessage(GenericGroupMessageEvent event) {}
-    public void onGenericGroupMessageReaction(GenericGroupMessageReactionEvent event) {}
-    public void onGenericGroupUpdate(GenericGroupUpdateEvent event) {}
-    public void onGenericCall(GenericCallEvent event) {}
-    public void onGenericCallUpdate(GenericCallUpdateEvent event) {}
-    public void onGenericCallVoice(GenericCallVoiceEvent event) {}
-
     @Override
-    public void onEvent(Event event)
+    public void onEvent(GenericEvent event)
     {
-        onGenericEvent(event);
         //JDA Events
         if (event instanceof ReadyEvent)
             onReady((ReadyEvent) event);
@@ -400,18 +317,6 @@ public abstract class DiscordListenerAdapter implements EventListener
             onMessageReactionRemove((MessageReactionRemoveEvent) event);
         else if (event instanceof MessageReactionRemoveAllEvent)
             onMessageReactionRemoveAll((MessageReactionRemoveAllEvent) event);
-
-            //User Events
-        else if (event instanceof UserNameUpdateEvent)
-            onUserNameUpdate((UserNameUpdateEvent) event);
-        else if (event instanceof UserAvatarUpdateEvent)
-            onUserAvatarUpdate((UserAvatarUpdateEvent) event);
-        else if (event instanceof UserGameUpdateEvent)
-            onUserGameUpdate((UserGameUpdateEvent) event);
-        else if (event instanceof UserOnlineStatusUpdateEvent)
-            onUserOnlineStatusUpdate((UserOnlineStatusUpdateEvent) event);
-        else if (event instanceof UserTypingEvent)
-            onUserTyping((UserTypingEvent) event);
 
             //Self Events
         else if (event instanceof SelfUpdateAvatarEvent)
@@ -532,8 +437,6 @@ public abstract class DiscordListenerAdapter implements EventListener
             onGuildMemberRoleAdd((GuildMemberRoleAddEvent) event);
         else if (event instanceof GuildMemberRoleRemoveEvent)
             onGuildMemberRoleRemove((GuildMemberRoleRemoveEvent) event);
-        else if (event instanceof GuildMemberNickChangeEvent)
-            onGuildMemberNickChange((GuildMemberNickChangeEvent) event);
 
             //Guild Voice Events
         else if (event instanceof GuildVoiceJoinEvent)
@@ -649,110 +552,6 @@ public abstract class DiscordListenerAdapter implements EventListener
         //Generic events that have 2 levels of generic subclasses
         if (event instanceof GenericGuildEvent)
             onGenericGuild((GenericGuildEvent) event);
-
-        if (event.getJDA().getAccountType() == AccountType.CLIENT)
-        {
-            //Relationship Events
-            if (event instanceof FriendAddedEvent)
-                onFriendAdded((FriendAddedEvent) event);
-            else if (event instanceof FriendRemovedEvent)
-                onFriendRemoved((FriendRemovedEvent) event);
-            else if (event instanceof UserBlockedEvent)
-                onUserBlocked((UserBlockedEvent) event);
-            else if (event instanceof UserUnblockedEvent)
-                onUserUnblocked((UserUnblockedEvent) event);
-            else if (event instanceof FriendRequestSentEvent)
-                onFriendRequestSent((FriendRequestSentEvent) event);
-            else if (event instanceof FriendRequestCanceledEvent)
-                onFriendRequestCanceled((FriendRequestCanceledEvent) event);
-            else if (event instanceof FriendRequestReceivedEvent)
-                onFriendRequestReceived((FriendRequestReceivedEvent) event);
-            else if (event instanceof FriendRequestIgnoredEvent)
-                onFriendRequestIgnored((FriendRequestIgnoredEvent) event);
-
-                //Group Events
-            else if (event instanceof GroupJoinEvent)
-                onGroupJoin((GroupJoinEvent) event);
-            else if (event instanceof GroupLeaveEvent)
-                onGroupLeave((GroupLeaveEvent) event);
-            else if (event instanceof GroupUserJoinEvent)
-                onGroupUserJoin((GroupUserJoinEvent) event);
-            else if (event instanceof GroupUserLeaveEvent)
-                onGroupUserLeave((GroupUserLeaveEvent) event);
-
-            //Group Message Events
-            if (event instanceof GroupMessageReceivedEvent)
-                onGroupMessageReceived((GroupMessageReceivedEvent) event);
-            else if (event instanceof GroupMessageUpdateEvent)
-                onGroupMessageUpdate((GroupMessageUpdateEvent) event);
-            else if (event instanceof GroupMessageDeleteEvent)
-                onGroupMessageDelete((GroupMessageDeleteEvent) event);
-            else if (event instanceof GroupMessageEmbedEvent)
-                onGroupMessageEmbed((GroupMessageEmbedEvent) event);
-            else if (event instanceof GroupMessageReactionAddEvent)
-                onGroupMessageReactionAdd((GroupMessageReactionAddEvent) event);
-            else if (event instanceof GroupMessageReactionRemoveEvent)
-                onGroupMessageReactionRemove((GroupMessageReactionRemoveEvent) event);
-            else if (event instanceof GroupMessageReactionRemoveAllEvent)
-                onGroupMessageReactionRemoveAll((GroupMessageReactionRemoveAllEvent) event);
-
-                //Group Update Events
-            else if (event instanceof GroupUpdateIconEvent)
-                onGroupUpdateIcon((GroupUpdateIconEvent) event);
-            else if (event instanceof GroupUpdateNameEvent)
-                onGroupUpdateName((GroupUpdateNameEvent) event);
-            else if (event instanceof GroupUpdateOwnerEvent)
-                onGroupUpdateOwner((GroupUpdateOwnerEvent) event);
-
-                //Call Events
-            else if (event instanceof CallCreateEvent)
-                onCallCreate((CallCreateEvent) event);
-            else if (event instanceof CallDeleteEvent)
-                onCallDelete((CallDeleteEvent) event);
-
-                //Call Update Events
-            else if (event instanceof CallUpdateRegionEvent)
-                onCallUpdateRegion((CallUpdateRegionEvent) event);
-            else if (event instanceof CallUpdateRingingUsersEvent)
-                onCallUpdateRingingUsers((CallUpdateRingingUsersEvent) event);
-
-                //Call Voice Events
-            else if (event instanceof CallVoiceJoinEvent)
-                onCallVoiceJoin((CallVoiceJoinEvent) event);
-            else if (event instanceof CallVoiceLeaveEvent)
-                onCallVoiceLeave((CallVoiceLeaveEvent) event);
-            else if (event instanceof CallVoiceSelfMuteEvent)
-                onCallVoiceSelfMute((CallVoiceSelfMuteEvent) event);
-            else if (event instanceof CallVoiceSelfDeafenEvent)
-                onCallVoiceSelfDeafen((CallVoiceSelfDeafenEvent) event);
-
-            //Client Only Child-Generic Events
-            if (event instanceof GenericRelationshipAddEvent)
-                onGenericRelationshipAdd((GenericRelationshipAddEvent) event);
-            else if (event instanceof GenericRelationshipRemoveEvent)
-                onGenericRelationshipRemove((GenericRelationshipRemoveEvent) event);
-            else if (event instanceof GenericGroupMessageReactionEvent)
-                onGenericGroupMessageReaction((GenericGroupMessageReactionEvent) event);
-            else if (event instanceof GenericGroupUpdateEvent)
-                onGenericGroupUpdate((GenericGroupUpdateEvent) event);
-            else if (event instanceof GenericCallUpdateEvent)
-                onGenericCallUpdate((GenericCallUpdateEvent) event);
-            else if (event instanceof GenericCallVoiceEvent)
-                onGenericCallVoice((GenericCallVoiceEvent) event);
-
-            //Client Only Generic Events
-            //Subclass of GenericGroupEvent must be in different if/else block
-            // cannot be in block above due to GenericGroupMessageReactionEvent being a child
-            if (event instanceof GenericGroupMessageEvent)
-                onGenericGroupMessage((GenericGroupMessageEvent) event);
-
-            if (event instanceof GenericRelationshipEvent)
-                onGenericRelationship((GenericRelationshipEvent) event);
-            else if (event instanceof GenericGroupEvent)
-                onGenericGroup((GenericGroupEvent) event);
-            else if (event instanceof GenericCallEvent)
-                onGenericCall((GenericCallEvent) event);
-        }
     }
 
     @Override
