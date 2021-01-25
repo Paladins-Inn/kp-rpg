@@ -53,7 +53,7 @@ RUN mvn --batch-mode --no-transfer-progress \
     -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false \
     clean install
 
-RUN ls -la rpg-server/tomb/target && cp -a rpg-seerver/tomb/target/app-runner.jar /app.jar
+RUN ls -la rpg-server/tomb/target && cp -a rpg-server/tomb/target/app-runner.jar /app.jar
 
 #
 # Package stage
