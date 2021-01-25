@@ -102,7 +102,17 @@ public class DiscordDiceRoller implements DiscordPlugin {
     public void work(final GuildMessageReactionAddEvent event) {
         LOG.info("Working on event: {}", event);
 
-        String command = event.getChannel().getHistory().getMessageById(event.getMessageId()).getContentRaw();
+        String msgId = event.getReaction().getMessageId();
+        Message msg = event.getChannel().getHistory().getMessageById(msgId);
+        if (msg == null) {
+            LOG.error("Can't read the message for the reaction: {}", msgId);
+
+            Message response = new DataMessage(false, event.getUser().getAsMention() + ": Leider kann ich die Nachricht nicht finden!", UUID.randomUUID().toString(), null);
+            event.getChannel().sendMessage(response).queue();
+            return;
+        }
+
+        String command = msg.getContentRaw();
 
         if (command.startsWith("/r ")) {
             String roll;
@@ -111,13 +121,13 @@ public class DiscordDiceRoller implements DiscordPlugin {
             } catch (IllegalArgumentException e) {
                 LOG.error("Rolling failed: " + e.getMessage(), e);
 
-                Message msg = new DataMessage(true, event.getUser().getAsMention() + " kann nicht richtig würfeln!", UUID.randomUUID().toString(), null);
-                event.getChannel().sendMessage(msg).queue();
+                Message response = new DataMessage(true, event.getUser().getAsMention() + " kann nicht richtig würfeln!", UUID.randomUUID().toString(), null);
+                event.getChannel().sendMessage(response).queue();
                 return;
             }
 
-            Message msg = new DataMessage(false, roll, UUID.randomUUID().toString(), null);
-            event.getChannel().sendMessage(msg).queue();
+            Message response = new DataMessage(false, roll, UUID.randomUUID().toString(), null);
+            event.getChannel().sendMessage(response).queue();
         }
 
         // remove the count on the original re-roll reaction to keep it nice and tidy at 1 ...
