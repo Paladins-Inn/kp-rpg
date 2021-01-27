@@ -100,37 +100,41 @@ public class DiscordDiceRoller implements DiscordPlugin {
 
     @Override
     public void work(final GuildMessageReactionAddEvent event) {
-        LOG.info("Working on event: {}", event);
+        String reactionCode = event.getReaction().getReactionEmote().getAsReactionCode();
+        LOG.info("Working on event: channel.id={}, message.id={}, user.name={}, reactionCode={}",
+                event.getChannel(), event.getMessageId(), event.getUser().getName(), reactionCode);
 
-        String msgId = event.getReaction().getMessageId();
-        event.getChannel().retrieveMessageById(msgId).queue(
-                (message) -> {
-                    String command = message.getContentRaw();
+        if ("RE:U+1f501".contentEquals(reactionCode)) {
+            String msgId = event.getReaction().getMessageId();
+            event.getChannel().retrieveMessageById(msgId).queue(
+                    (message) -> {
+                        String command = message.getContentRaw();
 
-                    if (command.startsWith("/r ")) {
-                        String roll;
-                        try {
-                            roll = roll(command.substring(3), event.getUser());
-                        } catch (IllegalArgumentException e) {
-                            LOG.error("Rolling failed: " + e.getMessage(), e);
+                        if (command.startsWith("/r ")) {
+                            String roll;
+                            try {
+                                roll = roll(command.substring(3), event.getUser());
+                            } catch (IllegalArgumentException e) {
+                                LOG.error("Rolling failed: " + e.getMessage(), e);
 
-                            Message response = new DataMessage(true, event.getUser().getAsMention() + " kann nicht richtig würfeln!", UUID.randomUUID().toString(), null);
+                                Message response = new DataMessage(true, event.getUser().getAsMention() + " kann nicht richtig würfeln!", UUID.randomUUID().toString(), null);
+                                event.getChannel().sendMessage(response).queue();
+                                return;
+                            }
+
+                            Message response = new DataMessage(false, roll, UUID.randomUUID().toString(), null);
                             event.getChannel().sendMessage(response).queue();
-                            return;
                         }
+                    },
+                    (failure) -> {
+                        LOG.error("Can't load message: " + failure.getMessage(), failure);
 
-                        Message response = new DataMessage(false, roll, UUID.randomUUID().toString(), null);
+                        Message response = new DataMessage(false, event.getUser().getAsMention() + ": Sorry, can't load this message.", UUID.randomUUID().toString(), null);
                         event.getChannel().sendMessage(response).queue();
+                        return;
                     }
-                },
-                (failure) -> {
-                    LOG.error("Can't load message: " + failure.getMessage(), failure);
-
-                    Message response = new DataMessage(false, event.getUser().getAsMention() + ": Sorry, can't load this message.", UUID.randomUUID().toString(), null);
-                    event.getChannel().sendMessage(response).queue();
-                    return;
-                }
-        );
+            );
+        }
 
         // remove the count on the original re-roll reaction to keep it nice and tidy at 1 ...
         event.getChannel().removeReactionById(event.getReaction().getMessageId(), REROLL_EMOJI, event.getUser()).queue();
