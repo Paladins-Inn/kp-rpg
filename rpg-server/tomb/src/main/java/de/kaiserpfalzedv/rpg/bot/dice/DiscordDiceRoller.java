@@ -100,8 +100,9 @@ public class DiscordDiceRoller implements DiscordPlugin {
 
     @Override
     public void work(final GuildMessageReactionAddEvent event) {
-        String reactionCode = event.getReaction().getReactionEmote().getAsReactionCode();
-        LOG.info("Working on event: channel.id={}, message.id={}, user.name={}, reactionCode={}",
+        String reactionCode = event.getReaction().getReactionEmote().toString();
+        LOG.info("Working on event: guild.id={}, guild.name={}, channel.id={}, message.id={}, user.name={}, reactionCode={}",
+                event.getGuild().getIconId(), event.getGuild().getName(),
                 event.getChannel(), event.getMessageId(), event.getUser().getName(), reactionCode);
 
         if ("RE:U+1f501".contentEquals(reactionCode)) {

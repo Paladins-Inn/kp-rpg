@@ -38,7 +38,6 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({children}) => {
   const [isNavOpen, setIsNavOpen] = React.useState(true);
   const [isMobileView, setIsMobileView] = React.useState(true);
   const [isNavOpenMobile, setIsNavOpenMobile] = React.useState(false);
-  const DisplayUserName = React.useState("Not logged in")
   const onNavToggleMobile = () => {
     setIsNavOpenMobile(!isNavOpenMobile);
   };
