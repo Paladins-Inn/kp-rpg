@@ -40,18 +40,18 @@ public class DriveThruRPGMockService implements QuarkusTestResourceLifecycleMana
         mockServer = new WireMockServer();
         mockServer.start();
 
-        WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/api/v1/token"))
+        stubFor(post(urlEqualTo("/api/v1/token"))
                 .willReturn(
-                        WireMock.aResponse()
+                        aResponse()
                         .withHeader("Content-Type", "application/json")
                                 .withBodyFile("token.json")
                 )
         );
 
 
-        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/api/v1/customers/CUST/products?page=1&page_size=1000&include_archived=0&fields=products_id"))
+        stubFor(get(urlEqualTo("/api/v1/customers/CUST/products?page=1&page_size=1000&include_archived=0&fields=products_id"))
                 .willReturn(
-                        WireMock.aResponse()
+                        aResponse()
                                 .withHeader("Content-Type", "application/json")
                                 .withBodyFile("projects-ids.json")
                 )
