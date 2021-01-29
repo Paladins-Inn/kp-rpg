@@ -17,11 +17,16 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
+import de.kaiserpfalzedv.rpg.integrations.drivethru.customers.DriveThruRPGOwnedProduct;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.customers.DriveThruRPGProductService;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.token.DriveThruRPGToken;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.token.DriveThruRPGTokenService;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -32,17 +37,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTest
 @QuarkusTestResource(DriveThruRPGMockService.class)
-public class TestDriveThruRPGTokenService {
-    static private final Logger LOG = LoggerFactory.getLogger(TestDriveThruRPGTokenService.class);
+public class TestDriveThruRPGProductService {
+    static private final Logger LOG = LoggerFactory.getLogger(TestDriveThruRPGProductService.class);
 
     @Inject
-    DriveThruRPGTokenService sut;
+    DriveThruRPGProductService sut;
 
     @Test
-    public void shouldRetrieveATokenWhenCorrectAPIKeyIsGiven() {
+    public void shouldRetrieveProductsWhenCorrectAPIKeyIsGiven() {
         MDC.put("test", "retrive-by-apiKey");
 
-        DriveThruRPGToken result = sut.getDriveThruRPGToken("API-KEY");
+        DriveThruRPGOwnedProduct[] result = sut.getOwnedProducts("API-KEY");
 
         LOG.trace("result={}", result);
         assertNotNull(result);

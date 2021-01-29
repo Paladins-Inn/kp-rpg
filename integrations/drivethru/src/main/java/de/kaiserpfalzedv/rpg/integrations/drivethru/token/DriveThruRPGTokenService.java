@@ -17,6 +17,8 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.token;
 
+import de.kaiserpfalzedv.rpg.integrations.drivethru.DriveThruRPGWrapper;
+import io.quarkus.cache.CacheResult;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +28,6 @@ import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 
@@ -46,13 +47,14 @@ public class DriveThruRPGTokenService {
     @RestClient
     DriveThruRPGTokenClient client;
 
+    @CacheResult(cacheName = "drivethrurpg-token")
     public DriveThruRPGToken getDriveThruRPGToken(final String apiKey) {
         LOG.trace("retrieving oauth2 token for: {}", apiKey);
 
         try {
-            LinkedHashMap<String, String> response = client
-                    .getToken("Bearer " + apiKey)
-                    .getMessage();
+            DriveThruRPGWrapper<LinkedHashMap> result = client.getToken("Bearer " + apiKey);
+
+            LinkedHashMap<String, String> response = result.getMessage();
 
             LocalDateTime serverTime = parse(response.get("server_time"));
             LocalDateTime expireTime = parse(response.get("expires"));
