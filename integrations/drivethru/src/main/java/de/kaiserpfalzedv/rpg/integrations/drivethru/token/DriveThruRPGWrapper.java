@@ -17,39 +17,35 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.token;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.rpg.core.cards.ImmutableCard;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Value.Immutable
 @Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableDriveThruRPGToken.class)
-@JsonDeserialize(builder = ImmutableDriveThruRPGToken.Builder.class)
-@Schema(name = "DriveThruRPGToken", description = "The access token for DriveThruRPG.")
-public interface DriveThruRPGToken extends Serializable {
-    @JsonProperty("access_token")
-    String getAccessToken();
+@JsonSerialize(as = ImmutableDriveThruRPGWrapper.class)
+@JsonDeserialize(builder = ImmutableDriveThruRPGWrapper.Builder.class)
+@Schema(name = "DriveThruRPGWrapper", description = "The wrapper class for DriveThruRPG answers.")
+public interface DriveThruRPGWrapper<T extends Serializable> extends Serializable {
+    /**
+     * The message itself.
+     * @return Either "success" or "error"
+     */
+    @JsonProperty("status")
+    String getStatus();
 
-    @JsonProperty("customers_id")
-    String getCustomerId();
-
-    @JsonProperty("expires")
-    LocalDateTime getExpireTime();
-
-    @JsonProperty("server_time")
-    LocalDateTime getServerTime();
-
-    @JsonIgnore
-    LocalDateTime getLocalTime();
-
-    @JsonIgnore
-    Long getExpires();
+    /**
+     * In case of error the error string. In case of success the result object.
+     *
+     * @return Either the error string or the result object.
+     */
+    @JsonProperty("message")
+    T getMessage();
 }

@@ -17,22 +17,28 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.token;
 
+import de.kaiserpfalzedv.rpg.core.rest.LoggingRestHeaders;
+import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import org.jboss.resteasy.annotations.jaxrs.QueryParam;
+
+import javax.ws.rs.*;
+import java.util.LinkedHashMap;
+
+
 /**
  * The tokenservice of DriveThruRPG to get the oauth2 token via the API key.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0 2021-01-29
  */
-
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-
 @Path("/api/v1")
 @RegisterRestClient(configKey = "tomb.drivethrurpg.api")
+@RegisterClientHeaders(LoggingRestHeaders.class)
 public interface DriveThruRPGTokenClient {
-    @GET
+    @POST
     @Path("/token")
-    DriveThruRPGToken getToken();
+    DriveThruRPGWrapper<LinkedHashMap> getToken(
+            @HeaderParam("Authorization") String authorization
+    );
 }

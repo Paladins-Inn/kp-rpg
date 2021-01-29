@@ -18,9 +18,17 @@
 package de.kaiserpfalzedv.rpg.integrations.drivethru.token;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
 
 /**
  * The internal token service.
@@ -30,11 +38,44 @@ import javax.inject.Inject;
  */
 @ApplicationScoped
 public class DriveThruRPGTokenService {
+    private static final Logger LOG = LoggerFactory.getLogger(DriveThruRPGTokenService.class);
+
+    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     @Inject
     @RestClient
     DriveThruRPGTokenClient client;
 
-    public String getDriveThruRPGToken(final String apiKey) {
-        return client.getToken().token;
+    public DriveThruRPGToken getDriveThruRPGToken(final String apiKey) {
+        LOG.trace("retrieving oauth2 token for: {}", apiKey);
+
+        try {
+            LinkedHashMap<String, String> response = client
+                    .getToken("Bearer " + apiKey)
+                    .getMessage();
+
+            LocalDateTime serverTime = parse(response.get("server_time"));
+            LocalDateTime expireTime = parse(response.get("expires"));
+            LocalDateTime localTime = LocalDateTime.now();
+
+            Duration duration = Duration.between(serverTime, expireTime);
+
+            return ImmutableDriveThruRPGToken.builder()
+                    .accessToken(response.get("access_token"))
+                    .customerId(response.get("customers_id"))
+                    .expireTime(expireTime)
+                    .serverTime(serverTime)
+                    .localTime(localTime)
+                    .expires(duration.getSeconds())
+                    .build();
+        } catch (WebApplicationException e) {
+            LOG.error("Could not retrieve the token: {}", e.getResponse().getHeaders());
+
+            throw e;
+        }
+    }
+
+    private LocalDateTime parse(final String input) {
+        return LocalDateTime.parse(input, dateFormatter);
     }
 }
