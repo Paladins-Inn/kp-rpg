@@ -27,12 +27,15 @@
   <description>kp-rpg is a framework for tabletop RPG supporting function and services.</description>
 
   <modules>
-    <module>rpg-core</module>
+    <module>testsupport</module>
     <module>integrations</module>
+
+    <module>rpg-core</module>
+
     <module>rpg-game-modules</module>
+
     <module>rpg-server</module>
 
-    <module>testsupport</module>
   </modules>
 
 
