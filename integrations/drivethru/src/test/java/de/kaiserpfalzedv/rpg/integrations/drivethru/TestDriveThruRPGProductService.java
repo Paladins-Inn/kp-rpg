@@ -49,7 +49,7 @@ public class TestDriveThruRPGProductService {
 
         DriveThruRPGOwnedProduct[] result = sut.getOwnedProducts("API-KEY");
 
-        LOG.trace("result={}", result);
+        LOG.trace("results={}", result);
         assertNotNull(result);
     }
 

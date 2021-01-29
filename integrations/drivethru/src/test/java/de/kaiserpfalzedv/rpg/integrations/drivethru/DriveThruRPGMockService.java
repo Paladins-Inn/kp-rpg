@@ -18,6 +18,7 @@
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 import java.util.Collections;
