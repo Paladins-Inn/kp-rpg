@@ -15,10 +15,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const ProviderMapper = ({ children, store }) => (
-  <Provider store={store}>
-    { children }
-  </Provider>
-)
+package de.kaiserpfalzedv.rpg.integrations.drivethru.token;
 
-export default ProviderMapper
+/**
+ * The tokenservice of DriveThruRPG to get the oauth2 token via the API key.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.2.0 2021-01-29
+ */
+
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
+@Path("/api/v1")
+@RegisterRestClient(configKey = "tomb.drivethrurpg.api")
+public interface DriveThruRPGTokenClient {
+    @GET
+    @Path("/token")
+    DriveThruRPGToken getToken();
+}
