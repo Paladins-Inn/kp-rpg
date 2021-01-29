@@ -132,6 +132,22 @@
       </dependency>
 
       <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>datastore</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>discord</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>drivethru</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
         <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
         <artifactId>mongodb-testsupport</artifactId>
         <version>${project.version}</version>
@@ -173,13 +189,6 @@
         <version>0.4.8</version>
       </dependency>
 
-      <!-- Discord Library -->
-      <dependency>
-        <groupId>net.dv8tion</groupId>
-        <artifactId>JDA</artifactId>
-        <version>4.2.0_227</version>
-      </dependency>
-
       <!-- MarkDown Library -->
       <dependency>
         <groupId>com.github.rjeschke</groupId>
@@ -200,6 +209,13 @@
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j</artifactId>
         <version>2.14.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-bom</artifactId>
+        <version>1.15.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -627,10 +643,6 @@
         <dependency>
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-vertx</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>io.quarkus</groupId>
-          <artifactId>quarkus-elytron-security-oauth2</artifactId>
         </dependency>
         <dependency>
           <groupId>io.quarkus</groupId>

@@ -38,6 +38,18 @@
             <groupId>de.kaiserpfalz-edv.rpg</groupId>
             <artifactId>rpg-core</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-elytron-security-oauth2</artifactId>
+        </dependency>
+
+        <!-- Discord Library -->
+        <dependency>
+            <groupId>net.dv8tion</groupId>
+            <artifactId>JDA</artifactId>
+            <version>4.2.0_227</version>
+        </dependency>
     </dependencies>
 
     <build>

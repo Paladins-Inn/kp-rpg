@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>integrations</artifactId>
-    <name>KP RPG :: Southbound Integrations</name>
+    <name>KP RPG :: Integration :: Base</name>
     <packaging>pom</packaging>
 
     <description>Integration in external services.</description>

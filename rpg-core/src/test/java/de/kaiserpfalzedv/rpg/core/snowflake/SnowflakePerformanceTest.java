@@ -17,24 +17,13 @@
 package de.kaiserpfalzedv.rpg.core.snowflake;
 
 import de.kaiserpfalzedv.rpg.core.snowflake.ConcurrentTestFramework.SummaryReport;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author downgoon {@literal http://downgoon.com}
  * @since 1.0.0 2021-01-11
  */
 public class SnowflakePerformanceTest {
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@Before
-	public void setUp() throws Exception {
-	}
-
 	@Test
 	public void testSingleThread() {
 		int n1 = 1000000; // 1百万次
@@ -50,13 +39,7 @@ public class SnowflakePerformanceTest {
 	public void testC10N10w() throws Exception {
 		ConcurrentTestFramework ctf = new ConcurrentTestFramework("C10N10w", true);
 		final Snowflake snowflake = new Snowflake(2, 5);
-		SummaryReport report = ctf.test(10, 100000, new Runnable() {
-			
-			@Override
-			public void run() {
-				snowflake.nextId();
-			}
-		});
+		SummaryReport report = ctf.test(10, 100000, snowflake::nextId);
 		report.setAttachment(String.format("wait: %d", snowflake.getWaitCount()));
 		System.out.println("C10N10w Report: " + report);
 	}
@@ -65,13 +48,7 @@ public class SnowflakePerformanceTest {
 	public void testC100N1w() throws Exception {
 		ConcurrentTestFramework ctf = new ConcurrentTestFramework("C100N1w", false);
 		final Snowflake snowflake = new Snowflake(2, 5);
-		SummaryReport report = ctf.test(100, 10000, new Runnable() {
-			
-			@Override
-			public void run() {
-				snowflake.nextId();
-			}
-		});
+		SummaryReport report = ctf.test(100, 10000, snowflake::nextId);
 		report.setAttachment(String.format("wait: %d", snowflake.getWaitCount()));
 		System.out.println("C100N1w Report: " + report);
 	}
@@ -80,13 +57,7 @@ public class SnowflakePerformanceTest {
 	public void testC50N100w() throws Exception {
 		ConcurrentTestFramework ctf = new ConcurrentTestFramework("C50N100w", false);
 		final Snowflake snowflake = new Snowflake(2, 5);
-		SummaryReport report = ctf.test(50, 1000000, new Runnable() {
-			
-			@Override
-			public void run() {
-				snowflake.nextId();
-			}
-		});
+		SummaryReport report = ctf.test(50, 1000000, snowflake::nextId);
 		report.setAttachment(String.format("wait: %d", snowflake.getWaitCount()));
 		System.out.println("C50N100w Report: " + report);
 	}
@@ -107,12 +78,13 @@ public class SnowflakePerformanceTest {
 		return r;
 	}
 
+	@SuppressWarnings("SameParameterValue")
 	private void showReport(int c, int n, long[] r) {
 		long costMS = r[0];
 		long qps = (long) (n / (costMS / 1000.0));
 		long qpms = n / costMS;
 		System.out
-				.println(String.format("C%dN%d: costMS=%d, QPS=%d, QPMS:=%d, wait=%d", c, n, costMS, qps, qpms, r[1]));
+				.printf("C%dN%d: costMS=%d, QPS=%d, QPMS:=%d, wait=%d%n", c, n, costMS, qps, qpms, r[1]);
 	}
 
 }

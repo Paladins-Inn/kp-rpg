@@ -15,14 +15,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.datastore;
+package de.kaiserpfalzedv.rpg.integrations.datastore.file;
 
 import com.mongodb.MongoGridFSException;
 import com.mongodb.client.gridfs.GridFSBucket;
-import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileCouldNotBeDeletedException;
-import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileCouldNotBeSavedException;
-import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileNotFoundException;
-import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileResourceService;
+import de.kaiserpfalzedv.rpg.integrations.datastore.file.store.FileCouldNotBeDeletedException;
+import de.kaiserpfalzedv.rpg.integrations.datastore.file.store.FileCouldNotBeSavedException;
+import de.kaiserpfalzedv.rpg.integrations.datastore.file.store.FileNotFoundException;
+import de.kaiserpfalzedv.rpg.integrations.datastore.file.store.FileResourceService;
 import org.bson.BsonString;
 import org.bson.BsonValue;
 

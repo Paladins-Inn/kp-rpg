@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.datastore.store;
+package de.kaiserpfalzedv.rpg.integrations.datastore.file.store;
 
 import de.kaiserpfalzedv.rpg.core.api.BaseException;
 

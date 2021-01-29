@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.datastore;
+package de.kaiserpfalzedv.rpg.integrations.datastore.file;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.gridfs.GridFSBucket;

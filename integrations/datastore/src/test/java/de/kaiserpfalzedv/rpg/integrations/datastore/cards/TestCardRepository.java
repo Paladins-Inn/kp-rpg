@@ -15,10 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.cards.store;
+package de.kaiserpfalzedv.rpg.integrations.datastore.cards;
 
 import de.kaiserpfalzedv.rpg.core.cards.ImmutableCard;
-import de.kaiserpfalzedv.rpg.core.dice.TestDice;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceHistory;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceStatus;
@@ -127,7 +126,7 @@ public class TestCardRepository {
 
     @BeforeAll
     static void setUp() {
-        MDC.put("test-class", TestDice.class.getSimpleName());
+        MDC.put("test-class", TestCardRepository.class.getSimpleName());
     }
 
     @AfterAll

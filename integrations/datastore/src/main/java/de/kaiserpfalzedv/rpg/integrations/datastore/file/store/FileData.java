@@ -15,21 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.datastore.store;
+package de.kaiserpfalzedv.rpg.integrations.datastore.file.store;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.rpg.core.files.ImmutableFileResource;
-import de.kaiserpfalzedv.rpg.core.resources.Resource;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
+import java.io.Serializable;
+import java.util.Optional;
+
 /**
- * FileResource -- A stored file in the resource server.
- *
- * This is the data set of a file resource. It can also be filled with the data itself but may also using the file
- * service endpoint to provide the file data. Then the file endpoint can be used with the UID of the FileResource here.
+ * FileData is the generic resource data type for storing files on this service.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-07
@@ -37,10 +35,25 @@ import org.immutables.value.Value;
 @Value.Immutable
 @Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableFileResource.class)
-@JsonDeserialize(builder = ImmutableFileResource.Builder.class)
-@Schema(name = "file", description = "File resource containting the data")
-public interface FileResource extends Resource<FileData, String> {
-    String API_VERSION = "v1";
-    String KIND = "File";
+@JsonSerialize(as = ImmutableFileData.class)
+@JsonDeserialize(builder = ImmutableFileData.Builder.class)
+@Schema(name = "fileData", description = "The data spec of the file.")
+public interface FileData extends Serializable {
+    /**
+     * @return the size in bytes of this file.
+     */
+    @Schema(name = "size", description = "The filesize in bytes.", required = true)
+    Long getSize();
+
+    /**
+     * @return The MIME type of this file.
+     */
+    @Schema(name = "fileType", description = "The MIME type of the file.", required = true)
+    String getMimeType();
+
+    /**
+     * @return The file data itself
+     */
+    @Schema(name = "file", description = "The file data itself.")
+    Optional<Serializable> getFile();
 }
