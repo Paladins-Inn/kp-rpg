@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.files;
+package de.kaiserpfalzedv.rpg.integrations.datastore.store;
 
 import java.util.UUID;
 

@@ -15,7 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.files;
+package de.kaiserpfalzedv.rpg.integrations.datastore.store;
+
+import de.kaiserpfalzedv.rpg.integrations.datastore.DuplicateFileException;
 
 import java.io.InputStream;
 import java.util.UUID;

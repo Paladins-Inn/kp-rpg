@@ -15,40 +15,42 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.files;
+package de.kaiserpfalzedv.rpg.integrations.datastore;
+
+import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileHandlingException;
 
 import java.util.UUID;
 
 /**
- * FileNotFoundException -- The file specified was not found.
+ * DuplicateFileException -- There is a file stored under this data.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-08
  */
-public class FileNotFoundException extends FileHandlingException {
+public class DuplicateFileException extends FileHandlingException {
     /**
-     * @param uid UID of the file.
-     * @param message the failure message.
+     * @param uid UID of the file resource.
+     * @param message The failure message.
      */
     @SuppressWarnings("CdiInjectionPointsInspection")
-    public FileNotFoundException(final UUID uid, final String message) {
+    public DuplicateFileException(final UUID uid, final String message) {
         super(uid, message);
     }
 
     /**
-     * @param uid UID of the file.
+     * @param uid UID of the file resource.
      * @param cause The failure cause.
      */
-    public FileNotFoundException(final UUID uid, final Throwable cause) {
+    public DuplicateFileException(final UUID uid, final Throwable cause) {
         super(uid, cause);
     }
 
     /**
-     * @param uid UID of the file.
-     * @param message a failure message.
-     * @param cause the failure cause.
+     * @param uid UID of the file resource.
+     * @param message The failure message.
+     * @param cause The failure cause.
      */
-    public FileNotFoundException(final UUID uid, final String message, final Throwable cause) {
+    public DuplicateFileException(final UUID uid, final String message, final Throwable cause) {
         super(uid, message, cause);
     }
 }
