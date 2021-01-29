@@ -15,12 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.datastore;
+package de.kaiserpfalzedv.rpg.integrations.datastore.cards;
 
+import de.kaiserpfalzedv.rpg.core.cards.BasicCardData;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
-import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileData;
-import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileResource;
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.codecs.pojo.annotations.BsonId;
@@ -31,13 +30,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * File -- The entity for storing the file resource.
+ * Card -- The entity for storing the card resource.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-09
  */
-@MongoEntity
-public class File extends PanacheMongoEntityBase implements FileResource {
+@MongoEntity(collection = "cards")
+public class Card extends PanacheMongoEntityBase implements de.kaiserpfalzedv.rpg.core.cards.Card {
     /** ID of the document. */
     @BsonId
     public UUID uid;
@@ -45,8 +44,20 @@ public class File extends PanacheMongoEntityBase implements FileResource {
     /** The resource meta data. */
     public ResourceMetadata metadata;
 
+    /** The data of the card. */
+    public Optional<BasicCardData> spec;
+
     /** The status of the resource. */
-    public ResourceStatus<String> status;
+    public Optional<ResourceStatus<String>> status;
+
+    public Card() {}
+
+    public Card(final de.kaiserpfalzedv.rpg.core.cards.Card orig) {
+        uid = orig.getMetadata().getUid();
+        metadata = orig.getMetadata();
+        spec = orig.getSpec();
+        status = orig.getStatus();
+    }
 
 
     @BsonIgnore
@@ -59,14 +70,14 @@ public class File extends PanacheMongoEntityBase implements FileResource {
     @BsonIgnore
     @Transient
     @Override
-    public Optional<FileData> getSpec() {
-        return Optional.empty();
+    public Optional<BasicCardData> getSpec() {
+        return spec;
     }
 
     @BsonIgnore
     @Transient
     @Override
     public Optional<ResourceStatus<String>> getStatus() {
-        return Optional.ofNullable(status);
+        return status;
     }
 }

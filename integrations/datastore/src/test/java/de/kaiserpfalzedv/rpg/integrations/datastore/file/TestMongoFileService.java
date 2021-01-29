@@ -15,11 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.datastore;
+package de.kaiserpfalzedv.rpg.integrations.datastore.file;
 
-import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileCouldNotBeDeletedException;
-import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileCouldNotBeSavedException;
-import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileNotFoundException;
+import de.kaiserpfalzedv.rpg.integrations.datastore.file.store.FileCouldNotBeDeletedException;
+import de.kaiserpfalzedv.rpg.integrations.datastore.file.store.FileCouldNotBeSavedException;
+import de.kaiserpfalzedv.rpg.integrations.datastore.file.store.FileNotFoundException;
 import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;

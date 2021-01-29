@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.cards.store;
+package de.kaiserpfalzedv.rpg.integrations.datastore.cards;
 
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.PanacheQuery;

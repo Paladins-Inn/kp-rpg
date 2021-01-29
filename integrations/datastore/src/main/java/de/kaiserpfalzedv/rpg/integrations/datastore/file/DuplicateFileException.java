@@ -15,23 +15,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.datastore.store;
+package de.kaiserpfalzedv.rpg.integrations.datastore.file;
+
+import de.kaiserpfalzedv.rpg.integrations.datastore.file.store.FileHandlingException;
 
 import java.util.UUID;
 
 /**
- * FileCouldNotBeSavedException -- The file could not be saved.
+ * DuplicateFileException -- There is a file stored under this data.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-08
  */
-public class FileCouldNotBeSavedException extends FileHandlingException {
+public class DuplicateFileException extends FileHandlingException {
     /**
      * @param uid UID of the file resource.
-     * @param message the failure message.
+     * @param message The failure message.
      */
     @SuppressWarnings("CdiInjectionPointsInspection")
-    public FileCouldNotBeSavedException(final UUID uid, final String message) {
+    public DuplicateFileException(final UUID uid, final String message) {
         super(uid, message);
     }
 
@@ -39,7 +41,7 @@ public class FileCouldNotBeSavedException extends FileHandlingException {
      * @param uid UID of the file resource.
      * @param cause The failure cause.
      */
-    public FileCouldNotBeSavedException(final UUID uid, final Throwable cause) {
+    public DuplicateFileException(final UUID uid, final Throwable cause) {
         super(uid, cause);
     }
 
@@ -48,7 +50,7 @@ public class FileCouldNotBeSavedException extends FileHandlingException {
      * @param message The failure message.
      * @param cause The failure cause.
      */
-    public FileCouldNotBeSavedException(final UUID uid, final String message, final Throwable cause) {
+    public DuplicateFileException(final UUID uid, final String message, final Throwable cause) {
         super(uid, message, cause);
     }
 }
