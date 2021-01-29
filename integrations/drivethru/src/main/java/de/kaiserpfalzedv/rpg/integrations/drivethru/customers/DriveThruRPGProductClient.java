@@ -29,18 +29,20 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.jboss.resteasy.annotations.jaxrs.QueryParam;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 
 @Path("/api/v1/customers")
 @RegisterRestClient(configKey = "tomb.drivethrurpg.api")
-public interface DriveThruRPGCustomerClient {
+public interface DriveThruRPGProductClient {
     @GET
     @Path("/{customerId}/products")
-    DriveThruRPGOwnedProducts getProducts(
+    DriveThruRPGProductMessage getProducts(
+            @HeaderParam("Authorization") String bearerToken,
             @PathParam("customerId") String customerId,
             @QueryParam("page") long page,
             @QueryParam("page_size") int size,
             @QueryParam("include_archived") int archived,
-            @QueryParam("fields") String[] fields
+            @QueryParam("fields") String fields
     );
 }

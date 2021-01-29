@@ -17,10 +17,8 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.token;
 
-import de.kaiserpfalzedv.rpg.core.rest.LoggingRestHeaders;
-import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.DriveThruRPGWrapper;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-import org.jboss.resteasy.annotations.jaxrs.QueryParam;
 
 import javax.ws.rs.*;
 import java.util.LinkedHashMap;
@@ -34,7 +32,6 @@ import java.util.LinkedHashMap;
  */
 @Path("/api/v1")
 @RegisterRestClient(configKey = "tomb.drivethrurpg.api")
-@RegisterClientHeaders(LoggingRestHeaders.class)
 public interface DriveThruRPGTokenClient {
     @POST
     @Path("/token")
