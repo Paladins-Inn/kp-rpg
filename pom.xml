@@ -28,6 +28,7 @@
 
   <modules>
     <module>rpg-core</module>
+    <module>integrations</module>
     <module>rpg-game-modules</module>
     <module>rpg-server</module>
 

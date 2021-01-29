@@ -15,12 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.files.store;
+package de.kaiserpfalzedv.rpg.integrations.datastore;
 
-import de.kaiserpfalzedv.rpg.core.files.FileData;
-import de.kaiserpfalzedv.rpg.core.files.FileResource;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
+import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileData;
+import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileResource;
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.codecs.pojo.annotations.BsonId;

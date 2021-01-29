@@ -15,10 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.files;
+package de.kaiserpfalzedv.rpg.integrations.datastore;
 
-import de.kaiserpfalzedv.rpg.core.dice.TestDice;
-import de.kaiserpfalzedv.rpg.core.files.store.MongoDBFileResources;
+import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileCouldNotBeDeletedException;
+import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileCouldNotBeSavedException;
+import de.kaiserpfalzedv.rpg.integrations.datastore.store.FileNotFoundException;
 import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -55,7 +56,7 @@ public class TestMongoFileService {
             String result = new String(outData.readAllBytes());
 
             Assertions.assertTrue(result.contains("Kaiserpfalz EDV-Service"));
-        } catch (FileNotFoundException|IOException e) {
+        } catch (FileNotFoundException |IOException e) {
             Assertions.fail("Can't load the data back!");
         }
     }
@@ -87,7 +88,7 @@ public class TestMongoFileService {
 
     @BeforeAll
     static void setUp() {
-        MDC.put("test-class", TestDice.class.getSimpleName());
+        MDC.put("test-class", TestMongoFileService.class.getSimpleName());
     }
 
     @AfterAll

@@ -15,38 +15,40 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.files.store;
+package de.kaiserpfalzedv.rpg.integrations.datastore.store;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.gridfs.GridFSBucket;
-import com.mongodb.client.gridfs.GridFSBuckets;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
+import java.util.UUID;
 
 /**
- * The provider for the GrifFS to save files to.
+ * FileCouldNotBeDeletedException -- File resource could not be removed.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-08
  */
-@ApplicationScoped
-public class FileDateabase {
-    private static final String FILE_DATABASE_NAME = "files";
-
+public class FileCouldNotBeDeletedException extends FileHandlingException {
     /**
-     * The mongo db client used for creating the GridFS bucket.
+     * @param uid UID of the file resource.
+     * @param message The failure message.
      */
     @SuppressWarnings("CdiInjectionPointsInspection")
-    @Inject
-    MongoClient client;
+    public FileCouldNotBeDeletedException(final UUID uid, final String message) {
+        super(uid, message);
+    }
 
     /**
-     * @return The bucket to handle the files of the service.
+     * @param uid UID of the file resource.
+     * @param cause The failure cause.
      */
-    @Produces
-    public GridFSBucket fileBucket() {
-        return GridFSBuckets.create(client.getDatabase(FILE_DATABASE_NAME));
+    public FileCouldNotBeDeletedException(final UUID uid, final Throwable cause) {
+        super(uid, cause);
+    }
+
+    /**
+     * @param uid UID of the file resource.
+     * @param message The failure message.
+     * @param cause The failure cause.
+     */
+    public FileCouldNotBeDeletedException(final UUID uid, final String message, final Throwable cause) {
+        super(uid, message, cause);
     }
 }
