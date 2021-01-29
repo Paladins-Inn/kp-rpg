@@ -18,6 +18,7 @@
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 import java.util.Collections;
@@ -39,18 +40,18 @@ public class DriveThruRPGMockService implements QuarkusTestResourceLifecycleMana
         mockServer = new WireMockServer();
         mockServer.start();
 
-        stubFor(post(urlEqualTo("/api/v1/token"))
+        WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/api/v1/token"))
                 .willReturn(
-                        aResponse()
+                        WireMock.aResponse()
                         .withHeader("Content-Type", "application/json")
                                 .withBodyFile("token.json")
                 )
         );
 
 
-        stubFor(get(urlEqualTo("/api/v1/customers/CUST/products?page=1&page_size=1000&include_archived=0&fields=products_id"))
+        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/api/v1/customers/CUST/products?page=1&page_size=1000&include_archived=0&fields=products_id"))
                 .willReturn(
-                        aResponse()
+                        WireMock.aResponse()
                                 .withHeader("Content-Type", "application/json")
                                 .withBodyFile("projects-ids.json")
                 )

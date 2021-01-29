@@ -61,6 +61,7 @@ public class DriveThruRPGProductService {
                     "products_id"
             );
 
+            LOG.debug("Loaded {} products for {}", result.getProducts().length, apiKey);
             return result.getProducts();
 
         } catch (WebApplicationException e) {
