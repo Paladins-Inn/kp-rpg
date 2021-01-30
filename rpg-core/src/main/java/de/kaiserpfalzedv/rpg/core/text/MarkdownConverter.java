@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.text;
+package de.kaiserpfalzedv.rpg.core.text;
 
 import com.github.rjeschke.txtmark.Processor;
 

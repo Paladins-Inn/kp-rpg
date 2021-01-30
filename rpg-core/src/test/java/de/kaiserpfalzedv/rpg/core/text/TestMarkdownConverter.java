@@ -15,9 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.text;
+package de.kaiserpfalzedv.rpg.core.text;
 
-import de.kaiserpfalzedv.rpg.bot.text.MarkdownConverter;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
