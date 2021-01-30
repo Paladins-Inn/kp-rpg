@@ -15,10 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.discord;
+package de.kaiserpfalzedv.rpg.integrations.discord;
+
+import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordPluginWrappedException;
+import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin;
 
 /**
- * This is an exception thrown by a discord plugin. All exceptions thrown by any {@link DiscordPlugin} should be at
+ * This is an exception thrown by a discord plugin. All exceptions thrown by any {@link DiscordTextChannelPlugin} should be at
  * least wrapped in {@link DiscordPluginWrappedException}.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}

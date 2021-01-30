@@ -38,6 +38,10 @@
             <groupId>de.kaiserpfalz-edv.rpg</groupId>
             <artifactId>rpg-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.rpg</groupId>
+            <artifactId>discord</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>io.quarkus</groupId>

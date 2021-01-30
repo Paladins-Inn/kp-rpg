@@ -15,13 +15,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.discord;
+package de.kaiserpfalzedv.rpg.integrations.discord.text;
+
+import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginException;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
 /**
- * This exception wraps another exception for using in {@link DiscordPlugin}.
+ * This exception wraps another exception for using in {@link DiscordTextChannelPlugin}.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06

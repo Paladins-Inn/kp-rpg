@@ -15,29 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.discord;
+package de.kaiserpfalzedv.rpg.integrations.discord;
 
-import de.kaiserpfalzedv.rpg.bot.text.MarkdownConverter;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-/**
- * DiscordMessageSender -- Sends the message to discord.
- *
- * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.0.0 2021-01-11
- */
-@ApplicationScoped
-public class DiscordMessageSender {
-
-    @Inject
-    MarkdownConverter converter;
-
-    public void sendMessage(final MessageChannel channel, final String message) {
-        String converted = converter.convert(message);
-
-        channel.sendMessage(converted);
+public class DontWorkOnDiscordEventException extends DiscordPluginException {
+    public DontWorkOnDiscordEventException(final DiscordTextChannelPlugin plugin) {
+        super(String.format("Plugin '%v' does not work on this event.", plugin.getName()));
     }
 }

@@ -50,6 +50,12 @@
             <artifactId>JDA</artifactId>
             <version>4.2.0_227</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-cache</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
