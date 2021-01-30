@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.integrations.datastore.cards;
 
+import de.kaiserpfalzedv.rpg.core.cards.Card;
 import de.kaiserpfalzedv.rpg.core.cards.ImmutableCard;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceHistory;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
@@ -56,16 +57,16 @@ public class TestCardRepository {
     /**
      * Default data created during setup of tests.
      */
-    private static final Card data = new Card(ImmutableCard.builder()
+    private static final MongoCard data = new MongoCard(ImmutableCard.builder()
             .metadata(
                     ImmutableResourceMetadata.builder()
-                            .kind(Card.KIND)
-                            .apiVersion(Card.API_VERSION)
+                            .kind(MongoCard.KIND)
+                            .apiVersion(MongoCard.API_VERSION)
 
                             .namespace(NAMESPACE)
                             .name(NAME)
                             .uid(CARD_UID)
-                            .selfLink("/apis/" + Card.KIND + "/" + Card.API_VERSION + "/" + CARD_UID)
+                            .selfLink("/apis/" + MongoCard.KIND + "/" + MongoCard.API_VERSION + "/" + CARD_UID)
 
                             .generation(1L)
                             .created(CREATED)

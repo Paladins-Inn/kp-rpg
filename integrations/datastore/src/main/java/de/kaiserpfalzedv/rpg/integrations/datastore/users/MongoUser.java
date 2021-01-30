@@ -19,6 +19,7 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.users;
 
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
+import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserData;
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
@@ -36,7 +37,7 @@ import java.util.UUID;
  * @since 1.2.0 2021-01-30
  */
 @MongoEntity(collection = "users")
-public class User extends PanacheMongoEntityBase implements de.kaiserpfalzedv.rpg.core.user.User {
+public class MongoUser extends PanacheMongoEntityBase implements User {
     /** ID of the document. */
     @BsonId
     public UUID uid;
@@ -51,7 +52,7 @@ public class User extends PanacheMongoEntityBase implements de.kaiserpfalzedv.rp
     public Optional<ResourceStatus<String>> status;
 
 
-    public User(final de.kaiserpfalzedv.rpg.core.user.User orig) {
+    public MongoUser(final de.kaiserpfalzedv.rpg.core.user.User orig) {
         uid = orig.getMetadata().getUid();
         metadata = orig.getMetadata();
         spec = orig.getSpec();

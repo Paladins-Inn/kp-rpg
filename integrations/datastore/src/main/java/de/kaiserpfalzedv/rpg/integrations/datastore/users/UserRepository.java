@@ -17,7 +17,9 @@
 
 package de.kaiserpfalzedv.rpg.integrations.datastore.users;
 
-import de.kaiserpfalzedv.rpg.integrations.datastore.cards.Card;
+import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
+import de.kaiserpfalzedv.rpg.core.user.User;
+import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import io.quarkus.panache.common.Sort;
@@ -30,19 +32,27 @@ import java.util.Map;
 import java.util.Optional;
 
 @ApplicationScoped
-public class UserRepository implements PanacheMongoRepository<User> {
+public class UserRepository implements UserStoreService, PanacheMongoRepository<MongoUser> {
     private static final Logger LOG = LoggerFactory.getLogger(UserRepository.class);
 
     public Optional<User> findByNameSpaceAndName(final String nameSpace, final String name) {
-        LOG.trace("loading user: nameSpace={}, name={}", nameSpace, name);
+        LOG.trace("loading: type=user, nameSpace={}, name={}", nameSpace, name);
 
         Map<String, String> queryParams = new HashMap<>(2);
         queryParams.put("nameSpace", nameSpace);
         queryParams.put("name", name);
-        PanacheQuery<User> query = User.find("nameSpace = :nameSpace and name = :name", Sort.descending("generation"), queryParams);
+        PanacheQuery<MongoUser> query = MongoUser.find("nameSpace = :nameSpace and name = :name", Sort.descending("generation"), queryParams);
 
-        User result = query.firstResult();
+        MongoUser result = query.firstResult();
         LOG.debug("Loaded: {}", result);
-        return Optional.ofNullable(result);
+        return Optional.ofNullable(ImmutableUser.builder().from(result).build());
+    }
+
+    @Override
+    public void persist(User object) {
+        LOG.trace("persisting: user={}", object);
+        persistOrUpdate(
+                new MongoUser(object)
+        );
     }
 }

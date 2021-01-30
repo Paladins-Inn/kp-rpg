@@ -22,6 +22,7 @@ import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceStatus;
 import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
 import de.kaiserpfalzedv.rpg.core.user.ImmutableUserData;
+import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -58,16 +59,16 @@ public class TestUserRepository {
     /**
      * Default data created during setup of tests.
      */
-    private static final User data = new User(ImmutableUser.builder()
+    private static final MongoUser data = new MongoUser(ImmutableUser.builder()
             .metadata(
                     ImmutableResourceMetadata.builder()
-                            .kind(User.KIND)
-                            .apiVersion(User.API_VERSION)
+                            .kind(MongoUser.KIND)
+                            .apiVersion(MongoUser.API_VERSION)
 
                             .namespace(NAMESPACE)
                             .name(NAME)
                             .uid(USER_UID)
-                            .selfLink("/apis/" + User.KIND + "/" + User.API_VERSION + "/" + USER_UID)
+                            .selfLink("/apis/" + MongoUser.KIND + "/" + MongoUser.API_VERSION + "/" + USER_UID)
 
                             .generation(1L)
                             .created(CREATED)

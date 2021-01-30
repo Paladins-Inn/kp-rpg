@@ -18,6 +18,7 @@
 package de.kaiserpfalzedv.rpg.integrations.datastore.cards;
 
 import de.kaiserpfalzedv.rpg.core.cards.BasicCardData;
+import de.kaiserpfalzedv.rpg.core.cards.Card;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
 import io.quarkus.mongodb.panache.MongoEntity;
@@ -36,7 +37,7 @@ import java.util.UUID;
  * @since 1.0.0 2021-01-09
  */
 @MongoEntity(collection = "cards")
-public class Card extends PanacheMongoEntityBase implements de.kaiserpfalzedv.rpg.core.cards.Card {
+public class MongoCard extends PanacheMongoEntityBase implements Card {
     /** ID of the document. */
     @BsonId
     public UUID uid;
@@ -50,9 +51,9 @@ public class Card extends PanacheMongoEntityBase implements de.kaiserpfalzedv.rp
     /** The status of the resource. */
     public Optional<ResourceStatus<String>> status;
 
-    public Card() {}
+    public MongoCard() {}
 
-    public Card(final de.kaiserpfalzedv.rpg.core.cards.Card orig) {
+    public MongoCard(final de.kaiserpfalzedv.rpg.core.cards.Card orig) {
         uid = orig.getMetadata().getUid();
         metadata = orig.getMetadata();
         spec = orig.getSpec();

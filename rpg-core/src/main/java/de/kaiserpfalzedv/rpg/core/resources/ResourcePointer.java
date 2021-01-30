@@ -62,5 +62,7 @@ public interface ResourcePointer extends Serializable {
      * @return The local part of the URL to retrieve this resource.
      */
     @Schema(name = "SelfLink", description = "The local part of the URL to retrieve the resource.", required = true)
-    String getSelfLink();
+    default String getSelfLink() {
+        return "/apis/" + getApiVersion() + "/" + getKind() + "/";
+    }
 }
