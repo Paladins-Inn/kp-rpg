@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.core.store;
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * StoreService -- A generic store service definition for persistent TOMB resources.
@@ -27,7 +28,50 @@ import java.util.Optional;
  * @param <T> The resource type to be stored.
  */
 public interface StoreService<T extends Resource> {
+    /**
+     * @param nameSpace the namespace of the object to load.
+     * @param name the name of the object to load.
+     * @return the object or an empty {@link Optional}.
+     */
     Optional<T> findByNameSpaceAndName(final String nameSpace, final String name);
 
-    void persist(final T object);
+    /**
+     * @param uid The uid of the data set to load.
+     * @return the object or an empty {@link Optional}.
+     */
+    Optional<T> findByUid(final UUID uid);
+
+    /**
+     * Persists the given Resource. If the Resource already is stored and the generations are equal, then the
+     * generation is incremented by 1. If the generation of the object is less than the generation of the data already
+     * in the store, then the {@link OptimisticLockStoreException} is thrown.
+     *
+     * @param object The data to store.
+     * @return The stored data (the generation may be incremented by 1).
+     * @throws OptimisticLockStoreException Thrown if the generation inside the store is higher than the generation of
+     *          the object given in the request.
+     */
+    T persist(final T object) throws OptimisticLockStoreException;
+
+    /**
+     * Remove the object.
+     *
+     * @param object the object to be removed.
+     */
+    void delete(final T object);
+
+    /**
+     * Remove the object specified by nameSpace and name.
+     *
+     * @param nameSpace the namespace of the object to be deleted.
+     * @param name the name of the object to be deleted.
+     */
+    void delete(final String nameSpace, final String name);
+
+    /**
+     * Remove the object specified by the uid.
+     *
+     * @param uid the uid of the object to be removed.
+     */
+    void delete(final UUID uid);
 }

@@ -108,4 +108,22 @@ public interface ResourceMetadata extends ResourcePointer {
     default boolean isLabeled(final String name) {
         return getLabels().containsKey(name);
     }
+
+    @Override
+    @Schema(name = "SelfLink", description = "The local part of the URL to retrieve the resource.", required = true)
+    String getSelfLink();
+
+
+    /**
+     * Generates the self link for this resource.
+     *
+     * @param base the base string for the self link.
+     * @param kind the kind of the resource link.
+     * @param apiVersion the API version of this resource link.
+     * @param uid the UID of this resource.
+     * @return the standardized self link to this resource.
+     */
+    static String generateSelfLink(final String base, final String kind, final String apiVersion, final UUID uid) {
+        return base + "/apis/" + apiVersion + "/" + kind + "/" + uid.toString();
+    }
 }
