@@ -17,7 +17,6 @@
 
 package de.kaiserpfalzedv.rpg.integrations.datastore.guilds;
 
-import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildStoreService;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.ImmutableGuild;
@@ -31,13 +30,15 @@ import javax.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @ApplicationScoped
 public class GuildRepository implements GuildStoreService, PanacheMongoRepository<MongoGuild> {
     private static final Logger LOG = LoggerFactory.getLogger(GuildRepository.class);
 
+
     public Optional<Guild> findByNameSpaceAndName(final String nameSpace, final String name) {
-        LOG.trace("loading: type=guild, nameSpace={}, name={}", nameSpace, name);
+        LOG.trace("loading: type=user, nameSpace={}, name={}", nameSpace, name);
 
         Map<String, String> queryParams = new HashMap<>(2);
         queryParams.put("nameSpace", nameSpace);
@@ -50,11 +51,42 @@ public class GuildRepository implements GuildStoreService, PanacheMongoRepositor
     }
 
     @Override
-    public void persist(Guild object) {
-        LOG.trace("persisting: guild={}", object);
+    public Optional<Guild> findByUid(final UUID uid) {
+        LOG.trace("loading: type=user, uid={}", uid);
 
-        persistOrUpdate(
-                new MongoGuild(object)
-        );
+        PanacheQuery<MongoGuild> query = MongoGuild.findById(uid);
+
+        MongoGuild result = query.firstResult();
+
+        LOG.debug("Loaded: {}", result);
+        return Optional.ofNullable(ImmutableGuild.builder().from(result).build());
+    }
+
+    @Override
+    public Guild persist(final Guild object) {
+        LOG.trace("persisting: user={}", object);
+
+        persistOrUpdate(new MongoGuild(object));
+
+        return object;
+    }
+
+    @Override
+    public void delete(final Guild object) {
+        delete(new MongoGuild(object));
+    }
+
+    @Override
+    public void delete(String nameSpace, String name) {
+        Optional<Guild> object = findByNameSpaceAndName(nameSpace, name);
+
+        object.ifPresent(this::delete);
+    }
+
+    @Override
+    public void delete(final UUID uid) {
+        Optional<Guild> object = findByUid(uid);
+
+        object.ifPresent(this::delete);
     }
 }
