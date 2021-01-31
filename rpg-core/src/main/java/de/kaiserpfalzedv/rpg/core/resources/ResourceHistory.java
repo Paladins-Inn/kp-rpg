@@ -31,7 +31,8 @@ import java.util.Optional;
 /**
  * A single history entry. Basic data is the timestamp, the status and the message.
  *
- * @param <T> The additional data.
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.0.0
  */
 @Value.Immutable
 @Value.Modifiable
@@ -39,7 +40,7 @@ import java.util.Optional;
 @JsonSerialize(as = ImmutableResourceHistory.class)
 @JsonDeserialize(builder = ImmutableResourceHistory.Builder.class)
 @Schema(name = "ResourceHistory", description = "A single history entry of a change.")
-public interface ResourceHistory<T extends Serializable> extends Serializable {
+public interface ResourceHistory extends Serializable {
     /**
      * @return Timestamp of this history entry.
      */
@@ -57,10 +58,4 @@ public interface ResourceHistory<T extends Serializable> extends Serializable {
      */
     @Schema(name = "Message", description = "The human readable description of the change.")
     Optional<String> getMessage();
-
-    /**
-     * @return The serializable additional data (if any).
-     */
-    @Schema(name = "Data", description = "A serializable data block of the change.")
-    Optional<T> getData();
 }

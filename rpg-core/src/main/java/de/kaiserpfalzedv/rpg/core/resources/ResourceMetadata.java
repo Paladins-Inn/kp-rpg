@@ -32,6 +32,9 @@ import java.util.UUID;
 
 /**
  * Metadata -- common data for every resource of the system.
+ *
+ * @author klenkes74 {@literal <rlichit@kaiserpfalz-edv.de>}
+ * @since 1.0.0
  */
 @Value.Immutable
 @Value.Modifiable
@@ -42,12 +45,6 @@ import java.util.UUID;
 @Schema(name = "ResourceMetadata", description = "The metadata of a resource.")
 public interface ResourceMetadata extends ResourcePointer {
     /**
-     * @return a unique id for this resource.
-     */
-    @Schema(name = "uid", description = "An UUID identifying the resource.", required = true)
-    UUID getUid();
-
-    /**
      * @return The generation of this resource. Starting with 1.
      */
     @Schema(name = "generation", description = "The generation of this object. Every change adds 1.", required = true)
@@ -57,7 +54,7 @@ public interface ResourceMetadata extends ResourcePointer {
      * @return The owning resource of this resource.
      */
     @Schema(name = "owner", description = "The owning resource. This is a sub-resource or managed resource of the given address.")
-    Optional<ResourceAddress> getOwner();
+    Optional<ResourcePointer> getOwner();
 
     /**
      * @return the creation timestamp.

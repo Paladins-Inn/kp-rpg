@@ -32,8 +32,6 @@ import java.util.List;
 /**
  * ResourceStatus -- The state of the managed resource.
  *
- * @param <H> Type of the additional history data.
- *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-07
  */
@@ -44,7 +42,7 @@ import java.util.List;
 @JsonDeserialize(builder = ImmutableResourceStatus.Builder.class)
 @JsonPropertyOrder({"observedGeneration,history"})
 @Schema(name = "ResourceStatus", description = "The status of a resource.")
-public interface ResourceStatus<H extends Serializable> extends Serializable {
+public interface ResourceStatus extends Serializable {
     /**
      * @return the generation of the resource this history is generated for.
      */
@@ -55,28 +53,7 @@ public interface ResourceStatus<H extends Serializable> extends Serializable {
      * @return a list of changes.
      */
     @Schema(name = "History", description = "A list of changes of the resource status.")
-    List<ResourceHistory<H>> getHistory();
-
-    /**
-     * Adds a new history entry.
-     *
-     * @param status The status of this entry.
-     * @param message The generic message for this history entry.
-     * @param add Additional data.
-     * @return TRUE if the history could be added.
-     */
-    default ResourceStatus<H> addHistory(final String status, final String message, final H add) {
-        getHistory().add(
-                ImmutableResourceHistory.<H>builder()
-                        .status(status)
-                        .timeStamp(OffsetDateTime.now(ZoneOffset.UTC))
-                        .message(message)
-                        .data(add)
-                        .build()
-        );
-
-        return this;
-    }
+    List<ResourceHistory> getHistory();
 
     /**
      * Adds a new history entry.
@@ -85,9 +62,9 @@ public interface ResourceStatus<H extends Serializable> extends Serializable {
      * @param message The generic message for this history entry.
      * @return TRUE if the history could be added.
      */
-    default ResourceStatus<H>  addHistory(final String status, final String message) {
+    default ResourceStatus addHistory(final String status, final String message) {
         getHistory().add(
-                ImmutableResourceHistory.<H>builder()
+                ImmutableResourceHistory.builder()
                         .status(status)
                         .timeStamp(OffsetDateTime.now(ZoneOffset.UTC))
                         .message(message)

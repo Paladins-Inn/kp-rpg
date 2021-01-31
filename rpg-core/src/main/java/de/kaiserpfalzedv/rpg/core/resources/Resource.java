@@ -25,13 +25,16 @@ import java.io.Serializable;
 import java.util.Optional;
 
 /**
+ * A generic resource.
  *
  * @param <D> The data provided by this resource.
- * @param <H> The type of additional history data.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.0.0
  */
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonPropertyOrder({"kind,apiVersion,metadata,spec,status"})
-public interface Resource<D extends Serializable, H extends Serializable> extends Serializable {
+public interface Resource<D extends Serializable> extends Serializable {
     @Schema(name = "metadata", description = "Technical data to the resource.", required = true)
     ResourceMetadata getMetadata();
 
@@ -39,5 +42,5 @@ public interface Resource<D extends Serializable, H extends Serializable> extend
     Optional<D> getSpec();
 
     @Schema(name = "status", description = "The status of the resource (containting the history).")
-    Optional<ResourceStatus<H>> getStatus();
+    Optional<ResourceStatus> getStatus();
 }
