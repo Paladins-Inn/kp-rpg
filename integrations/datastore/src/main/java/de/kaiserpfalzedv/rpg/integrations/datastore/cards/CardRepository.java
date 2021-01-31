@@ -20,8 +20,6 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.cards;
 import de.kaiserpfalzedv.rpg.core.cards.Card;
 import de.kaiserpfalzedv.rpg.core.cards.CardStoreService;
 import de.kaiserpfalzedv.rpg.core.cards.ImmutableCard;
-import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import io.quarkus.panache.common.Sort;
@@ -32,14 +30,15 @@ import javax.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @ApplicationScoped
 public class CardRepository implements CardStoreService, PanacheMongoRepository<MongoCard> {
     private static final Logger LOG = LoggerFactory.getLogger(CardRepository.class);
 
-    @Override
+
     public Optional<Card> findByNameSpaceAndName(final String nameSpace, final String name) {
-        LOG.trace("loading: type=card nameSpace={}, name={}", nameSpace, name);
+        LOG.trace("loading: type=user, nameSpace={}, name={}", nameSpace, name);
 
         Map<String, String> queryParams = new HashMap<>(2);
         queryParams.put("nameSpace", nameSpace);
@@ -52,9 +51,41 @@ public class CardRepository implements CardStoreService, PanacheMongoRepository<
     }
 
     @Override
-    public void persist(Card object) {
-        LOG.trace("persisting: card={}", object);
+    public Optional<Card> findByUid(final UUID uid) {
+        LOG.trace("loading: type=user, uid={}", uid);
+
+        PanacheQuery<MongoCard> query = MongoCard.findById(uid);
+
+        MongoCard result = query.firstResult();
+
+        LOG.debug("Loaded: {}", result);
+        return Optional.ofNullable(ImmutableCard.builder().from(result).build());
+    }
+
+    @Override
+    public Card persist(final Card object) {
+        LOG.trace("persisting: user={}", object);
 
         persistOrUpdate(new MongoCard(object));
+
+        return object;
     }
-}
+
+    @Override
+    public void delete(final Card object) {
+        delete(new MongoCard(object));
+    }
+
+    @Override
+    public void delete(String nameSpace, String name) {
+        Optional<Card> object = findByNameSpaceAndName(nameSpace, name);
+
+        object.ifPresent(this::delete);
+    }
+
+    @Override
+    public void delete(final UUID uid) {
+        Optional<Card> object = findByUid(uid);
+
+        object.ifPresent(this::delete);
+    }}

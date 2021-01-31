@@ -22,6 +22,7 @@ import de.kaiserpfalzedv.rpg.core.cards.ImmutableCard;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceHistory;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceStatus;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -66,7 +67,7 @@ public class TestCardRepository {
                             .namespace(NAMESPACE)
                             .name(NAME)
                             .uid(CARD_UID)
-                            .selfLink("/apis/" + MongoCard.KIND + "/" + MongoCard.API_VERSION + "/" + CARD_UID)
+                            .selfLink(ResourceMetadata.generateSelfLink("", MongoCard.KIND, MongoCard.API_VERSION, CARD_UID))
 
                             .generation(1L)
                             .created(CREATED)
