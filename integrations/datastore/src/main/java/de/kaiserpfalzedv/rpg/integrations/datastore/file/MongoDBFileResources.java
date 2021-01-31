@@ -19,10 +19,6 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.file;
 
 import com.mongodb.MongoGridFSException;
 import com.mongodb.client.gridfs.GridFSBucket;
-import de.kaiserpfalzedv.rpg.integrations.datastore.file.store.FileCouldNotBeDeletedException;
-import de.kaiserpfalzedv.rpg.integrations.datastore.file.store.FileCouldNotBeSavedException;
-import de.kaiserpfalzedv.rpg.integrations.datastore.file.store.FileNotFoundException;
-import de.kaiserpfalzedv.rpg.integrations.datastore.file.store.FileResourceService;
 import org.bson.BsonString;
 import org.bson.BsonValue;
 
@@ -31,6 +27,7 @@ import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -40,42 +37,38 @@ import java.util.UUID;
  * @since 1.0.0 2021-01-08
  */
 @ApplicationScoped
-public class MongoDBFileResources implements FileResourceService {
-
+public class MongoDBFileResources {
     /**
      * The GridFS bucket for storing files.
      */
     @Inject
     GridFSBucket store;
 
-    @Override
-    public void create(final UUID uid, final String fileName, final InputStream data) throws FileCouldNotBeSavedException {
+    public void create(final UUID uid, final String fileName, final InputStream data) {
         try {
             store.uploadFromStream(mongofyUUID(uid), fileName, data);
         } catch (MongoGridFSException e) {
-            throw new FileCouldNotBeSavedException(uid, e.getMessage(), e.getCause());
+            // FIXME 2021-01-31 rlichti Handle the exception
         }
     }
 
-    @Override
-    public InputStream retrieve(final UUID uid) throws FileNotFoundException {
+    public Optional<InputStream> retrieve(final UUID uid) {
         ByteArrayOutputStream data = new ByteArrayOutputStream();
 
         try {
             store.downloadToStream(mongofyUUID(uid), data);
         } catch (MongoGridFSException e) {
-            throw new FileNotFoundException(uid, e.getCause());
+            // FIXME 2021-01-31 rlichti Handle the exception
         }
 
-        return new ByteArrayInputStream(data.toByteArray());
+        return Optional.of(new ByteArrayInputStream(data.toByteArray()));
     }
 
-    @Override
-    public void delete(final UUID uid) throws FileCouldNotBeDeletedException {
+    public void delete(final UUID uid) {
         try {
             store.delete(mongofyUUID(uid));
         } catch (MongoGridFSException e) {
-            throw new FileCouldNotBeDeletedException(uid, e.getCause());
+            // FIXME 2021-01-31 rlichti Handle the exception
         }
     }
 

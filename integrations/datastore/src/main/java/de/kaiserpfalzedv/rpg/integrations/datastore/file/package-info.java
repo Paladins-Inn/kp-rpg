@@ -15,7 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.datastore.cards;
-
-public class MongoDBCardResources {
-}
+/**
+ * The file datastore is used for storing binary data on the central server.
+ * It's a tech-experiment for using GridFS.
+ */
+package de.kaiserpfalzedv.rpg.integrations.datastore.file;
