@@ -19,7 +19,6 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.guilds;
 
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
-import de.kaiserpfalzedv.rpg.core.user.UserData;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildData;
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
@@ -49,8 +48,10 @@ public class MongoGuild extends PanacheMongoEntityBase implements de.kaiserpfalz
     public Optional<de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildData> spec;
 
     /** The status of the resource. */
-    public Optional<ResourceStatus<String>> status;
+    public Optional<ResourceStatus> status;
 
+
+    public MongoGuild() {}
 
     public MongoGuild(final de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild orig) {
         uid = orig.getMetadata().getUid();
@@ -76,7 +77,7 @@ public class MongoGuild extends PanacheMongoEntityBase implements de.kaiserpfalz
     @BsonIgnore
     @Transient
     @Override
-    public Optional<ResourceStatus<String>> getStatus() {
+    public Optional<ResourceStatus> getStatus() {
         return status;
     }
 }

@@ -23,6 +23,7 @@ import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.beans.Transient;
 import java.util.HashMap;
+import java.util.StringJoiner;
 
 public class MongoMetaData extends MongoResourcePointer {
     public MongoResourcePointer owner;
@@ -49,6 +50,7 @@ public class MongoMetaData extends MongoResourcePointer {
 
         nameSpace = orig.getNamespace();
         name = orig.getName();
+        uid = orig.getUid();
         generation = orig.getGeneration();
 
         created = new MongoOffsetDateTime(orig.getCreated());
@@ -64,11 +66,9 @@ public class MongoMetaData extends MongoResourcePointer {
     @BsonIgnore
     @Transient
     public ResourceMetadata metadata() {
-        return ImmutableResourceMetadata.builder()
+        ImmutableResourceMetadata.Builder result = ImmutableResourceMetadata.builder()
                 .kind(kind)
                 .apiVersion(apiVersion)
-
-                .owner(owner != null ? owner.pointer() : null)
 
                 .namespace(nameSpace)
                 .name(name)
@@ -77,11 +77,26 @@ public class MongoMetaData extends MongoResourcePointer {
                 .selfLink(ResourceMetadata.generateSelfLink("", kind, apiVersion, uid))
 
                 .created(created.timeStamp())
-                .deleted(deleted != null ? deleted.timeStamp() : null)
 
                 .annotations(annotations)
-                .labels(labels)
+                .labels(labels);
 
-                .build();
+        if (owner != null)          result.owner(owner.pointer());
+        if (deleted != null)        result.deleted(deleted.timeStamp());
+
+        return result.build();
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", MongoMetaData.class.getSimpleName() + "[", "]")
+                .add("owner=" + owner)
+                .add("generation=" + generation)
+                .add("kind='" + kind + "'")
+                .add("apiVersion='" + apiVersion + "'")
+                .add("nameSpace='" + nameSpace + "'")
+                .add("name='" + name + "'")
+                .add("uid=" + uid)
+                .toString();
     }
 }

@@ -17,9 +17,11 @@
 
 package de.kaiserpfalzedv.rpg.integrations.datastore.users;
 
-import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.store.OptimisticLockStoreException;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
+import io.quarkus.arc.AlternativePriority;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @ApplicationScoped
+@AlternativePriority(1000)
 public class UserRepository implements UserStoreService, PanacheMongoRepository<MongoUser> {
     private static final Logger LOG = LoggerFactory.getLogger(UserRepository.class);
 
@@ -63,10 +66,31 @@ public class UserRepository implements UserStoreService, PanacheMongoRepository<
     public User persist(final User object) {
         LOG.trace("persisting: user={}", object);
 
-        persistOrUpdate(new MongoUser(object));
+        MongoUser toSave = new MongoUser(object);
 
-        return object;
+        Optional<User> stored = findByUid(object.getUid());
+        if (stored.isPresent()) {
+            checkGeneration(stored.get().getMetadata(), object.getMetadata());
+        } else {
+            if (toSave.uid == null) {
+                toSave.uid = UUID.randomUUID();
+
+                LOG.warn("Added UID to user: uid={}, nameSpace='{}', name='{}'", toSave.uid, toSave.nameSpace, toSave.name);
+            }
+        }
+
+        toSave.status.updateHistory();
+        persistOrUpdate(toSave);
+        LOG.debug("persisted: user={}", toSave);
+        return toSave.user();
     }
+
+    private void checkGeneration(final ResourceMetadata stored, final ResourceMetadata data) {
+        if (stored.getGeneration() > data.getGeneration()) {
+            throw new OptimisticLockStoreException(stored.getGeneration(), data.getGeneration());
+        }
+    }
+
 
     @Override
     public void delete(final User object) {

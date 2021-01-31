@@ -60,19 +60,19 @@ public class TestUserRepository {
     /**
      * Default data created during setup of tests.
      */
-    private static final MongoUser data = new MongoUser(ImmutableUser.builder()
+    private static final User data = ImmutableUser.builder()
             .metadata(
                     ImmutableResourceMetadata.builder()
-                            .kind(MongoUser.KIND)
-                            .apiVersion(MongoUser.API_VERSION)
+                            .kind(User.KIND)
+                            .apiVersion(User.API_VERSION)
 
                             .namespace(NAMESPACE)
                             .name(NAME)
                             .uid(USER_UID)
-                            .selfLink(ResourceMetadata.generateSelfLink("", MongoUser.KIND, MongoUser.API_VERSION, USER_UID))
+                            .selfLink(ResourceMetadata.generateSelfLink("", User.KIND, User.API_VERSION, USER_UID))
 
-                            .generation(1L)
                             .created(CREATED)
+                            .generation(0L)
 
                             .putAnnotations("test", "true")
 
@@ -85,25 +85,24 @@ public class TestUserRepository {
                     .build()
             )
             .status(
-                    ImmutableResourceStatus.<String>builder()
+                    ImmutableResourceStatus.builder()
                             .observedGeneration(1L)
                             .addHistory(
-                                    ImmutableResourceHistory.<String>builder()
-                                            .status("Created")
+                                    ImmutableResourceHistory.builder()
+                                            .status("created")
                                             .timeStamp(CREATED)
-                                            .message("User created.")
                                             .build()
                             )
                             .build()
             )
-            .build());
+            .build();
 
     @Inject
     UserRepository sut;
 
     @Test
     public void shouldReturnEmptyOptionalWhenThereIsNoUser() {
-        MDC.put("test", "not-present-without-card");
+        MDC.put("test", "not-present-without-user");
 
         Optional<User> result = sut.findByNameSpaceAndName("no-namespace", "no-card");
         LOG.trace("result=", result);
@@ -112,22 +111,34 @@ public class TestUserRepository {
     }
 
     @Test
-    public void shouldReturnUserWhenThereIsAnUser() {
-        MDC.put("test", "load-card");
+    public void shouldReturnUserByNamespaceAndNameWhenThereIsAnUser() {
+        MDC.put("test", "load-user-by-namespace-and-name");
 
         Optional<User> result = sut.findByNameSpaceAndName(NAMESPACE, NAME);
         LOG.trace("result=", result);
 
-        assertTrue(result.isPresent(), "There should be a card " + NAMESPACE + "/" + NAME);
+        assertTrue(result.isPresent(), "There should be an user " + NAMESPACE + "/" + NAME);
+    }
+
+    @Test
+    public void shouldReturnUserByUidWhenThereIsAnUser() {
+        MDC.put("test", "load-user-by-uid");
+
+        Optional<User> result = sut.findByUid(USER_UID);
+        LOG.trace("result=", result);
+
+        assertTrue(result.isPresent(), "There should be an user with UID " + USER_UID.toString());
     }
 
     @BeforeEach
     void setUpEach() {
-        sut.persistOrUpdate(data);
+        sut.persist(data);
     }
 
     @AfterEach
     void tearDownEach() {
+        sut.delete(data);
+
         MDC.remove("test");
     }
 

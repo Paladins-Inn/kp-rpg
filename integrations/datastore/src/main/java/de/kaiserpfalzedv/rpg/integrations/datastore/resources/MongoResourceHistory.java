@@ -20,6 +20,8 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.resources;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceHistory;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceHistory;
 
+import java.util.StringJoiner;
+
 
 /**
  * A single history entry. Basic data is the timestamp, the status and the message.
@@ -34,7 +36,7 @@ public class MongoResourceHistory {
 
     public MongoResourceHistory() {}
 
-    public MongoResourceHistory(ResourceHistory orig) {
+    public MongoResourceHistory(final ResourceHistory orig) {
         status = orig.getStatus();
         timeStamp = new MongoOffsetDateTime(orig.getTimeStamp());
 
@@ -44,10 +46,21 @@ public class MongoResourceHistory {
     }
 
     public ResourceHistory history() {
-        return ImmutableResourceHistory.builder()
+        ImmutableResourceHistory.Builder result = ImmutableResourceHistory.builder()
                 .status(status)
-                .timeStamp(timeStamp.timeStamp())
-                .message(message)
-                .build();
+                .timeStamp(timeStamp.timeStamp());
+
+        if (message != null)            result.message(message);
+
+        return result.build();
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", MongoResourceHistory.class.getSimpleName() + "[", "]")
+                .add("status='" + status + "'")
+                .add("timeStamp=" + timeStamp)
+                .add("message='" + message + "'")
+                .toString();
     }
 }

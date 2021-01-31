@@ -17,12 +17,15 @@
 
 package de.kaiserpfalzedv.rpg.core.resources;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * A generic resource.
@@ -43,4 +46,40 @@ public interface Resource<D extends Serializable> extends Serializable {
 
     @Schema(name = "status", description = "The status of the resource (containting the history).")
     Optional<ResourceStatus> getStatus();
+
+    @Transient
+    @JsonIgnore
+    default UUID getUid() {
+        return getMetadata().getUid();
+    }
+
+    @Transient
+    @JsonIgnore
+    default String getKind() {
+        return getMetadata().getKind();
+    }
+
+    @Transient
+    @JsonIgnore
+    default String getApiVersion() {
+        return getMetadata().getApiVersion();
+    }
+
+    @Transient
+    @JsonIgnore
+    default String getNameSpace() {
+        return getMetadata().getNamespace();
+    }
+
+    @Transient
+    @JsonIgnore
+    default String getName() {
+        return getMetadata().getName();
+    }
+
+    @Transient
+    @JsonIgnore
+    default Long getGeneration() {
+        return getMetadata().getGeneration();
+    }
 }

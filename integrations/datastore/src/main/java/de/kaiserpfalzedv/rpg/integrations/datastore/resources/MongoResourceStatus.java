@@ -22,8 +22,11 @@ import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceStatus;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceHistory;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
 
+import java.time.Clock;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class MongoResourceStatus {
@@ -44,6 +47,39 @@ public class MongoResourceStatus {
         }
     }
 
+    /**
+     * Update history entry
+     */
+    public void updateHistory() {
+        if (observedGeneration == null || observedGeneration <= 0L) {
+            saved();
+        } else {
+            updated();
+        }
+    }
+
+    private void saved() {
+        observedGeneration = 1L;
+
+        addHistory("saved", null);
+    }
+
+    private void updated() {
+        observedGeneration++;
+
+        addHistory("updated", null);
+    }
+
+    private void addHistory(final String status, final String message) {
+        MongoResourceHistory entry = new MongoResourceHistory();
+
+        entry.status = status;
+        entry.message = message;
+        entry.timeStamp = new MongoOffsetDateTime(OffsetDateTime.now(Clock.systemUTC()));
+
+        history.add(entry);
+    }
+
     public ResourceStatus status() {
         return ImmutableResourceStatus.builder()
 
@@ -57,5 +93,21 @@ public class MongoResourceStatus {
         return history.stream()
                 .map(MongoResourceHistory::history)
                 .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    public String toString() {
+
+        return new StringJoiner(", ", MongoResourceStatus.class.getSimpleName() + "[", "]")
+                .add("observedGeneration=" + observedGeneration)
+                .add("history=" + joinHistory())
+                .toString();
+    }
+
+    private String joinHistory() {
+        StringJoiner result = new StringJoiner(",", "[", "]");
+        history.forEach(e -> result.add(e.toString()));
+
+        return result.toString();
     }
 }

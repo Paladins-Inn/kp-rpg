@@ -43,12 +43,12 @@ public class MongoUserData {
     }
 
     public UserData userData() {
-        return ImmutableUserData.builder()
-                .description(description)
-                .picture(picture.pointer())
+        ImmutableUserData.Builder result = ImmutableUserData.builder();
 
-                .driveThruRPGApiKey(driveThruApiKey)
+        if (description != null)        result.description(description);
+        if (picture != null)            result.picture(picture.pointer());
+        if (driveThruApiKey != null)    result.driveThruRPGApiKey(driveThruApiKey);
 
-                .build();
+        return result.build();
     }
 }

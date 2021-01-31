@@ -19,6 +19,7 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.resources;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.StringJoiner;
 
 public class MongoOffsetDateTime {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_ZONED_DATE_TIME;
@@ -33,5 +34,10 @@ public class MongoOffsetDateTime {
 
     public OffsetDateTime timeStamp() {
         return OffsetDateTime.parse(dateTime, formatter);
+    }
+
+    @Override
+    public String toString() {
+        return dateTime;
     }
 }

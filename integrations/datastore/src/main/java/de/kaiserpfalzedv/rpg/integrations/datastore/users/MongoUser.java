@@ -17,7 +17,6 @@
 
 package de.kaiserpfalzedv.rpg.integrations.datastore.users;
 
-import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
 import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoMetaData;
@@ -28,6 +27,7 @@ import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.beans.Transient;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 /**
@@ -51,9 +51,9 @@ public class MongoUser extends PanacheMongoEntityBase {
     public MongoUser() {}
 
     public MongoUser(final User orig) {
-        uid = orig.getMetadata().getUid();
-        nameSpace = orig.getMetadata().getNamespace();
-        name = orig.getMetadata().getName();
+        uid = orig.getUid();
+        nameSpace = orig.getNameSpace();
+        name = orig.getName();
 
         metadata = new MongoMetaData(orig.getMetadata());
         status = orig.getStatus().isPresent() ? new MongoResourceStatus(orig.getStatus().get()) : null;
@@ -66,10 +66,28 @@ public class MongoUser extends PanacheMongoEntityBase {
     @BsonIgnore
     @Transient
     public User user() {
-        return ImmutableUser.builder()
-                .metadata(metadata.metadata())
-                .spec(spec != null ? spec.userData() : null)
-                .status(status != null ? status.status() : null)
-                .build();
+        ImmutableUser.Builder result = ImmutableUser.builder()
+                .metadata(metadata.metadata());
+
+        if (spec != null) {
+            result.spec(spec.userData());
+        }
+
+        if (status != null) {
+            result.status(status.status());
+        }
+
+
+        return result.build();
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", MongoUser.class.getSimpleName() + "[", "]")
+                .add("hash=" + System.identityHashCode(this))
+                .add("uid=" + uid)
+                .add("nameSpace='" + nameSpace + "'")
+                .add("name='" + name + "'")
+                .toString();
     }
 }

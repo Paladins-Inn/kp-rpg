@@ -42,6 +42,9 @@ public class MongoCard extends PanacheMongoEntityBase implements Card {
     @BsonId
     public UUID uid;
 
+    public String nameSpace;
+    public String name;
+
     /** The resource meta data. */
     public ResourceMetadata metadata;
 
@@ -49,12 +52,15 @@ public class MongoCard extends PanacheMongoEntityBase implements Card {
     public Optional<BasicCardData> spec;
 
     /** The status of the resource. */
-    public Optional<ResourceStatus<String>> status;
+    public Optional<ResourceStatus> status;
 
     public MongoCard() {}
 
     public MongoCard(final de.kaiserpfalzedv.rpg.core.cards.Card orig) {
         uid = orig.getMetadata().getUid();
+        nameSpace = orig.getMetadata().getNamespace();
+        name = orig.getMetadata().getName();
+
         metadata = orig.getMetadata();
         spec = orig.getSpec();
         status = orig.getStatus();
@@ -78,7 +84,7 @@ public class MongoCard extends PanacheMongoEntityBase implements Card {
     @BsonIgnore
     @Transient
     @Override
-    public Optional<ResourceStatus<String>> getStatus() {
+    public Optional<ResourceStatus> getStatus() {
         return status;
     }
 }

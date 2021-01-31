@@ -22,6 +22,7 @@ import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.beans.Transient;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 /**
@@ -61,5 +62,17 @@ public class MongoResourcePointer {
                 .uid(uid)
 
                 .build();
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", MongoResourcePointer.class.getSimpleName() + "[", "]")
+                .add("hash=" + System.identityHashCode(this))
+                .add("kind='" + kind + "'")
+                .add("apiVersion='" + apiVersion + "'")
+                .add("nameSpace='" + nameSpace + "'")
+                .add("name='" + name + "'")
+                .add("uid=" + uid)
+                .toString();
     }
 }

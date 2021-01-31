@@ -20,7 +20,7 @@ package de.kaiserpfalzedv.rpg.core.cards;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceAddress;
+import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
@@ -41,7 +41,7 @@ import java.util.Optional;
 @Schema(name="card", description = "Card Definition for card play.")
 public interface BasicCardData extends Serializable {
     @Schema(name = "picture", description="The resource address of the picture of this card.")
-    ResourceAddress getPicture();
+    ResourcePointer getPicture();
 
     @Schema(name = "description", description = "A description of the card.")
     Optional<String> getDescription();
