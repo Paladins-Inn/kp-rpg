@@ -36,14 +36,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.StringJoiner;
 
-@ApplicationScoped
+/**
+ * DiscordDispatcher -- The plugin based dispatcher for Discord bots.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.0.0
+ */
+@Singleton // since ListenerAdapter contains a final method, we need a proxy-less implementation.
 public class DiscordDispatcher extends ListenerAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(DiscordDispatcher.class);
 

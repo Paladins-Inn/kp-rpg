@@ -30,7 +30,7 @@ import java.util.List;
  */
 public interface DiscordPlugin {
     /**
-     * @return The name of the plugin. Defaults to {@link #getClass()}{@literal .}{@link Class#getSimpleName()}.
+     * @return The name of the plugin. Defaults to {@link Class#getSimpleName()}.
      */
     default String getName() {
         return getClass().getSimpleName();
