@@ -37,7 +37,7 @@ import org.immutables.value.Value;
 @JsonSerialize(as = ImmutableGuild.class)
 @JsonDeserialize(builder = ImmutableGuild.Builder.class)
 @Schema(name = "guild", description = "A single guild (server) within discord.")
-public interface Guild extends Resource<GuildData, String> {
+public interface Guild extends Resource<GuildData> {
     String API_VERSION = "v1";
     String KIND = "User";
 

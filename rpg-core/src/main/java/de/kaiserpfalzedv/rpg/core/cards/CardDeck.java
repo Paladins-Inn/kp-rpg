@@ -36,7 +36,7 @@ import org.immutables.value.Value;
 @JsonSerialize(as = ImmutableCardDeck.class)
 @JsonDeserialize(builder = ImmutableCardDeck.Builder.class)
 @Schema(name = "cardDeck", description = "A card deck defined by a collection of cards.")
-public interface CardDeck extends Resource<BasicCardDeckData, String> {
+public interface CardDeck extends Resource<BasicCardDeckData> {
     String API_VERSION = "v1";
     String KIND = "CardDeck";
 }

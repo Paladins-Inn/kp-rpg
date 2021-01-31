@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.integrations.datastore.guilds;
 
+import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildStoreService;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.ImmutableGuild;
@@ -47,7 +48,7 @@ public class GuildRepository implements GuildStoreService, PanacheMongoRepositor
 
         MongoGuild result = query.firstResult();
         LOG.debug("Loaded: {}", result);
-        return Optional.ofNullable(ImmutableGuild.builder().from(result).build());
+        return result != null ? Optional.ofNullable(ImmutableGuild.builder().from(result).build()) : Optional.empty();
     }
 
     @Override

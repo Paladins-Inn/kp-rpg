@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.cards;
 import de.kaiserpfalzedv.rpg.core.cards.Card;
 import de.kaiserpfalzedv.rpg.core.cards.CardStoreService;
 import de.kaiserpfalzedv.rpg.core.cards.ImmutableCard;
+import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import io.quarkus.panache.common.Sort;
@@ -46,8 +47,14 @@ public class CardRepository implements CardStoreService, PanacheMongoRepository<
         PanacheQuery<MongoCard> query = MongoCard.find("nameSpace = :nameSpace and name = :name", Sort.descending("generation"), queryParams);
 
         MongoCard result = query.firstResult();
+        LOG.trace("Loaded: {}", result);
+        if (result == null) {
+            LOG.info("not found: type=card, nameSpace={}, name={}", nameSpace, name);
+            return Optional.empty();
+        }
+
         LOG.debug("Loaded: {}", result);
-        return Optional.ofNullable(ImmutableCard.builder().from(result).build());
+        return Optional.of(ImmutableCard.builder().from(result).build());
     }
 
     @Override

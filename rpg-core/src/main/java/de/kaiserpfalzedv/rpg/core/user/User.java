@@ -30,7 +30,7 @@ import org.immutables.value.Value;
 @JsonSerialize(as = ImmutableUser.class)
 @JsonDeserialize(builder = ImmutableUser.Builder.class)
 @Schema(name = "card", description = "a single card definition.")
-public interface User extends Resource<UserData, String> {
+public interface User extends Resource<UserData> {
     String API_VERSION = "v1";
     String KIND = "User";
 }
