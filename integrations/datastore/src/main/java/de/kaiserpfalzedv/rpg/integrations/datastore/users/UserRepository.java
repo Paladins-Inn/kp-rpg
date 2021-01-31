@@ -30,6 +30,7 @@ import javax.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @ApplicationScoped
 public class UserRepository implements UserStoreService, PanacheMongoRepository<MongoUser> {
@@ -49,10 +50,42 @@ public class UserRepository implements UserStoreService, PanacheMongoRepository<
     }
 
     @Override
-    public void persist(User object) {
+    public Optional<User> findByUid(final UUID uid) {
+        LOG.trace("loading: type=user, uid={}", uid);
+
+        PanacheQuery<MongoUser> query = MongoUser.findById(uid);
+
+        MongoUser result = query.firstResult();
+
+        LOG.debug("Loaded: {}", result);
+        return Optional.ofNullable(ImmutableUser.builder().from(result).build());
+    }
+
+    @Override
+    public User persist(final User object) {
         LOG.trace("persisting: user={}", object);
-        persistOrUpdate(
-                new MongoUser(object)
-        );
+
+        persistOrUpdate(new MongoUser(object));
+
+        return object;
+    }
+
+    @Override
+    public void delete(final User object) {
+        delete(new MongoUser(object));
+    }
+
+    @Override
+    public void delete(String nameSpace, String name) {
+        Optional<User> object = findByNameSpaceAndName(nameSpace, name);
+
+        object.ifPresent(this::delete);
+    }
+
+    @Override
+    public void delete(final UUID uid) {
+        Optional<User> object = findByUid(uid);
+
+        object.ifPresent(this::delete);
     }
 }

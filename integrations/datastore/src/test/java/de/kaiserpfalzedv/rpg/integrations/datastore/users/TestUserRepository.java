@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.users;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceHistory;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceStatus;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
 import de.kaiserpfalzedv.rpg.core.user.ImmutableUserData;
 import de.kaiserpfalzedv.rpg.core.user.User;
@@ -68,7 +69,7 @@ public class TestUserRepository {
                             .namespace(NAMESPACE)
                             .name(NAME)
                             .uid(USER_UID)
-                            .selfLink("/apis/" + MongoUser.KIND + "/" + MongoUser.API_VERSION + "/" + USER_UID)
+                            .selfLink(ResourceMetadata.generateSelfLink("", MongoUser.KIND, MongoUser.API_VERSION, USER_UID))
 
                             .generation(1L)
                             .created(CREATED)
