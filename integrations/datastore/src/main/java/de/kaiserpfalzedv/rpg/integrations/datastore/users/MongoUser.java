@@ -17,17 +17,17 @@
 
 package de.kaiserpfalzedv.rpg.integrations.datastore.users;
 
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
+import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
 import de.kaiserpfalzedv.rpg.core.user.User;
-import de.kaiserpfalzedv.rpg.core.user.UserData;
+import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoMetaData;
+import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoResourceStatus;
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.beans.Transient;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -37,46 +37,39 @@ import java.util.UUID;
  * @since 1.2.0 2021-01-30
  */
 @MongoEntity(collection = "users")
-public class MongoUser extends PanacheMongoEntityBase implements User {
-    /** ID of the document. */
+public class MongoUser extends PanacheMongoEntityBase {
     @BsonId
     public UUID uid;
 
-    /** The resource meta data. */
-    public ResourceMetadata metadata;
-
-    /** The data of the card. */
-    public Optional<UserData> spec;
-
-    /** The status of the resource. */
-    public Optional<ResourceStatus<String>> status;
+    public String nameSpace;
+    public String name;
+    public MongoMetaData metadata;
+    public MongoUserData spec;
+    public MongoResourceStatus status;
 
 
-    public MongoUser(final de.kaiserpfalzedv.rpg.core.user.User orig) {
+    public MongoUser() {}
+
+    public MongoUser(final User orig) {
         uid = orig.getMetadata().getUid();
-        metadata = orig.getMetadata();
-        spec = orig.getSpec();
-        status = orig.getStatus();
+        nameSpace = orig.getMetadata().getNamespace();
+        name = orig.getMetadata().getName();
+
+        metadata = new MongoMetaData(orig.getMetadata());
+        status = orig.getStatus().isPresent() ? new MongoResourceStatus(orig.getStatus().get()) : null;
+
+        if (orig.getSpec().isPresent()) {
+            spec = new MongoUserData(orig.getSpec().get());
+        }
     }
 
     @BsonIgnore
     @Transient
-    @Override
-    public ResourceMetadata getMetadata() {
-        return metadata;
-    }
-
-    @BsonIgnore
-    @Transient
-    @Override
-    public Optional<UserData> getSpec() {
-        return spec;
-    }
-
-    @BsonIgnore
-    @Transient
-    @Override
-    public Optional<ResourceStatus<String>> getStatus() {
-        return status;
+    public User user() {
+        return ImmutableUser.builder()
+                .metadata(metadata.metadata())
+                .spec(spec != null ? spec.userData() : null)
+                .status(status != null ? status.status() : null)
+                .build();
     }
 }

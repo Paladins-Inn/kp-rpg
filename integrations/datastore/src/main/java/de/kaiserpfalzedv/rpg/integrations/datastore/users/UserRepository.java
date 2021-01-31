@@ -21,14 +21,10 @@ import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
-import io.quarkus.mongodb.panache.PanacheQuery;
-import io.quarkus.panache.common.Sort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,26 +35,28 @@ public class UserRepository implements UserStoreService, PanacheMongoRepository<
     public Optional<User> findByNameSpaceAndName(final String nameSpace, final String name) {
         LOG.trace("loading: type=user, nameSpace={}, name={}", nameSpace, name);
 
-        Map<String, String> queryParams = new HashMap<>(2);
-        queryParams.put("nameSpace", nameSpace);
-        queryParams.put("name", name);
-        PanacheQuery<MongoUser> query = MongoUser.find("nameSpace = :nameSpace and name = :name", Sort.descending("generation"), queryParams);
+        MongoUser result = MongoUser.find("{'nameSpace': ?1, 'name': ?2}", nameSpace, name).firstResult();
+        if (result == null) {
+            LOG.info("not found: type=user, nameSpace='{}', name='{}'", nameSpace, name);
+            return Optional.empty();
+        }
 
-        MongoUser result = query.firstResult();
-        LOG.debug("Loaded: {}", result);
-        return Optional.ofNullable(ImmutableUser.builder().from(result).build());
+        LOG.debug("Loaded: {}, metadata={}", result, result.metadata);
+        return Optional.of(result.user());
     }
 
     @Override
     public Optional<User> findByUid(final UUID uid) {
         LOG.trace("loading: type=user, uid={}", uid);
 
-        PanacheQuery<MongoUser> query = MongoUser.findById(uid);
+        MongoUser result = MongoUser.findById(uid);
+        if (result == null) {
+            LOG.info("not found: type=user, uid='{}'", uid);
+            return Optional.empty();
+        }
 
-        MongoUser result = query.firstResult();
-
-        LOG.debug("Loaded: {}", result);
-        return Optional.ofNullable(ImmutableUser.builder().from(result).build());
+        LOG.debug("Loaded: {}, metadata={}", result, result.metadata);
+        return Optional.of(result.user());
     }
 
     @Override
@@ -72,11 +70,19 @@ public class UserRepository implements UserStoreService, PanacheMongoRepository<
 
     @Override
     public void delete(final User object) {
+        LOG.info("remove: type=user, uid={}, nameSpace={}, name={}",
+                object.getMetadata().getUid(),
+                object.getMetadata().getNamespace(),
+                object.getMetadata().getName()
+        );
+
         delete(new MongoUser(object));
     }
 
     @Override
     public void delete(String nameSpace, String name) {
+        LOG.trace("remove: type=user, nameSpace={}, name={}", nameSpace, name);
+
         Optional<User> object = findByNameSpaceAndName(nameSpace, name);
 
         object.ifPresent(this::delete);
@@ -84,6 +90,8 @@ public class UserRepository implements UserStoreService, PanacheMongoRepository<
 
     @Override
     public void delete(final UUID uid) {
+        LOG.trace("remove: type=user, uid={}", uid);
+
         Optional<User> object = findByUid(uid);
 
         object.ifPresent(this::delete);
