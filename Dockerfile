@@ -48,10 +48,17 @@ COPY . /projects
 RUN mkdir -p /projects/rpg-bot/src/main/resources/META-INF/resources
 ###COPY --from=npm /dist/* /projects/rpg-bot/src/main/resources/META-INF/resources/
 
-RUN mvn --batch-mode --no-transfer-progress \
-    -DskipTests=true -Dmaven.test.skip -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true -Dskip.site=true \
-    -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false \
-    clean install
+ARG MVN_PARAMETER="--batch-mode --no-transfer-progress \
+    -DskipTests=true -Dmaven.test.skip -Dskip.jar=true -Dskip.javadoc=true -Dskip.source=true \
+    -Dskip.site=true \
+    -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false"
+
+RUN mvn ${MVN_PARAMETER} -N clean install
+RUN cd testsupport && mvn ${MVN_PARAMETER} clean install && cd ..
+RUN cd rpg-core && mvn ${MVN_PARAMETER} clean install && cd ..
+RUN cd rpg-game-modules && mvn ${MVN_PARAMETER} clean install && cd ..
+RUN cd integrations && mvn ${MVN_PARAMETER} clean install && cd ..
+RUN cd rpg-server && mvn ${MVN_PARAMETER} clean install && cd ..
 
 RUN ls -la rpg-server/tomb/target && cp -a rpg-server/tomb/target/app-runner.jar /app.jar
 
@@ -67,7 +74,7 @@ LABEL io.openshift.tags="quarkus rpg discord"
 LABEL maintainer="Kaiserpfalz EDV-Service"
 LABEL summary="Provides a supporting system for online tabletop RPG playing."
 LABEL vendor="Kaiserpfalz EDV-Service"
-LABEL version="1.1.0-SNAPSHOT"
+LABEL version="1.2.0-SNAPSHOT"
 
 
 ARG JAVA_PACKAGE=java-11-openjdk-headless
