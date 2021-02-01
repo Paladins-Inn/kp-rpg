@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.bot.dice;
 
-import de.kaiserpfalzedv.rpg.bot.discord.DiscordPlugin;
+import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin;
 import io.quarkus.runtime.StartupEvent;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -41,7 +41,7 @@ import java.util.UUID;
  * @since 1.0.0 2021-01-11
  */
 @ApplicationScoped
-public class DiscordDiceRoller implements DiscordPlugin {
+public class DiscordDiceRoller implements DiscordTextChannelPlugin {
     static private final Logger LOG = LoggerFactory.getLogger(DiscordDiceRoller.class);
 
     /** Emoji for re-rolling the die roll. */

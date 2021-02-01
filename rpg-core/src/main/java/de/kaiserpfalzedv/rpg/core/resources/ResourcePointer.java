@@ -20,8 +20,10 @@ package de.kaiserpfalzedv.rpg.core.resources;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.immutables.value.Value;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * ResourcePointer -- A single resource definition pointing to a unique resource on the server.
@@ -29,6 +31,8 @@ import java.io.Serializable;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-07
  */
+@Value.Immutable
+@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonPropertyOrder({"kind,apiVersion,namespace,name,selfLink"})
 @Schema(name = "ResourcePointer", description = "A full address of a resource within the system.")
@@ -59,8 +63,17 @@ public interface ResourcePointer extends Serializable {
     String getName();
 
     /**
+     * @return The unique id of the resource.
+     * @since 1.2.0
+     */
+    @Schema(name = "Uid", description = "The unique id.")
+    UUID getUid();
+
+    /**
      * @return The local part of the URL to retrieve this resource.
      */
     @Schema(name = "SelfLink", description = "The local part of the URL to retrieve the resource.", required = true)
-    String getSelfLink();
+    default String getSelfLink() {
+        return "/apis/" + getApiVersion() + "/" + getKind() + "/" + getUid();
+    }
 }

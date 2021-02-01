@@ -20,7 +20,7 @@ package de.kaiserpfalzedv.rpg.core.cards;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceAddress;
+import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
@@ -56,11 +56,11 @@ public interface BasicCardDeckData extends Serializable {
      * @return A picture of the backside of the cards.
      */
     @Schema(name = "BackOfCard", description = "The definition of the picture of the backside of the card.", required = true)
-    ResourceAddress getBackOfCard();
+    ResourcePointer getBackOfCard();
 
     /**
      * @return All cards of this deck.
      */
     @Schema(name = "Cards", description = "A list of all cards of this deck.", required = true)
-    List<ResourceAddress> getCards();
+    List<ResourcePointer> getCards();
 }

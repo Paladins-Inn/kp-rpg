@@ -369,6 +369,10 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
           <version>${maven-resources-plugin.version}</version>
+          <configuration>
+            <encoding>${project.build.sourceEncoding}</encoding>
+            <propertiesEncoding>${project.build.sourceEncoding}</propertiesEncoding>
+          </configuration>
           <executions>
             <execution>
               <id>test-sources-generation</id>
@@ -729,19 +733,6 @@
           <groupId>io.rest-assured</groupId>
           <artifactId>rest-assured</artifactId>
           <scope>test</scope>
-        </dependency>
-
-        <dependency>
-          <groupId>io.quarkus</groupId>
-          <artifactId>quarkus-container-image-docker</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>io.quarkus</groupId>
-          <artifactId>quarkus-openshift</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>io.quarkus</groupId>
-          <artifactId>quarkus-kubernetes</artifactId>
         </dependency>
       </dependencies>
 

@@ -26,12 +26,16 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 /**
  * Metadata -- common data for every resource of the system.
+ *
+ * @author klenkes74 {@literal <rlichit@kaiserpfalz-edv.de>}
+ * @since 1.0.0
  */
 @Value.Immutable
 @Value.Modifiable
@@ -42,22 +46,22 @@ import java.util.UUID;
 @Schema(name = "ResourceMetadata", description = "The metadata of a resource.")
 public interface ResourceMetadata extends ResourcePointer {
     /**
-     * @return a unique id for this resource.
-     */
-    @Schema(name = "uid", description = "An UUID identifying the resource.", required = true)
-    UUID getUid();
-
-    /**
+     * During generation of a new resource the generation is 0L. When the resource is persisted,
+     * the generation is incremented.
+     *
      * @return The generation of this resource. Starting with 1.
      */
-    @Schema(name = "generation", description = "The generation of this object. Every change adds 1.", required = true)
-    Long getGeneration();
+    @Schema(name = "generation", description = "The generation of this object. Every change adds 1.", required = true, defaultValue = "0L")
+    @Value.Default
+    default Long getGeneration() {
+        return 0L;
+    }
 
     /**
      * @return The owning resource of this resource.
      */
     @Schema(name = "owner", description = "The owning resource. This is a sub-resource or managed resource of the given address.")
-    Optional<ResourceAddress> getOwner();
+    Optional<ResourcePointer> getOwner();
 
     /**
      * @return the creation timestamp.
@@ -77,7 +81,10 @@ public interface ResourceMetadata extends ResourcePointer {
      * @return all annotations.
      */
     @Schema(name = "annotations", description = "A set of annotations to this resource.", maxItems = 256)
-    Map<String, String> getAnnotations();
+    @Value.Default
+    default Map<String, String> getAnnotations() {
+        return new HashMap<>();
+    }
 
     /**
      * Checks if there is an annotation for this name.
@@ -96,7 +103,10 @@ public interface ResourceMetadata extends ResourcePointer {
      * @return all labels.
      */
     @Schema(name = "labels", description = "A set of labels to this resource.", maxItems = 256)
-    Map<String, String> getLabels();
+    @Value.Default
+    default Map<String, String> getLabels() {
+        return new HashMap<>();
+    }
 
     /**
      * Checks if there is a label with a special name.
@@ -107,5 +117,26 @@ public interface ResourceMetadata extends ResourcePointer {
     @JsonIgnore
     default boolean isLabeled(final String name) {
         return getLabels().containsKey(name);
+    }
+
+    @Override
+    @Schema(name = "SelfLink", description = "The local part of the URL to retrieve the resource.", required = true)
+    @Value.Default
+    default String getSelfLink() {
+        return "/apis/" + getApiVersion() + "/" + getKind() + "/" + getUid();
+    }
+
+
+    /**
+     * Generates the self link for this resource.
+     *
+     * @param base the base string for the self link.
+     * @param kind the kind of the resource link.
+     * @param apiVersion the API version of this resource link.
+     * @param uid the UID of this resource.
+     * @return the standardized self link to this resource.
+     */
+    static String generateSelfLink(final String base, final String kind, final String apiVersion, final UUID uid) {
+        return base + "/apis/" + apiVersion + "/" + kind + "/" + uid.toString();
     }
 }

@@ -17,21 +17,27 @@
 
 package de.kaiserpfalzedv.rpg.core.resources;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
+ * A generic resource.
  *
  * @param <D> The data provided by this resource.
- * @param <H> The type of additional history data.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.0.0
  */
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonPropertyOrder({"kind,apiVersion,metadata,spec,status"})
-public interface Resource<D extends Serializable, H extends Serializable> extends Serializable {
+public interface Resource<D extends Serializable> extends Serializable {
     @Schema(name = "metadata", description = "Technical data to the resource.", required = true)
     ResourceMetadata getMetadata();
 
@@ -39,5 +45,41 @@ public interface Resource<D extends Serializable, H extends Serializable> extend
     Optional<D> getSpec();
 
     @Schema(name = "status", description = "The status of the resource (containting the history).")
-    Optional<ResourceStatus<H>> getStatus();
+    Optional<ResourceStatus> getStatus();
+
+    @Transient
+    @JsonIgnore
+    default UUID getUid() {
+        return getMetadata().getUid();
+    }
+
+    @Transient
+    @JsonIgnore
+    default String getKind() {
+        return getMetadata().getKind();
+    }
+
+    @Transient
+    @JsonIgnore
+    default String getApiVersion() {
+        return getMetadata().getApiVersion();
+    }
+
+    @Transient
+    @JsonIgnore
+    default String getNameSpace() {
+        return getMetadata().getNamespace();
+    }
+
+    @Transient
+    @JsonIgnore
+    default String getName() {
+        return getMetadata().getName();
+    }
+
+    @Transient
+    @JsonIgnore
+    default Long getGeneration() {
+        return getMetadata().getGeneration();
+    }
 }

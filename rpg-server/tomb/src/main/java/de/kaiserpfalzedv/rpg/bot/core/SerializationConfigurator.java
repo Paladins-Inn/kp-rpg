@@ -21,7 +21,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import io.quarkus.jackson.ObjectMapperCustomizer;
+import io.quarkus.runtime.StartupEvent;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Singleton;
 
 /**
@@ -30,8 +33,12 @@ import javax.inject.Singleton;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de}
  * @since 1.0.0 2021-01-07
  */
-@Singleton
+@ApplicationScoped
 public class SerializationConfigurator implements ObjectMapperCustomizer {
+    void startup(@Observes final StartupEvent event) {
+
+    }
+
     @Override
     public void customize(ObjectMapper objectMapper) {
         configureTimestampsAsIso8601(objectMapper);

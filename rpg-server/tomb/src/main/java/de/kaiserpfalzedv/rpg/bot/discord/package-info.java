@@ -19,13 +19,13 @@
  * de.kaiserpfalzedv.rpg.bot.discord -- The technical parts of the discord bot.
  *
  * <p>This package contains the technical gear of the discord connector. It connects to discord
- * and dispatches all discord bot messages via {@link de.kaiserpfalzedv.rpg.bot.discord.DiscordDispatcher} to all
- * services implementing the {@link de.kaiserpfalzedv.rpg.bot.discord.DiscordPlugin}.</p>
+ * and dispatches all discord bot messages via {@link de.kaiserpfalzedv.rpg.integrations.discord.JDA.DiscordDispatcher} to all
+ * services implementing the {@link de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin}.</p>
  *
  * <p>It's a fire-and-forget usage of the plugin. Every plugin gets the message and decides how to react on it. Handling
  * the outgoing message is the responsibility of the plugin.</p>
  *
- * <p>The {@link de.kaiserpfalzedv.rpg.bot.discord.DiscordLivenessCheck} will end in the liveness check of the quarkus
+ * <p>The {@link de.kaiserpfalzedv.rpg.integrations.discord.JDA.DiscordLivenessCheck} will end in the liveness check of the quarkus
  * app.</p>
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}

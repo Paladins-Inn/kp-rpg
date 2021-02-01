@@ -35,6 +35,12 @@
             <groupId>net.objecthunter</groupId>
             <artifactId>exp4j</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.rjeschke</groupId>
+            <artifactId>txtmark</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-jackson</artifactId>
