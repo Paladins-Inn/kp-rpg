@@ -17,18 +17,14 @@
 
 package de.kaiserpfalzedv.rpg.integrations.datastore.cards;
 
-import de.kaiserpfalzedv.rpg.core.cards.BasicCardData;
 import de.kaiserpfalzedv.rpg.core.cards.Card;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
+import de.kaiserpfalzedv.rpg.core.cards.ImmutableCard;
+import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoResource;
 import io.quarkus.mongodb.panache.MongoEntity;
-import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
-import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.beans.Transient;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.StringJoiner;
 
 /**
  * Card -- The entity for storing the card resource.
@@ -37,54 +33,49 @@ import java.util.UUID;
  * @since 1.0.0 2021-01-09
  */
 @MongoEntity(collection = "cards")
-public class MongoCard extends PanacheMongoEntityBase implements Card {
-    /** ID of the document. */
-    @BsonId
-    public UUID uid;
+public class MongoCard extends MongoResource<Card> {
+    /**
+     * The data of the card.
+     */
+    public MongoCardData spec;
 
-    public String nameSpace;
-    public String name;
-
-    /** The resource meta data. */
-    public ResourceMetadata metadata;
-
-    /** The data of the card. */
-    public Optional<BasicCardData> spec;
-
-    /** The status of the resource. */
-    public Optional<ResourceStatus> status;
-
-    public MongoCard() {}
-
-    public MongoCard(final de.kaiserpfalzedv.rpg.core.cards.Card orig) {
-        uid = orig.getMetadata().getUid();
-        nameSpace = orig.getMetadata().getNamespace();
-        name = orig.getMetadata().getName();
-
-        metadata = orig.getMetadata();
-        spec = orig.getSpec();
-        status = orig.getStatus();
+    public MongoCard() {
     }
 
-
-    @BsonIgnore
-    @Transient
-    @Override
-    public ResourceMetadata getMetadata() {
-        return metadata;
+    public MongoCard(final Card orig) {
+        data(orig);
     }
 
     @BsonIgnore
     @Transient
     @Override
-    public Optional<BasicCardData> getSpec() {
-        return spec;
+    public void data(final Card orig) {
+        super.data(orig);
+
+        if (orig.getSpec().isPresent()) {
+            spec = new MongoCardData(orig.getSpec().get());
+        }
     }
 
     @BsonIgnore
     @Transient
     @Override
-    public Optional<ResourceStatus> getStatus() {
-        return status;
+    public Card data() {
+        ImmutableCard.Builder result = ImmutableCard.builder()
+                .metadata(metadata.data());
+
+        if (spec != null) result.spec(spec.data());
+
+        return result.build();
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", MongoCard.class.getSimpleName() + "[", "]")
+                .add("hash=" + System.identityHashCode(this))
+                .add("uid=" + uid)
+                .add("nameSpace='" + nameSpace + "'")
+                .add("name='" + name + "'")
+                .toString();
     }
 }

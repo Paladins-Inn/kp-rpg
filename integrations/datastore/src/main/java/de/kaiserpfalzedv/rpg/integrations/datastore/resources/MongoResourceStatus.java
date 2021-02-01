@@ -17,7 +17,6 @@
 
 package de.kaiserpfalzedv.rpg.integrations.datastore.resources;
 
-import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceHistory;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceStatus;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceHistory;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
@@ -50,22 +49,24 @@ public class MongoResourceStatus {
     /**
      * Update history entry
      */
-    public void updateHistory() {
+    public void updateHistory(MongoMetaData metaData) {
         if (observedGeneration == null || observedGeneration <= 0L) {
-            saved();
+            saved(metaData);
         } else {
-            updated();
+            updated(metaData);
         }
     }
 
-    private void saved() {
-        observedGeneration = 1L;
+    private void saved(MongoMetaData metaData) {
+        metaData.generation = 1L;
+        observedGeneration = metaData.generation;
 
         addHistory("saved", null);
     }
 
-    private void updated() {
-        observedGeneration++;
+    private void updated(MongoMetaData metaData) {
+        metaData.generation++;
+        observedGeneration = metaData.generation;
 
         addHistory("updated", null);
     }
@@ -80,7 +81,7 @@ public class MongoResourceStatus {
         history.add(entry);
     }
 
-    public ResourceStatus status() {
+    public ResourceStatus data() {
         return ImmutableResourceStatus.builder()
 
                 .observedGeneration(observedGeneration)

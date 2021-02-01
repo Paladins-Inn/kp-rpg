@@ -23,6 +23,7 @@ import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.beans.Transient;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 public class MongoMetaData extends MongoResourcePointer {
@@ -36,6 +37,7 @@ public class MongoMetaData extends MongoResourcePointer {
     public HashMap<String, String> annotations;
     public HashMap<String, String> labels;
 
+    @SuppressWarnings("unused")
     public MongoMetaData() {}
 
     public MongoMetaData(final ResourceMetadata orig) {
@@ -65,7 +67,7 @@ public class MongoMetaData extends MongoResourcePointer {
 
     @BsonIgnore
     @Transient
-    public ResourceMetadata metadata() {
+    public ResourceMetadata data() {
         ImmutableResourceMetadata.Builder result = ImmutableResourceMetadata.builder()
                 .kind(kind)
                 .apiVersion(apiVersion)
@@ -81,10 +83,24 @@ public class MongoMetaData extends MongoResourcePointer {
                 .annotations(annotations)
                 .labels(labels);
 
-        if (owner != null)          result.owner(owner.pointer());
-        if (deleted != null)        result.deleted(deleted.timeStamp());
+        if (owner != null) result.owner(owner.data());
+        if (deleted != null) result.deleted(deleted.timeStamp());
 
         return result.build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MongoMetaData)) return false;
+        if (!super.equals(o)) return false;
+        MongoMetaData that = (MongoMetaData) o;
+        return Objects.equals(owner, that.owner) && generation.equals(that.generation) && created.equals(that.created) && Objects.equals(deleted, that.deleted);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), owner, generation, created, deleted);
     }
 
     @Override
@@ -96,7 +112,7 @@ public class MongoMetaData extends MongoResourcePointer {
                 .add("apiVersion='" + apiVersion + "'")
                 .add("nameSpace='" + nameSpace + "'")
                 .add("name='" + name + "'")
-                .add("uid=" + uid)
+                .add("uid='" + uid + "'")
                 .toString();
     }
 }

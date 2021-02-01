@@ -44,7 +44,7 @@ public class GuildProvider {
 
     @CacheInvalidate(cacheName = "discord-guilds")
     public void store(final Guild data) {
-        store.persist(
+        store.save(
                 increaseGeneration(data)
         );
     }
@@ -72,12 +72,7 @@ public class GuildProvider {
     public Guild retrieve(final String name) {
         Optional<Guild> data = store.findByNameSpaceAndName(Guild.DISCORD_NAMESPACE, name);
 
-        if (data.isPresent()) {
-            return data.get();
-        }
-
-        Guild result = generateNewGuildEntry();
-        return result;
+        return data.orElseGet(this::generateNewGuildEntry);
     }
 
     @NotNull
@@ -88,7 +83,7 @@ public class GuildProvider {
                                 .kind(Guild.KIND)
                                 .apiVersion(Guild.API_VERSION)
                                 .uid(UUID.randomUUID())
-                                .generation(1L)
+                                .generation(0L)
                                 .build()
                 )
                 .build();

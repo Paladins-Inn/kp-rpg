@@ -21,7 +21,6 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 /**
  * DiscordMessageSender -- Sends the message to discord.
@@ -32,12 +31,10 @@ import javax.inject.Inject;
 @ApplicationScoped
 public class DiscordMessageSender {
     public void sendTextMessage(final MessageChannel channel, final String message) {
-        channel.sendMessage(message);
+        channel.sendMessage(message).queue();
     }
 
     public void sendDM(final User user, final String message) {
-        user.openPrivateChannel().queue((channel) -> {
-           channel.sendMessage(message).queue();
-        });
+        user.openPrivateChannel().queue((channel) -> channel.sendMessage(message).queue());
     }
 }

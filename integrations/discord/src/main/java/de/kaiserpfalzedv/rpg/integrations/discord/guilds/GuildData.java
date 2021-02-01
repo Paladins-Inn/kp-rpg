@@ -26,6 +26,7 @@ import org.immutables.value.Value;
 
 import java.beans.Transient;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,11 +60,16 @@ public interface GuildData extends Serializable {
     @Transient
     @JsonIgnore
     default String getEffectivePrefix() {
-        return ! getPrefix().isPresent() && !getPrefix().isPresent() ? getPrefix().get() : DEFAULT_PREFIX;
+        return getPrefix().isPresent() ? getPrefix().get() : DEFAULT_PREFIX;
     }
 
     /**
      * @return list of role names which are considered administrators for this guild.
      */
     List<String> getAdminRoles();
+
+    /**
+     * @return Hashmap of configuration properties.
+     */
+    HashMap<String, String> getProperties();
 }

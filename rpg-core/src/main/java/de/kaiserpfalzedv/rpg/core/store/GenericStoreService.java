@@ -27,15 +27,14 @@ import java.util.UUID;
 
 /**
  * GenericStoreService -- an ephemeral store for Resources.
- *
+ * <p>
  * This is a memory alternative for a persistent data store.
  *
  * @param <T> The resource to be stored inside the data store.
- *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-01-31
  */
-public abstract class GenericStoreService<T extends Resource> implements StoreService<T> {
+public abstract class GenericStoreService<T extends Resource<?>> implements StoreService<T> {
     /**
      * The name based memory store for guilds.
      */
@@ -64,7 +63,7 @@ public abstract class GenericStoreService<T extends Resource> implements StoreSe
     }
 
     @Override
-    public T persist(final T object) throws OptimisticLockStoreException {
+    public T save(final T object) throws OptimisticLockStoreException {
         String key = generateStoreKey(object.getMetadata().getNamespace(), object.getMetadata().getName());
         T data = object;
 
@@ -81,7 +80,7 @@ public abstract class GenericStoreService<T extends Resource> implements StoreSe
     }
 
     @Override
-    public void delete(final T object) {
+    public void remove(final T object) {
         String key = generateStoreKey(object.getMetadata().getNamespace(), object.getMetadata().getName());
 
         namedStore.remove(key);
@@ -89,7 +88,7 @@ public abstract class GenericStoreService<T extends Resource> implements StoreSe
     }
 
     @Override
-    public void delete(final String nameSpace, final String name) {
+    public void remove(final String nameSpace, final String name) {
         String key = generateStoreKey(nameSpace, name);
 
         if (namedStore.containsKey(key)) {
@@ -99,7 +98,7 @@ public abstract class GenericStoreService<T extends Resource> implements StoreSe
     }
 
     @Override
-    public void delete(final UUID uid) {
+    public void remove(final UUID uid) {
         if (uidStore.containsKey(uid)) {
             T data = uidStore.get(uid);
             String key = generateStoreKey(data.getMetadata().getNamespace(), data.getMetadata().getName());

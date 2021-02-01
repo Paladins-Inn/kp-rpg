@@ -19,16 +19,12 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.users;
 
 import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
 import de.kaiserpfalzedv.rpg.core.user.User;
-import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoMetaData;
-import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoResourceStatus;
+import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoResource;
 import io.quarkus.mongodb.panache.MongoEntity;
-import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
-import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.beans.Transient;
 import java.util.StringJoiner;
-import java.util.UUID;
 
 /**
  * The stored user data.
@@ -37,49 +33,46 @@ import java.util.UUID;
  * @since 1.2.0 2021-01-30
  */
 @MongoEntity(collection = "users")
-public class MongoUser extends PanacheMongoEntityBase {
-    @BsonId
-    public UUID uid;
-
-    public String nameSpace;
-    public String name;
-    public MongoMetaData metadata;
+public class MongoUser extends MongoResource<User> {
     public MongoUserData spec;
-    public MongoResourceStatus status;
 
-
-    public MongoUser() {}
+    public MongoUser() {
+    }
 
     public MongoUser(final User orig) {
-        uid = orig.getUid();
-        nameSpace = orig.getNameSpace();
-        name = orig.getName();
+        data(orig);
+    }
 
-        metadata = new MongoMetaData(orig.getMetadata());
-        status = orig.getStatus().isPresent() ? new MongoResourceStatus(orig.getStatus().get()) : null;
+    @Override
+    @BsonIgnore
+    @Transient
+    public void data(final User orig) {
+        super.data(orig);
 
         if (orig.getSpec().isPresent()) {
             spec = new MongoUserData(orig.getSpec().get());
         }
     }
 
+    @Override
     @BsonIgnore
     @Transient
-    public User user() {
+    public User data() {
         ImmutableUser.Builder result = ImmutableUser.builder()
-                .metadata(metadata.metadata());
+                .metadata(metadata.data());
 
         if (spec != null) {
-            result.spec(spec.userData());
+            result.spec(spec.data());
         }
 
         if (status != null) {
-            result.status(status.status());
+            result.status(status.data());
         }
 
 
         return result.build();
     }
+
 
     @Override
     public String toString() {

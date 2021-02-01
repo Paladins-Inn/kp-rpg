@@ -17,67 +17,65 @@
 
 package de.kaiserpfalzedv.rpg.integrations.datastore.guilds;
 
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildData;
+import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoResource;
+import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
+import de.kaiserpfalzedv.rpg.integrations.discord.guilds.ImmutableGuild;
 import io.quarkus.mongodb.panache.MongoEntity;
-import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
-import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.beans.Transient;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.StringJoiner;
 
 /**
- * The stored user data.
+ * The stored guild data.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0 2021-01-30
+ * @since 1.2.0 2021-01-31
  */
-@MongoEntity(collection = "users")
-public class MongoGuild extends PanacheMongoEntityBase implements de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild {
-    /** ID of the document. */
-    @BsonId
-    public UUID uid;
-
-    /** The resource meta data. */
-    public ResourceMetadata metadata;
-
-    /** The data of the card. */
-    public Optional<de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildData> spec;
-
-    /** The status of the resource. */
-    public Optional<ResourceStatus> status;
+@MongoEntity(collection = "guilds")
+public class MongoGuild extends MongoResource<Guild> {
+    /**
+     * The data of the card.
+     */
+    public MongoGuildData spec;
 
 
-    public MongoGuild() {}
+    public MongoGuild() {
+    }
 
-    public MongoGuild(final de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild orig) {
-        uid = orig.getMetadata().getUid();
-        metadata = orig.getMetadata();
-        spec = orig.getSpec();
-        status = orig.getStatus();
+    public MongoGuild(final Guild orig) {
+        data(orig);
     }
 
     @BsonIgnore
     @Transient
     @Override
-    public ResourceMetadata getMetadata() {
-        return metadata;
+    public void data(final Guild orig) {
+        super.data(orig);
+
+        if (orig.getSpec().isPresent()) spec = new MongoGuildData(orig.getSpec().get());
     }
 
     @BsonIgnore
     @Transient
     @Override
-    public Optional<GuildData> getSpec() {
-        return spec;
+    public Guild data() {
+        ImmutableGuild.Builder result = ImmutableGuild.builder()
+                .metadata(metadata.data());
+
+        if (spec != null) result.spec(spec.data());
+        if (status != null) result.status(status.data());
+
+        return result.build();
     }
 
-    @BsonIgnore
-    @Transient
     @Override
-    public Optional<ResourceStatus> getStatus() {
-        return status;
+    public String toString() {
+        return new StringJoiner(", ", MongoGuild.class.getSimpleName() + "[", "]")
+                .add("hash=" + System.identityHashCode(this))
+                .add("uid=" + uid)
+                .add("nameSpace='" + nameSpace + "'")
+                .add("name='" + name + "'")
+                .toString();
     }
 }

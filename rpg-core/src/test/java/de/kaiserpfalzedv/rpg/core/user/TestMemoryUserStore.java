@@ -17,7 +17,6 @@
 
 package de.kaiserpfalzedv.rpg.core.user;
 
-import de.kaiserpfalzedv.rpg.core.dice.TestDice;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.store.OptimisticLockStoreException;
@@ -84,7 +83,7 @@ public class TestMemoryUserStore {
     void shouldSaveNewDataWhenDataIsNotStoredYet() {
         MDC.put("test", "store-new-data");
 
-        sut.persist(DATA);
+        sut.save(DATA);
 
         Optional<User> result = sut.findByNameSpaceAndName(DATA_NAMESPACE, DATA_NAME);
         LOG.trace("result: {}", result);
@@ -97,12 +96,12 @@ public class TestMemoryUserStore {
     void shouldSaveNewDataWhenDataIsAlreadyStoredYet() {
         MDC.put("test", "update-stored-data");
 
-        sut.persist(DATA); // store data first time
+        sut.save(DATA); // store data first time
 
-        sut.persist(DATA); // update data
+        sut.save(DATA); // update data
 
         Optional<User> result = sut.findByNameSpaceAndName(DATA_NAMESPACE, DATA_NAME);
-        LOG.trace("result: {}");
+        LOG.trace("result: {}", result);
 
         assertTrue(result.isPresent(), "The data should have been stored!");
         assertNotEquals(DATA, result.get());
@@ -114,7 +113,7 @@ public class TestMemoryUserStore {
     void shouldThrowOptimisticLockExceptionWhenTheNewGenerationIsNotHighEnough() {
         MDC.put("test", "throw-optmistic-lock-exception");
 
-        sut.persist(
+        sut.save(
                 ImmutableUser.builder()
                         .from(DATA)
                         .metadata(
@@ -127,7 +126,7 @@ public class TestMemoryUserStore {
         );
 
         try {
-            sut.persist(DATA);
+            sut.save(DATA);
 
             fail("There should have been an OptimisticLockStoreException!");
         } catch (OptimisticLockStoreException e) {
@@ -139,9 +138,9 @@ public class TestMemoryUserStore {
     public void shouldSaveOtherDataSetsWhenDataIsAlreadyStored() {
         MDC.put("test", "save-other-data");
 
-        sut.persist(DATA);
+        sut.save(DATA);
 
-        sut.persist(OTHER);
+        sut.save(OTHER);
 
         Optional<User> result = sut.findByUid(OTHER_UID);
 
@@ -153,8 +152,8 @@ public class TestMemoryUserStore {
     public void shouldDeleteByNameWhenTheDataExists() {
         MDC.put("test", "delete-existing-by-name");
 
-        sut.persist(DATA);
-        sut.delete(DATA_NAMESPACE, DATA_NAME);
+        sut.save(DATA);
+        sut.remove(DATA_NAMESPACE, DATA_NAME);
 
         Optional<User> result = sut.findByUid(DATA_UID);
         assertFalse(result.isPresent(), "Data should have been deleted!");
@@ -164,8 +163,8 @@ public class TestMemoryUserStore {
     public void shouldDeleteByUidWhenTheDataExists() {
         MDC.put("test", "delete-existing-by-uid");
 
-        sut.persist(DATA);
-        sut.delete(DATA_UID);
+        sut.save(DATA);
+        sut.remove(DATA_UID);
 
         Optional<User> result = sut.findByUid(DATA_UID);
         assertFalse(result.isPresent(), "Data should have been deleted!");
@@ -175,8 +174,8 @@ public class TestMemoryUserStore {
     public void shouldDeleteByObjectWhenTheDataExists() {
         MDC.put("test", "delete-existing-by-uid");
 
-        sut.persist(DATA);
-        sut.delete(DATA);
+        sut.save(DATA);
+        sut.remove(DATA);
 
         Optional<User> result = sut.findByUid(DATA_UID);
         assertFalse(result.isPresent(), "Data should have been deleted!");
@@ -185,7 +184,7 @@ public class TestMemoryUserStore {
     public void shouldDeleteByNameWhenTheDataDoesNotExists() {
         MDC.put("test", "delete-non-existing-by-name");
 
-        sut.delete(DATA_NAMESPACE, DATA_NAME);
+        sut.remove(DATA_NAMESPACE, DATA_NAME);
 
         Optional<User> result = sut.findByUid(DATA_UID);
         assertFalse(result.isPresent(), "Data should have been deleted!");
@@ -195,7 +194,7 @@ public class TestMemoryUserStore {
     public void shouldDeleteByUidWhenTheDataDoesNotExists() {
         MDC.put("test", "delete-non-existing-by-uid");
 
-        sut.delete(DATA_UID);
+        sut.remove(DATA_UID);
 
         Optional<User> result = sut.findByUid(DATA_UID);
         assertFalse(result.isPresent(), "Data should have been deleted!");
@@ -205,7 +204,7 @@ public class TestMemoryUserStore {
     public void shouldDeleteByObjectWhenTheDataDoesNotExists() {
         MDC.put("test", "delete-non-existing-by-uid");
 
-        sut.delete(DATA);
+        sut.remove(DATA);
 
         Optional<User> result = sut.findByUid(DATA_UID);
         assertFalse(result.isPresent(), "Data should have been deleted!");

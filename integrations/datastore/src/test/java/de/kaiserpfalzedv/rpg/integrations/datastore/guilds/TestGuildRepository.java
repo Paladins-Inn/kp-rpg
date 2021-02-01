@@ -15,15 +15,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.datastore.users;
+package de.kaiserpfalzedv.rpg.integrations.datastore.guilds;
 
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceHistory;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceStatus;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
-import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
-import de.kaiserpfalzedv.rpg.core.user.ImmutableUserData;
-import de.kaiserpfalzedv.rpg.core.user.User;
+import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
+import de.kaiserpfalzedv.rpg.integrations.discord.guilds.ImmutableGuild;
+import de.kaiserpfalzedv.rpg.integrations.discord.guilds.ImmutableGuildData;
 import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -38,6 +38,7 @@ import org.slf4j.MDC;
 import javax.inject.Inject;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,34 +46,35 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * TestUserRepository -- tests the basic methods for storing, manipulating and deleting users.
+ * TestGuildRepository -- tests the basic methods for storing, manipulating and deleting users.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0 2021-01-30
  */
 @QuarkusTest
 @QuarkusTestResource(MongoDBResource.class)
-public class TestUserRepository {
-    private static final Logger LOG = LoggerFactory.getLogger(TestUserRepository.class);
+public class TestGuildRepository {
+    private static final Logger LOG = LoggerFactory.getLogger(TestGuildRepository.class);
 
     private static final String NAMESPACE = "discord";
-    private static final String NAME = "klenkes74#0355";
+    private static final String NAME = "Paladins Inn";
     private static final UUID UID = UUID.randomUUID();
     private static final OffsetDateTime CREATED = OffsetDateTime.now(ZoneOffset.UTC);
+    private static final String PREFIX = "test!";
 
     /**
      * Default data created during setup of tests.
      */
-    private static final User data = ImmutableUser.builder()
+    private static final Guild data = ImmutableGuild.builder()
             .metadata(
                     ImmutableResourceMetadata.builder()
-                            .kind(User.KIND)
-                            .apiVersion(User.API_VERSION)
+                            .kind(Guild.KIND)
+                            .apiVersion(Guild.API_VERSION)
 
                             .namespace(NAMESPACE)
                             .name(NAME)
                             .uid(UID)
-                            .selfLink(ResourceMetadata.generateSelfLink("", User.KIND, User.API_VERSION, UID))
+                            .selfLink(ResourceMetadata.generateSelfLink("", Guild.KIND, Guild.API_VERSION, UID))
 
                             .created(CREATED)
                             .generation(0L)
@@ -82,14 +84,14 @@ public class TestUserRepository {
                             .build()
             )
             .spec(
-                    ImmutableUserData.builder()
-                            .description("A discord user.")
-                            .driveThruRPGApiKey("API-KEY")
-                    .build()
+                    ImmutableGuildData.builder()
+                            .prefix(PREFIX)
+                            .properties(new HashMap<>())
+                            .build()
             )
             .status(
                     ImmutableResourceStatus.builder()
-                            .observedGeneration(1L)
+                            .observedGeneration(0L)
                             .addHistory(
                                     ImmutableResourceHistory.builder()
                                             .status("created")
@@ -101,55 +103,56 @@ public class TestUserRepository {
             .build();
 
     @Inject
-    MongoUserRepository sut;
+    MongoGuildRepository sut;
 
-    @Test
-    public void shouldReturnEmptyOptionalWhenThereIsNoUser() {
-        MDC.put("test", "not-present-without-user");
+    @BeforeAll
+    static void setUp() {
+        MDC.put("test-class", TestGuildRepository.class.getSimpleName());
 
-        Optional<User> result = sut.findByNameSpaceAndName("no-namespace", "no-card");
-        LOG.trace("result={}", result);
+        MongoGuildRepository repo = new MongoGuildRepository();
+        repo.save(data);
 
-        assertFalse(result.isPresent(), "There should be no card no-namespace/no-card");
+        LOG.info("Saved: data={}, count={}, stored={}", data, repo.count(), repo.findByUid(UID));
+    }
+
+    @AfterAll
+    static void tearDown() {
+        new MongoGuildRepository().remove(data);
+        MDC.clear();
     }
 
     @Test
-    public void shouldReturnUserByNamespaceAndNameWhenThereIsAnUser() {
-        MDC.put("test", "load-user-by-namespace-and-name");
+    public void shouldReturnEmptyOptionalWhenThereIsNoGuild() {
+        MDC.put("test", "not-present-without-guild");
 
-        sut.save(data);
+        Optional<Guild> result = sut.findByNameSpaceAndName("no-namespace", "no-guild");
+        LOG.trace("result={}", result);
 
-        Optional<User> result = sut.findByNameSpaceAndName(NAMESPACE, NAME);
+        assertFalse(result.isPresent(), "There should be no guild no-namespace/no-guild");
+    }
+
+    @AfterEach
+    void tearDownEach() {
+        MDC.remove("test");
+    }
+
+    @Test
+    public void shouldReturnGuildByNamespaceAndNameWhenThereIsAnGuild() {
+        MDC.put("test", "load-guild-by-namespace-and-name");
+
+        Optional<Guild> result = sut.findByNameSpaceAndName(NAMESPACE, NAME);
         LOG.trace("result={}", result);
 
         assertTrue(result.isPresent(), "There should be an user " + NAMESPACE + "/" + NAME);
     }
 
     @Test
-    public void shouldReturnUserByUidWhenThereIsAnUser() {
+    public void shouldReturnGuildByUidWhenThereIsAnGuild() {
         MDC.put("test", "load-user-by-uid");
 
-        sut.save(data);
-
-        Optional<User> result = sut.findByUid(UID);
+        Optional<Guild> result = sut.findByUid(UID);
         LOG.trace("result={}", result);
 
-        assertTrue(result.isPresent(), "There should be an user with UID " + UID.toString());
-    }
-
-    @AfterEach
-    void tearDownEach() {
-        sut.remove(data.getNameSpace(), data.getName());
-        MDC.remove("test");
-    }
-
-    @BeforeAll
-    static void setUp() {
-        MDC.put("test-class", TestUserRepository.class.getSimpleName());
-    }
-
-    @AfterAll
-    static void tearDown() {
-        MDC.clear();
+        assertTrue(result.isPresent(), "There should be a guild with UID " + UID.toString());
     }
 }

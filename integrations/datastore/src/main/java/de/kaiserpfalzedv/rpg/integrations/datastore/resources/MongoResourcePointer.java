@@ -22,6 +22,7 @@ import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.beans.Transient;
+import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -51,7 +52,7 @@ public class MongoResourcePointer {
 
     @BsonIgnore
     @Transient
-    public ResourcePointer pointer() {
+    public ResourcePointer data() {
         return ImmutableResourcePointer.builder()
                 .kind(kind)
                 .apiVersion(apiVersion)
@@ -62,6 +63,19 @@ public class MongoResourcePointer {
                 .uid(uid)
 
                 .build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MongoResourcePointer)) return false;
+        MongoResourcePointer that = (MongoResourcePointer) o;
+        return kind.equals(that.kind) && apiVersion.equals(that.apiVersion) && nameSpace.equals(that.nameSpace) && name.equals(that.name) && uid.equals(that.uid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(kind, apiVersion, nameSpace, name, uid);
     }
 
     @Override

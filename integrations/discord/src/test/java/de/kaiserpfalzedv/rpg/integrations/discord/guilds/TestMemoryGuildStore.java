@@ -27,6 +27,7 @@ import org.slf4j.MDC;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,6 +61,7 @@ public class TestMemoryGuildStore {
             .spec(
                     ImmutableGuildData.builder()
                             .prefix(DATA_PREFIX)
+                            .properties(new HashMap<>())
                             .build()
             )
             .build();
@@ -71,6 +73,7 @@ public class TestMemoryGuildStore {
             .spec(
                     ImmutableGuildData.builder()
                             .prefix(OTHER_PREFIX)
+                            .properties(new HashMap<>())
                             .build()
             )
             .build();
@@ -83,7 +86,7 @@ public class TestMemoryGuildStore {
     void shouldSaveNewDataWhenDataIsNotStoredYet() {
         MDC.put("test", "store-new-data");
 
-        sut.persist(DATA);
+        sut.save(DATA);
 
         Optional<Guild> result = sut.findByNameSpaceAndName(DATA_NAMESPACE, DATA_NAME);
         LOG.trace("result: {}", result);
@@ -96,12 +99,12 @@ public class TestMemoryGuildStore {
     void shouldSaveNewDataWhenDataIsAlreadyStoredYet() {
         MDC.put("test", "update-stored-data");
 
-        sut.persist(DATA); // store data first time
+        sut.save(DATA); // store data first time
 
-        sut.persist(DATA); // update data
+        sut.save(DATA); // update data
 
         Optional<Guild> result = sut.findByNameSpaceAndName(DATA_NAMESPACE, DATA_NAME);
-        LOG.trace("result: {}");
+        LOG.trace("result: {}", result);
 
         assertTrue(result.isPresent(), "The data should have been stored!");
         assertNotEquals(DATA, result.get());
@@ -113,7 +116,7 @@ public class TestMemoryGuildStore {
     void shouldThrowOptimisticLockExceptionWhenTheNewGenerationIsNotHighEnough() {
         MDC.put("test", "throw-optmistic-lock-exception");
 
-        sut.persist(
+        sut.save(
                 ImmutableGuild.builder()
                         .from(DATA)
                         .metadata(
@@ -126,7 +129,7 @@ public class TestMemoryGuildStore {
         );
 
         try {
-            sut.persist(DATA);
+            sut.save(DATA);
 
             fail("There should have been an OptimisticLockStoreException!");
         } catch (OptimisticLockStoreException e) {
@@ -138,9 +141,9 @@ public class TestMemoryGuildStore {
     public void shouldSaveOtherDataSetsWhenDataIsAlreadyStored() {
         MDC.put("test", "save-other-data");
 
-        sut.persist(DATA);
+        sut.save(DATA);
 
-        sut.persist(OTHER);
+        sut.save(OTHER);
 
         Optional<Guild> result = sut.findByUid(OTHER_UID);
 
@@ -152,8 +155,8 @@ public class TestMemoryGuildStore {
     public void shouldDeleteByNameWhenTheDataExists() {
         MDC.put("test", "delete-existing-by-name");
 
-        sut.persist(DATA);
-        sut.delete(DATA_NAMESPACE, DATA_NAME);
+        sut.save(DATA);
+        sut.remove(DATA_NAMESPACE, DATA_NAME);
 
         Optional<Guild> result = sut.findByUid(DATA_UID);
         assertFalse(result.isPresent(), "Data should have been deleted!");
@@ -163,8 +166,8 @@ public class TestMemoryGuildStore {
     public void shouldDeleteByUidWhenTheDataExists() {
         MDC.put("test", "delete-existing-by-uid");
 
-        sut.persist(DATA);
-        sut.delete(DATA_UID);
+        sut.save(DATA);
+        sut.remove(DATA_UID);
 
         Optional<Guild> result = sut.findByUid(DATA_UID);
         assertFalse(result.isPresent(), "Data should have been deleted!");
@@ -174,8 +177,8 @@ public class TestMemoryGuildStore {
     public void shouldDeleteByObjectWhenTheDataExists() {
         MDC.put("test", "delete-existing-by-uid");
 
-        sut.persist(DATA);
-        sut.delete(DATA);
+        sut.save(DATA);
+        sut.remove(DATA);
 
         Optional<Guild> result = sut.findByUid(DATA_UID);
         assertFalse(result.isPresent(), "Data should have been deleted!");
@@ -184,7 +187,7 @@ public class TestMemoryGuildStore {
     public void shouldDeleteByNameWhenTheDataDoesNotExists() {
         MDC.put("test", "delete-non-existing-by-name");
 
-        sut.delete(DATA_NAMESPACE, DATA_NAME);
+        sut.remove(DATA_NAMESPACE, DATA_NAME);
 
         Optional<Guild> result = sut.findByUid(DATA_UID);
         assertFalse(result.isPresent(), "Data should have been deleted!");
@@ -194,7 +197,7 @@ public class TestMemoryGuildStore {
     public void shouldDeleteByUidWhenTheDataDoesNotExists() {
         MDC.put("test", "delete-non-existing-by-uid");
 
-        sut.delete(DATA_UID);
+        sut.remove(DATA_UID);
 
         Optional<Guild> result = sut.findByUid(DATA_UID);
         assertFalse(result.isPresent(), "Data should have been deleted!");
@@ -204,7 +207,7 @@ public class TestMemoryGuildStore {
     public void shouldDeleteByObjectWhenTheDataDoesNotExists() {
         MDC.put("test", "delete-non-existing-by-uid");
 
-        sut.delete(DATA);
+        sut.remove(DATA);
 
         Optional<Guild> result = sut.findByUid(DATA_UID);
         assertFalse(result.isPresent(), "Data should have been deleted!");

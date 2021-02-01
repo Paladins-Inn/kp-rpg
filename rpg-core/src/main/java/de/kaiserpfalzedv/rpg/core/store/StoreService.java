@@ -27,10 +27,10 @@ import java.util.UUID;
  *
  * @param <T> The resource type to be stored.
  */
-public interface StoreService<T extends Resource> {
+public interface StoreService<T extends Resource<?>> {
     /**
      * @param nameSpace the namespace of the object to load.
-     * @param name the name of the object to load.
+     * @param name      the name of the object to load.
      * @return the object or an empty {@link Optional}.
      */
     Optional<T> findByNameSpaceAndName(final String nameSpace, final String name);
@@ -45,33 +45,38 @@ public interface StoreService<T extends Resource> {
      * Persists the given Resource. If the Resource already is stored and the generations are equal, then the
      * generation is incremented by 1. If the generation of the object is less than the generation of the data already
      * in the store, then the {@link OptimisticLockStoreException} is thrown.
+     * <p>
+     * On the other hand: if the namespace and name matches but uid not, then the object is considered a duplicate and
+     * the persisting of the new object is denied.
      *
      * @param object The data to store.
      * @return The stored data (the generation may be incremented by 1).
      * @throws OptimisticLockStoreException Thrown if the generation inside the store is higher than the generation of
-     *          the object given in the request.
+     *                                      the object given in the request.
+     * @throws DuplicateStoreException      If name and nameSpace matches but uid not, then an object is considered a
+     *                                      duplicate.
      */
-    T persist(final T object) throws OptimisticLockStoreException;
+    T save(final T object) throws OptimisticLockStoreException, DuplicateStoreException;
 
     /**
      * Remove the object.
      *
      * @param object the object to be removed.
      */
-    void delete(final T object);
+    void remove(final T object);
 
     /**
      * Remove the object specified by nameSpace and name.
      *
      * @param nameSpace the namespace of the object to be deleted.
-     * @param name the name of the object to be deleted.
+     * @param name      the name of the object to be deleted.
      */
-    void delete(final String nameSpace, final String name);
+    void remove(final String nameSpace, final String name);
 
     /**
      * Remove the object specified by the uid.
      *
      * @param uid the uid of the object to be removed.
      */
-    void delete(final UUID uid);
+    void remove(final UUID uid);
 }
