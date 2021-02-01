@@ -20,7 +20,6 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.users;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceHistory;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceStatus;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
 import de.kaiserpfalzedv.rpg.core.user.ImmutableUserData;
 import de.kaiserpfalzedv.rpg.core.user.User;
@@ -38,6 +37,7 @@ import org.slf4j.MDC;
 import javax.inject.Inject;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -72,10 +72,8 @@ public class TestUserRepository {
                             .namespace(NAMESPACE)
                             .name(NAME)
                             .uid(UID)
-                            .selfLink(ResourceMetadata.generateSelfLink("", User.KIND, User.API_VERSION, UID))
 
                             .created(CREATED)
-                            .generation(0L)
 
                             .putAnnotations("test", "true")
 
@@ -85,6 +83,7 @@ public class TestUserRepository {
                     ImmutableUserData.builder()
                             .description("A discord user.")
                             .driveThruRPGApiKey("API-KEY")
+                            .properties(new HashMap<>())
                     .build()
             )
             .status(

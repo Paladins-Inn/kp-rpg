@@ -25,6 +25,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -38,9 +40,9 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableUserData.class)
 @JsonDeserialize(builder = ImmutableUserData.Builder.class)
-@Schema(name="userData", description = "Registered User.")
+@Schema(name = "userData", description = "Registered User.")
 public interface UserData extends Serializable {
-    @Schema(name = "picture", description="The resource address of the picture of this card.")
+    @Schema(name = "picture", description = "The resource address of the picture of this card.")
     Optional<ResourcePointer> getPicture();
 
     @Schema(name = "description", description = "A description of the card.")
@@ -48,4 +50,15 @@ public interface UserData extends Serializable {
 
     @Schema(name = "driveThruRPGApiKey", description = "The API Key for DriveThruRPG.")
     Optional<String> getDriveThruRPGApiKey();
+
+
+    /**
+     * @return Hashmap of configuration properties.
+     */
+    @Schema(name = "properties", description = "A map of plugin properties for this user.")
+    @Value.Default
+    default Map<String, String> getProperties() {
+        return new HashMap<>();
+    }
+
 }

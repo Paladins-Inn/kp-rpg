@@ -76,7 +76,6 @@ public class MongoMetaData extends MongoResourcePointer {
                 .name(name)
                 .uid(uid)
                 .generation(generation)
-                .selfLink(ResourceMetadata.generateSelfLink("", kind, apiVersion, uid))
 
                 .created(created.timeStamp())
 

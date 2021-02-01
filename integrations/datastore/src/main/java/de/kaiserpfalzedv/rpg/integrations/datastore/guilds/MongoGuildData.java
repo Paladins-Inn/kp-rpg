@@ -46,10 +46,9 @@ public class MongoGuildData {
         adminRoles = new ArrayList<>();
         properties = new HashMap<>();
 
-        if (orig.getPrefix().isPresent()) prefix = orig.getPrefix().get();
-
-        if (orig.getAdminRoles() != null) adminRoles.addAll(orig.getAdminRoles());
-        if (orig.getProperties() != null) properties.putAll(orig.getProperties());
+        prefix = orig.getPrefix();
+        adminRoles.addAll(orig.getAdminRoles());
+        properties.putAll(orig.getProperties());
     }
 
     public GuildData data() {

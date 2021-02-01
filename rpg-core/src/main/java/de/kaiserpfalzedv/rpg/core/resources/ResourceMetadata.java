@@ -26,6 +26,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,10 +46,16 @@ import java.util.UUID;
 @Schema(name = "ResourceMetadata", description = "The metadata of a resource.")
 public interface ResourceMetadata extends ResourcePointer {
     /**
+     * During generation of a new resource the generation is 0L. When the resource is persisted,
+     * the generation is incremented.
+     *
      * @return The generation of this resource. Starting with 1.
      */
-    @Schema(name = "generation", description = "The generation of this object. Every change adds 1.", required = true)
-    Long getGeneration();
+    @Schema(name = "generation", description = "The generation of this object. Every change adds 1.", required = true, defaultValue = "0L")
+    @Value.Default
+    default Long getGeneration() {
+        return 0L;
+    }
 
     /**
      * @return The owning resource of this resource.
@@ -74,7 +81,10 @@ public interface ResourceMetadata extends ResourcePointer {
      * @return all annotations.
      */
     @Schema(name = "annotations", description = "A set of annotations to this resource.", maxItems = 256)
-    Map<String, String> getAnnotations();
+    @Value.Default
+    default Map<String, String> getAnnotations() {
+        return new HashMap<>();
+    }
 
     /**
      * Checks if there is an annotation for this name.
@@ -93,7 +103,10 @@ public interface ResourceMetadata extends ResourcePointer {
      * @return all labels.
      */
     @Schema(name = "labels", description = "A set of labels to this resource.", maxItems = 256)
-    Map<String, String> getLabels();
+    @Value.Default
+    default Map<String, String> getLabels() {
+        return new HashMap<>();
+    }
 
     /**
      * Checks if there is a label with a special name.
@@ -108,7 +121,10 @@ public interface ResourceMetadata extends ResourcePointer {
 
     @Override
     @Schema(name = "SelfLink", description = "The local part of the URL to retrieve the resource.", required = true)
-    String getSelfLink();
+    @Value.Default
+    default String getSelfLink() {
+        return "/apis/" + getApiVersion() + "/" + getKind() + "/" + getUid();
+    }
 
 
     /**

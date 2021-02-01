@@ -83,7 +83,6 @@ public class GuildProvider {
                                 .kind(Guild.KIND)
                                 .apiVersion(Guild.API_VERSION)
                                 .uid(UUID.randomUUID())
-                                .generation(0L)
                                 .build()
                 )
                 .build();

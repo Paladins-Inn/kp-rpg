@@ -20,7 +20,6 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.guilds;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceHistory;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceStatus;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.ImmutableGuild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.ImmutableGuildData;
@@ -74,10 +73,8 @@ public class TestGuildRepository {
                             .namespace(NAMESPACE)
                             .name(NAME)
                             .uid(UID)
-                            .selfLink(ResourceMetadata.generateSelfLink("", Guild.KIND, Guild.API_VERSION, UID))
 
                             .created(CREATED)
-                            .generation(0L)
 
                             .putAnnotations("test", "true")
 

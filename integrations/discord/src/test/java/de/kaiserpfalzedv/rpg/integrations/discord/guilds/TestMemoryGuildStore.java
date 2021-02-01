@@ -18,7 +18,6 @@
 package de.kaiserpfalzedv.rpg.integrations.discord.guilds;
 
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.store.OptimisticLockStoreException;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -109,7 +108,7 @@ public class TestMemoryGuildStore {
         assertTrue(result.isPresent(), "The data should have been stored!");
         assertNotEquals(DATA, result.get());
 
-        assertEquals(2L, result.get().getMetadata().getGeneration());
+        assertEquals(1L, result.get().getMetadata().getGeneration());
     }
 
     @Test
@@ -256,9 +255,7 @@ public class TestMemoryGuildStore {
                 .namespace(namespace)
                 .name(name)
                 .uid(uid)
-                .selfLink(ResourceMetadata.generateSelfLink("", Guild.KIND, Guild.API_VERSION, uid))
 
-                .generation(1L)
                 .created(created)
 
                 .build();

@@ -21,14 +21,21 @@ import de.kaiserpfalzedv.rpg.core.user.ImmutableUserData;
 import de.kaiserpfalzedv.rpg.core.user.UserData;
 import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoResourcePointer;
 
+import java.util.HashMap;
+
 public class MongoUserData {
     public String description;
     public MongoResourcePointer picture;
     public String driveThruApiKey;
 
-    public MongoUserData() {}
+    public HashMap<String, String> properties;
+
+    public MongoUserData() {
+    }
 
     public MongoUserData(UserData orig) {
+        properties = new HashMap<>();
+
         if (orig.getDescription().isPresent()) {
             description = orig.getDescription().get();
         }
@@ -40,6 +47,8 @@ public class MongoUserData {
         if (orig.getDriveThruRPGApiKey().isPresent()) {
             driveThruApiKey = orig.getDriveThruRPGApiKey().get();
         }
+
+        properties.putAll(orig.getProperties());
     }
 
     public UserData data() {

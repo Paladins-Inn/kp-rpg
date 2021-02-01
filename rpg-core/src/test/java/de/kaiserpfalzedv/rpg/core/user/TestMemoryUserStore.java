@@ -18,7 +18,6 @@
 package de.kaiserpfalzedv.rpg.core.user;
 
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.store.OptimisticLockStoreException;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -27,6 +26,7 @@ import org.slf4j.MDC;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -71,6 +71,7 @@ public class TestMemoryUserStore {
             .spec(
                     ImmutableUserData.builder()
                             .driveThruRPGApiKey(OTHER_API_KEY)
+                            .properties(new HashMap<>())
                             .build()
             )
             .build();
@@ -106,7 +107,7 @@ public class TestMemoryUserStore {
         assertTrue(result.isPresent(), "The data should have been stored!");
         assertNotEquals(DATA, result.get());
 
-        assertEquals(2L, result.get().getMetadata().getGeneration());
+        assertEquals(1L, result.get().getMetadata().getGeneration());
     }
 
     @Test
@@ -253,9 +254,7 @@ public class TestMemoryUserStore {
                 .namespace(namespace)
                 .name(name)
                 .uid(uid)
-                .selfLink(ResourceMetadata.generateSelfLink("", User.KIND, User.API_VERSION, uid))
 
-                .generation(1L)
                 .created(created)
 
                 .build();
