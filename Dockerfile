@@ -54,13 +54,18 @@ ARG MVN_PARAMETER="--batch-mode --no-transfer-progress \
     -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false"
 
 RUN mvn ${MVN_PARAMETER} -N clean install
-RUN cd testsupport && mvn ${MVN_PARAMETER} clean install && cd ..
-RUN cd rpg-core && mvn ${MVN_PARAMETER} clean install && cd ..
-RUN cd rpg-game-modules && mvn ${MVN_PARAMETER} clean install && cd ..
-RUN cd integrations && mvn ${MVN_PARAMETER} clean install && cd ..
-RUN cd rpg-server && mvn ${MVN_PARAMETER} clean install && cd ..
+RUN cd testsupport && mvn ${MVN_PARAMETER} clean install
+RUN cd ../rpg-core && mvn ${MVN_PARAMETER} clean install
+RUN cd ../rpg-game-modules && mvn ${MVN_PARAMETER} clean install
 
-RUN ls -la rpg-server/tomb/target && cp -a rpg-server/tomb/target/app-runner.jar /app.jar
+RUN cd ../integrations && mvn ${MVN_PARAMETER} -N clean install
+RUN cd discord && mvn ${MVN_PARAMETER} clean install
+RUN cd ../drivethru && mvn ${MVN_PARAMETER} clean install
+RUN cd ../datastore && mvn ${MVN_PARAMETER} clean install
+
+RUN cd ../../rpg-server && mvn ${MVN_PARAMETER} clean install
+
+RUN cp -a tomb/target/app-runner.jar /app.jar
 
 #
 # Package stage
