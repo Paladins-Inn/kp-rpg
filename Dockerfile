@@ -55,17 +55,17 @@ ARG MVN_PARAMETER="--batch-mode --no-transfer-progress \
 
 RUN mvn ${MVN_PARAMETER} -N clean install
 RUN cd testsupport && mvn ${MVN_PARAMETER} clean install
-RUN cd ../rpg-core && mvn ${MVN_PARAMETER} clean install
-RUN cd ../rpg-game-modules && mvn ${MVN_PARAMETER} clean install
+RUN cd rpg-core && mvn ${MVN_PARAMETER} clean install
+RUN cd rpg-game-modules && mvn ${MVN_PARAMETER} clean install
 
-RUN cd ../integrations && mvn ${MVN_PARAMETER} -N clean install
-RUN cd discord && mvn ${MVN_PARAMETER} clean install
-RUN cd ../drivethru && mvn ${MVN_PARAMETER} clean install
-RUN cd ../datastore && mvn ${MVN_PARAMETER} clean install
+RUN cd integrations && mvn ${MVN_PARAMETER} -N clean install
+RUN cd integrations/discord && mvn ${MVN_PARAMETER} clean install
+RUN cd integrations/drivethru && mvn ${MVN_PARAMETER} clean install
+RUN cd integratinos/datastore && mvn ${MVN_PARAMETER} clean install
 
-RUN cd ../../rpg-server && mvn ${MVN_PARAMETER} clean install
+RUN cd rpg-server && mvn ${MVN_PARAMETER} clean install
 
-RUN cp -a tomb/target/app-runner.jar /app.jar
+RUN cp -a rpg-server/tomb/target/app-runner.jar /app.jar
 
 #
 # Package stage
