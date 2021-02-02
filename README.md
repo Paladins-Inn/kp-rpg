@@ -4,7 +4,7 @@
 >
 > -- Balian, Kingdom of Heaven
 
-[![Maven](https://github.com/Paladins-Inn/kp-rpg/workflows/Java%20CI%20with%20Maven/badge.svg)]
+![Maven](https://github.com/Paladins-Inn/kp-rpg/workflows/Java%20CI%20with%20Maven/badge.svg)
 [![Docker Repository on Quay](https://quay.io/repository/klenkes74/kp-rpg-discord-bot/status "Docker Repository on Quay")](https://quay.io/repository/klenkes74/kp-rpg-discord-bot)
 
 ## Abstract
