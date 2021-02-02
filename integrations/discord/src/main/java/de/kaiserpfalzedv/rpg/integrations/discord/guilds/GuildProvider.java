@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.time.Clock;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -72,17 +74,22 @@ public class GuildProvider {
     public Guild retrieve(final String name) {
         Optional<Guild> data = store.findByNameSpaceAndName(Guild.DISCORD_NAMESPACE, name);
 
-        return data.orElseGet(this::generateNewGuildEntry);
+        return data.orElseGet(() -> generateNewGuildEntry(name));
     }
 
     @NotNull
-    private Guild generateNewGuildEntry() {
+    private Guild generateNewGuildEntry(final String name) {
         Guild result = ImmutableGuild.builder()
                 .metadata(
                         ImmutableResourceMetadata.builder()
                                 .kind(Guild.KIND)
                                 .apiVersion(Guild.API_VERSION)
+
+                                .namespace(Guild.DISCORD_NAMESPACE)
+                                .name(name)
                                 .uid(UUID.randomUUID())
+                                .created(OffsetDateTime.now(Clock.systemUTC()))
+
                                 .build()
                 )
                 .build();
