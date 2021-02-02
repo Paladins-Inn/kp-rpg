@@ -17,20 +17,25 @@
 
 package de.kaiserpfalzedv.rpg.bot.dice;
 
+import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
+import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageHandler;
 import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin;
 import io.quarkus.runtime.StartupEvent;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.internal.entities.DataMessage;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -44,22 +49,40 @@ import java.util.UUID;
 public class DiscordDiceRoller implements DiscordTextChannelPlugin {
     static private final Logger LOG = LoggerFactory.getLogger(DiscordDiceRoller.class);
 
-    /** Emoji for re-rolling the die roll. */
+    /**
+     * Emoji for re-rolling the die roll.
+     */
     private static final String REROLL_EMOJI = "🔁";
 
-    /** Emoji for adding to the current die roll. */
+    /**
+     * Emoji for adding to the current die roll.
+     */
     private static final String ADD_ROLL = "⬆️";
     private static final String ADD_ROLL_A_BIT = "↗️";
 
+    private static final List<String> REACTIONS = new ArrayList<>();
+
+    static {
+        REACTIONS.add(REROLL_EMOJI);
+        REACTIONS.add(ADD_ROLL);
+        REACTIONS.add(ADD_ROLL_A_BIT);
+    }
+
     @Inject
     DiceRoller roller;
+
+    @Inject
+    DiscordMessageHandler sender;
 
     public void startup(@Observes final StartupEvent event) {
         LOG.info("Created discord roller plugin {}: roller={}", this, roller);
     }
 
     @Override
-    public void work(MessageReceivedEvent event) {
+    public void workOn(
+            final Guild guild,
+            final MessageReceivedEvent event
+    ) {
         String command = event.getMessage().getContentRaw();
 
         if (command.startsWith("/r ")) {
@@ -69,16 +92,14 @@ public class DiscordDiceRoller implements DiscordTextChannelPlugin {
             } catch (IllegalArgumentException e) {
                 LOG.error("Rolling failed: " + e.getMessage(), e);
 
-                Message msg = new DataMessage(true, event.getAuthor().getAsMention() + " kann nicht richtig würfeln!", UUID.randomUUID().toString(), null);
-                event.getChannel().sendMessage(msg).queue();
+                sendHelp(event.getAuthor(), String.format("Sorry, I don't understand the command: '%s'", command.substring(3)));
                 return;
             }
 
             // ad the re-roll reaction to the original message.
-            event.getMessage().addReaction(REROLL_EMOJI).queue();
+            REACTIONS.forEach(r -> sender.addReactionToEvent(event.getMessage(), r));
 
-            Message msg = new DataMessage(false, roll, UUID.randomUUID().toString(), null);
-            event.getChannel().sendMessage(msg).queue();
+            sender.sendTextMessage(event.getTextChannel(), roll);
         }
     }
 
@@ -99,52 +120,74 @@ public class DiscordDiceRoller implements DiscordTextChannelPlugin {
     }
 
     @Override
-    public void work(final GuildMessageReactionAddEvent event) {
+    public void workOn(
+            final Guild guild,
+            final GenericGuildMessageReactionEvent event
+    ) {
         String reactionCode = event.getReaction().getReactionEmote().toString();
-        LOG.info("Working on event: guild.id={}, guild.name={}, channel.id={}, message.id={}, user.name={}, reactionCode={}",
-                event.getGuild().getIconId(), event.getGuild().getName(),
-                event.getChannel(), event.getMessageId(), event.getUser().getName(), reactionCode);
 
-        if ("RE:U+1f501".contentEquals(reactionCode)) {
-            String msgId = event.getReaction().getMessageId();
-            event.getChannel().retrieveMessageById(msgId).queue(
-                    (message) -> {
-                        String command = message.getContentRaw();
+        switch (reactionCode) {
+            case "RE:U+1f501":
+                reRoll(event);
+                break;
 
-                        if (command.startsWith("/r ")) {
-                            String roll;
-                            try {
-                                roll = roll(command.substring(3), event.getUser());
-                            } catch (IllegalArgumentException e) {
-                                LOG.error("Rolling failed: " + e.getMessage(), e);
+            default:
+                LOG.info("No reaction for '{}' defined.", reactionCode);
 
-                                Message response = new DataMessage(true, event.getUser().getAsMention() + " kann nicht richtig würfeln!", UUID.randomUUID().toString(), null);
-                                event.getChannel().sendMessage(response).queue();
-                                return;
-                            }
-
-                            Message response = new DataMessage(false, roll, UUID.randomUUID().toString(), null);
-                            event.getChannel().sendMessage(response).queue();
-                        }
-                    },
-                    (failure) -> {
-                        LOG.error("Can't load message: " + failure.getMessage(), failure);
-
-                        Message response = new DataMessage(false, event.getUser().getAsMention() + ": Sorry, can't load this message.", UUID.randomUUID().toString(), null);
-                        event.getChannel().sendMessage(response).queue();
-                        return;
-                    }
-            );
+                sendHelp(event.getUser(), String.format("Sorry, currently I don't understand the reaction '%s'.", reactionCode));
         }
 
-        // remove the count on the original re-roll reaction to keep it nice and tidy at 1 ...
-        event.getChannel().removeReactionById(event.getReaction().getMessageId(), REROLL_EMOJI, event.getUser()).queue();
     }
 
-    @Override
-    public void work(final GuildMessageReactionRemoveEvent event) {
-        LOG.info("Working on event: {}", event);
+    @NotNull
+    private RestAction<Message> getMessageRestAction(GenericGuildMessageReactionEvent event) {
+        return event.getChannel().retrieveMessageById(event.getReaction().getMessageId());
     }
+
+    private void reRoll(final GenericGuildMessageReactionEvent event) {
+        RestAction<Message> action = getMessageRestAction(event);
+        User user = event.getUser();
+
+        event.getChannel().removeReactionById(event.getReaction().getMessageId(), REROLL_EMOJI, user).queue();
+
+        action.queue(
+                (message) -> {
+                    String command = message.getContentRaw();
+
+                    if (command.startsWith("/r ")) {
+                        String roll;
+                        try {
+                            roll = roll(command.substring(3), user);
+                        } catch (IllegalArgumentException e) {
+                            LOG.error("Rolling failed: " + e.getMessage(), e);
+
+                            sendHelp(user, command.substring(3));
+                            return;
+                        }
+
+                        Message response = new DataMessage(false, roll, UUID.randomUUID().toString(), null);
+                        event.getChannel().sendMessage(response).queue();
+                    }
+                },
+                (failure) -> {
+                    LOG.error("Can't load message: " + failure.getMessage(), failure);
+
+                    sendHelp(user, "Can't load message to reroll the dice roll. Sorry");
+                }
+        );
+    }
+
+
+    /**
+     * Sends a default failure message to the user creating the event.
+     *
+     * @param user    The user to be informed.
+     * @param message The failure message.
+     */
+    private void sendHelp(final User user, final String message) {
+        sender.sendDM(user, message);
+    }
+
 
     @Override
     public String toString() {

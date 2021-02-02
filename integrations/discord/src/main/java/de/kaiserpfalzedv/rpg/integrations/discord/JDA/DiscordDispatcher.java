@@ -18,14 +18,12 @@
 package de.kaiserpfalzedv.rpg.integrations.discord.JDA;
 
 
-import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginNotAllowedException;
 import de.kaiserpfalzedv.rpg.integrations.discord.DontWorkOnDiscordEventException;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildProvider;
-import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageSender;
+import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageHandler;
 import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin;
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginException;
 import io.quarkus.runtime.StartupEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
@@ -61,10 +59,7 @@ public class DiscordDispatcher extends ListenerAdapter {
     GuildProvider guildProvider;
 
     @Inject
-    UserStoreService userStoreService;
-
-    @Inject
-    DiscordMessageSender sender;
+    DiscordMessageHandler sender;
 
 
     void startup(@Observes StartupEvent event) {
@@ -77,32 +72,52 @@ public class DiscordDispatcher extends ListenerAdapter {
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
         addMDCInfo(event);
 
+        Guild guild = guildProvider.retrieve(event.getGuild().getName());
+
         for (DiscordTextChannelPlugin p : plugins) {
             try {
-                checkForWork(p, event);
+                checkForWork(p, guild, event);
 
-                p.work(event);
-            } catch (DontWorkOnDiscordEventException|DiscordPluginNotAllowedException e) {
+                p.workOn(guild, event);
+            } catch (DontWorkOnDiscordEventException | DiscordPluginNotAllowedException e) {
                 cleanMDC();
                 return;
-            } catch (DiscordPluginException e) {
-                LOG.error("Plugin '" + p.getClass().getSimpleName() + "' complains: " + e.getMessage(), e);
             }
         }
 
         cleanMDC();
     }
 
+    @Override
+    public void onGuildMessageReactionAdd(@NotNull final GuildMessageReactionAddEvent event) {
+        addMDCInfo(event);
+
+        Guild guild = guildProvider.retrieve(event.getGuild().getName());
+
+        for (DiscordTextChannelPlugin p : plugins) {
+            try {
+                checkForWork(p, guild, event);
+
+                p.workOn(guild, event);
+            } catch (DontWorkOnDiscordEventException | DiscordPluginNotAllowedException e) {
+                cleanMDC();
+                return;
+            }
+        }
+
+        cleanMDC();
+    }
+
+
     /**
      * Checks if the plugin should be called on this event.
      *
      * @param plugin The plugin to check this event on.
-     * @param event The event to be checked against the plugin.,
+     * @param event  The event to be checked against the plugin.,
      */
-    private void checkForWork(final DiscordTextChannelPlugin plugin, final MessageReceivedEvent event)
+    private void checkForWork(final DiscordTextChannelPlugin plugin, final Guild guild, final MessageReceivedEvent event)
             throws DontWorkOnDiscordEventException, DiscordPluginNotAllowedException {
         try {
-            Guild guild = guildProvider.retrieve(event.getGuild().getName());
             plugin.workOn(guild, event);
             plugin.checkUserPermission(guild, event.getTextChannel(), event.getAuthor());
         } catch (DontWorkOnDiscordEventException e) {
@@ -125,38 +140,15 @@ public class DiscordDispatcher extends ListenerAdapter {
     }
 
 
-    @Override
-    public void onGuildMessageReactionAdd(@NotNull final GuildMessageReactionAddEvent event) {
-        addMDCInfo(event);
-
-        for (DiscordTextChannelPlugin p : plugins) {
-            try {
-                checkForWork(p, event);
-
-                p.work(event);
-            } catch (DontWorkOnDiscordEventException|DiscordPluginNotAllowedException e) {
-                cleanMDC();
-                return;
-            } catch (DiscordPluginException e) {
-                LOG.error("Plugin '" + p.getClass().getSimpleName() + "' complains: " + e.getMessage(), e);
-            }
-        }
-
-        cleanMDC();
-    }
-
-
     /**
      * Checks if the plugin should be called on this event.
      *
      * @param plugin The plugin to check this event on.
-     * @param event The event to be checked against the plugin.,
+     * @param event  The event to be checked against the plugin.,
      */
-    private void checkForWork(final DiscordTextChannelPlugin plugin, final GenericGuildMessageReactionEvent event)
+    private void checkForWork(final DiscordTextChannelPlugin plugin, final Guild guild, final GenericGuildMessageReactionEvent event)
             throws DontWorkOnDiscordEventException, DiscordPluginNotAllowedException {
         try {
-            Guild guild = guildProvider.retrieve(event.getGuild().getName());
-
             plugin.workOn(guild, event);
             plugin.checkUserPermission(guild, event.getChannel(), event.getUser());
         } catch (DontWorkOnDiscordEventException e) {

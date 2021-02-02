@@ -18,15 +18,15 @@
 package de.kaiserpfalzedv.rpg.integrations.discord.text;
 
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPlugin;
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginException;
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginNotAllowedException;
 import de.kaiserpfalzedv.rpg.integrations.discord.DontWorkOnDiscordEventException;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,7 @@ public interface DiscordTextChannelPlugin extends DiscordPlugin {
     Logger LOG = LoggerFactory.getLogger(DiscordTextChannelPlugin.class);
 
     /**
-     * Checks if this plugin should be executed for this event.
+     * Executes the plugin.
      *
      * @param messageReceivedEvent the event received.
      * @throws DontWorkOnDiscordEventException When the plugin does not work on this event.
@@ -54,12 +54,12 @@ public interface DiscordTextChannelPlugin extends DiscordPlugin {
     default void workOn(
             @SuppressWarnings("unused") final Guild guild,
             @SuppressWarnings("unused") final MessageReceivedEvent messageReceivedEvent
-    ) throws DontWorkOnDiscordEventException {
+    ) throws DontWorkOnDiscordEventException, DiscordPluginNotAllowedException {
         throw new DontWorkOnDiscordEventException(this);
     }
 
     /**
-     * Checks if this plugin should be executed for this event.
+     * Executes the plugin.
      *
      * @param messageReceivedEvent the event received.
      * @throws DontWorkOnDiscordEventException When the plugin does not work on this event.
@@ -97,29 +97,4 @@ public interface DiscordTextChannelPlugin extends DiscordPlugin {
 
         throw new DiscordPluginNotAllowedException(this, requiredRoles, true);
     }
-
-    /**
-     * The command execution of this plugin. All plugins get all events and have to decide to react on it or not.
-     *
-     * @param event the event to work on.
-     * @throws DiscordPluginException something happened.
-     */
-    @SuppressWarnings({"unused", "RedundantThrows", "RedundantSuppression"})
-    default void work(final MessageReceivedEvent event) throws DiscordPluginException {}
-
-    /**
-     *
-     * @param event the event to work on.
-     * @throws DiscordPluginException something happened.
-     */
-    @SuppressWarnings({"unused", "RedundantThrows", "RedundantSuppression"})
-    default void work(final GuildMessageReactionAddEvent event) throws DiscordPluginException {}
-
-    /**
-     *
-     * @param event the event to work on.
-     * @throws DiscordPluginException something happened.
-     */
-    @SuppressWarnings({"unused", "RedundantThrows", "RedundantSuppression"})
-    default void work(final GuildMessageReactionRemoveEvent event) throws DiscordPluginException {}
 }
