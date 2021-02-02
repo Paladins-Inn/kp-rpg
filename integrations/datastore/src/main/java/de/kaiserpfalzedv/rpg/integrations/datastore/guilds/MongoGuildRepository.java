@@ -25,6 +25,8 @@ import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 
 /**
@@ -33,6 +35,19 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 @AlternativePriority(1000)
 public class MongoGuildRepository extends MongoResourceRepository<Guild, MongoGuild> implements GuildStoreService, PanacheMongoRepository<MongoGuild> {
+
+    @PostConstruct
+    @Override
+    public void setUp() {
+        super.setUp();
+    }
+
+    @PreDestroy
+    @Override
+    public void tearDown() {
+        super.tearDown();
+    }
+
     public MongoGuild empty() {
         return new MongoGuild();
     }

@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 /**
@@ -41,7 +42,7 @@ import java.util.UUID;
  * @param <M> The MongoDB variant of the resource.
  */
 public abstract class MongoResourceRepository<T extends Resource<?>, M extends MongoResource<T>> implements StoreService<T>, PanacheMongoRepository<M> {
-    protected Logger LOG = LoggerFactory.getLogger(MongoResourceRepository.class);
+    protected Logger LOG;
 
     @PostConstruct
     public void setUp() {
@@ -186,5 +187,12 @@ public abstract class MongoResourceRepository<T extends Resource<?>, M extends M
 
         LOG.debug("Loaded: {}", result);
         return Optional.of(result.get().data());
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", MongoResourceRepository.class.getSimpleName() + "[", "]")
+                .add("hash=" + System.identityHashCode(this))
+                .toString();
     }
 }

@@ -62,6 +62,11 @@ public class DiscordDispatcher extends ListenerAdapter {
     DiscordMessageHandler sender;
 
 
+    /**
+     * Loads the injected instances into the array for later easier access.
+     *
+     * @param event The startup event.
+     */
     void startup(@Observes StartupEvent event) {
         pluginInstances.forEach(plugins::add);
 
@@ -126,12 +131,7 @@ public class DiscordDispatcher extends ListenerAdapter {
     private void checkForWork(final DiscordTextChannelPlugin plugin, final Guild guild, final MessageReceivedEvent event)
             throws DontWorkOnDiscordEventException, DiscordPluginNotAllowedException {
         try {
-            plugin.workOn(guild, event);
             plugin.checkUserPermission(guild, event.getTextChannel(), event.getAuthor());
-        } catch (DontWorkOnDiscordEventException e) {
-            LOG.debug(e.getMessage(), e);
-
-            throw e;
         } catch (DiscordPluginNotAllowedException e) {
             if (e.isBlame()) {
                 sender.sendDM(
@@ -157,12 +157,7 @@ public class DiscordDispatcher extends ListenerAdapter {
     private void checkForWork(final DiscordTextChannelPlugin plugin, final Guild guild, final GenericGuildMessageReactionEvent event)
             throws DontWorkOnDiscordEventException, DiscordPluginNotAllowedException {
         try {
-            plugin.workOn(guild, event);
             plugin.checkUserPermission(guild, event.getChannel(), event.getUser());
-        } catch (DontWorkOnDiscordEventException e) {
-            LOG.debug(e.getMessage(), e);
-
-            throw e;
         } catch (DiscordPluginNotAllowedException e) {
             if (e.isBlame() && event.getUser() != null) {
                 sender.sendDM(

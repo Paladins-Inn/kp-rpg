@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.Clock;
@@ -44,11 +45,15 @@ public class GuildProvider {
     @Inject
     GuildStoreService store;
 
+    @PostConstruct
+    public void logCreation() {
+        LOG.info("GuildProvider using store: {}", store);
+    }
+
+
     @CacheInvalidate(cacheName = "discord-guilds")
     public void store(final Guild data) {
-        store.save(
-                increaseGeneration(data)
-        );
+        store.save(data);
     }
 
     @NotNull
@@ -73,6 +78,7 @@ public class GuildProvider {
     @CacheResult(cacheName = "discord-guilds")
     public Guild retrieve(final String name) {
         Optional<Guild> data = store.findByNameSpaceAndName(Guild.DISCORD_NAMESPACE, name);
+
 
         data.ifPresent(guild -> LOG.debug("Loaded guild: guild={}", guild));
         return data.orElseGet(() -> generateNewGuildEntry(name));

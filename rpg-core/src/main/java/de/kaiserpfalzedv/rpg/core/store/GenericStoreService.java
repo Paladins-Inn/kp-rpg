@@ -23,6 +23,7 @@ import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 /**
@@ -143,5 +144,14 @@ public abstract class GenericStoreService<T extends Resource<?>> implements Stor
                 .from(metadata)
                 .generation(metadata.getGeneration() + 1)
                 .build();
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", GenericStoreService.class.getSimpleName() + "[", "]")
+                .add("hash=" + System.identityHashCode(this))
+                .add("namedStore=" + namedStore.size())
+                .add("uidStore=" + uidStore.size())
+                .toString();
     }
 }
