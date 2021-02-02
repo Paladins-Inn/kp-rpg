@@ -95,13 +95,7 @@ public interface DiscordTextChannelPlugin extends DiscordPlugin {
             }
         }
 
-        throw new DiscordPluginNotAllowedException(
-                true,
-                String.format("Plugin '%s' requires any of the following roles: [%s]",
-                        getClass().getSimpleName(),
-                        String.join(",", requiredRoles)
-                )
-        );
+        throw new DiscordPluginNotAllowedException(this, requiredRoles, true);
     }
 
     /**

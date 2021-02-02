@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.integrations.discord.text;
 
+import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPlugin;
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginException;
 
 import java.io.PrintStream;
@@ -31,8 +32,8 @@ import java.io.PrintWriter;
 public class DiscordPluginWrappedException extends DiscordPluginException {
     final Throwable wrapped;
 
-    public DiscordPluginWrappedException(final Throwable wrapped) {
-        super("This is a wrapped exception");
+    public DiscordPluginWrappedException(final DiscordPlugin plugin, final Throwable wrapped) {
+        super(plugin, String.format("%s (wrapped)", wrapped.getMessage()));
         this.wrapped = wrapped;
     }
 

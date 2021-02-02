@@ -17,6 +17,8 @@
 
 package de.kaiserpfalzedv.rpg.integrations.discord;
 
+import java.util.Collection;
+
 /**
  * DiscordPluginNotAllowedException -- The user does not have the needed permissions to use this plugin.
  *
@@ -26,27 +28,14 @@ package de.kaiserpfalzedv.rpg.integrations.discord;
 public class DiscordPluginNotAllowedException extends DiscordPluginException {
     private final boolean blame;
 
-    public DiscordPluginNotAllowedException(final boolean blame) {
-        this.blame = blame;
+    public DiscordPluginNotAllowedException(@SuppressWarnings("CdiInjectionPointsInspection") final DiscordPlugin plugin) {
+        super(plugin, "Access denied.");
+        this.blame = false;
     }
 
-    public DiscordPluginNotAllowedException(final boolean blame, final String message) {
-        super(message);
-        this.blame = blame;
-    }
-
-    public DiscordPluginNotAllowedException(final boolean blame, final String message, final Throwable cause) {
-        super(message, cause);
-        this.blame = blame;
-    }
-
-    public DiscordPluginNotAllowedException(final boolean blame, final Throwable cause) {
-        super(cause);
-        this.blame = blame;
-    }
-
-    public DiscordPluginNotAllowedException(final boolean blame, final String message, final Throwable cause, final boolean enableSuppression, final boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public DiscordPluginNotAllowedException(final DiscordPlugin plugin, final Collection<String> roles, final boolean blame) {
+        super(plugin, String.format("Access denied. This plugin requires one of these roles: [%s]",
+                String.join(",", roles)));
         this.blame = blame;
     }
 

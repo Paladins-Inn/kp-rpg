@@ -27,25 +27,35 @@ import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06
  */
-public class DiscordPluginException extends Exception {
-    public DiscordPluginException() {
-        super("Developer too lazy to use a meaningful exception");
+public abstract class DiscordPluginException extends Exception {
+    private final DiscordPlugin plugin;
+
+    public DiscordPluginException(final DiscordPlugin plugin, final String message) {
+        super(String.format("%s (Plugin: '%s')", message, plugin.getName()));
+
+        this.plugin = plugin;
     }
 
-    public DiscordPluginException(final String message) {
-        super(message);
+    public DiscordPluginException(final DiscordPlugin plugin, final String message, final Throwable cause) {
+        super(String.format("%s (Plugin: '%s')", message, plugin.getName()), cause);
+
+        this.plugin = plugin;
     }
 
-    public DiscordPluginException(final String message, final Throwable cause) {
-        super(message, cause);
+    public DiscordPluginException(final DiscordPlugin plugin, final Throwable cause) {
+        super(String.format("%s (Plugin: '%s')", cause.getMessage(), plugin.getName()), cause);
+
+        this.plugin = plugin;
     }
 
-    public DiscordPluginException(final Throwable cause) {
-        super(cause);
+
+    public DiscordPluginException(final DiscordPlugin plugin, final String message, final Throwable cause, final boolean enableSuppression, boolean writableStackTrace) {
+        super(String.format("%s (Plugin: '%s')", cause.getMessage(), plugin.getName()), cause, enableSuppression, writableStackTrace);
+
+        this.plugin = plugin;
     }
 
-
-    public DiscordPluginException(final String message, final Throwable cause, final boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public DiscordPlugin getPlugin() {
+        return plugin;
     }
 }

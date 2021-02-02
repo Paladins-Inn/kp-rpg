@@ -17,10 +17,34 @@
 
 package de.kaiserpfalzedv.rpg.integrations.discord;
 
+import de.kaiserpfalzedv.rpg.integrations.discord.guilds.TestMemoryGuildStore;
 import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin;
+import org.junit.jupiter.api.*;
+import org.slf4j.MDC;
 
-public class DontWorkOnDiscordEventException extends DiscordPluginException {
-    public DontWorkOnDiscordEventException(final DiscordTextChannelPlugin plugin) {
-        super(plugin, "Event not supported.");
+public class TestDiscordPluginNotAllowedException {
+    @Test
+    public void shouldGenerateAValidException() {
+        DontWorkOnDiscordEventException cut = new DontWorkOnDiscordEventException(new TestPlugin());
+
+        Assertions.assertEquals("Event not supported. (Plugin: 'TestPlugin')", cut.getMessage());
     }
+
+
+    @AfterEach
+    void tearDownEach() {
+        MDC.remove("test");
+    }
+
+    @BeforeAll
+    static void setUp() {
+        MDC.put("test-class", TestMemoryGuildStore.class.getSimpleName());
+    }
+
+    @AfterAll
+    static void tearDown() {
+        MDC.clear();
+    }
+
+    static class TestPlugin implements DiscordTextChannelPlugin {}
 }
