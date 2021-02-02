@@ -74,6 +74,7 @@ public class GuildProvider {
     public Guild retrieve(final String name) {
         Optional<Guild> data = store.findByNameSpaceAndName(Guild.DISCORD_NAMESPACE, name);
 
+        data.ifPresent(guild -> LOG.debug("Loaded guild: guild={}", guild));
         return data.orElseGet(() -> generateNewGuildEntry(name));
     }
 
