@@ -72,6 +72,10 @@ public class DiscordDispatcher extends ListenerAdapter {
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
         addMDCInfo(event);
 
+        if (event.getAuthor().isBot()) {
+            LOG.info("Ignoring bot: bot={}", event.getAuthor());
+        }
+
         Guild guild = guildProvider.retrieve(event.getGuild().getName());
 
         for (DiscordTextChannelPlugin p : plugins) {
@@ -91,6 +95,10 @@ public class DiscordDispatcher extends ListenerAdapter {
     @Override
     public void onGuildMessageReactionAdd(@NotNull final GuildMessageReactionAddEvent event) {
         addMDCInfo(event);
+
+        if (event.getUser().isBot()) {
+            LOG.info("Ignoring bot: bot={}", event.getUser());
+        }
 
         Guild guild = guildProvider.retrieve(event.getGuild().getName());
 
