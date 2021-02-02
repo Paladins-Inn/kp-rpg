@@ -20,10 +20,10 @@ package de.kaiserpfalzedv.rpg.integrations.discord.JDA;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.runtime.configuration.ProfileManager;
-import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
+import java.util.Set;
 import java.util.StringJoiner;
+
+import static net.dv8tion.jda.api.requests.GatewayIntent.*;
 
 /**
  * DiscordBot -- The discord connection bot.
@@ -82,7 +85,22 @@ public class DiscordBot {
             return;
         }
 
-        JDABuilder builder = new JDABuilder(AccountType.BOT);
+        Set<GatewayIntent> intents = Set.of(
+                GUILD_MEMBERS,
+                GUILD_PRESENCES,
+                GUILD_EMOJIS,
+                GUILD_BANS,
+                GUILD_WEBHOOKS,
+                GUILD_INVITES,
+                GUILD_VOICE_STATES,
+                GUILD_MESSAGES,
+                GUILD_MESSAGE_REACTIONS,
+                GUILD_MESSAGE_TYPING,
+                DIRECT_MESSAGES,
+                DIRECT_MESSAGE_REACTIONS
+        );
+
+        JDABuilder builder = JDABuilder.create(discordToken, intents);
         builder.setToken(discordToken);
         builder.addEventListeners(dispatcher);
 
