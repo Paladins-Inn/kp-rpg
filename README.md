@@ -4,6 +4,7 @@
 >
 > -- Balian, Kingdom of Heaven
 
+![Maven](https://github.com/actions/hello-world/workflows/maven/badge.svg)
 [![Docker Repository on Quay](https://quay.io/repository/klenkes74/kp-rpg-discord-bot/status "Docker Repository on Quay")](https://quay.io/repository/klenkes74/kp-rpg-discord-bot)
 
 ## Abstract
