@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.integrations.discord.text;
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPlugin;
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginNotAllowedException;
 import de.kaiserpfalzedv.rpg.integrations.discord.DontWorkOnDiscordEventException;
+import de.kaiserpfalzedv.rpg.integrations.discord.IgnoreBotsException;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -51,7 +52,7 @@ public interface DiscordTextChannelPlugin extends DiscordPlugin {
      * @throws DontWorkOnDiscordEventException When the plugin does not work on this event.
      */
     @SuppressWarnings({"unused", "RedundantThrows", "RedundantSuppression"})
-    default void workOn(
+    default void workOnMessage(
             @SuppressWarnings("unused") final Guild guild,
             @SuppressWarnings("unused") final MessageReceivedEvent messageReceivedEvent
     ) throws DontWorkOnDiscordEventException, DiscordPluginNotAllowedException {
@@ -64,7 +65,7 @@ public interface DiscordTextChannelPlugin extends DiscordPlugin {
      * @param messageReceivedEvent the event received.
      * @throws DontWorkOnDiscordEventException When the plugin does not work on this event.
      */
-    default void workOn(
+    default void workOnReaction(
             @SuppressWarnings("unused") final Guild guild,
             @SuppressWarnings("unused") final GenericGuildMessageReactionEvent messageReceivedEvent
     ) throws DontWorkOnDiscordEventException {
@@ -73,8 +74,11 @@ public interface DiscordTextChannelPlugin extends DiscordPlugin {
 
     default void checkUserPermission(
             @SuppressWarnings("unused") final Guild guild,
-            final TextChannel channel, final User user) throws DiscordPluginNotAllowedException {
+            final TextChannel channel, final User user
+    ) throws DiscordPluginNotAllowedException, IgnoreBotsException {
         List<String> requiredRoles = rolesRequired();
+
+        checkWorkForBots(user);
 
         // no required roles - we may stop immediately.
         if (requiredRoles.isEmpty()) {
@@ -96,5 +100,19 @@ public interface DiscordTextChannelPlugin extends DiscordPlugin {
         }
 
         throw new DiscordPluginNotAllowedException(this, requiredRoles, true);
+    }
+
+    /**
+     * Checks if the event is from a bot and throws the {@link IgnoreBotsException} if so.
+     *
+     * @param user The user to be checked.
+     * @throws IgnoreBotsException The user is a bot.
+     */
+    default void checkWorkForBots(final User user) throws IgnoreBotsException {
+        if (user.isBot()) {
+            LOG.debug("Ignoring event from bot: bot={}", user.getName());
+
+            throw new IgnoreBotsException(this);
+        }
     }
 }

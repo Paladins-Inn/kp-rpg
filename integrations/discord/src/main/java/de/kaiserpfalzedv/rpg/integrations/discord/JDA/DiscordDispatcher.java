@@ -20,13 +20,16 @@ package de.kaiserpfalzedv.rpg.integrations.discord.JDA;
 
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginNotAllowedException;
 import de.kaiserpfalzedv.rpg.integrations.discord.DontWorkOnDiscordEventException;
+import de.kaiserpfalzedv.rpg.integrations.discord.IgnoreBotsException;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildProvider;
 import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageHandler;
 import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin;
 import io.quarkus.runtime.StartupEvent;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -75,21 +78,21 @@ public class DiscordDispatcher extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
-        addMDCInfo(event);
-
-        if (event.getAuthor().isBot()) {
-            LOG.info("Ignoring bot: bot={}", event.getAuthor());
-            return;
-        }
+        addMDCInfo(
+                event.getMessageId(),
+                event.getGuild(),
+                event.getChannel(),
+                event.getAuthor()
+        );
 
         Guild guild = guildProvider.retrieve(event.getGuild().getName());
 
         for (DiscordTextChannelPlugin p : plugins) {
             try {
-                checkForWork(p, guild, event);
+                checkForWork(p, guild, event.getChannel(), event.getAuthor());
 
-                p.workOn(guild, event);
-            } catch (DontWorkOnDiscordEventException | DiscordPluginNotAllowedException e) {
+                p.workOnMessage(guild, event);
+            } catch (DontWorkOnDiscordEventException | DiscordPluginNotAllowedException | IgnoreBotsException e) {
                 cleanMDC();
                 return;
             }
@@ -100,21 +103,21 @@ public class DiscordDispatcher extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReactionAdd(@NotNull final GuildMessageReactionAddEvent event) {
-        addMDCInfo(event);
-
-        if (event.getUser().isBot()) {
-            LOG.info("Ignoring bot: bot={}", event.getUser());
-            return;
-        }
+        addMDCInfo(
+                event.getMessageId(),
+                event.getGuild(),
+                event.getChannel(),
+                event.getUser()
+        );
 
         Guild guild = guildProvider.retrieve(event.getGuild().getName());
 
         for (DiscordTextChannelPlugin p : plugins) {
             try {
-                checkForWork(p, guild, event);
+                checkForWork(p, guild, event.getChannel(), event.getUser());
 
-                p.workOn(guild, event);
-            } catch (DontWorkOnDiscordEventException | DiscordPluginNotAllowedException e) {
+                p.workOnReaction(guild, event);
+            } catch (DontWorkOnDiscordEventException | DiscordPluginNotAllowedException | IgnoreBotsException e) {
                 cleanMDC();
                 return;
             }
@@ -123,55 +126,31 @@ public class DiscordDispatcher extends ListenerAdapter {
         cleanMDC();
     }
 
-
     /**
      * Checks if the plugin should be called on this event.
      *
      * @param plugin The plugin to check this event on.
-     * @param event  The event to be checked against the plugin.,
      */
-    private void checkForWork(final DiscordTextChannelPlugin plugin, final Guild guild, final MessageReceivedEvent event)
-            throws DontWorkOnDiscordEventException, DiscordPluginNotAllowedException {
+    private void checkForWork(
+            final DiscordTextChannelPlugin plugin,
+            final Guild guild,
+            final MessageChannel channel,
+            final User user
+    ) throws DontWorkOnDiscordEventException, DiscordPluginNotAllowedException, IgnoreBotsException {
+        if (!(channel instanceof TextChannel)) {
+            LOG.debug("This is no text channel. Can't check permission.");
+            return;
+        }
+
         try {
-            plugin.checkUserPermission(guild, event.getTextChannel(), event.getAuthor());
+            plugin.checkUserPermission(guild, (TextChannel) channel, user);
         } catch (DiscordPluginNotAllowedException e) {
             if (e.isBlame()) {
-                sender.sendDM(
-                        event.getAuthor(),
-                        "Sorry, you are not allowed to use this command: " + e.getMessage()
-                );
+                sender.sendDM(user, "Sorry, you are not allowed to use this command: " + e.getMessage());
             }
 
             LOG.warn("{}: plugin={}, user={}, blame={}",
-                    e.getMessage(), plugin.getName(), event.getAuthor().getName(), e.isBlame());
-
-            throw e;
-        }
-    }
-
-
-    /**
-     * Checks if the plugin should be called on this event.
-     *
-     * @param plugin The plugin to check this event on.
-     * @param event  The event to be checked against the plugin.,
-     */
-    private void checkForWork(final DiscordTextChannelPlugin plugin, final Guild guild, final GenericGuildMessageReactionEvent event)
-            throws DontWorkOnDiscordEventException, DiscordPluginNotAllowedException {
-        try {
-            plugin.checkUserPermission(guild, event.getChannel(), event.getUser());
-        } catch (DiscordPluginNotAllowedException e) {
-            if (e.isBlame() && event.getUser() != null) {
-                sender.sendDM(
-                        event.getUser(),
-                        "Sorry, you are not allowed to use this command: " + e.getMessage()
-                );
-            }
-
-            if (event.getUser() != null) {
-                LOG.warn("{}: plugin={}, user={}, blame={}",
-                        e.getMessage(), plugin.getName(), event.getUser().getName(), e.isBlame());
-            }
+                    e.getMessage(), plugin.getName(), user.getName(), e.isBlame());
 
             throw e;
         }
@@ -181,54 +160,33 @@ public class DiscordDispatcher extends ListenerAdapter {
     /**
      * Adds the information to MDC for logging.
      *
-     * @param event event to read information from.
+     * @param user user since depending on the event type, the user is in different properties.
      */
-    private void addMDCInfo(final GenericGuildMessageReactionEvent event) {
-        MDC.put("message.id", event.getMessageId());
+    private void addMDCInfo(
+            final String messageId,
+            final net.dv8tion.jda.api.entities.Guild guild,
+            final MessageChannel channel,
+            final User user
+    ) {
+        MDC.put("message.id", messageId);
 
-        MDC.put("guild.name", event.getGuild().getName());
-        MDC.put("guild.id", event.getGuild().getIconId());
+        MDC.put("guild.name", guild.getName());
+        MDC.put("guild.id", guild.getId());
 
-        MDC.put("channel.name", event.getChannel().getName());
-        MDC.put("channel.id", event.getChannel().getId());
+        MDC.put("channel.name", channel.getName());
+        MDC.put("channel.id", channel.getId());
 
-        MDC.put("user.name", event.getUser() != null ? event.getUser().getName() : "-no-name-");
-        MDC.put("user.id", event.getUser().getId());
-
-        LOG.trace("Received event: guild='{}', channel='{}', author='{}', message.id='{}', emote='{}'",
-                event.getGuild().getName(),
-                event.getChannel().getName(),
-                event.getUser().getName(),
-                event.getMessageId(),
-                event.getReaction().getReactionEmote().toString()
-        );
-    }
-
-    /**
-     * Adds the information to MDC for logging.
-     *
-     * @param event event to read information from.
-     */
-    private void addMDCInfo(final MessageReceivedEvent event) {
-        MDC.put("message.id", event.getMessageId());
-
-        MDC.put("guild.name", event.getGuild().getName());
-        MDC.put("guild.id", event.getGuild().getIconId());
-
-        MDC.put("channel.name", event.getChannel().getName());
-        MDC.put("channel.id", event.getChannel().getId());
-
-        MDC.put("user.name", event.getAuthor().getName());
-        MDC.put("user.id", event.getAuthor().getId());
-
+        MDC.put("user.name", user.getName());
+        MDC.put("user.id", user.getId());
 
         LOG.trace("Received event: guild='{}', channel='{}', author='{}', message.id='{}'",
-                event.getGuild().getName(),
-                event.getChannel().getName(),
-                event.getAuthor().getName(),
-                event.getMessageId()
+                guild.getName(),
+                channel.getName(),
+                user.getName(),
+                messageId
         );
     }
+
 
     /**
      * Removes the MDC for this event.

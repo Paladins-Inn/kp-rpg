@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.bot.dice;
 
+import de.kaiserpfalzedv.rpg.integrations.discord.JDA.NullDiscordUser;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageHandler;
 import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin;
@@ -79,7 +80,7 @@ public class DiscordDiceRoller implements DiscordTextChannelPlugin {
     }
 
     @Override
-    public void workOn(
+    public void workOnMessage(
             final Guild guild,
             final MessageReceivedEvent event
     ) {
@@ -120,19 +121,21 @@ public class DiscordDiceRoller implements DiscordTextChannelPlugin {
     }
 
     @Override
-    public void workOn(
+    public void workOnReaction(
             final Guild guild,
             final GenericGuildMessageReactionEvent event
     ) {
         String reactionCode = event.getReaction().getReactionEmote().toString();
 
         switch (reactionCode) {
-            case "RE:U+1f501":
+            case "RE:U+1f501": // 🔁
+            case "RE:U+2b06U+fe0f": // ⬆
+            case "RE:U+2197U+fe0f": // ↗
                 reRoll(event);
                 break;
 
             default:
-                LOG.info("No reaction for '{}' defined.", reactionCode);
+                LOG.debug("No reaction for '{}' defined.", reactionCode);
 
                 sendHelp(event.getUser(), String.format("Sorry, currently I don't understand the reaction '%s'.", reactionCode));
         }
@@ -146,7 +149,7 @@ public class DiscordDiceRoller implements DiscordTextChannelPlugin {
 
     private void reRoll(final GenericGuildMessageReactionEvent event) {
         RestAction<Message> action = getMessageRestAction(event);
-        User user = event.getUser();
+        User user = event.getUser() != null ? event.getUser() : new NullDiscordUser();
 
         event.getChannel().removeReactionById(event.getReaction().getMessageId(), REROLL_EMOJI, user).queue();
 
