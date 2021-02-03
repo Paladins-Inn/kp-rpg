@@ -38,11 +38,8 @@ public class DiceRoller {
     @ConsumeEvent("throw-dice")
     public String work(final String dieRollString) {
         String[] rollAndComment = dieRollString.split(" # ", 2);
-        RollTotal roll = parser.parse(dieRollString);
 
-        if (roll.isEmpty()) {
-            throw new IllegalArgumentException("The command '" + dieRollString + "' is no valid die roll!");
-        }
+        RollTotal roll = results(dieRollString);
 
         return (rollAndComment.length > 1 && rollAndComment[1] != null ? rollAndComment[1] + ": " : "") + roll.getDescription();
     }
@@ -54,7 +51,9 @@ public class DiceRoller {
      * @return All results instead of a parsed string like in {@link #work(String)}
      */
     public RollTotal results(final String dieRollString) {
-        RollTotal roll = parser.parse(dieRollString);
+        String[] rollAndComment = dieRollString.split(" # ", 2);
+
+        RollTotal roll = parser.parse(rollAndComment[0]);
 
         if (roll.isEmpty()) {
             throw new IllegalArgumentException("The command '" + dieRollString + "' is no valid die roll!");
