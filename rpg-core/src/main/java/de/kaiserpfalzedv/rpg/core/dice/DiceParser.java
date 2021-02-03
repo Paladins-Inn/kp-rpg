@@ -159,7 +159,7 @@ public class DiceParser {
 
     private Die selectDieType(final String qualifier) {
         for (Die die : dice) {
-            LOG.trace("Checking die type: qualifier={}, die={}", die.getDieType());
+            LOG.trace("Checking die type: qualifier={}, die={}", qualifier, die.getDieType());
             if (die.getDieType().equalsIgnoreCase(qualifier))
                 return die;
         }
