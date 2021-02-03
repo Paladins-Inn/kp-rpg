@@ -19,8 +19,7 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.users;
 
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
-import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoResourceRepository;
-import io.quarkus.arc.AlternativePriority;
+import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoResourceStore;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
@@ -28,8 +27,7 @@ import io.quarkus.panache.common.Parameters;
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-@AlternativePriority(1000)
-public class MongoUserRepository extends MongoResourceRepository<User, MongoUser> implements UserStoreService, PanacheMongoRepository<MongoUser> {
+public class MongoUserStore extends MongoResourceStore<User, MongoUser> implements UserStoreService, PanacheMongoRepository<MongoUser> {
     @Override
     public MongoUser empty() {
         return new MongoUser();

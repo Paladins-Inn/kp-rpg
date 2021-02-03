@@ -15,29 +15,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.discord.guilds;
+package de.kaiserpfalzedv.rpg.core.user;
 
 import de.kaiserpfalzedv.rpg.core.store.GenericStoreService;
+import io.quarkus.arc.DefaultBean;
 
-import javax.annotation.Priority;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Alternative;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Produces;
 
 /**
- * MemoryGuildStore -- an ephemeral store for Guild settings.
- *
- * This is a memory alternative for a persistent data store for Guild settings.
+ * The fallback provider for a memory based user store.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0  2021-01-31
+ * @since 1.2.0  2021-02-03
  */
-@ApplicationScoped
-@Alternative
-@Priority(9000)
-public class MemoryGuildStore extends GenericStoreService<Guild> implements GuildStoreService {
+@Dependent
+public class FallbackUserStoreProvider {
+    /**
+     * Produces an user store if no other bean is defined.
+     *
+     * @return The memory implementation of the {@link UserStoreService}.
+     */
+    @Produces
+    @DefaultBean
+    public UserStoreService memoryGuildStore() {
+        return new MemoryUserStore();
+    }
+}
+
+class MemoryUserStore extends GenericStoreService<User> implements UserStoreService {
     @Override
-    public Guild increaseGeneration(final Guild data) {
-        return ImmutableGuild.builder()
+    public User increaseGeneration(final User data) {
+        return ImmutableUser.builder()
                 .from(data)
                 .metadata(
                         increaseGeneration(data.getMetadata())

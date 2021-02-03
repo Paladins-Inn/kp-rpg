@@ -15,26 +15,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.user;
+package de.kaiserpfalzedv.rpg.core.cards;
 
-import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.store.GenericStoreService;
-import io.quarkus.arc.AlternativePriority;
+import io.quarkus.arc.DefaultBean;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Produces;
 
 /**
- * MemoryUserStore -- an ephemeral user data store.
+ * The fallback provider for a memory based card store.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0  2021-01-31
+ * @since 1.2.0  2021-02-03
  */
-@ApplicationScoped
-@AlternativePriority(9000)
-public class MemoryUserStore extends GenericStoreService<User> implements UserStoreService {
+@Dependent
+public class FallbackCardStoreProvider {
+    /**
+     * Produces a card store if no other bean is defined.
+     *
+     * @return The memory implementation of the {@link CardStoreService}.
+     */
+    @Produces
+    @DefaultBean
+    public CardStoreService memoryGuildStore() {
+        return new MemoryCardStore();
+    }
+}
+
+class MemoryCardStore extends GenericStoreService<Card> implements CardStoreService {
     @Override
-    public User increaseGeneration(final User data) {
-        return ImmutableUser.builder()
+    public Card increaseGeneration(final Card data) {
+        return ImmutableCard.builder()
                 .from(data)
                 .metadata(
                         increaseGeneration(data.getMetadata())
@@ -42,3 +54,4 @@ public class MemoryUserStore extends GenericStoreService<User> implements UserSt
                 .build();
     }
 }
+

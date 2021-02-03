@@ -19,16 +19,14 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.cards;
 
 import de.kaiserpfalzedv.rpg.core.cards.Card;
 import de.kaiserpfalzedv.rpg.core.cards.CardStoreService;
-import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoResourceRepository;
-import io.quarkus.arc.AlternativePriority;
+import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoResourceStore;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
 
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-@AlternativePriority(1000)
-public class MongoCardRepository extends MongoResourceRepository<Card, MongoCard> implements CardStoreService {
+public class MongoCardStore extends MongoResourceStore<Card, MongoCard> implements CardStoreService {
     @Override
     public MongoCard empty() {
         return new MongoCard();

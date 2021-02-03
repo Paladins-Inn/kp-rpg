@@ -23,6 +23,7 @@ import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceStatus;
 import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
 import de.kaiserpfalzedv.rpg.core.user.ImmutableUserData;
 import de.kaiserpfalzedv.rpg.core.user.User;
+import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
 import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -52,8 +53,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @QuarkusTest
 @QuarkusTestResource(MongoDBResource.class)
-public class TestUserRepository {
-    private static final Logger LOG = LoggerFactory.getLogger(TestUserRepository.class);
+public class TestMongoUserStore {
+    private static final Logger LOG = LoggerFactory.getLogger(TestMongoUserStore.class);
 
     private static final String NAMESPACE = "discord";
     private static final String NAME = "klenkes74#0355";
@@ -99,8 +100,19 @@ public class TestUserRepository {
             )
             .build();
 
+
+    private final UserStoreService sut;
+
+    @SuppressWarnings("CdiInjectionPointsInspection")
     @Inject
-    MongoUserRepository sut;
+    public TestMongoUserStore(final UserStoreService store) {
+        this.sut = store;
+    }
+
+    @BeforeAll
+    static void setUp() {
+        MDC.put("test-class", TestMongoUserStore.class.getSimpleName());
+    }
 
     @Test
     public void shouldReturnEmptyOptionalWhenThereIsNoUser() {
@@ -136,16 +148,17 @@ public class TestUserRepository {
         assertTrue(result.isPresent(), "There should be an user with UID " + UID.toString());
     }
 
+    @Test
+    public void shouldBeAMongoBasedImplementation() {
+        MDC.put("test", "mongo-based-implementation");
+
+        assertTrue(sut instanceof MongoUserStore);
+    }
 
     @AfterEach
     void tearDownEach() {
-        sut.remove(data.getNameSpace(), data.getName());
+        sut.remove(data);
         MDC.remove("test");
-    }
-
-    @BeforeAll
-    static void setUp() {
-        MDC.put("test-class", TestUserRepository.class.getSimpleName());
     }
 
     @AfterAll

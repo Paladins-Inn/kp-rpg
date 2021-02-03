@@ -21,15 +21,13 @@ import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceHistory;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceStatus;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
+import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildStoreService;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.ImmutableGuild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.ImmutableGuildData;
 import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -52,8 +50,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @QuarkusTest
 @QuarkusTestResource(MongoDBResource.class)
-public class TestGuildRepository {
-    private static final Logger LOG = LoggerFactory.getLogger(TestGuildRepository.class);
+public class TestMongoGuildStore {
+    private static final Logger LOG = LoggerFactory.getLogger(TestMongoGuildStore.class);
 
     private static final String NAMESPACE = "discord";
     private static final String NAME = "Paladins Inn";
@@ -99,23 +97,40 @@ public class TestGuildRepository {
             )
             .build();
 
+    private final GuildStoreService sut;
+
+    @SuppressWarnings("CdiInjectionPointsInspection")
     @Inject
-    MongoGuildRepository sut;
+    public TestMongoGuildStore(final GuildStoreService store) {
+        this.sut = store;
+    }
 
     @BeforeAll
     static void setUp() {
-        MDC.put("test-class", TestGuildRepository.class.getSimpleName());
-
-        MongoGuildRepository repo = new MongoGuildRepository().setUp();
-        repo.save(data);
-
-        LOG.info("Saved: data={}, count={}, stored={}", data, repo.count(), repo.findByUid(UID));
+        MDC.put("test-class", TestMongoGuildStore.class.getSimpleName());
     }
 
     @AfterAll
     static void tearDown() {
-        new MongoGuildRepository().remove(data);
+        new MongoGuildStore().remove(data);
         MDC.clear();
+    }
+
+    @BeforeEach
+    void loadData() {
+        sut.save(data);
+    }
+
+    @AfterEach
+    void deleteData() {
+        sut.remove(data);
+    }
+
+    @Test
+    public void shouldBeMongoBasedImplementation() {
+        MDC.put("test", "mongo-based-service");
+
+        assertTrue(sut instanceof MongoGuildStore);
     }
 
     @Test
@@ -126,6 +141,14 @@ public class TestGuildRepository {
         LOG.trace("result={}", result);
 
         assertFalse(result.isPresent(), "There should be no guild no-namespace/no-guild");
+    }
+
+
+    @Test
+    public void shouldUseTheMongoGuildStore() {
+        MDC.put("test", "use-mongo-store");
+
+        assertTrue(sut instanceof MongoGuildStore);
     }
 
     @AfterEach

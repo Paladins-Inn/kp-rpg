@@ -19,6 +19,7 @@ package de.kaiserpfalzedv.rpg.integrations.discord.guilds;
 
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.store.OptimisticLockStoreException;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-01-31
  */
+@QuarkusTest
 public class TestMemoryGuildStore {
     private static final Logger LOG = LoggerFactory.getLogger(TestMemoryGuildStore.class);
 
@@ -78,8 +80,21 @@ public class TestMemoryGuildStore {
             .build();
 
 
-    /** service under test. */
-    private MemoryGuildStore sut;
+    /**
+     * service under test.
+     */
+    private GuildStoreService sut;
+
+    public TestMemoryGuildStore(final GuildStoreService store) {
+        this.sut = store;
+    }
+
+    @Test
+    void shouldBeAMemoryBasedService() {
+        MDC.put("test", "memory-based-store");
+
+        assertTrue(sut instanceof MemoryGuildStore);
+    }
 
     @Test
     void shouldSaveNewDataWhenDataIsNotStoredYet() {

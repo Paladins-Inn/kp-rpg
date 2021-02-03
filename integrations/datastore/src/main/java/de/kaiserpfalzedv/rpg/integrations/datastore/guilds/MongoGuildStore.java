@@ -17,32 +17,33 @@
 
 package de.kaiserpfalzedv.rpg.integrations.datastore.guilds;
 
-import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoResourceRepository;
+import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoResourceStore;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildStoreService;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
+import io.quarkus.runtime.StartupEvent;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Alternative;
-import javax.enterprise.inject.Specializes;
+import javax.enterprise.event.Observes;
 
 /**
  * MongoGuildRepository -- The persistent datastore for guild configurations.
  */
 @ApplicationScoped
-@Specializes
-@Alternative
-@Priority(1000)
-public class MongoGuildRepository extends MongoResourceRepository<Guild, MongoGuild> implements GuildStoreService, PanacheMongoRepository<MongoGuild> {
+public class MongoGuildStore extends MongoResourceStore<Guild, MongoGuild> implements GuildStoreService, PanacheMongoRepository<MongoGuild> {
+
+
+    public void startUp(@Observes StartupEvent event) {
+        LOG.info("started: {}", this);
+    }
 
     @PostConstruct
     @Override
-    public MongoGuildRepository setUp() {
+    public MongoGuildStore setUp() {
         super.setUp();
 
         return this;

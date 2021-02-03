@@ -24,9 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.Optional;
@@ -42,11 +40,14 @@ import java.util.UUID;
 public class GuildProvider {
     private static final Logger LOG = LoggerFactory.getLogger(GuildProvider.class);
 
-    @Inject
-    GuildStoreService store;
+    /**
+     * The guild store service to use.
+     */
+    private final GuildStoreService store;
 
-    @PostConstruct
-    public void logCreation() {
+    public GuildProvider(final GuildStoreService store) {
+        this.store = store;
+
         LOG.info("GuildProvider using store: {}", store);
     }
 
@@ -54,20 +55,10 @@ public class GuildProvider {
     @CacheInvalidate(cacheName = "discord-guilds")
     public void store(final Guild data) {
         store.save(data);
+
+        LOG.debug("Saved: guild={}", data);
     }
 
-    @NotNull
-    private ImmutableGuild increaseGeneration(final Guild data) {
-        return ImmutableGuild.builder()
-                .from(data)
-                .metadata(
-                        ImmutableResourceMetadata.builder()
-                                .from(data.getMetadata())
-                                .generation(data.getMetadata().getGeneration() + 1)
-                                .build()
-                )
-                .build();
-    }
 
     /**
      * Loads a guild setup information from the store. If there is no setup, create one and store it.

@@ -41,11 +41,11 @@ import java.util.UUID;
  * @param <T> The default immutable resource.
  * @param <M> The MongoDB variant of the resource.
  */
-public abstract class MongoResourceRepository<T extends Resource<?>, M extends MongoResource<T>> implements StoreService<T>, PanacheMongoRepository<M> {
-    protected Logger LOG;
+public abstract class MongoResourceStore<T extends Resource<?>, M extends MongoResource<T>> implements StoreService<T>, PanacheMongoRepository<M> {
+    protected Logger LOG = LoggerFactory.getLogger(MongoResourceStore.class);
 
     @PostConstruct
-    public MongoResourceRepository<T, M> setUp() {
+    public MongoResourceStore<T, M> setUp() {
         LOG = LoggerFactory.getLogger(getClass());
 
         LOG.info("MongoRepository created: resource={}", empty().getClass().getSimpleName());
@@ -193,7 +193,7 @@ public abstract class MongoResourceRepository<T extends Resource<?>, M extends M
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", MongoResourceRepository.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", MongoResourceStore.class.getSimpleName() + "[", "]")
                 .add("hash=" + System.identityHashCode(this))
                 .toString();
     }
