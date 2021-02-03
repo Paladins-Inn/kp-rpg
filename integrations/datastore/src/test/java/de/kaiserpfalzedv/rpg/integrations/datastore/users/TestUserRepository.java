@@ -136,6 +136,7 @@ public class TestUserRepository {
         assertTrue(result.isPresent(), "There should be an user with UID " + UID.toString());
     }
 
+
     @AfterEach
     void tearDownEach() {
         sut.remove(data.getNameSpace(), data.getName());

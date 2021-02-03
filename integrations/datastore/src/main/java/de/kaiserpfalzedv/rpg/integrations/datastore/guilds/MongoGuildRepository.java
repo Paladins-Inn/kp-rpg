@@ -20,26 +20,32 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.guilds;
 import de.kaiserpfalzedv.rpg.integrations.datastore.resources.MongoResourceRepository;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildStoreService;
-import io.quarkus.arc.AlternativePriority;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Specializes;
 
 /**
  * MongoGuildRepository -- The persistent datastore for guild configurations.
  */
 @ApplicationScoped
-@AlternativePriority(1000)
+@Specializes
+@Alternative
+@Priority(1000)
 public class MongoGuildRepository extends MongoResourceRepository<Guild, MongoGuild> implements GuildStoreService, PanacheMongoRepository<MongoGuild> {
 
     @PostConstruct
     @Override
-    public void setUp() {
+    public MongoGuildRepository setUp() {
         super.setUp();
+
+        return this;
     }
 
     @PreDestroy

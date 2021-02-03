@@ -106,7 +106,7 @@ public class TestGuildRepository {
     static void setUp() {
         MDC.put("test-class", TestGuildRepository.class.getSimpleName());
 
-        MongoGuildRepository repo = new MongoGuildRepository();
+        MongoGuildRepository repo = new MongoGuildRepository().setUp();
         repo.save(data);
 
         LOG.info("Saved: data={}, count={}, stored={}", data, repo.count(), repo.findByUid(UID));

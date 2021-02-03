@@ -18,12 +18,10 @@
 package de.kaiserpfalzedv.rpg.integrations.discord.guilds;
 
 import de.kaiserpfalzedv.rpg.core.store.GenericStoreService;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildStoreService;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.ImmutableGuild;
-import io.quarkus.arc.AlternativePriority;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
 
 /**
  * MemoryGuildStore -- an ephemeral store for Guild settings.
@@ -34,7 +32,8 @@ import javax.enterprise.context.ApplicationScoped;
  * @since 1.2.0  2021-01-31
  */
 @ApplicationScoped
-@AlternativePriority(9000)
+@Alternative
+@Priority(9000)
 public class MemoryGuildStore extends GenericStoreService<Guild> implements GuildStoreService {
     @Override
     public Guild increaseGeneration(final Guild data) {

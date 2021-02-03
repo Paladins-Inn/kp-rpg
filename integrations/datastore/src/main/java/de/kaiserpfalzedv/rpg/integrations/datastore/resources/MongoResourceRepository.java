@@ -45,10 +45,12 @@ public abstract class MongoResourceRepository<T extends Resource<?>, M extends M
     protected Logger LOG;
 
     @PostConstruct
-    public void setUp() {
+    public MongoResourceRepository<T, M> setUp() {
         LOG = LoggerFactory.getLogger(getClass());
 
         LOG.info("MongoRepository created: resource={}", empty().getClass().getSimpleName());
+
+        return this;
     }
 
     @PreDestroy

@@ -79,6 +79,7 @@ public class DiscordDispatcher extends ListenerAdapter {
 
         if (event.getAuthor().isBot()) {
             LOG.info("Ignoring bot: bot={}", event.getAuthor());
+            return;
         }
 
         Guild guild = guildProvider.retrieve(event.getGuild().getName());
@@ -103,6 +104,7 @@ public class DiscordDispatcher extends ListenerAdapter {
 
         if (event.getUser().isBot()) {
             LOG.info("Ignoring bot: bot={}", event.getUser());
+            return;
         }
 
         Guild guild = guildProvider.retrieve(event.getGuild().getName());
