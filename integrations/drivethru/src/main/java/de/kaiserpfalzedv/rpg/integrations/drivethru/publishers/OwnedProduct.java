@@ -15,12 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.drivethru.customers;
+package de.kaiserpfalzedv.rpg.integrations.drivethru.publishers;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
@@ -30,15 +31,15 @@ import java.util.Optional;
 @Value.Immutable
 @Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableDriveThruRPGOwnedProduct.class)
-@JsonDeserialize(builder = ImmutableDriveThruRPGOwnedProduct.Builder.class)
-@Schema(name = "DriveThruRPGOwnedProduct", description = "a product dataset of DriveThruRPG.")
-public interface DriveThruRPGOwnedProduct {
+@JsonSerialize(as = ImmutableOwnedProduct.class)
+@JsonDeserialize(builder = ImmutableOwnedProduct.Builder.class)
+@Schema(name = "OwnedProduct", description = "a product dataset of DriveThruRPG.")
+public interface OwnedProduct extends DriveThruResource {
     @JsonProperty("products_id")
     String getId();
 
     @JsonProperty("products_name")
-    Optional<String> getName();
+    String getName();
 
     @JsonProperty("is_archived")
     Optional<String> isArchived();

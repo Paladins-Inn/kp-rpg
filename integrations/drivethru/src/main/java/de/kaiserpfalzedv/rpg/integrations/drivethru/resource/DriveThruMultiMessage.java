@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.drivethru.token;
+package de.kaiserpfalzedv.rpg.integrations.drivethru.resource;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -25,31 +25,25 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.beans.Transient;
+import java.util.List;
 
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableDriveThruRPGToken.class)
-@JsonDeserialize(builder = ImmutableDriveThruRPGToken.Builder.class)
-@Schema(name = "DriveThruRPGToken", description = "The access token for DriveThruRPG.")
-public interface DriveThruRPGToken extends Serializable {
-    @JsonProperty("access_token")
-    String getAccessToken();
+@JsonSerialize(as = ImmutableDriveThruMultiMessage.class)
+@JsonDeserialize(builder = ImmutableDriveThruMultiMessage.Builder.class)
+@Schema(name = "DriveThruMessage")
+public interface DriveThruMultiMessage<T> {
+    @JsonProperty("status")
+    String getStatus();
 
-    @JsonProperty("customers_id")
-    String getCustomerId();
+    @JsonProperty("message")
+    T[] getMessage();
 
-    @JsonProperty("expires")
-    LocalDateTime getExpireTime();
-
-    @JsonProperty("server_time")
-    LocalDateTime getServerTime();
-
+    @Transient
     @JsonIgnore
-    LocalDateTime getLocalTime();
-
-    @JsonIgnore
-    Long getExpires();
+    @Value.Default
+    default List<T> getData() {
+        return List.of(getMessage());
+    }
 }

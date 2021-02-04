@@ -15,8 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.drivethru.customers;
+package de.kaiserpfalzedv.rpg.integrations.drivethru.resource;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -24,18 +25,25 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
-import java.time.OffsetDateTime;
+import java.beans.Transient;
+import java.util.Optional;
 
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableDriveThruRPGProductMessage.class)
-@JsonDeserialize(builder = ImmutableDriveThruRPGProductMessage.Builder.class)
-@Schema(name = "DriveThruRPGProductMessage", description = "a product dataset of DriveThruRPG.")
-public interface DriveThruRPGProductMessage {
+@JsonSerialize(as = ImmutableDriveThruMessage.class)
+@JsonDeserialize(builder = ImmutableDriveThruMessage.Builder.class)
+@Schema(name = "DriveThruMessage")
+public interface DriveThruMessage<T> {
     @JsonProperty("status")
     String getStatus();
 
     @JsonProperty("message")
-    DriveThruRPGOwnedProduct[] getProducts();
+    T getMessage();
+
+    @Transient
+    @JsonIgnore
+    @Value.Default
+    default Optional<T> getData() {
+        return Optional.ofNullable(getMessage());
+    }
 }

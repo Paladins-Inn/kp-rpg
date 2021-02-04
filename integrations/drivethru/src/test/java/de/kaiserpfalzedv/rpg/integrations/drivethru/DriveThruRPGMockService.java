@@ -18,7 +18,6 @@
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 import java.util.Collections;
@@ -49,11 +48,27 @@ public class DriveThruRPGMockService implements QuarkusTestResourceLifecycleMana
         );
 
 
-        stubFor(get(urlEqualTo("/api/v1/customers/CUST/products?page=1&page_size=1000&include_archived=0&fields=products_id"))
+        stubFor(get(urlEqualTo("/api/v1/customers/CUST/products?page=1&page_size=1000&include_archived=0"))
                 .willReturn(
                         aResponse()
                                 .withHeader("Content-Type", "application/json")
                                 .withBodyFile("projects-ids.json")
+                )
+        );
+
+        stubFor(get(urlEqualTo("/api/v1/publishers/PUBLISHER"))
+                .willReturn(
+                        aResponse()
+                                .withHeader("Content-Type", "application/json")
+                                .withBodyFile("publisher-2.json")
+                )
+        );
+
+        stubFor(get(urlEqualTo("/api/v1/products/PRODUCT"))
+                .willReturn(
+                        aResponse()
+                                .withHeader("Content-Type", "application/json")
+                                .withBodyFile("product-1.json")
                 )
         );
 

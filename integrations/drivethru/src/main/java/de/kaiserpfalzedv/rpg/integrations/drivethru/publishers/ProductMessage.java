@@ -15,27 +15,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.drivethru.token;
+package de.kaiserpfalzedv.rpg.integrations.drivethru.publishers;
 
-import de.kaiserpfalzedv.rpg.integrations.drivethru.DriveThruRPGWrapper;
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
 
-import javax.ws.rs.*;
-import java.util.LinkedHashMap;
+public class ProductMessage implements DriveThruMessage<Product> {
+    private String status;
+    private Product product;
 
+    @Override
+    public String getStatus() {
+        return status;
+    }
 
-/**
- * The tokenservice of DriveThruRPG to get the oauth2 token via the API key.
- *
- * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0 2021-01-29
- */
-@Path("/api/v1")
-@RegisterRestClient(configKey = "tomb.drivethrurpg.api")
-public interface DriveThruRPGTokenClient {
-    @POST
-    @Path("/token")
-    DriveThruRPGWrapper<LinkedHashMap> getToken(
-            @HeaderParam("Authorization") String authorization
-    );
+    public void setStatus(final String status) {
+        this.status = status;
+    }
+
+    @Override
+    public Product getMessage() {
+        return product;
+    }
+
+    public void setMessage(final Product product) {
+        this.product = product;
+    }
 }
