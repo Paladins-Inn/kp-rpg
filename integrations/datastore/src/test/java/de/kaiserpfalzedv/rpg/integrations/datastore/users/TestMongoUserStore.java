@@ -24,6 +24,7 @@ import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
 import de.kaiserpfalzedv.rpg.core.user.ImmutableUserData;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
+import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -56,7 +57,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TestMongoUserStore {
     private static final Logger LOG = LoggerFactory.getLogger(TestMongoUserStore.class);
 
-    private static final String NAMESPACE = "discord";
+    private static final String NAMESPACE = Guild.DISCORD_NAMESPACE;
     private static final String NAME = "klenkes74#0355";
     private static final UUID UID = UUID.randomUUID();
     private static final OffsetDateTime CREATED = OffsetDateTime.now(ZoneOffset.UTC);

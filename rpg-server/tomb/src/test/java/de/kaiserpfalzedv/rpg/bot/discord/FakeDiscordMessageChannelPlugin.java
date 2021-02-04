@@ -15,17 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.discord;
+package de.kaiserpfalzedv.rpg.bot.discord;
 
-/**
- * DontWorkOnDiscordEventException -- This event will be ignored.
- *
- * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0
- */
-public class DontWorkOnDiscordEventException extends DiscordPluginException {
-    @SuppressWarnings("CdiInjectionPointsInspection")
-    public DontWorkOnDiscordEventException(final DiscordPlugin plugin) {
-        super(plugin, "Event not supported.");
-    }
+import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageChannelPlugin;
+
+public class FakeDiscordMessageChannelPlugin implements DiscordMessageChannelPlugin {
 }

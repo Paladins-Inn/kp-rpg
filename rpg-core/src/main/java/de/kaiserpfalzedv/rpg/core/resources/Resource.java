@@ -79,6 +79,12 @@ public interface Resource<D extends Serializable> extends Serializable {
 
     @Transient
     @JsonIgnore
+    default String getDisplayName() {
+        return String.format("%s/%s/%s/%s", getKind(), getApiVersion(), getNameSpace(), getName());
+    }
+
+    @Transient
+    @JsonIgnore
     default Long getGeneration() {
         return getMetadata().getGeneration();
     }

@@ -67,6 +67,9 @@ public abstract class MongoResource<T extends Resource<?>> extends PanacheMongoE
     }
 
     public void updateHistory() {
+        if (status == null) {
+            status = new MongoResourceStatus();
+        }
         status.updateHistory(metadata);
     }
 

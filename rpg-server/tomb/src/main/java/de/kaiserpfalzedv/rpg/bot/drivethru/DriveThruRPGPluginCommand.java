@@ -15,17 +15,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.discord;
+package de.kaiserpfalzedv.rpg.bot.drivethru;
+
+import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginCommand;
 
 /**
- * DontWorkOnDiscordEventException -- This event will be ignored.
+ * A single command for the ProductPlugin.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0
+ * @since 1.2.0  2021-02-04
  */
-public class DontWorkOnDiscordEventException extends DiscordPluginException {
-    @SuppressWarnings("CdiInjectionPointsInspection")
-    public DontWorkOnDiscordEventException(final DiscordPlugin plugin) {
-        super(plugin, "Event not supported.");
-    }
+public interface DriveThruRPGPluginCommand extends DiscordPluginCommand {
 }

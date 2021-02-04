@@ -23,8 +23,8 @@ import de.kaiserpfalzedv.rpg.integrations.discord.DontWorkOnDiscordEventExceptio
 import de.kaiserpfalzedv.rpg.integrations.discord.IgnoreBotsException;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildProvider;
+import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageChannelPlugin;
 import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageHandler;
-import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin;
 import io.quarkus.runtime.StartupEvent;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -54,15 +54,29 @@ import java.util.StringJoiner;
 public class DiscordDispatcher extends ListenerAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(DiscordDispatcher.class);
 
-    @Inject
-    Instance<DiscordTextChannelPlugin> pluginInstances;
-    private final ArrayList<DiscordTextChannelPlugin> plugins = new ArrayList<>();
+    /**
+     * The plugins to work on.
+     */
+    private final ArrayList<DiscordMessageChannelPlugin> plugins = new ArrayList<>();
+    /**
+     * The guild provider to load guilds from.
+     */
+    private final GuildProvider guildProvider;
+    /**
+     * The message sender for discord messages.
+     */
+    private final DiscordMessageHandler sender;
 
     @Inject
-    GuildProvider guildProvider;
-
-    @Inject
-    DiscordMessageHandler sender;
+    public DiscordDispatcher(
+            final GuildProvider guildProvider,
+            final DiscordMessageHandler sender,
+            final Instance<DiscordMessageChannelPlugin> plugins
+    ) {
+        this.guildProvider = guildProvider;
+        this.sender = sender;
+        plugins.forEach(this.plugins::add);
+    }
 
 
     /**
@@ -71,23 +85,16 @@ public class DiscordDispatcher extends ListenerAdapter {
      * @param event The startup event.
      */
     void startup(@Observes StartupEvent event) {
-        pluginInstances.forEach(plugins::add);
-
         LOG.info("Discord Dispatcher: plugins: {}", plugins);
     }
 
     @Override
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
-        addMDCInfo(
-                event.getMessageId(),
-                event.getGuild(),
-                event.getChannel(),
-                event.getAuthor()
-        );
+        addMDCInfo(event.getMessageId(), event.getGuild(), event.getChannel(), event.getAuthor());
 
         Guild guild = guildProvider.retrieve(event.getGuild().getName());
 
-        for (DiscordTextChannelPlugin p : plugins) {
+        for (DiscordMessageChannelPlugin p : plugins) {
             try {
                 checkForWork(p, guild, event.getChannel(), event.getAuthor());
 
@@ -103,16 +110,11 @@ public class DiscordDispatcher extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReactionAdd(@NotNull final GuildMessageReactionAddEvent event) {
-        addMDCInfo(
-                event.getMessageId(),
-                event.getGuild(),
-                event.getChannel(),
-                event.getUser()
-        );
+        addMDCInfo(event.getMessageId(), event.getGuild(), event.getChannel(), event.getUser());
 
         Guild guild = guildProvider.retrieve(event.getGuild().getName());
 
-        for (DiscordTextChannelPlugin p : plugins) {
+        for (DiscordMessageChannelPlugin p : plugins) {
             try {
                 checkForWork(p, guild, event.getChannel(), event.getUser());
 
@@ -132,7 +134,7 @@ public class DiscordDispatcher extends ListenerAdapter {
      * @param plugin The plugin to check this event on.
      */
     private void checkForWork(
-            final DiscordTextChannelPlugin plugin,
+            final DiscordMessageChannelPlugin plugin,
             final Guild guild,
             final MessageChannel channel,
             final User user
@@ -192,6 +194,8 @@ public class DiscordDispatcher extends ListenerAdapter {
      * Removes the MDC for this event.
      */
     private void cleanMDC() {
+        MDC.remove("message.id");
+
         MDC.remove("guild.name");
         MDC.remove("guild.id");
 
@@ -205,6 +209,7 @@ public class DiscordDispatcher extends ListenerAdapter {
     @Override
     public String toString() {
         return new StringJoiner(", ", getClass().getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")
+                .add("identity=" + System.identityHashCode(this))
                 .toString();
     }
 }

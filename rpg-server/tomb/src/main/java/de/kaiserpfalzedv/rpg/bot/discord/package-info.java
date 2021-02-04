@@ -20,7 +20,7 @@
  *
  * <p>This package contains the technical gear of the discord connector. It connects to discord
  * and dispatches all discord bot messages via {@link de.kaiserpfalzedv.rpg.integrations.discord.JDA.DiscordDispatcher} to all
- * services implementing the {@link de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin}.</p>
+ * services implementing the {@link de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageChannelPlugin}.</p>
  *
  * <p>It's a fire-and-forget usage of the plugin. Every plugin gets the message and decides how to react on it. Handling
  * the outgoing message is the responsibility of the plugin.</p>

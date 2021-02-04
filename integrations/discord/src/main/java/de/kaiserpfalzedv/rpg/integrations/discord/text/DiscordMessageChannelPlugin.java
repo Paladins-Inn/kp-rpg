@@ -35,15 +35,15 @@ import java.util.List;
 
 /**
  * DiscordTextChannelPlugin -- A plugin working on Discord TextChannels.
- *
+ * <p>
  * The plugin for all text channel plugins. The plugin has to create the answer and send it.
  * This is a "fire and forget" interface.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06
  */
-public interface DiscordTextChannelPlugin extends DiscordPlugin {
-    Logger LOG = LoggerFactory.getLogger(DiscordTextChannelPlugin.class);
+public interface DiscordMessageChannelPlugin extends DiscordPlugin {
+    Logger LOG = LoggerFactory.getLogger(DiscordMessageChannelPlugin.class);
 
     /**
      * Executes the plugin.

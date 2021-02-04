@@ -18,7 +18,7 @@
 package de.kaiserpfalzedv.rpg.integrations.discord;
 
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.TestMemoryGuildStore;
-import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin;
+import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageChannelPlugin;
 import org.junit.jupiter.api.*;
 import org.slf4j.MDC;
 
@@ -48,6 +48,7 @@ public class TestDontWorkOnDiscordEventException {
         MDC.clear();
     }
 
-    static class TestPlugin implements DiscordTextChannelPlugin {}
+    static class TestPlugin implements DiscordMessageChannelPlugin {
+    }
 }
 

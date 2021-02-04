@@ -32,17 +32,21 @@ public class MongoResourceStatus {
     public Long observedGeneration;
     public List<MongoResourceHistory> history;
 
-    public MongoResourceStatus() {}
+    public MongoResourceStatus() {
+        history = new ArrayList<>();
+    }
 
     public MongoResourceStatus(ResourceStatus orig) {
         observedGeneration = orig.getObservedGeneration();
 
-        if (! orig.getHistory().isEmpty()) {
+        if (!orig.getHistory().isEmpty()) {
             history = new ArrayList<>(orig.getHistory().size());
 
             for (ResourceHistory h : orig.getHistory()) {
                 history.add(new MongoResourceHistory(h));
             }
+        } else {
+            history = new ArrayList<>();
         }
     }
 

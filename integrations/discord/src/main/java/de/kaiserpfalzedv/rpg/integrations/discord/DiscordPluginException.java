@@ -17,11 +17,11 @@
 
 package de.kaiserpfalzedv.rpg.integrations.discord;
 
+import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageChannelPlugin;
 import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordPluginWrappedException;
-import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin;
 
 /**
- * This is an exception thrown by a discord plugin. All exceptions thrown by any {@link DiscordTextChannelPlugin} should be at
+ * This is an exception thrown by a discord plugin. All exceptions thrown by any {@link DiscordMessageChannelPlugin} should be at
  * least wrapped in {@link DiscordPluginWrappedException}.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}

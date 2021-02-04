@@ -19,8 +19,8 @@ package de.kaiserpfalzedv.rpg.bot.dice;
 
 import de.kaiserpfalzedv.rpg.integrations.discord.JDA.NullDiscordUser;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
+import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageChannelPlugin;
 import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageHandler;
-import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordTextChannelPlugin;
 import io.quarkus.runtime.StartupEvent;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -47,7 +47,7 @@ import java.util.UUID;
  * @since 1.0.0 2021-01-11
  */
 @ApplicationScoped
-public class DiscordDiceRoller implements DiscordTextChannelPlugin {
+public class DiscordDiceRoller implements DiscordMessageChannelPlugin {
     static private final Logger LOG = LoggerFactory.getLogger(DiscordDiceRoller.class);
 
     /**
@@ -69,11 +69,17 @@ public class DiscordDiceRoller implements DiscordTextChannelPlugin {
         REACTIONS.add(ADD_ROLL_A_BIT);
     }
 
-    @Inject
     DiceRoller roller;
+    DiscordMessageHandler sender;
 
     @Inject
-    DiscordMessageHandler sender;
+    public DiscordDiceRoller(
+            final DiceRoller roller,
+            final DiscordMessageHandler sender
+    ) {
+        this.roller = roller;
+        this.sender = sender;
+    }
 
     public void startup(@Observes final StartupEvent event) {
         LOG.info("Created discord roller plugin {}: roller={}", this, roller);

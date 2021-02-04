@@ -24,7 +24,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 
 /**
- * This exception wraps another exception for using in {@link DiscordTextChannelPlugin}.
+ * This exception wraps another exception for using in {@link DiscordMessageChannelPlugin}.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06

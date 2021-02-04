@@ -53,7 +53,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TestMongoGuildStore {
     private static final Logger LOG = LoggerFactory.getLogger(TestMongoGuildStore.class);
 
-    private static final String NAMESPACE = "discord";
+    private static final String NAMESPACE = Guild.DISCORD_NAMESPACE;
     private static final String NAME = "Paladins Inn";
     private static final UUID UID = UUID.randomUUID();
     private static final OffsetDateTime CREATED = OffsetDateTime.now(ZoneOffset.UTC);
