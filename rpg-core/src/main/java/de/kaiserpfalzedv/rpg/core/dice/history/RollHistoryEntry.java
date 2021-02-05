@@ -15,57 +15,57 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.dice.mat;
+package de.kaiserpfalzedv.rpg.core.dice.history;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
+import de.kaiserpfalzedv.rpg.core.user.User;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.StringJoiner;
-
+import java.time.OffsetDateTime;
 
 /**
- * RollTotal -- The result of a numeric die result.
+ * RollHistoryEntry -- A stored roll result for getting a list of recent rolls.
+ * <p>
+ * The rolls are stored seperately for users in sessions.
+ * <p>
+ * For example a session could be represented by a special Discord channel.
  *
- * This is the result of a numeric die roll.
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.2.0  2021-02-05
  */
 @Value.Immutable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableRollTotal.class)
-@JsonDeserialize(builder = ImmutableRollTotal.Builder.class)
-@Schema(name = "RollTotal", description = "A generic result of a die roll.")
-public interface RollTotal extends Serializable {
-    default String getDescription() {
-        StringJoiner result = new StringJoiner(" - ");
-
-        for (ExpressionTotal r : getExpressions()) {
-            result.add(r.getDescription());
-        }
-
-        return result.toString();
-    }
+@JsonSerialize(as = ImmutableRollHistoryEntry.class)
+@JsonDeserialize(builder = ImmutableRollHistoryEntry.Builder.class)
+@Schema(name = "RollHistory", description = "A single dice roll.")
+public interface RollHistoryEntry extends Serializable {
+    /**
+     * @return the session this roll history belongs to.
+     */
+    String getSession();
 
     /**
-     * Checks if there are any results from this roll.
-     *
-     * @return FALSE if there is at least one result, TRUE if there are no results
+     * @return The user who rolled this roll.
      */
-    default boolean isEmpty() {
-        return getExpressions().size() == 0;
-    }
+    User getUser();
 
     /**
-     * @return The results of the di(c)e roll(s).
+     * @return a roll id.
      */
-
-    List<ExpressionTotal> getExpressions();
+    String getRollId();
 
     /**
-     * @return the comment of the user for this roll.
+     * @return the time of this roll.
      */
-    String getComment();
+    OffsetDateTime getTimestamp();
+
+    /**
+     * @return The roll definition.
+     */
+    RollTotal getResult();
 }
