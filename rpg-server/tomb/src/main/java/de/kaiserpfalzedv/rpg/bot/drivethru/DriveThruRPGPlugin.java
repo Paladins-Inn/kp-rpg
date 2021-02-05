@@ -37,18 +37,28 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The plugin for handling direct commands to DriveThruRPG.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.2.0  2021-02-04
+ */
 @ApplicationScoped
 public class DriveThruRPGPlugin implements DiscordMessageChannelPlugin {
     private static final Logger LOG = LoggerFactory.getLogger(DriveThruRPGPlugin.class);
 
     private static final String PLUGIN_PREFIX = "dtr";
 
+    /**
+     * The DriveThruRPG service.
+     */
     private final DriveThruRPGService service;
-
+    /** The user store. */
     private final UserStoreService userStore;
-
+    /** The commands of this plugin. */
     private final List<DriveThruRPGPluginCommand> commands = new ArrayList<>();
 
+    @SuppressWarnings("CdiInjectionPointsInspection")
     @Inject
     public DriveThruRPGPlugin(
             final UserStoreService userStore,
@@ -61,8 +71,7 @@ public class DriveThruRPGPlugin implements DiscordMessageChannelPlugin {
     }
 
     public void startup(@Observes final StartupEvent event) {
-
-        LOG.info("Created discord roller plugin {}: service={}, userStore={}, commands={}",
+        LOG.info("Created discord DriveThruRPG plugin {}: service={}, userStore={}, commands={}",
                 this, service, userStore, commands);
     }
 
@@ -72,11 +81,8 @@ public class DriveThruRPGPlugin implements DiscordMessageChannelPlugin {
             final MessageReceivedEvent event
     ) {
         String message = event.getMessage().getContentRaw();
-        //noinspection OptionalGetWithoutIsPresent
-        String guildPrefix = guild.getSpec().get().getPrefix();
-        String pluginPrefix = guildPrefix + PLUGIN_PREFIX;
+        String pluginPrefix = loadGuildPrefix(guild) + PLUGIN_PREFIX;
 
-        //noinspection OptionalGetWithoutIsPresent
         if (message.startsWith(pluginPrefix)) {
             String arg = message.substring(pluginPrefix.length());
             String[] args = arg.split(" ", 2);
@@ -97,6 +103,14 @@ public class DriveThruRPGPlugin implements DiscordMessageChannelPlugin {
                 }
             }
         }
+    }
+
+    private String loadGuildPrefix(Guild guild) {
+        String guildPrefix = "";
+        if (guild.getSpec().isPresent()) {
+            guildPrefix = guild.getSpec().get().getPrefix();
+        }
+        return guildPrefix;
     }
 
     @Override
