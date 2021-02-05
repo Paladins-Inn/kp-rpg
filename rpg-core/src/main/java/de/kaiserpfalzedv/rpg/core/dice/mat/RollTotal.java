@@ -25,6 +25,7 @@ import org.immutables.value.Value;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 
@@ -67,5 +68,5 @@ public interface RollTotal extends Serializable {
     /**
      * @return the comment of the user for this roll.
      */
-    String getComment();
+    Optional<String> getComment();
 }
