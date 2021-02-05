@@ -24,10 +24,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The basic data for every guild.
@@ -73,5 +70,12 @@ public interface GuildData extends Serializable {
     @Value.Default
     default Map<String, String> getProperties() {
         return new HashMap<>();
+    }
+
+    /**
+     * @return the value of the property.
+     */
+    default Optional<String> getProperty(final String key) {
+        return Optional.ofNullable(getProperties().get(key));
     }
 }

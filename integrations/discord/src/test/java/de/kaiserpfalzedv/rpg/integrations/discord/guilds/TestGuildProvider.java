@@ -22,6 +22,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import javax.inject.Inject;
@@ -36,7 +38,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @QuarkusTest
 public class TestGuildProvider {
+    private static final Logger LOG = LoggerFactory.getLogger(TestGuildProvider.class);
 
+    /**
+     * service under test.
+     */
     private final GuildProvider sut;
 
     @Inject
@@ -56,9 +62,41 @@ public class TestGuildProvider {
 
     @Test
     public void shouldCreateANewGuildWhenGuildIsNotFound() {
+        MDC.put("test", "create-new-guild");
+
         Guild result = sut.retrieve("test");
+        LOG.trace("result={}", result);
 
         assertEquals("test", result.getName());
+    }
+
+    @Test
+    public void shouldLoadTheGuildWhenGuildAlreadyExists() {
+        MDC.put("test", "load-guild");
+
+        // create the guild.
+        Guild created = sut.retrieve("new-guild");
+
+        // need to save it to invalidate the cache.
+        Guild saved = ImmutableGuild.builder()
+                .from(created)
+                .spec(
+                        ImmutableGuildData.builder()
+                                .putProperties("test-property", "data")
+                                .build()
+                )
+                .build();
+        sut.store(saved);
+
+        // load the guild from the repository.
+        Guild result = sut.refreshCache("new-guild");
+        LOG.trace("result={}", result);
+
+        assertEquals(created.getUid(), result.getUid());
+        assertEquals(created.getDisplayName(), result.getDisplayName());
+
+        GuildData data = result.getSpec().orElseThrow();
+        assertEquals("data", data.getProperty("test-property").orElseThrow());
     }
 
     @AfterEach

@@ -52,13 +52,16 @@ public class GuildProvider {
     }
 
 
-    @CacheInvalidate(cacheName = "discord-guilds")
     public void store(final Guild data) {
         store.save(data);
 
-        LOG.debug("Saved: guild={}", data);
+        LOG.info("Saved: guild={}", data);
     }
 
+    @CacheInvalidate(cacheName = "discord-guilds")
+    public Guild refreshCache(final String name) {
+        return retrieve(name);
+    }
 
     /**
      * Loads a guild setup information from the store. If there is no setup, create one and store it.
@@ -72,7 +75,10 @@ public class GuildProvider {
 
 
         data.ifPresent(guild -> LOG.debug("Loaded guild: guild={}", guild));
-        return data.orElseGet(() -> generateNewGuildEntry(name));
+        Guild result = data.orElseGet(() -> generateNewGuildEntry(name));
+
+        LOG.info("Loaded: guild={}", result);
+        return result;
     }
 
     @NotNull
