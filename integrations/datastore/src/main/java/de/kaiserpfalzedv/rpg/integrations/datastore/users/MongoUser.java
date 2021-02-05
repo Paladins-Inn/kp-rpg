@@ -77,7 +77,7 @@ public class MongoUser extends MongoResource<User> {
     @Override
     public String toString() {
         return new StringJoiner(", ", MongoUser.class.getSimpleName() + "[", "]")
-                .add("hash=" + System.identityHashCode(this))
+                .add("identity=" + System.identityHashCode(this))
                 .add("uid=" + uid)
                 .add("nameSpace='" + nameSpace + "'")
                 .add("name='" + name + "'")

@@ -81,7 +81,7 @@ public class MongoResourcePointer {
     @Override
     public String toString() {
         return new StringJoiner(", ", MongoResourcePointer.class.getSimpleName() + "[", "]")
-                .add("hash=" + System.identityHashCode(this))
+                .add("identity=" + System.identityHashCode(this))
                 .add("kind='" + kind + "'")
                 .add("apiVersion='" + apiVersion + "'")
                 .add("nameSpace='" + nameSpace + "'")

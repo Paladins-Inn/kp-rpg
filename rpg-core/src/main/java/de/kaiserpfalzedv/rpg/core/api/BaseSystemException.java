@@ -41,6 +41,7 @@ public abstract class BaseSystemException extends RuntimeException {
      *          later retrieval by the {@link #getMessage()} method.
      * @since 1.0.0
      */
+    @SuppressWarnings("CdiInjectionPointsInspection")
     public BaseSystemException(final String message) {
         super(message);
     }
@@ -106,7 +107,8 @@ public abstract class BaseSystemException extends RuntimeException {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", getClass().getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")
+        return new StringJoiner(", ", getClass().getSimpleName() + "[", "]")
+                .add("identity=" + System.identityHashCode(this))
                 .add("uuid=" + uuid)
                 .toString();
     }

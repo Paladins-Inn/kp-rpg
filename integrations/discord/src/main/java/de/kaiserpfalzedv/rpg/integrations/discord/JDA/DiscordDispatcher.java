@@ -213,7 +213,7 @@ public class DiscordDispatcher extends ListenerAdapter {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", getClass().getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")
+        return new StringJoiner(", ", getClass().getSimpleName() + "[", "]")
                 .add("identity=" + System.identityHashCode(this))
                 .toString();
     }

@@ -64,7 +64,8 @@ public class DiceRoller {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", DiceRoller.class.getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")
+        return new StringJoiner(", ", DiceRoller.class.getSimpleName() + "[", "]")
+                .add("identity=" + System.identityHashCode(this))
                 .toString();
     }
 }

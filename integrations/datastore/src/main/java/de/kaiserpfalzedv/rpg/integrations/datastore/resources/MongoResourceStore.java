@@ -194,7 +194,7 @@ public abstract class MongoResourceStore<T extends Resource<?>, M extends MongoR
     @Override
     public String toString() {
         return new StringJoiner(", ", MongoResourceStore.class.getSimpleName() + "[", "]")
-                .add("hash=" + System.identityHashCode(this))
+                .add("identity=" + System.identityHashCode(this))
                 .toString();
     }
 }

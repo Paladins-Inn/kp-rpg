@@ -72,7 +72,7 @@ public class MongoGuild extends MongoResource<Guild> {
     @Override
     public String toString() {
         return new StringJoiner(", ", MongoGuild.class.getSimpleName() + "[", "]")
-                .add("hash=" + System.identityHashCode(this))
+                .add("identity=" + System.identityHashCode(this))
                 .add("uid=" + uid)
                 .add("nameSpace='" + nameSpace + "'")
                 .add("name='" + name + "'")

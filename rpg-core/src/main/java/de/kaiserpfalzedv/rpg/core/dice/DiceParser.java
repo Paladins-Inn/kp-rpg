@@ -169,7 +169,8 @@ public class DiceParser {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", DiceParser.class.getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")
+        return new StringJoiner(", ", DiceParser.class.getSimpleName() + "[", "]")
+                .add("identity=" + System.identityHashCode(this))
                 .toString();
     }
 }

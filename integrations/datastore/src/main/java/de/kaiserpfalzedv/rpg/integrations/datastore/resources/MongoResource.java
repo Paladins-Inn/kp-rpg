@@ -94,7 +94,7 @@ public abstract class MongoResource<T extends Resource<?>> extends PanacheMongoE
     @Override
     public String toString() {
         return new StringJoiner(", ", MongoResource.class.getSimpleName() + "[", "]")
-                .add("hash=" + System.identityHashCode(this))
+                .add("identity=" + System.identityHashCode(this))
                 .add("id=" + id)
                 .add("uid='" + uid + "'")
                 .add("nameSpace='" + nameSpace + "'")

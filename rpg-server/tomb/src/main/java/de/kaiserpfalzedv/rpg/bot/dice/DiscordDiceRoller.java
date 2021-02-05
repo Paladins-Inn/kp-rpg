@@ -202,7 +202,8 @@ public class DiscordDiceRoller implements DiscordMessageChannelPlugin {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", getClass().getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")
+        return new StringJoiner(", ", getClass().getSimpleName() + "[", "]")
+                .add("identity=" + System.identityHashCode(this))
                 .add("roller=" + roller)
                 .toString();
     }

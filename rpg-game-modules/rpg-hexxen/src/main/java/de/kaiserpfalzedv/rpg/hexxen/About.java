@@ -27,7 +27,8 @@ import java.util.StringJoiner;
 public class About {
     @Override
     public String toString() {
-        return new StringJoiner(", ", About.class.getSimpleName() + "@" + System.identityHashCode(this) + "[", "]")
+        return new StringJoiner(", ", About.class.getSimpleName() + "[", "]")
+                .add("identity=" + System.identityHashCode(this))
                 .toString();
     }
 }

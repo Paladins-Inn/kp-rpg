@@ -149,7 +149,7 @@ public abstract class GenericStoreService<T extends Resource<?>> implements Stor
     @Override
     public String toString() {
         return new StringJoiner(", ", GenericStoreService.class.getSimpleName() + "[", "]")
-                .add("hash=" + System.identityHashCode(this))
+                .add("identity=" + System.identityHashCode(this))
                 .add("namedStore=" + namedStore.size())
                 .add("uidStore=" + uidStore.size())
                 .toString();
