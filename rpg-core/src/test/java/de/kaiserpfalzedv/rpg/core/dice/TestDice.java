@@ -93,9 +93,8 @@ public class TestDice {
 
         for (GenericNumericDie die : dice) {
             String result = die.toString();
-            int max = die.max;
 
-            assertTrue(result.startsWith(die.getClass().getSimpleName() + "["));
+            assertTrue(result.startsWith(die.getDieType() + "["));
         }
     }
 
