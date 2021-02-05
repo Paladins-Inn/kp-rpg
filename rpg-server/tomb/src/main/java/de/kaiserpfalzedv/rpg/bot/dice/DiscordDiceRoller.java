@@ -25,7 +25,7 @@ import io.quarkus.runtime.StartupEvent;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
+import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.internal.entities.DataMessage;
 import org.jetbrains.annotations.NotNull;
@@ -53,18 +53,20 @@ public class DiscordDiceRoller implements DiscordMessageChannelPlugin {
     /**
      * Emoji for re-rolling the die roll.
      */
-    private static final String REROLL_EMOJI = "🔁";
-
+    private static final String RE_ROLL_EMOJI = "🔁";
     /**
      * Emoji for adding to the current die roll.
      */
     private static final String ADD_ROLL = "⬆️";
+    /**
+     * Emoji for
+     */
     private static final String ADD_ROLL_A_BIT = "↗️";
 
     private static final List<String> REACTIONS = new ArrayList<>();
 
     static {
-        REACTIONS.add(REROLL_EMOJI);
+        REACTIONS.add(RE_ROLL_EMOJI);
         REACTIONS.add(ADD_ROLL);
         REACTIONS.add(ADD_ROLL_A_BIT);
     }
@@ -129,7 +131,7 @@ public class DiscordDiceRoller implements DiscordMessageChannelPlugin {
     @Override
     public void workOnReaction(
             final Guild guild,
-            final GenericGuildMessageReactionEvent event
+            final GenericMessageReactionEvent event
     ) {
         String reactionCode = event.getReaction().getReactionEmote().toString();
 
@@ -149,15 +151,15 @@ public class DiscordDiceRoller implements DiscordMessageChannelPlugin {
     }
 
     @NotNull
-    private RestAction<Message> getMessageRestAction(GenericGuildMessageReactionEvent event) {
+    private RestAction<Message> getMessageRestAction(final GenericMessageReactionEvent event) {
         return event.getChannel().retrieveMessageById(event.getReaction().getMessageId());
     }
 
-    private void reRoll(final GenericGuildMessageReactionEvent event) {
+    private void reRoll(final GenericMessageReactionEvent event) {
         RestAction<Message> action = getMessageRestAction(event);
         User user = event.getUser() != null ? event.getUser() : new NullDiscordUser();
 
-        event.getChannel().removeReactionById(event.getReaction().getMessageId(), REROLL_EMOJI, user).queue();
+        event.getReaction().removeReaction(user).queue();
 
         action.queue(
                 (message) -> {
@@ -181,7 +183,7 @@ public class DiscordDiceRoller implements DiscordMessageChannelPlugin {
                 (failure) -> {
                     LOG.error("Can't load message: " + failure.getMessage(), failure);
 
-                    sendHelp(user, "Can't load message to reroll the dice roll. Sorry");
+                    sendHelp(user, "Can't load message to re-roll the dice roll. Sorry");
                 }
         );
     }

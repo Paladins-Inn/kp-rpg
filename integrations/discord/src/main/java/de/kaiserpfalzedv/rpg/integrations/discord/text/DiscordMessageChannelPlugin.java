@@ -27,7 +27,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
+import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +67,7 @@ public interface DiscordMessageChannelPlugin extends DiscordPlugin {
      */
     default void workOnReaction(
             @SuppressWarnings("unused") final Guild guild,
-            @SuppressWarnings("unused") final GenericGuildMessageReactionEvent messageReceivedEvent
+            @SuppressWarnings("unused") final GenericMessageReactionEvent messageReceivedEvent
     ) throws DontWorkOnDiscordEventException {
         throw new DontWorkOnDiscordEventException(this);
     }

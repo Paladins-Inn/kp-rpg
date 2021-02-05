@@ -29,8 +29,9 @@ import io.quarkus.runtime.StartupEvent;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -90,7 +91,7 @@ public class DiscordDispatcher extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
-        addMDCInfo(event.getMessageId(), event.getGuild(), event.getChannel(), event.getAuthor());
+        addMDCInfo(event, event.getAuthor());
 
         Guild guild = guildProvider.retrieve(event.getGuild().getName());
 
@@ -109,8 +110,8 @@ public class DiscordDispatcher extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMessageReactionAdd(@NotNull final GuildMessageReactionAddEvent event) {
-        addMDCInfo(event.getMessageId(), event.getGuild(), event.getChannel(), event.getUser());
+    public void onMessageReactionAdd(@NotNull final MessageReactionAddEvent event) {
+        addMDCInfo(event, event.getUser());
 
         Guild guild = guildProvider.retrieve(event.getGuild().getName());
 
@@ -165,27 +166,27 @@ public class DiscordDispatcher extends ListenerAdapter {
      * @param user user since depending on the event type, the user is in different properties.
      */
     private void addMDCInfo(
-            final String messageId,
-            final net.dv8tion.jda.api.entities.Guild guild,
-            final MessageChannel channel,
+            final GenericMessageEvent event,
             final User user
     ) {
-        MDC.put("message.id", messageId);
+        MDC.put("message.id", event.getMessageId());
 
-        MDC.put("guild.name", guild.getName());
-        MDC.put("guild.id", guild.getId());
+        if (event.isFromGuild()) {
+            MDC.put("guild.name", event.getGuild().getName());
+            MDC.put("guild.id", event.getGuild().getId());
+        }
 
-        MDC.put("channel.name", channel.getName());
-        MDC.put("channel.id", channel.getId());
+        MDC.put("channel.name", event.getChannel().getName());
+        MDC.put("channel.id", event.getChannel().getId());
 
         MDC.put("user.name", user.getName());
         MDC.put("user.id", user.getId());
 
         LOG.trace("Received event: guild='{}', channel='{}', author='{}', message.id='{}'",
-                guild.getName(),
-                channel.getName(),
+                event.isFromGuild() ? event.getGuild().getName() : "no-guild",
+                event.getChannel().getName(),
                 user.getName(),
-                messageId
+                event.getMessageId()
         );
     }
 
