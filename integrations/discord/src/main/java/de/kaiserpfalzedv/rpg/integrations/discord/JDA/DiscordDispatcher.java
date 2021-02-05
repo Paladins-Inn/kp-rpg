@@ -93,7 +93,7 @@ public class DiscordDispatcher extends ListenerAdapter {
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
         addMDCInfo(event, event.getAuthor());
 
-        Guild guild = guildProvider.retrieve(event.getGuild().getName());
+        Guild guild = retrieveGuild(event);
 
         for (DiscordMessageChannelPlugin p : plugins) {
             try {
@@ -113,7 +113,7 @@ public class DiscordDispatcher extends ListenerAdapter {
     public void onMessageReactionAdd(@NotNull final MessageReactionAddEvent event) {
         addMDCInfo(event, event.getUser());
 
-        Guild guild = guildProvider.retrieve(event.getGuild().getName());
+        Guild guild = retrieveGuild(event);
 
         for (DiscordMessageChannelPlugin p : plugins) {
             try {
@@ -127,6 +127,10 @@ public class DiscordDispatcher extends ListenerAdapter {
         }
 
         cleanMDC();
+    }
+
+    private Guild retrieveGuild(@NotNull GenericMessageEvent event) {
+        return event.isFromGuild() ? guildProvider.retrieve(event.getGuild().getName()) : guildProvider.retrieve("no-guild");
     }
 
     /**
