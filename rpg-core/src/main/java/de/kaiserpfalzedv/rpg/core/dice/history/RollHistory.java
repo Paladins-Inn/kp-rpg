@@ -15,57 +15,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.dice.mat;
+package de.kaiserpfalzedv.rpg.core.dice.history;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.rpg.core.resources.Resource;
+import de.kaiserpfalzedv.rpg.core.resources.SerializableList;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.StringJoiner;
-
 
 /**
- * RollTotal -- The result of a numeric die result.
+ * RollHistory -- The history of rolls for an user in a session.
  *
- * This is the result of a numeric die roll.
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.2.0  2021-02-05
  */
 @Value.Immutable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableRollTotal.class)
-@JsonDeserialize(builder = ImmutableRollTotal.Builder.class)
-@Schema(name = "RollTotal", description = "A generic result of a die roll.")
-public interface RollTotal extends Serializable {
-    default String getDescription() {
-        StringJoiner result = new StringJoiner(" - ");
+@JsonSerialize(as = ImmutableRollHistory.class)
+@JsonDeserialize(builder = ImmutableRollHistory.Builder.class)
+@Schema(name = "RollHistory", description = "The roll history of an user in a special channel.")
+public interface RollHistory extends Resource<SerializableList<RollHistoryEntry>> {
+    String KIND = "RollHistory";
+    String API_VERSION = "v1";
 
-        for (ExpressionTotal r : getExpressions()) {
-            result.add(r.getDescription());
-        }
-
-        return result.toString();
+    /**
+     * @return The list of history entries.
+     */
+    @Value.Default
+    default List<RollHistoryEntry> getList() {
+        return getSpec().orElseThrow();
     }
-
-    /**
-     * Checks if there are any results from this roll.
-     *
-     * @return FALSE if there is at least one result, TRUE if there are no results
-     */
-    default boolean isEmpty() {
-        return getExpressions().size() == 0;
-    }
-
-    /**
-     * @return The results of the di(c)e roll(s).
-     */
-
-    List<ExpressionTotal> getExpressions();
-
-    /**
-     * @return the comment of the user for this roll.
-     */
-    String getComment();
 }
