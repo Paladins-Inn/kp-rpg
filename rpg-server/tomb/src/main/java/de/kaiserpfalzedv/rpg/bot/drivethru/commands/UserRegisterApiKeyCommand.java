@@ -145,6 +145,7 @@ public class UserRegisterApiKeyCommand implements DriveThruRPGPluginCommand {
         return "token";
     }
 
+
     @Override
     public String getHelp() {
         return formatHelp("Register your api-key for DriveThruRPG");

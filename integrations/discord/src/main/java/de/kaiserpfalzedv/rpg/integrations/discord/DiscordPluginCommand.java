@@ -31,6 +31,14 @@ public interface DiscordPluginCommand {
     String getCommand();
 
     /**
+     * @param input The input message.
+     * @return returns the argument (without the command).
+     */
+    default String getArgument(final String input) {
+        return input.replaceFirst(getCommand() + "\\s+", "");
+    }
+
+    /**
      * @return the help line for this command.
      */
     default String getHelp() {

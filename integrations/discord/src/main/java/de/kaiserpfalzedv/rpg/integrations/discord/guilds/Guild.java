@@ -21,8 +21,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
-import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
-import de.kaiserpfalzedv.rpg.core.user.UserData;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
@@ -32,14 +30,13 @@ import org.immutables.value.Value;
  * This data is used for customizing the bot and checking for permissions to use certain functions.
  */
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableGuild.class)
 @JsonDeserialize(builder = ImmutableGuild.Builder.class)
 @Schema(name = "guild", description = "A single guild (server) within discord.")
 public interface Guild extends Resource<GuildData> {
     String API_VERSION = "v1";
-    String KIND = "User";
+    String KIND = "Guild";
 
     String DISCORD_NAMESPACE = "discord";
 }

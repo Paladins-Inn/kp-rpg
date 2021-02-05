@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.core.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -24,6 +25,7 @@ import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,4 +63,15 @@ public interface UserData extends Serializable {
         return new HashMap<>();
     }
 
+    /**
+     * Returns a property.
+     *
+     * @param key The unique key of the property within the user dataset.
+     * @return The property saved with the user.
+     */
+    @Transient
+    @JsonIgnore
+    default Optional<String> getProperty(final String key) {
+        return Optional.ofNullable(getProperties().get(key));
+    }
 }

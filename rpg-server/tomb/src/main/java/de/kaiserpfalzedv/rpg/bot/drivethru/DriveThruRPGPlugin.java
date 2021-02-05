@@ -84,16 +84,17 @@ public class DriveThruRPGPlugin implements DiscordMessageChannelPlugin {
         String pluginPrefix = loadGuildPrefix(guild) + PLUGIN_PREFIX;
 
         if (message.startsWith(pluginPrefix)) {
-            String arg = message.substring(pluginPrefix.length());
+            String arg = message.substring(pluginPrefix.length() + 1);
             String[] args = arg.split(" ", 2);
 
             for (DiscordPluginCommand c : commands) {
+
                 DiscordPluginContext ctx = ImmutableDiscordPluginContext.builder()
                         .plugin(this)
                         .guild(guild)
                         .channel(event.getChannel())
                         .user(event.getAuthor())
-                        .argument(args[1])
+                        .argument(c.getArgument(args[1]))
                         .build();
 
                 try {

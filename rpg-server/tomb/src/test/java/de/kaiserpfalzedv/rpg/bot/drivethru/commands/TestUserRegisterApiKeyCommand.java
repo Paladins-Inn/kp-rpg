@@ -17,7 +17,6 @@
 
 package de.kaiserpfalzedv.rpg.bot.drivethru.commands;
 
-import de.kaiserpfalzedv.rpg.bot.dice.TestDiceRoller;
 import de.kaiserpfalzedv.rpg.bot.discord.FakeDiscordMessageChannelPlugin;
 import de.kaiserpfalzedv.rpg.bot.discord.FakeMessageChannel;
 import de.kaiserpfalzedv.rpg.bot.discord.FakeUser;
@@ -75,12 +74,30 @@ public class TestUserRegisterApiKeyCommand {
                             .build()
             )
             .build();
+
+    /**
+     * A valid api key (40 digits, hex).
+     */
     private static final String VALID_DISCORD_API_KEY = "deadb3afdeadbeafdeadbeafdeadbeafdeadbeaf";
+    /**
+     * An invalid api key.
+     */
     private static final String INVALID_DISCORD_API_KEY = "deadbeafdeadbeafd-adbeafdeadbeafdeadbeaf";
-    private final UserRegisterApiKeyCommand sut;
+
+
+    /**
+     * The user store to store data into.
+     */
     private final UserStoreService userStore;
 
 
+    /**
+     * The API Key registration command.
+     */
+    private final UserRegisterApiKeyCommand sut;
+
+
+    @SuppressWarnings("CdiInjectionPointsInspection")
     @Inject
     public TestUserRegisterApiKeyCommand(
             final UserRegisterApiKeyCommand sut,
@@ -92,7 +109,7 @@ public class TestUserRegisterApiKeyCommand {
 
     @BeforeAll
     static void setUp() {
-        MDC.put("test-class", TestDiceRoller.class.getSimpleName());
+        MDC.put("test-class", TestUserRegisterApiKeyCommand.class.getSimpleName());
     }
 
     @AfterAll

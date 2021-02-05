@@ -15,51 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.discord;
+package de.kaiserpfalzedv.rpg.integrations.discord.events;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.User;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
-/**
- * The context for plugin commands.
- *
- * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0  2021-02-04
- */
 @Value.Immutable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableDiscordPluginContext.class)
-@JsonDeserialize(builder = ImmutableDiscordPluginContext.Builder.class)
-@Schema(name = "card", description = "a single card definition.")
-public interface DiscordPluginContext {
-    /**
-     * @return the plugin generating this context.
-     */
-    DiscordPlugin getPlugin();
-
-    /**
-     * @return the guild this event was created in.
-     */
-    Guild getGuild();
-
-    /**
-     * @return the user of the event.
-     */
-    User getUser();
-
-    /**
-     * @return the channel of the event.
-     */
-    MessageChannel getChannel();
-
-    /**
-     * @return the raw argument to the command.
-     */
-    String getArgument();
+@JsonSerialize(as = ImmutableMessageEvent.class)
+@JsonDeserialize(builder = ImmutableMessageEvent.Builder.class)
+@Schema(name = "BaseEvent", description = "The base event for discord events.")
+public interface MessageEvent extends BaseEvent {
+    String getMessage();
 }
