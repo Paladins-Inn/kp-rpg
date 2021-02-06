@@ -18,6 +18,7 @@
 package de.kaiserpfalzedv.rpg.bot.drivethru.commands;
 
 import de.kaiserpfalzedv.rpg.bot.drivethru.DriveThruRPGPluginCommand;
+import de.kaiserpfalzedv.rpg.core.user.InvalidUserException;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginContext;
@@ -26,6 +27,7 @@ import de.kaiserpfalzedv.rpg.integrations.discord.DontWorkOnDiscordEventExceptio
 import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageHandler;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.DriveThruRPGService;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.OwnedProduct;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoDriveThruRPGAPIKeyDefinedException;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoValidTokenException;
 import net.dv8tion.jda.api.entities.ChannelType;
 import org.slf4j.Logger;
@@ -62,7 +64,7 @@ public class ListOwnedProductCommand implements DriveThruRPGPluginCommand {
     public ListOwnedProductCommand(
             final DriveThruRPGService service,
             @SuppressWarnings("CdiInjectionPointsInspection") final UserStoreService userStore,
-            final DiscordMessageHandler sender
+            @SuppressWarnings("CdiInjectionPointsInspection") final DiscordMessageHandler sender
     ) {
         this.service = service;
         this.userStore = userStore;
@@ -89,7 +91,7 @@ public class ListOwnedProductCommand implements DriveThruRPGPluginCommand {
 
             LOG.debug("Listed {} products.", result.size());
             sender.sendTextMessage(context.getChannel(), sj.toString());
-        } catch (NoValidTokenException e) {
+        } catch (NoValidTokenException | InvalidUserException | NoDriveThruRPGAPIKeyDefinedException e) {
             sender.sendDM(context.getUser(), "Sorry, your api-key is invalid. Please check it.");
             LOG.warn("Invalid api-key for driveThruRPG.");
         }

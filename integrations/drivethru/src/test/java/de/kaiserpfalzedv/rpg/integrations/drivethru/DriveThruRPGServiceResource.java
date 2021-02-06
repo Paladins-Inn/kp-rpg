@@ -18,12 +18,11 @@
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 import java.util.Collections;
 import java.util.Map;
-
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 /**
  * A mocked version of the DriveThruRPG api.
@@ -31,7 +30,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0 2021-01-29
  */
-public class DriveThruRPGMockService implements QuarkusTestResourceLifecycleManager {
+public class DriveThruRPGServiceResource implements QuarkusTestResourceLifecycleManager {
     private WireMockServer mockServer;
 
     @Override
@@ -39,34 +38,34 @@ public class DriveThruRPGMockService implements QuarkusTestResourceLifecycleMana
         mockServer = new WireMockServer();
         mockServer.start();
 
-        stubFor(post(urlEqualTo("/api/v1/token"))
+        WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/api/v1/token"))
                 .willReturn(
-                        aResponse()
-                        .withHeader("Content-Type", "application/json")
+                        WireMock.aResponse()
+                                .withHeader("Content-Type", "application/json")
                                 .withBodyFile("token.json")
                 )
         );
 
 
-        stubFor(get(urlEqualTo("/api/v1/customers/CUST/products?page=1&page_size=1000&include_archived=0"))
+        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/api/v1/customers/CUST/products?page=1&page_size=1000&include_archived=0"))
                 .willReturn(
-                        aResponse()
+                        WireMock.aResponse()
                                 .withHeader("Content-Type", "application/json")
                                 .withBodyFile("projects-ids.json")
                 )
         );
 
-        stubFor(get(urlEqualTo("/api/v1/publishers/PUBLISHER"))
+        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/api/v1/publishers/PUBLISHER"))
                 .willReturn(
-                        aResponse()
+                        WireMock.aResponse()
                                 .withHeader("Content-Type", "application/json")
                                 .withBodyFile("publisher-2.json")
                 )
         );
 
-        stubFor(get(urlEqualTo("/api/v1/products/PRODUCT"))
+        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/api/v1/products/PRODUCT"))
                 .willReturn(
-                        aResponse()
+                        WireMock.aResponse()
                                 .withHeader("Content-Type", "application/json")
                                 .withBodyFile("product-1.json")
                 )

@@ -20,39 +20,11 @@ package de.kaiserpfalzedv.rpg.integrations.discord.text;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.internal.entities.DataMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.enterprise.context.ApplicationScoped;
-import java.util.UUID;
+public interface DiscordMessageHandler {
+    void sendTextMessage(MessageChannel channel, String message);
 
-/**
- * DiscordMessageSender -- Sends the message to discord.
- *
- * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.0.0 2021-01-11
- */
-@ApplicationScoped
-public class DiscordMessageHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(DiscordMessageHandler.class);
+    void sendDM(User user, String message);
 
-    public void sendTextMessage(final MessageChannel channel, final String message) {
-        LOG.info("Sending channel message: channel='{}', message='{}'", channel.getName(), message);
-
-        Message msg = new DataMessage(false, message, UUID.randomUUID().toString(), null);
-        channel.sendMessage(msg).queue();
-    }
-
-    public void sendDM(final User user, final String message) {
-        LOG.info("Sending DM. user='{}', message='{}'", user.getName(), message);
-
-        user.openPrivateChannel().queue((channel) -> channel.sendMessage(message).queue());
-    }
-
-    public void addReactionToEvent(final Message message, final String reaction) {
-        LOG.info("Adding reaction: channel='{}', message.id='{}, reaction='{}'", message.getChannel().getName(), message.getId(), reaction);
-
-        message.addReaction(reaction).queue();
-    }
+    void addReactionToEvent(Message message, String reaction);
 }
