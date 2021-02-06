@@ -18,7 +18,6 @@
 package de.kaiserpfalzedv.rpg.bot.drivethru.commands;
 
 import de.kaiserpfalzedv.rpg.bot.drivethru.DriveThruRPGPluginCommand;
-import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
 import de.kaiserpfalzedv.rpg.core.user.ImmutableUserData;
 import de.kaiserpfalzedv.rpg.core.user.User;
@@ -32,13 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.Dependent;
-import java.time.Clock;
-import java.time.OffsetDateTime;
-import java.util.Optional;
 import java.util.StringJoiner;
-import java.util.UUID;
-
-import static de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild.DISCORD_NAMESPACE;
 
 /**
  * UserRegisterApiKeyCommand -- This command will register the DriveThruRPG API Key for the given user.
@@ -77,7 +70,7 @@ public class UserRegisterApiKeyCommand implements DriveThruRPGPluginCommand {
     public void execute(final DiscordPluginContext context) throws DiscordPluginException {
         validate(context);
 
-        User user = loadUserFromStoreOrCreateNewUser(context);
+        User user = loadUserFromStoreOrCreateNewUser(context, userStore);
 
         user = addTokenToUser(user, context.getArgument());
         user = userStore.save(user);
@@ -96,43 +89,13 @@ public class UserRegisterApiKeyCommand implements DriveThruRPGPluginCommand {
         }
     }
 
-    private User loadUserFromStoreOrCreateNewUser(DiscordPluginContext context) {
-        net.dv8tion.jda.api.entities.User user = context.getUser();
-        Optional<User> store = userStore.findByNameSpaceAndName(DISCORD_NAMESPACE, user.getName());
-        User result;
-        if (store.isEmpty()) {
-            result = ImmutableUser.builder()
-                    .metadata(
-                            ImmutableResourceMetadata.builder()
-                                    .kind(User.KIND)
-                                    .apiVersion(User.API_VERSION)
-
-                                    .namespace(DISCORD_NAMESPACE)
-                                    .name(context.getUser().getName())
-                                    .uid(UUID.randomUUID())
-                                    .generation(0L)
-                                    .created(OffsetDateTime.now(Clock.systemUTC()))
-
-                                    .putAnnotations("discord-id", user.getId())
-                                    .putAnnotations("discord-avatar-id", user.getAvatarId())
-                                    .putAnnotations("discord-avatar-url", user.getEffectiveAvatarUrl())
-
-                                    .build()
-                    )
-                    .build();
-        } else {
-            result = store.get();
-        }
-
-        return result;
-    }
-
     private User addTokenToUser(final User user, final String apiKey) {
         return ImmutableUser.builder()
                 .from(user)
 
                 .spec(
                         ImmutableUserData.builder()
+                                .from(user.getSpec().orElse(ImmutableUserData.builder().build()))
                                 .driveThruRPGApiKey(apiKey)
                                 .build()
                 )
@@ -148,7 +111,7 @@ public class UserRegisterApiKeyCommand implements DriveThruRPGPluginCommand {
 
     @Override
     public String getHelp() {
-        return formatHelp("Register your api-key for DriveThruRPG");
+        return formatHelp("<api-key> Register your api-key for DriveThruRPG");
     }
 
 
