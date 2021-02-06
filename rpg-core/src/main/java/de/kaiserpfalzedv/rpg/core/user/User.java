@@ -25,11 +25,10 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableUser.class)
 @JsonDeserialize(builder = ImmutableUser.Builder.class)
-@Schema(name = "card", description = "a single card definition.")
+@Schema(name = "User", description = "a user of the tomb system.")
 public interface User extends Resource<UserData> {
     String API_VERSION = "v1";
     String KIND = "User";
