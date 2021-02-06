@@ -35,7 +35,6 @@ import java.util.Optional;
  * @since 1.0.0
  */
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableResourceHistory.class)
 @JsonDeserialize(builder = ImmutableResourceHistory.Builder.class)

@@ -38,7 +38,6 @@ import java.util.UUID;
  * @since 1.0.0
  */
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableResourceMetadata.class)
 @JsonDeserialize(builder = ImmutableResourceMetadata.Builder.class)

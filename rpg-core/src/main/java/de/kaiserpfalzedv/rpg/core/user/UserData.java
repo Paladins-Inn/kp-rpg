@@ -44,12 +44,21 @@ import java.util.Optional;
 @JsonDeserialize(builder = ImmutableUserData.Builder.class)
 @Schema(name = "userData", description = "Registered User.")
 public interface UserData extends Serializable {
+    /**
+     * @return A pointer to a picture of this user.
+     */
     @Schema(name = "picture", description = "The resource address of the picture of this card.")
     Optional<ResourcePointer> getPicture();
 
+    /**
+     * @return A description of this user.
+     */
     @Schema(name = "description", description = "A description of the card.")
     Optional<String> getDescription();
 
+    /**
+     * @return the api key for accessing the DriveThruRPG webservice.
+     */
     @Schema(name = "driveThruRPGApiKey", description = "The API Key for DriveThruRPG.")
     Optional<String> getDriveThruRPGApiKey();
 
