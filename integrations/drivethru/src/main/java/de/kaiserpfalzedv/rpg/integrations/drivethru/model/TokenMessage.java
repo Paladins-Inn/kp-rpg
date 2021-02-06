@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.drivethru.publishers;
+package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
 
