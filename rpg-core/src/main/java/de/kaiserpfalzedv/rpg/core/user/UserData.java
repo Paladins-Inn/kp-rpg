@@ -21,14 +21,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.rpg.core.resources.DefaultResourceSpec;
 import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 import java.beans.Transient;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,24 +36,25 @@ import java.util.Optional;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06
  */
+@SuppressWarnings("unused")
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableUserData.class)
 @JsonDeserialize(builder = ImmutableUserData.Builder.class)
 @Schema(name = "userData", description = "Registered User.")
-public interface UserData extends Serializable {
-    /**
-     * @return A pointer to a picture of this user.
-     */
-    @Schema(name = "picture", description = "The resource address of the picture of this card.")
-    Optional<ResourcePointer> getPicture();
+public interface UserData extends DefaultResourceSpec {
+    String CAMPAIGNS = "campains";
+    String GAMES = "games";
 
-    /**
-     * @return A description of this user.
-     */
-    @Schema(name = "description", description = "A description of the card.")
-    Optional<String> getDescription();
+    String[] STRUCTURED_PROPERTIES = {
+            CAMPAIGNS,
+            GAMES
+    };
+
+    @Override
+    default String[] getDefaultProperties() {
+        return STRUCTURED_PROPERTIES;
+    }
 
     /**
      * @return the api key for accessing the DriveThruRPG webservice.
@@ -62,25 +62,23 @@ public interface UserData extends Serializable {
     @Schema(name = "driveThruRPGApiKey", description = "The API Key for DriveThruRPG.")
     Optional<String> getDriveThruRPGApiKey();
 
-
     /**
-     * @return Hashmap of configuration properties.
+     * @return The campaigns owned by this user.
      */
-    @Schema(name = "properties", description = "A map of plugin properties for this user.")
     @Value.Default
-    default Map<String, String> getProperties() {
-        return new HashMap<>();
+    @Transient
+    @JsonIgnore
+    default List<ResourcePointer> getCampaigns() {
+        return getResourcePointers(CAMPAIGNS);
     }
 
     /**
-     * Returns a property.
-     *
-     * @param key The unique key of the property within the user dataset.
-     * @return The property saved with the user.
+     * @return The games owned by this user.
      */
+    @Value.Default
     @Transient
     @JsonIgnore
-    default Optional<String> getProperty(final String key) {
-        return Optional.ofNullable(getProperties().get(key));
+    default List<ResourcePointer> getGames() {
+        return getResourcePointers(GAMES);
     }
 }

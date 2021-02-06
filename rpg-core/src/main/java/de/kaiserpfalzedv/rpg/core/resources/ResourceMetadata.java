@@ -29,8 +29,6 @@ import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
-
 /**
  * Metadata -- common data for every resource of the system.
  *
@@ -123,19 +121,5 @@ public interface ResourceMetadata extends ResourcePointer {
     @Value.Default
     default String getSelfLink() {
         return "/apis/" + getApiVersion() + "/" + getKind() + "/" + getUid();
-    }
-
-
-    /**
-     * Generates the self link for this resource.
-     *
-     * @param base the base string for the self link.
-     * @param kind the kind of the resource link.
-     * @param apiVersion the API version of this resource link.
-     * @param uid the UID of this resource.
-     * @return the standardized self link to this resource.
-     */
-    static String generateSelfLink(final String base, final String kind, final String apiVersion, final UUID uid) {
-        return base + "/apis/" + apiVersion + "/" + kind + "/" + uid.toString();
     }
 }

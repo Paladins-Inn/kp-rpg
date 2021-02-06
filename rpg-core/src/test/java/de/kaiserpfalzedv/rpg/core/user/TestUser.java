@@ -22,15 +22,13 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * TestMemoryUserStore -- checks if the memory store behaves correctly.
@@ -39,19 +37,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @since 1.2.0  2021-01-31
  */
 public class TestUser {
-    private static final Logger LOG = LoggerFactory.getLogger(TestUser.class);
-
     private static final UUID DATA_UID = UUID.randomUUID();
     private static final String DATA_NAMESPACE = "testNS";
     private static final String DATA_NAME = "testName";
     private static final OffsetDateTime DATA_CREATED = OffsetDateTime.now(Clock.systemUTC());
     private static final String DATA_API_KEY = "test-api-key";
     private static final String DISCORD_ID = "123123591";
-
-    private static final UUID OTHER_UID = UUID.randomUUID();
-    private static final String OTHER_NAMESPACE = "otherNS";
-    private static final String OTHER_NAME = "otherName";
-    private static final OffsetDateTime OTHER_CREATED = OffsetDateTime.now(Clock.systemUTC());
 
     private static final User DATA = ImmutableUser.builder()
             .metadata(
@@ -62,12 +53,6 @@ public class TestUser {
                             .driveThruRPGApiKey(DATA_API_KEY)
                             .putProperties("discord-id", DISCORD_ID)
                             .build()
-            )
-            .build();
-
-    private static final User OTHER = ImmutableUser.builder()
-            .metadata(
-                    generateMetadata(OTHER_NAMESPACE, OTHER_NAME, OTHER_UID, OTHER_CREATED)
             )
             .build();
 
@@ -89,6 +74,7 @@ public class TestUser {
      * @param uid       UUID of the data set.
      * @return The generated metadata
      */
+    @SuppressWarnings("SameParameterValue")
     private static ImmutableResourceMetadata generateMetadata(
             final String namespace,
             final String name,
@@ -105,6 +91,9 @@ public class TestUser {
 
                 .created(created)
 
+                .putAnnotations("valid", "test")
+                .putLabels("test", "valid")
+
                 .build();
     }
 
@@ -113,6 +102,36 @@ public class TestUser {
         MDC.put("test", "read-discord-id");
 
         assertEquals(DISCORD_ID, DATA.getSpec().orElseThrow().getProperty("discord-id").orElseThrow());
+    }
+
+    @Test
+    void shouldFindAnnotationWhenItIsSet() {
+        MDC.put("test", "read-valid-annotation");
+
+        assertTrue(DATA.getMetadata().isAnnotated("valid"));
+        assertEquals("test", DATA.getMetadata().getAnnotations().get("valid"));
+    }
+
+    @Test
+    void shouldNotFindAnnotationWhenItIsAbsent() {
+        MDC.put("test", "read-invalid-annotation");
+
+        assertFalse(DATA.getMetadata().isAnnotated("invalid"));
+    }
+
+    @Test
+    void shouldFindLabelWhenItIsSet() {
+        MDC.put("test", "read-valid-label");
+
+        assertTrue(DATA.getMetadata().isLabeled("test"));
+        assertEquals("valid", DATA.getMetadata().getLabels().get("test"));
+    }
+
+    @Test
+    void shouldNotFindLabelWhenItIsAbsent() {
+        MDC.put("test", "read-invalid-label");
+
+        assertFalse(DATA.getMetadata().isAnnotated("not-there"));
     }
 
     @AfterEach
