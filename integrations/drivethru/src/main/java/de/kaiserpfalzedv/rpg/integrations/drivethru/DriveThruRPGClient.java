@@ -15,8 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.drivethru.publishers;
+package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.OwnedProduct;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Product;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Publisher;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMultiMessage;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;

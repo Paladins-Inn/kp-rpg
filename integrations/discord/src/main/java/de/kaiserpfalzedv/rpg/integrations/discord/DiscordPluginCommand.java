@@ -17,6 +17,18 @@
 
 package de.kaiserpfalzedv.rpg.integrations.discord;
 
+import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
+import de.kaiserpfalzedv.rpg.core.user.User;
+import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
+
+import java.time.Clock;
+import java.time.OffsetDateTime;
+import java.util.Optional;
+import java.util.UUID;
+
+import static de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild.DISCORD_NAMESPACE;
+
 /**
  * A single command of a plugin. For your plugin define a marker interface from this and let inject the matching
  * classes into your plugin.
@@ -62,4 +74,42 @@ public interface DiscordPluginCommand {
      * @throws DiscordPluginException If there is a problem.
      */
     void execute(final DiscordPluginContext context) throws DiscordPluginException;
+
+    /**
+     * Loads the TOMB user matching the discord user from the UserStoreService.
+     *
+     * @param context   The command context.
+     * @param userStore The userstore to load the user from.
+     * @return Either the stored user or a newly created one.
+     */
+    default User loadUserFromStoreOrCreateNewUser(final DiscordPluginContext context, final UserStoreService userStore) {
+        net.dv8tion.jda.api.entities.User user = context.getUser();
+        Optional<User> store = userStore.findByNameSpaceAndName(DISCORD_NAMESPACE, user.getName());
+        User result;
+        if (store.isEmpty()) {
+            result = ImmutableUser.builder()
+                    .metadata(
+                            ImmutableResourceMetadata.builder()
+                                    .kind(User.KIND)
+                                    .apiVersion(User.API_VERSION)
+
+                                    .namespace(DISCORD_NAMESPACE)
+                                    .name(context.getUser().getName())
+                                    .uid(UUID.randomUUID())
+                                    .generation(0L)
+                                    .created(OffsetDateTime.now(Clock.systemUTC()))
+
+                                    .putAnnotations("discord-id", user.getId())
+                                    .putAnnotations("discord-avatar-id", user.getAvatarId())
+                                    .putAnnotations("discord-avatar-url", user.getEffectiveAvatarUrl())
+
+                                    .build()
+                    )
+                    .build();
+        } else {
+            result = store.get();
+        }
+
+        return result;
+    }
 }
