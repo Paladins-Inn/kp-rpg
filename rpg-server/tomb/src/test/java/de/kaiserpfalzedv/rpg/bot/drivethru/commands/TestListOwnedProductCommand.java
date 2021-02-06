@@ -31,6 +31,9 @@ import de.kaiserpfalzedv.rpg.integrations.discord.ImmutableDiscordPluginContext;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.ImmutableGuild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.ImmutableGuildData;
+import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageHandlerMock;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.DriveThruRPGService;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.DriveThruRPGServiceMock;
 import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -48,6 +51,7 @@ import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 
@@ -55,7 +59,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 @QuarkusTestResource(MongoDBResource.class)
 public class TestListOwnedProductCommand {
     public static final String VALID_USER = "klenkes74#0355";
-    public static final String INVALID_USER = "rlichti#6400";
+    public static final String INVALID_USER = "invalid#0003";
     private static final Logger LOG = LoggerFactory.getLogger(TestListOwnedProductCommand.class);
     private static final Guild GUILD = ImmutableGuild.builder()
             .metadata(
@@ -81,30 +85,32 @@ public class TestListOwnedProductCommand {
      * A valid api key (40 digits, hex).
      */
     private static final String VALID_DISCORD_API_KEY = "deadb3afdeadbeafdeadbeafdeadbeafdeadbeaf";
-    /**
-     * A valid api key (40 digits, hex).
-     */
-    private static final String INVALID_DISCORD_API_KEY = "deadb-afdeadbeafdeadbeafdeadbeafdeadbeaf";
+
     /**
      * The user store to store data into.
      */
     private final UserStoreService userStore;
 
+    /**
+     * The message handling service for discord. This mock can be checked afterwards.
+     */
+    private final DiscordMessageHandlerMock sender;
 
     /**
      * The API Key registration command.
      */
     private final ListOwnedProductCommand sut;
 
-
     @SuppressWarnings("CdiInjectionPointsInspection")
     @Inject
     public TestListOwnedProductCommand(
-            final ListOwnedProductCommand sut,
             final UserStoreService userStore
     ) {
-        this.sut = sut;
+        DriveThruRPGService service = new DriveThruRPGServiceMock();
         this.userStore = userStore;
+        this.sender = new DiscordMessageHandlerMock();
+
+        this.sut = new ListOwnedProductCommand(service, userStore, sender);
     }
 
     @BeforeAll
@@ -152,6 +158,8 @@ public class TestListOwnedProductCommand {
                 .build();
 
         sut.execute(ctx);
+
+        assertTrue(sender.isTextMessageSent());
     }
 
     @Test
@@ -187,12 +195,14 @@ public class TestListOwnedProductCommand {
 
             fail("There should be an exception!");
         } catch (DiscordPluginException e) {
+            assertTrue(sender.isDMSent());
             LOG.debug("Found expected exception: '" + e.getMessage() + "'", e);
         }
     }
 
     @AfterEach
     void tearDownEach() {
+        sender.clear(); // resets the message handler
         MDC.remove("test");
     }
 }

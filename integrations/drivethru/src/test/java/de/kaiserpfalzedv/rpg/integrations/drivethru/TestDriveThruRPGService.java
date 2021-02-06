@@ -49,7 +49,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
-@QuarkusTestResource(DriveThruRPGMockService.class)
+@QuarkusTestResource(DriveThruRPGServiceResource.class)
 public class TestDriveThruRPGService {
     static private final Logger LOG = LoggerFactory.getLogger(TestDriveThruRPGService.class);
     private static final User DEFAULT_USER = ImmutableUser.builder()
@@ -74,11 +74,16 @@ public class TestDriveThruRPGService {
                             .build()
             )
             .build();
+
+    private final DriveThruRPGService sut;
+
     @Inject
-    DriveThruRPGService sut;
+    public TestDriveThruRPGService(final DriveThruRPGService sut) {
+        this.sut = sut;
+    }
 
     @Test
-    public void shouldRetrieveOwnedProductsWhenCorrectAPIKeyIsGiven() throws NoValidTokenException {
+    public void shouldRetrieveOwnedProductsWhenCorrectAPIKeyIsGiven() throws NoValidTokenException, InvalidUserException, NoDriveThruRPGAPIKeyDefinedException {
         MDC.put("test", "retrieve-owned-products");
 
         List<OwnedProduct> result = sut.getOwnedProducts(DEFAULT_USER);
