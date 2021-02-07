@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.resources;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourcePointer;
 import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.bson.types.ObjectId;
 
 import java.beans.Transient;
 import java.util.Objects;
@@ -53,6 +54,12 @@ public class MongoResourcePointer {
     @BsonIgnore
     @Transient
     public ResourcePointer data() {
+        return data(null);
+    }
+
+    @BsonIgnore
+    @Transient
+    public ResourcePointer data(final ObjectId id) {
         return ImmutableResourcePointer.builder()
                 .kind(kind)
                 .apiVersion(apiVersion)
