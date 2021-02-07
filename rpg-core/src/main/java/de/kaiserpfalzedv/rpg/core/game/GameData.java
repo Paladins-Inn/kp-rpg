@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.user;
+package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,54 +31,72 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The basic data for every card.
+ * The game data. It stores everything in properties so if is basically build from convenience methods for the
+ * {@link DefaultResourceSpec}.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.0.0 2021-01-06
+ * @since 1.2.0 2021-02-06
  */
 @SuppressWarnings("unused")
 @Value.Immutable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableUserData.class)
-@JsonDeserialize(builder = ImmutableUserData.Builder.class)
-@Schema(name = "userData", description = "Registered User.")
-public interface UserData extends DefaultResourceSpec {
-    String CAMPAIGNS = "campains";
-    String GAMES = "games";
+@JsonSerialize(as = ImmutableGameData.class)
+@JsonDeserialize(builder = ImmutableGameData.Builder.class)
+@Schema(name = "GameData", description = "A game session data.")
+public interface GameData extends DefaultResourceSpec {
+    String CAMPAIGN = "campaign";
+    String GAME_GM = "game.gm";
+    String GAME_PLAYERS = "game.players";
+    String DISCORD_GUILD = "discord.guild";
+    String DISCORD_CHANNEL = "discord.channel";
 
     String[] STRUCTURED_PROPERTIES = {
-            CAMPAIGNS,
-            GAMES
+            CAMPAIGN,
+            GAME_GM,
+            GAME_PLAYERS,
+            DISCORD_GUILD,
+            DISCORD_CHANNEL
     };
+
 
     @Override
     default String[] getDefaultProperties() {
         return STRUCTURED_PROPERTIES;
     }
 
-    /**
-     * @return the api key for accessing the DriveThruRPG webservice.
-     */
-    @Schema(name = "driveThruRPGApiKey", description = "The API Key for DriveThruRPG.")
-    Optional<String> getDriveThruRPGApiKey();
 
-    /**
-     * @return The campaigns owned by this user.
-     */
     @Value.Default
     @Transient
     @JsonIgnore
-    default List<ResourcePointer> getCampaigns() {
-        return getResourcePointers(CAMPAIGNS);
+    default Optional<ResourcePointer> getCampaign() {
+        return getResourcePointer(CAMPAIGN);
     }
 
-    /**
-     * @return The games owned by this user.
-     */
     @Value.Default
     @Transient
     @JsonIgnore
-    default List<ResourcePointer> getGames() {
-        return getResourcePointers(GAMES);
+    default Optional<ResourcePointer> getGameMaster() {
+        return getResourcePointer(GAME_GM);
+    }
+
+    @Value.Default
+    @Transient
+    @JsonIgnore
+    default List<ResourcePointer> getPlayers() {
+        return getResourcePointers(GAME_PLAYERS);
+    }
+
+    @Value.Default
+    @Transient
+    @JsonIgnore
+    default Optional<ResourcePointer> getDiscordChannel() {
+        return getResourcePointer(DISCORD_CHANNEL);
+    }
+
+    @Value.Default
+    @Transient
+    @JsonIgnore
+    default Optional<ResourcePointer> getDiscordGuild() {
+        return getResourcePointer(DISCORD_GUILD);
     }
 }

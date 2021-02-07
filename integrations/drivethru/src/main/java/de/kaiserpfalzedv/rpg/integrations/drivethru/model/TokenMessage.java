@@ -15,16 +15,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.discord.text;
+package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.User;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
 
-public interface DiscordMessageHandler {
-    void sendTextMessage(MessageChannel channel, String message);
+public class TokenMessage implements DriveThruMessage<Token> {
+    private String status;
+    private Token token;
 
-    void sendDM(User user, String message);
+    @Override
+    public String getStatus() {
+        return status;
+    }
 
-    void addReactionToEvent(Message message, String reaction);
+    public void setStatus(final String status) {
+        this.status = status;
+    }
+
+    @Override
+    public Token getMessage() {
+        return token;
+    }
+
+    public void setMessage(final Token token) {
+        this.token = token;
+    }
 }

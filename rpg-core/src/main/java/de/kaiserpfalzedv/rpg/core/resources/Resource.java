@@ -38,51 +38,81 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonPropertyOrder({"kind,apiVersion,metadata,spec,status"})
 public interface Resource<D extends Serializable> extends Serializable {
+    /**
+     * @return the metadata of the resource containing the structural parameters.
+     */
     @Schema(name = "metadata", description = "Technical data to the resource.", required = true)
     ResourceMetadata getMetadata();
 
+    /**
+     * @return the data of the resource.
+     */
     @Schema(name = "spec", description = "The resource data itself.")
     Optional<D> getSpec();
 
-    @Schema(name = "status", description = "The status of the resource (containting the history).")
+    /**
+     * @return the status and history of the resource.
+     */
+    @Schema(name = "status", description = "The status of the resource (containing the history).")
     Optional<ResourceStatus> getStatus();
 
+    /**
+     * @return the unique identifier of the resource.
+     */
     @Transient
     @JsonIgnore
     default UUID getUid() {
         return getMetadata().getUid();
     }
 
+    /**
+     * @return the type of the resource.
+     */
     @Transient
     @JsonIgnore
     default String getKind() {
         return getMetadata().getKind();
     }
 
+    /**
+     * @return the version of the resource definition.
+     */
     @Transient
     @JsonIgnore
     default String getApiVersion() {
         return getMetadata().getApiVersion();
     }
 
+    /**
+     * @return the namespace of the resource.
+     */
     @Transient
     @JsonIgnore
     default String getNameSpace() {
         return getMetadata().getNamespace();
     }
 
+    /**
+     * @return the name of the resource.
+     */
     @Transient
     @JsonIgnore
     default String getName() {
         return getMetadata().getName();
     }
 
+    /**
+     * @return the display name of the resource
+     */
     @Transient
     @JsonIgnore
     default String getDisplayName() {
         return String.format("%s/%s/%s/%s", getKind(), getApiVersion(), getNameSpace(), getName());
     }
 
+    /**
+     * @return The generation of this resource.
+     */
     @Transient
     @JsonIgnore
     default Long getGeneration() {

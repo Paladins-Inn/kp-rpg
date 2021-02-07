@@ -15,21 +15,50 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.user;
+package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.rpg.core.resources.Resource;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
+import java.beans.Transient;
+import java.time.LocalDateTime;
+
 @Value.Immutable
+@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableUser.class)
-@JsonDeserialize(builder = ImmutableUser.Builder.class)
-@Schema(name = "User", description = "a user of the tomb system.")
-public interface User extends Resource<UserData> {
-    String API_VERSION = "v1";
-    String KIND = "User";
+@JsonSerialize(as = ImmutableToken.class)
+@JsonDeserialize(builder = ImmutableToken.Builder.class)
+@Schema(name = "DriveThruRPGToken", description = "The access token for DriveThruRPG.")
+public interface Token extends DriveThruResource {
+    @JsonProperty("access_token")
+    String getAccessToken();
+
+    @Transient
+    @JsonIgnore
+    @Value.Default
+    default String getBearerToken() {
+        return "Bearer " + getAccessToken();
+    }
+
+
+    @JsonProperty("customers_id")
+    String getCustomerId();
+
+    @JsonProperty("expires")
+    LocalDateTime getExpireTime();
+
+    @JsonProperty("server_time")
+    LocalDateTime getServerTime();
+
+    @JsonIgnore
+    LocalDateTime getLocalTime();
+
+    @JsonIgnore
+    Long getExpires();
 }

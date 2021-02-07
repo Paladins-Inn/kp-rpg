@@ -15,16 +15,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.discord.text;
+package de.kaiserpfalzedv.rpg.core.dice.history;
 
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.User;
+import de.kaiserpfalzedv.rpg.core.store.StoreService;
 
-public interface DiscordMessageHandler {
-    void sendTextMessage(MessageChannel channel, String message);
-
-    void sendDM(User user, String message);
-
-    void addReactionToEvent(Message message, String reaction);
+/**
+ * RollHistoryStoreService -- The data store for the dice roll history.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.2.0 2021-02-05
+ */
+public interface RollHistoryStoreService extends StoreService<RollHistory> {
 }

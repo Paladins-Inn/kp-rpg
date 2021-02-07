@@ -15,32 +15,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.drivethru.publishers;
+package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
+import de.kaiserpfalzedv.rpg.core.resources.Resource;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
+/**
+ * Campaign -- A campaign consisting of multiple RPG {@link Game}s.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.2.0  2021-02-06
+ */
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutablePublisher.class)
-@JsonDeserialize(builder = ImmutablePublisher.Builder.class)
-@Schema(name = "Publisher", description = "A publisher from DriveThruRPG.")
-public interface Publisher extends DriveThruResource {
-    /**
-     * @return the DriveThruRPG id.
-     */
-    @JsonProperty("publishers_id")
-    String getPublisherId();
-
-    /**
-     * @return The DriveThruRPG name.
-     */
-    @JsonProperty("publishers_name")
-    String getPublisherName();
+@JsonSerialize(as = ImmutableCampaign.class)
+@JsonDeserialize(builder = ImmutableCampaign.Builder.class)
+@Schema(name = "Campaign", description = "A campaign consisting of multiple games.")
+public interface Campaign extends Resource<CampaignData> {
+    String API_VERSION = "v1";
+    String KIND = "Campaign";
 }

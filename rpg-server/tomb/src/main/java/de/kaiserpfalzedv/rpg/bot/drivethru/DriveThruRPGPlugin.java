@@ -88,7 +88,6 @@ public class DriveThruRPGPlugin implements DiscordMessageChannelPlugin {
             String[] args = arg.split(" ", 2);
 
             for (DiscordPluginCommand c : commands) {
-
                 DiscordPluginContext ctx = ImmutableDiscordPluginContext.builder()
                         .plugin(this)
                         .guild(guild)

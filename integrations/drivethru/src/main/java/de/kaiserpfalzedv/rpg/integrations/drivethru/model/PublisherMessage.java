@@ -15,13 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.drivethru.publishers;
+package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
 
-public class ProductMessage implements DriveThruMessage<Product> {
+public class PublisherMessage implements DriveThruMessage<Publisher> {
     private String status;
-    private Product product;
+    private Publisher publisher;
 
     @Override
     public String getStatus() {
@@ -33,11 +33,11 @@ public class ProductMessage implements DriveThruMessage<Product> {
     }
 
     @Override
-    public Product getMessage() {
-        return product;
+    public Publisher getMessage() {
+        return publisher;
     }
 
-    public void setMessage(final Product product) {
-        this.product = product;
+    public void setMessage(final Publisher publisher) {
+        this.publisher = publisher;
     }
 }

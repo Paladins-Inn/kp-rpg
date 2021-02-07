@@ -15,29 +15,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.drivethru.publishers;
+package de.kaiserpfalzedv.rpg.core.resources;
 
-import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TokenMessage implements DriveThruMessage<Token> {
-    private String status;
-    private Token token;
-
-    @Override
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    @Override
-    public Token getMessage() {
-        return token;
-    }
-
-    public void setMessage(final Token token) {
-        this.token = token;
-    }
+/**
+ * ResourceList -- A serializable implementation of the List.
+ *
+ * @param <T> The elements of the list.
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.2.0  2021-02-05
+ */
+public class SerializableList<T extends Serializable> extends ArrayList<T> implements List<T>, Serializable, Cloneable {
 }

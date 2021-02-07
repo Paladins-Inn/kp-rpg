@@ -58,6 +58,8 @@ public class MongoUserData {
         if (picture != null) result.picture(picture.data());
         if (driveThruApiKey != null) result.driveThruRPGApiKey(driveThruApiKey);
 
+        result.properties(properties);
+
         return result.build();
     }
 }

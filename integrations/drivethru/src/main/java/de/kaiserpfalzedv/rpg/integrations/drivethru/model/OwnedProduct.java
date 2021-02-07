@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.drivethru.publishers;
+package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,37 +25,28 @@ import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
+import java.time.OffsetDateTime;
+import java.util.Optional;
+
 @Value.Immutable
 @Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableProduct.class)
-@JsonDeserialize(builder = ImmutableProduct.Builder.class)
-@Schema(name = "Product", description = "A product from DriveThruRPG.")
-public interface Product extends DriveThruResource {
+@JsonSerialize(as = ImmutableOwnedProduct.class)
+@JsonDeserialize(builder = ImmutableOwnedProduct.Builder.class)
+@Schema(name = "OwnedProduct", description = "a product dataset of DriveThruRPG.")
+public interface OwnedProduct extends DriveThruResource {
     @JsonProperty("products_id")
-    String getProductsId();
+    String getId();
 
     @JsonProperty("products_name")
-    String getProductsName();
+    String getName();
 
-    @JsonProperty("publishers_id")
-    String getPublisherId();
-
-    @JsonProperty("publishers_name")
-    String getPublisherName();
+    @JsonProperty("is_archived")
+    Optional<String> isArchived();
 
     @JsonProperty("cover_url")
-    String getCoverURL();
+    Optional<String> getCoverURL();
 
-    @JsonProperty("products_thumbnail")
-    String getThumbnail();
-
-    @JsonProperty("products_thumbnail100")
-    String getThumbnail100();
-
-    @JsonProperty("products_thumbnail80")
-    String getThumbnail80();
-
-    @JsonProperty("products_thumbnail40")
-    String getThumbnail40();
+    @JsonProperty("date_purchased")
+    Optional<OffsetDateTime> getDatePurchased();
 }

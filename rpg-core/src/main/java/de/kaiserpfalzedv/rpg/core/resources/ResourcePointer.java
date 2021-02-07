@@ -32,7 +32,6 @@ import java.util.UUID;
  * @since 1.0.0 2021-01-07
  */
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonPropertyOrder({"kind,apiVersion,namespace,name,selfLink"})
 @Schema(name = "ResourcePointer", description = "A full address of a resource within the system.")

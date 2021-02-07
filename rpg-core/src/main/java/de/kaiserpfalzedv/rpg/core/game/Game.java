@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.user;
+package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -24,12 +24,18 @@ import de.kaiserpfalzedv.rpg.core.resources.Resource;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
+/**
+ * Game -- A single RPG game.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.2.0  2021-02-06
+ */
 @Value.Immutable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableUser.class)
-@JsonDeserialize(builder = ImmutableUser.Builder.class)
-@Schema(name = "User", description = "a user of the tomb system.")
-public interface User extends Resource<UserData> {
+@JsonSerialize(as = ImmutableGame.class)
+@JsonDeserialize(builder = ImmutableGame.Builder.class)
+@Schema(name = "Game", description = "A game session.")
+public interface Game extends Resource<GameData> {
     String API_VERSION = "v1";
-    String KIND = "User";
+    String KIND = "Game";
 }

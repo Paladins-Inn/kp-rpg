@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.bot.discord;
 
+import de.kaiserpfalzedv.rpg.integrations.discord.testsupport.TestJDA;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -37,6 +38,7 @@ public class FakeMessageChannel implements MessageChannel {
     private final long latestMessageId;
     private final ChannelType type;
 
+    @SuppressWarnings("CdiInjectionPointsInspection")
     public FakeMessageChannel(
             final long id,
             final String name,
@@ -82,7 +84,7 @@ public class FakeMessageChannel implements MessageChannel {
     @NotNull
     @Override
     public JDA getJDA() {
-        return null;
+        return TestJDA.JDA;
     }
 
     @Override
@@ -95,7 +97,7 @@ public class FakeMessageChannel implements MessageChannel {
         if (this == o) return true;
         if (!(o instanceof FakeMessageChannel)) return false;
         FakeMessageChannel that = (FakeMessageChannel) o;
-        return getId() == that.getId();
+        return getId().equals(that.getId());
     }
 
     @Override

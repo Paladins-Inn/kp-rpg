@@ -70,7 +70,7 @@ public class TestDice {
         for (Die die : dice) {
             String result = die.toString();
 
-            assertTrue(result.startsWith(die.getClass().getSimpleName() + "["));
+            assertTrue(result.startsWith(die.getDieType() + "["));
         }
     }
 

@@ -15,38 +15,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.drivethru.publishers;
+package de.kaiserpfalzedv.rpg.core.dice.history;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
+import de.kaiserpfalzedv.rpg.core.resources.Resource;
+import de.kaiserpfalzedv.rpg.core.resources.SerializableList;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
-import java.time.OffsetDateTime;
-import java.util.Optional;
+import java.util.List;
 
+/**
+ * RollHistory -- The history of rolls for an user in a session.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.2.0  2021-02-05
+ */
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableOwnedProduct.class)
-@JsonDeserialize(builder = ImmutableOwnedProduct.Builder.class)
-@Schema(name = "OwnedProduct", description = "a product dataset of DriveThruRPG.")
-public interface OwnedProduct extends DriveThruResource {
-    @JsonProperty("products_id")
-    String getId();
+@JsonSerialize(as = ImmutableRollHistory.class)
+@JsonDeserialize(builder = ImmutableRollHistory.Builder.class)
+@Schema(name = "RollHistory", description = "The roll history of an user in a special channel.")
+public interface RollHistory extends Resource<SerializableList<RollHistoryEntry>> {
+    String KIND = "RollHistory";
+    String API_VERSION = "v1";
 
-    @JsonProperty("products_name")
-    String getName();
-
-    @JsonProperty("is_archived")
-    Optional<String> isArchived();
-
-    @JsonProperty("cover_url")
-    Optional<String> getCoverURL();
-
-    @JsonProperty("date_purchased")
-    Optional<OffsetDateTime> getDatePurchased();
+    /**
+     * @return The list of history entries.
+     */
+    @Value.Default
+    default List<RollHistoryEntry> getList() {
+        return getSpec().orElseThrow();
+    }
 }

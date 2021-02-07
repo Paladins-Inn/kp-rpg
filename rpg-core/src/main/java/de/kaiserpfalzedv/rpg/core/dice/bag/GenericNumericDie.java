@@ -26,7 +26,7 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
- * NumericDie -- Implements the die rolling for numeric die from 1 to {@link #max}.
+ * GenericNumericDie -- Implements the die rolling for numeric die from 1 to {@link #max}.
  *
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2020-08-12
@@ -76,6 +76,11 @@ public class GenericNumericDie implements Die {
         return true;
     }
 
+    @Override
+    public String getDieType() {
+        return "D" + max;
+    }
+
 
     @Override
     public final boolean equals(Object o) {
@@ -93,7 +98,7 @@ public class GenericNumericDie implements Die {
     @Override
     public final String toString() {
         return new StringJoiner(", ",
-                getClass().getSimpleName() + "[",
+                getDieType() + "[",
                 "]")
                 .add("identity=" + System.identityHashCode(this))
                 .toString();

@@ -15,9 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.drivethru.publishers;
+package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -26,39 +25,37 @@ import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
-import java.beans.Transient;
-import java.time.LocalDateTime;
-
 @Value.Immutable
 @Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableToken.class)
-@JsonDeserialize(builder = ImmutableToken.Builder.class)
-@Schema(name = "DriveThruRPGToken", description = "The access token for DriveThruRPG.")
-public interface Token extends DriveThruResource {
-    @JsonProperty("access_token")
-    String getAccessToken();
+@JsonSerialize(as = ImmutableProduct.class)
+@JsonDeserialize(builder = ImmutableProduct.Builder.class)
+@Schema(name = "Product", description = "A product from DriveThruRPG.")
+public interface Product extends DriveThruResource {
+    @JsonProperty("products_id")
+    String getProductsId();
 
-    @Transient
-    @JsonIgnore
-    @Value.Default
-    default String getBearerToken() {
-        return "Bearer " + getAccessToken();
-    }
+    @JsonProperty("products_name")
+    String getProductsName();
 
+    @JsonProperty("publishers_id")
+    String getPublisherId();
 
-    @JsonProperty("customers_id")
-    String getCustomerId();
+    @JsonProperty("publishers_name")
+    String getPublisherName();
 
-    @JsonProperty("expires")
-    LocalDateTime getExpireTime();
+    @JsonProperty("cover_url")
+    String getCoverURL();
 
-    @JsonProperty("server_time")
-    LocalDateTime getServerTime();
+    @JsonProperty("products_thumbnail")
+    String getThumbnail();
 
-    @JsonIgnore
-    LocalDateTime getLocalTime();
+    @JsonProperty("products_thumbnail100")
+    String getThumbnail100();
 
-    @JsonIgnore
-    Long getExpires();
+    @JsonProperty("products_thumbnail80")
+    String getThumbnail80();
+
+    @JsonProperty("products_thumbnail40")
+    String getThumbnail40();
 }

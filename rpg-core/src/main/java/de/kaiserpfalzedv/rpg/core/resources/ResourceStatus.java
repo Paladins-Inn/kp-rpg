@@ -36,7 +36,6 @@ import java.util.List;
  * @since 1.0.0 2021-01-07
  */
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableResourceStatus.class)
 @JsonDeserialize(builder = ImmutableResourceStatus.Builder.class)
@@ -62,6 +61,7 @@ public interface ResourceStatus extends Serializable {
      * @param message The generic message for this history entry.
      * @return TRUE if the history could be added.
      */
+    @SuppressWarnings("unused")
     default ResourceStatus addHistory(final String status, final String message) {
         getHistory().add(
                 ImmutableResourceHistory.builder()

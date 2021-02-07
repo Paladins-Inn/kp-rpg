@@ -15,21 +15,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.user;
+package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.rpg.core.resources.Resource;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 @Value.Immutable
+@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableUser.class)
-@JsonDeserialize(builder = ImmutableUser.Builder.class)
-@Schema(name = "User", description = "a user of the tomb system.")
-public interface User extends Resource<UserData> {
-    String API_VERSION = "v1";
-    String KIND = "User";
+@JsonSerialize(as = ImmutablePublisher.class)
+@JsonDeserialize(builder = ImmutablePublisher.Builder.class)
+@Schema(name = "Publisher", description = "A publisher from DriveThruRPG.")
+public interface Publisher extends DriveThruResource {
+    /**
+     * @return the DriveThruRPG id.
+     */
+    @JsonProperty("publishers_id")
+    String getPublisherId();
+
+    /**
+     * @return The DriveThruRPG name.
+     */
+    @JsonProperty("publishers_name")
+    String getPublisherName();
 }

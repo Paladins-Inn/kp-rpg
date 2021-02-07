@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.user;
+package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,50 +31,68 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The basic data for every card.
+ * The campaign data. It stores everything in properties so if is basically build from convenience methods for the
+ * {@link DefaultResourceSpec}.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.0.0 2021-01-06
+ * @since 1.2.0 2021-02-06
  */
 @SuppressWarnings("unused")
 @Value.Immutable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableUserData.class)
-@JsonDeserialize(builder = ImmutableUserData.Builder.class)
-@Schema(name = "userData", description = "Registered User.")
-public interface UserData extends DefaultResourceSpec {
-    String CAMPAIGNS = "campains";
+@JsonSerialize(as = ImmutableCampaignData.class)
+@JsonDeserialize(builder = ImmutableCampaignData.Builder.class)
+@Schema(name = "CampaignData", description = "The data for a multiple game spanning campaign.")
+public interface CampaignData extends DefaultResourceSpec {
+    String CAMPAIGN_GM = "campaign.gm";
+    String CAMPAIGN_PLAYERS = "campaign.players";
+    String DISCORD_CHANNEL = "discord.channel";
+    String DISCORD_GUILD = "discord.guild";
     String GAMES = "games";
 
     String[] STRUCTURED_PROPERTIES = {
-            CAMPAIGNS,
+            CAMPAIGN_GM,
+            CAMPAIGN_PLAYERS,
+            DISCORD_GUILD,
+            DISCORD_CHANNEL,
             GAMES
     };
+
 
     @Override
     default String[] getDefaultProperties() {
         return STRUCTURED_PROPERTIES;
     }
 
-    /**
-     * @return the api key for accessing the DriveThruRPG webservice.
-     */
-    @Schema(name = "driveThruRPGApiKey", description = "The API Key for DriveThruRPG.")
-    Optional<String> getDriveThruRPGApiKey();
 
-    /**
-     * @return The campaigns owned by this user.
-     */
     @Value.Default
     @Transient
     @JsonIgnore
-    default List<ResourcePointer> getCampaigns() {
-        return getResourcePointers(CAMPAIGNS);
+    default Optional<ResourcePointer> getGameMaster() {
+        return getResourcePointer(CAMPAIGN_GM);
     }
 
-    /**
-     * @return The games owned by this user.
-     */
+    @Value.Default
+    @Transient
+    @JsonIgnore
+    default List<ResourcePointer> getPlayers() {
+        return getResourcePointers(CAMPAIGN_PLAYERS);
+    }
+
+    @Value.Default
+    @Transient
+    @JsonIgnore
+    default Optional<ResourcePointer> getDiscordChannel() {
+        return getResourcePointer(DISCORD_CHANNEL);
+    }
+
+    @Value.Default
+    @Transient
+    @JsonIgnore
+    default Optional<ResourcePointer> getDiscordGuild() {
+        return getResourcePointer(DISCORD_GUILD);
+    }
+
     @Value.Default
     @Transient
     @JsonIgnore

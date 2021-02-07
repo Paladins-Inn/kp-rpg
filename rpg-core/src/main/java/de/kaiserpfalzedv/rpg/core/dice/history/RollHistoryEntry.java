@@ -15,46 +15,57 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.core.resources;
+package de.kaiserpfalzedv.rpg.core.dice.history;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
+import de.kaiserpfalzedv.rpg.core.user.User;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.util.Optional;
-
 
 /**
- * A single history entry. Basic data is the timestamp, the status and the message.
+ * RollHistoryEntry -- A stored roll result for getting a list of recent rolls.
+ * <p>
+ * The rolls are stored seperately for users in sessions.
+ * <p>
+ * For example a session could be represented by a special Discord channel.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.0.0
+ * @since 1.2.0  2021-02-05
  */
 @Value.Immutable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableResourceHistory.class)
-@JsonDeserialize(builder = ImmutableResourceHistory.Builder.class)
-@Schema(name = "ResourceHistory", description = "A single history entry of a change.")
-public interface ResourceHistory extends Serializable {
+@JsonSerialize(as = ImmutableRollHistoryEntry.class)
+@JsonDeserialize(builder = ImmutableRollHistoryEntry.Builder.class)
+@Schema(name = "RollHistory", description = "A single dice roll.")
+public interface RollHistoryEntry extends Serializable {
     /**
-     * @return Timestamp of this history entry.
+     * @return the session this roll history belongs to.
      */
-    @Schema(name = "TimeStamp", description = "The timestamp of the change.", required = true)
-    OffsetDateTime getTimeStamp();
+    String getSession();
 
     /**
-     * @return Status of the resource after this change.
+     * @return The user who rolled this roll.
      */
-    @Schema(name = "Status", description = "The resource status after the change.", required = true)
-    String getStatus();
+    User getUser();
 
     /**
-     * @return Human readable message for this change (if any).
+     * @return a roll id.
      */
-    @Schema(name = "Message", description = "The human readable description of the change.")
-    Optional<String> getMessage();
+    String getRollId();
+
+    /**
+     * @return the time of this roll.
+     */
+    OffsetDateTime getTimestamp();
+
+    /**
+     * @return The roll definition.
+     */
+    RollTotal getResult();
 }
