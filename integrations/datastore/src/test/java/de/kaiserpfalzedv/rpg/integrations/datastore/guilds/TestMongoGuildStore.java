@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.guilds;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceHistory;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceStatus;
+import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildStoreService;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.ImmutableGuild;
@@ -33,14 +34,14 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import javax.inject.Inject;
+import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * TestGuildRepository -- tests the basic methods for storing, manipulating and deleting users.
@@ -62,7 +63,7 @@ public class TestMongoGuildStore {
     /**
      * Default data created during setup of tests.
      */
-    private static final Guild data = ImmutableGuild.builder()
+    private static final Guild DATA = ImmutableGuild.builder()
             .metadata(
                     ImmutableResourceMetadata.builder()
                             .kind(Guild.KIND)
@@ -112,18 +113,18 @@ public class TestMongoGuildStore {
 
     @AfterAll
     static void tearDown() {
-        new MongoGuildStore().remove(data);
+        new MongoGuildStore().remove(DATA);
         MDC.clear();
     }
 
     @BeforeEach
     void loadData() {
-        sut.save(data);
+        sut.save(DATA);
     }
 
     @AfterEach
     void deleteData() {
-        sut.remove(data);
+        sut.remove(DATA);
     }
 
     @Test
@@ -174,5 +175,31 @@ public class TestMongoGuildStore {
         LOG.trace("result={}", result);
 
         assertTrue(result.isPresent(), "There should be a guild with UID " + UID.toString());
+    }
+
+    @Test
+    public void shouldRewriteGuildsWithKindGuildWhenTheStoredDataIsOfKindUser() {
+        MDC.put("test", "repair-wrong-saved-guild");
+
+        Guild invalid = ImmutableGuild.builder()
+                .from(DATA)
+                .metadata(
+                        ImmutableResourceMetadata.builder()
+                                .from(DATA.getMetadata())
+                                .kind(User.KIND)
+                                .name("invalid-kind")
+                                .uid(UUID.randomUUID())
+                                .created(OffsetDateTime.now(Clock.systemUTC()))
+                                .build()
+                )
+                .build();
+
+        sut.save(invalid);
+
+        Optional<Guild> result = sut.findByNameSpaceAndName(DATA.getNameSpace(), "invalid-kind");
+        LOG.trace("result={}", result);
+
+        assertTrue(result.isPresent());
+        assertEquals(Guild.KIND, result.get().getKind());
     }
 }

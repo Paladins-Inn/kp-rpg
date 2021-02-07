@@ -25,7 +25,9 @@ import de.kaiserpfalzedv.rpg.core.resources.SerializableList;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * RollHistory -- The history of rolls for an user in a session.
@@ -47,6 +49,10 @@ public interface RollHistory extends Resource<SerializableList<RollHistoryEntry>
      */
     @Value.Default
     default List<RollHistoryEntry> getList() {
-        return getSpec().orElseThrow();
+        try {
+            return getSpec().orElseThrow();
+        } catch (NoSuchElementException e) {
+            return new ArrayList<>();
+        }
     }
 }

@@ -21,6 +21,7 @@ import de.kaiserpfalzedv.rpg.core.resources.Resource;
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.types.ObjectId;
 
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -55,11 +56,15 @@ public abstract class MongoResource<T extends Resource<?>> extends PanacheMongoE
      * @param data The resource to load data from.
      */
     public void data(final T data) {
+        if (data.getMetadata().isAnnotated("mongo-id")) {
+            id = new ObjectId(data.getMetadata().getAnnotations().get("mongo-id")); // reload the mongodb id from the annotations.
+        }
         uid = data.getUid();
         nameSpace = data.getNameSpace();
         name = data.getName();
 
         metadata = new MongoMetaData(data.getMetadata());
+        metadata.annotations.remove("mongo-id"); // remove the mongodb id if it is in there ...
 
         if (data.getStatus().isPresent()) {
             status = new MongoResourceStatus(data.getStatus().get());

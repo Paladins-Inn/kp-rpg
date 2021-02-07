@@ -61,7 +61,7 @@ public class MongoGuild extends MongoResource<Guild> {
     @Override
     public Guild data() {
         ImmutableGuild.Builder result = ImmutableGuild.builder()
-                .metadata(metadata.data());
+                .metadata(metadata.data(id));
 
         if (spec != null) result.spec(spec.data());
         if (status != null) result.status(status.data());

@@ -62,7 +62,7 @@ public class MongoCard extends MongoResource<Card> {
     @Override
     public Card data() {
         ImmutableCard.Builder result = ImmutableCard.builder()
-                .metadata(metadata.data());
+                .metadata(metadata.data(id));
 
         if (spec != null) result.spec(spec.data());
 

@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.integrations.datastore.resources;
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.bson.types.ObjectId;
 
 import java.beans.Transient;
 import java.util.HashMap;
@@ -65,9 +66,12 @@ public class MongoMetaData extends MongoResourcePointer {
     }
 
 
+    @Override
     @BsonIgnore
     @Transient
-    public ResourceMetadata data() {
+    public ResourceMetadata data(final ObjectId id) {
+        annotations.put("mongo-id", id.toHexString());
+
         ImmutableResourceMetadata.Builder result = ImmutableResourceMetadata.builder()
                 .kind(kind)
                 .apiVersion(apiVersion)

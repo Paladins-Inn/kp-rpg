@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
+import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
@@ -45,9 +46,9 @@ import java.time.OffsetDateTime;
 @Schema(name = "RollHistory", description = "A single dice roll.")
 public interface RollHistoryEntry extends Serializable {
     /**
-     * @return the session this roll history belongs to.
+     * @return the game this roll history belongs to.
      */
-    String getSession();
+    ResourcePointer getGame();
 
     /**
      * @return The user who rolled this roll.

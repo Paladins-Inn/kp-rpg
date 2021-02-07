@@ -59,7 +59,7 @@ public class MongoUser extends MongoResource<User> {
     @Transient
     public User data() {
         ImmutableUser.Builder result = ImmutableUser.builder()
-                .metadata(metadata.data());
+                .metadata(metadata.data(id));
 
         if (spec != null) {
             result.spec(spec.data());
