@@ -29,15 +29,16 @@
 
 
     <properties>
-        <quarkus-plugin.version>1.12.0.Final</quarkus-plugin.version>
+        <vaadin.version>14.5.1</vaadin.version>
+        <discord.version>3.5.0_329</discord.version>
+
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>1.11.3.Final</quarkus.platform.version>
+        <quarkus.platform.version>1.13.2.Final</quarkus.platform.version>
+
+        <quarkus-plugin.version>1.13.2.Final</quarkus-plugin.version>
         <surefire-plugin.version>2.22.1</surefire-plugin.version>
 
-        <vaadin.version>14.5.1</vaadin.version>
-
-        <discord.version>3.5.0_329</discord.version>
     </properties>
 
     <dependencyManagement>
