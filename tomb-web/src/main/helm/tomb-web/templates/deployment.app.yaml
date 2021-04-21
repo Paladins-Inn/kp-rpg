@@ -1,0 +1,127 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: "{{ .Release.Namespace }}"
+  name: "{{ .Chart.Name }}-app"
+  labels:
+    app.kubernetes.io/name: "{{ .Chart.Name }}"
+    app.kubernetes.io/component: "app"
+    app.kubernetes.io/part-of: "{{ .Chart.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ .Chart.Name }}"
+      app.kubernetes.io/part-of: "{{ .Chart.Name }}"
+      app.kubernetes.io/component: "app"
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      name: "{{ .Chart.Name }}-app"
+      labels:
+        app.kubernetes.io/name: "{{ .Chart.Name }}"
+        app.kubernetes.io/part-of: "{{ .Chart.Name }}"
+        app.kubernetes.io/component: "app"
+        app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: "{{ .Chart.Name }}-app"
+          image: 'docker-registry.default.svc:5000/{{ .Release.Namespace }}/delphi-council-is:{{ .Chart.AppVersion }}'
+          imagePullPolicy: "{{ .Values.app.image.pullPolicy }}"
+          resources:
+            limits:
+              cpu: {{ .Values.app.limits.cpu }}
+              memory: {{ .Values.app.limits.memory }}
+            requests:
+              cpu: {{ .Values.app.requests.cpu }}
+              memory: {{ .Values.app.requests.memory }}
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: database-user
+                  name: {{ .Chart.Name }}-db
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: database-password
+                  name: {{ .Chart.Name }}-db
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: database-name
+                  name: {{ .Chart.Name }}-db
+            - name: MAIL_FROM_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: mail-name
+                  name: {{ .Chart.Name }}-mail
+            - name: MAIL_FROM_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  key: mail-address
+                  name: {{ .Chart.Name }}-mail
+            - name: MAIL_USER
+              valueFrom:
+                secretKeyRef:
+                  key: mail-user
+                  name: {{ .Chart.Name }}-mail
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mail-password
+                  name: {{ .Chart.Name }}-mail
+            - name: MAIL_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: mail-host
+                  name: {{ .Chart.Name }}-mail
+            - name: MAIL_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: mail-port
+                  name: {{ .Chart.Name }}-mail
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 1
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 300
+            periodSeconds: 100
+            failureThreshold: 3
+            successThreshold: 1
+            timeoutSeconds: 5
+          volumeMounts:
+            - mountPath: /deployments/config/application.properties
+              name: config-volume
+              subPath: application.properties
+      volumes:
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: application.properties
+                path: application.properties
+            name: "{{ .Chart.Name }}-config"
+          name: config-volume
+

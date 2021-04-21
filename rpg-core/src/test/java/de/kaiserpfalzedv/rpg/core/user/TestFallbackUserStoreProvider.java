@@ -17,24 +17,19 @@
 
 package de.kaiserpfalzedv.rpg.core.user;
 
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.MDC;
 
-import javax.inject.Inject;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@QuarkusTest
 public class TestFallbackUserStoreProvider {
     private final UserStoreService sut;
 
-    @Inject
-    public TestFallbackUserStoreProvider(final UserStoreService store) {
-        this.sut = store;
+    public TestFallbackUserStoreProvider() {
+        this.sut = new FallbackUserStoreProvider().memoryGuildStore();
     }
 
     @BeforeAll

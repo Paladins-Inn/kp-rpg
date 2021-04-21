@@ -29,7 +29,6 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableOwnedProduct.class)
 @JsonDeserialize(builder = ImmutableOwnedProduct.Builder.class)

@@ -19,7 +19,6 @@ package de.kaiserpfalzedv.rpg.core.user;
 
 import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.store.OptimisticLockStoreException;
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-import javax.inject.Inject;
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
@@ -43,7 +41,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-01-31
  */
-@QuarkusTest
 public class TestMemoryUserStore {
     private static final Logger LOG = LoggerFactory.getLogger(TestMemoryUserStore.class);
 
@@ -88,9 +85,8 @@ public class TestMemoryUserStore {
      */
     private final UserStoreService sut;
 
-    @Inject
-    public TestMemoryUserStore(final UserStoreService store) {
-        this.sut = store;
+    public TestMemoryUserStore() {
+        this.sut = new MemoryUserStore();
     }
 
     @Test

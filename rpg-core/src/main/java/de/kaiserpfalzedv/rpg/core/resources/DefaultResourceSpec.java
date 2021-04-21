@@ -36,7 +36,6 @@ import java.util.*;
  */
 @SuppressWarnings("unused")
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableDefaultResourceSpec.class)
 @JsonDeserialize(builder = ImmutableDefaultResourceSpec.Builder.class)

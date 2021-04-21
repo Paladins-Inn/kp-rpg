@@ -22,13 +22,12 @@ import de.kaiserpfalzedv.rpg.core.dice.mat.ExpressionTotal;
 import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableExpressionTotal;
 import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableRollTotal;
 import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
-import io.quarkus.runtime.StartupEvent;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
-import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -49,9 +48,9 @@ public class DiceParser {
 
     static private final String DICE_PATTERN =
             "(?<pre>(([A-Za-z]+)?[(])?)?"
-            +"(?<amount>\\d+)?"
-            +"(?<type>([dD])?[A-Za-z][0-9A-Za-z]+)"
-            +"(?<post>.*)?";
+                    + "(?<amount>\\d+)?"
+                    + "(?<type>([dD])?[A-Za-z][0-9A-Za-z]+)"
+                    + "(?<post>.*)?";
 
     static private final Pattern PATTERN = Pattern.compile(DICE_PATTERN);
 
@@ -59,7 +58,8 @@ public class DiceParser {
     Instance<Die> dice;
 
 
-    public void startUp(@Observes StartupEvent event) {
+    @PostConstruct
+    public void startUp() {
         ArrayList<Die> dice = new ArrayList<>();
         this.dice.forEach(dice::add);
 

@@ -34,7 +34,6 @@ import java.util.Optional;
  * @since 1.0.0 2021-01-06
  */
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableBasicCardData.class)
 @JsonDeserialize(builder = ImmutableBasicCardData.Builder.class)

@@ -48,7 +48,7 @@
         </dependency>
         <dependency>
             <groupId>de.kaiserpfalz-edv.rpg</groupId>
-            <artifactId>datastore</artifactId>
+            <artifactId>datastore-mongodb</artifactId>
         </dependency>
 
         <dependency>

@@ -18,10 +18,6 @@
 package de.kaiserpfalzedv.rpg.core.cards;
 
 import de.kaiserpfalzedv.rpg.core.store.GenericStoreService;
-import io.quarkus.arc.DefaultBean;
-
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
 
 /**
  * The fallback provider for a memory based card store.
@@ -29,15 +25,12 @@ import javax.enterprise.inject.Produces;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-02-03
  */
-@Dependent
 public class FallbackCardStoreProvider {
     /**
      * Produces a card store if no other bean is defined.
      *
      * @return The memory implementation of the {@link CardStoreService}.
      */
-    @Produces
-    @DefaultBean
     public CardStoreService memoryGuildStore() {
         return new MemoryCardStore();
     }

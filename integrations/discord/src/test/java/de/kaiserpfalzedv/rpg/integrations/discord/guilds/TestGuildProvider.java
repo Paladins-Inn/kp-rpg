@@ -17,7 +17,6 @@
 
 package de.kaiserpfalzedv.rpg.integrations.discord.guilds;
 
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -36,7 +35,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-02-02
  */
-@QuarkusTest
 public class TestGuildProvider {
     private static final Logger LOG = LoggerFactory.getLogger(TestGuildProvider.class);
 
@@ -46,8 +44,8 @@ public class TestGuildProvider {
     private final GuildProvider sut;
 
     @Inject
-    public TestGuildProvider(final GuildProvider provider) {
-        this.sut = provider;
+    public TestGuildProvider() {
+        sut = new GuildProvider(new FallbackGuildStoreProvider().memoryGuildStore());
     }
 
     @BeforeAll

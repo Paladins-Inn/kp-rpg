@@ -30,7 +30,6 @@ import java.beans.Transient;
 import java.time.LocalDateTime;
 
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableToken.class)
 @JsonDeserialize(builder = ImmutableToken.Builder.class)

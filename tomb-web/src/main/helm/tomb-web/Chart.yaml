@@ -1,0 +1,11 @@
+---
+type: application
+apiVersion: v2
+name: @project.artifactId@
+version: @project.version@
+description: @project.description@
+maintainers:
+  - name: Roland T. Lichti
+    email: rlichti@kaiserpfalz-edv.de
+    url: https://www.lichti.de
+appVersion: @project.version@

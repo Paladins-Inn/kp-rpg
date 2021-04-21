@@ -26,7 +26,6 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.immutables.value.Value;
 
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableProduct.class)
 @JsonDeserialize(builder = ImmutableProduct.Builder.class)

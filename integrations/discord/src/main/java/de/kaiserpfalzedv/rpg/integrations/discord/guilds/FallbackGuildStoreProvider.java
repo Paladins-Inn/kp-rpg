@@ -18,10 +18,6 @@
 package de.kaiserpfalzedv.rpg.integrations.discord.guilds;
 
 import de.kaiserpfalzedv.rpg.core.store.GenericStoreService;
-import io.quarkus.arc.DefaultBean;
-
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
 
 /**
  * The fallback provider for a memory based guild store.
@@ -29,15 +25,12 @@ import javax.enterprise.inject.Produces;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-02-03
  */
-@Dependent
 public class FallbackGuildStoreProvider {
     /**
      * Produces a guild store if no other bean is defined.
      *
      * @return The memory implementation of the {@link GuildStoreService}.
      */
-    @Produces
-    @DefaultBean
     public GuildStoreService memoryGuildStore() {
         return new MemoryGuildStore();
     }

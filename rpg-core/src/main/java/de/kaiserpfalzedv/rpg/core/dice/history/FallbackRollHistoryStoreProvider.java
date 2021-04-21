@@ -19,7 +19,6 @@ package de.kaiserpfalzedv.rpg.core.dice.history;
 
 import de.kaiserpfalzedv.rpg.core.cards.CardStoreService;
 import de.kaiserpfalzedv.rpg.core.store.GenericStoreService;
-import io.quarkus.arc.DefaultBean;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
@@ -38,7 +37,6 @@ public class FallbackRollHistoryStoreProvider {
      * @return The memory implementation of the {@link CardStoreService}.
      */
     @Produces
-    @DefaultBean
     public RollHistoryStoreService memoryRollHistoryStore() {
         return new MemoryRollHistoryStore();
     }

@@ -1,0 +1,26 @@
+###
+POST {{host}}/api/v1/token
+Authorization: Bearer {{api_key}}
+
+> {%
+ client.global.set("access_token", response.body.message.access_token);
+ client.global.set("customers_id", response.body.message.customers_id);
+%}
+
+###
+GET {{host}}/api/v1/customers/{{customers_id}}/products?page=1&page_size=100
+Authorization: Bearer {{access_token}}
+
+###
+GET {{host}}/api/v1/products/269324
+
+###
+GET {{host}}/api/v1/publishers/3444?products
+
+###
+GET {{host}}/api/v1/publishers/{{publisher_id}}
+Authorization: Bearer {{access_token}}
+
+###
+GET {{host}}/api/v1/customers/{{customers_id}}/
+Authorization: Bearer {{access_token}}

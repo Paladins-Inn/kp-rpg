@@ -1,0 +1,39 @@
+---
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  namespace: "{{ .Release.Namespace }}"
+  name: "{{ .Values.app.image.name }}"
+  labels:
+    app.kubernetes.io/name: "{{ .Chart.Name }}"
+    app.kubernetes.io/component: "app"
+    app.kubernetes.io/part-of: "{{ .Chart.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
+spec:
+  lookupPolicy:
+    local: true
+  tags:
+    - name: latest
+      from:
+        kind: DockerImage
+        name: "{{ .Values.app.image.repo }}/{{ .Values.app.image.name }}:latest"
+      importPolicy:
+        scheduled: true
+      referencePolicy:
+        type: Local
+    - name: "{{ .Values.app.image.tag }}"
+      from:
+        kind: DockerImage
+        name: "{{ .Values.app.image.repo }}/{{ .Values.app.image.name }}:0.2.0"
+      importPolicy:
+        scheduled: true
+      referencePolicy:
+        type: Local
+    - name: "{{ .Values.app.image.tag }}"
+      from:
+        kind: DockerImage
+        name: "{{ .Values.app.image.repo }}/{{ .Values.app.image.name }}:{{ .Values.app.image.tag }}"
+      importPolicy:
+        scheduled: true
+      referencePolicy:
+        type: Local

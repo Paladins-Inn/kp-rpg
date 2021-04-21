@@ -31,7 +31,6 @@ import org.immutables.value.Value;
  * @since 1.0.0 2021-01-07
  */
 @Value.Immutable
-@Value.Modifiable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonSerialize(as = ImmutableCard.class)
 @JsonDeserialize(builder = ImmutableCard.Builder.class)
