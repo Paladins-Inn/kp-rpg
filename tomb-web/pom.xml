@@ -104,7 +104,7 @@
 
         <site-plugin.version>3.9.1</site-plugin.version>
         <info-reports-plugin.version>3.1.1</info-reports-plugin.version>
-        <vaadin-maven-plugin.version>${vaadin.version}</vaadin-maven-plugin.version>
+        <vaadin-maven-plugin.version>19.0.6</vaadin-maven-plugin.version>
     </properties>
 
 
