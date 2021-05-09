@@ -17,11 +17,10 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
-import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
-import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
-import de.kaiserpfalzedv.rpg.core.user.ImmutableUserData;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.user.InvalidUserException;
 import de.kaiserpfalzedv.rpg.core.user.User;
+import de.kaiserpfalzedv.rpg.core.user.UserData;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.OwnedProduct;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Product;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Publisher;
@@ -52,9 +51,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @QuarkusTestResource(DriveThruRPGServiceResource.class)
 public class TestDriveThruRPGService {
     static private final Logger LOG = LoggerFactory.getLogger(TestDriveThruRPGService.class);
-    private static final User DEFAULT_USER = ImmutableUser.builder()
+    private static final User DEFAULT_USER = User.builder()
             .metadata(
-                    ImmutableResourceMetadata.builder()
+                    ResourceMetadata.builder()
                             .kind(User.KIND)
                             .apiVersion(User.API_VERSION)
 
@@ -68,7 +67,7 @@ public class TestDriveThruRPGService {
                             .build()
             )
             .spec(
-                    ImmutableUserData.builder()
+                    UserData.builder()
                             .description("Test-user for API calls")
                             .driveThruRPGApiKey("API-KEY")
                             .build()

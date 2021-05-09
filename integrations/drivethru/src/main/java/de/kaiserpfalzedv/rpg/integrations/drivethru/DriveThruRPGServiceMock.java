@@ -20,7 +20,10 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru;
 import de.kaiserpfalzedv.rpg.core.dice.bag.D100;
 import de.kaiserpfalzedv.rpg.core.user.InvalidUserException;
 import de.kaiserpfalzedv.rpg.core.user.User;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.*;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.OwnedProduct;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Product;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Publisher;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Token;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoDriveThruRPGAPIKeyDefinedException;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoValidTokenException;
 import org.slf4j.Logger;
@@ -79,7 +82,7 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
 
         LocalDateTime now = LocalDateTime.now(UTC);
 
-        Token token = ImmutableToken.builder()
+        Token token = Token.builder()
                 .accessToken(UUID.randomUUID().toString())
                 .customerId(user.getName().split("#")[1])
 
@@ -91,8 +94,9 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
                 .build();
 
         if ("invalid#0003".equalsIgnoreCase(user.getName())) {
-            token = ImmutableToken.builder()
-                    .from(token)
+            token = Token.builder()
+                    .accessToken(UUID.randomUUID().toString())
+                    .customerId(user.getName().split("#")[1])
 
                     .expireTime(now)
                     .serverTime(now.minusHours(1))
@@ -123,7 +127,7 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
         LOG.trace("Product created. productId={}", productId);
         String productUrl = "https://nowhere/product/" + productId;
         return Optional.of(
-                ImmutableProduct.builder()
+                Product.builder()
                         .productsId(productId)
                         .productsName("Product Nr. 1")
 
@@ -156,7 +160,7 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
 
         LOG.trace("Publisher created. publisherId={}", publisherId);
         return Optional.of(
-                ImmutablePublisher.builder()
+                Publisher.builder()
                         .publisherId(publisherId)
                         .publisherName("Publisher Nr. " + publisherId)
                         .build()
@@ -191,13 +195,13 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
 
         for (int i = 1; i < count + 1; i++) {
             result.add(
-                    ImmutableOwnedProduct.builder()
+                    OwnedProduct.builder()
                             .id(Integer.toString(i, 10))
                             .name("Product Nr. " + i)
-                            .coverURL("https://nowhere/product/" + i + "/cover")
+                            .coverURL(Optional.of("https://nowhere/product/" + i + "/cover"))
 
-                            .datePurchased(OffsetDateTime.now(UTC).minusMonths(3L))
-                            .isArchived("0")
+                            .datePurchased(Optional.of(OffsetDateTime.now(UTC).minusMonths(3L)))
+                            .archived(Optional.of("0"))
                             .build()
             );
         }

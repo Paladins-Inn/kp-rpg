@@ -18,13 +18,14 @@
 package de.kaiserpfalzedv.rpg.integrations.discord.guilds;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The basic data for every guild.
@@ -32,50 +33,22 @@ import java.util.*;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06
  */
-@Value.Immutable
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableGuildData.class)
-@JsonDeserialize(builder = ImmutableGuildData.Builder.class)
-@Schema(name="guildData", description = "The data for a guild (server) within Discord.")
-public interface GuildData extends Serializable {
-    String DEFAULT_PREFIX = "tb!";
+@Schema(name = "guildData", description = "The data for a guild (server) within Discord.")
+public class GuildData implements Serializable {
+    public static String DEFAULT_PREFIX = "tb!";
 
-    /**
-     * getPrefix -- The default prefix for this guild.
-     * <p>
-     * Will be {@value #DEFAULT_PREFIX} ({@link #DEFAULT_PREFIX}) by default but can
-     * be redefined. A plugin can decide to take this prefix or roll with another (like the dice rolling plugin which
-     * uses "/r " instead to mimic <a href="https://roll20.net">Roll20</a>.
-     *
-     * @return the prefix for this guild.
-     */
+    @Schema(name = "adminRoles", description = "The roles needed for being seen as admin.")
+    private final List<String> adminRoles = new ArrayList<>();
+
+    @Schema(name = "properties", description = "Configuration properties")
+    private final Map<String, String> properties = new HashMap<>();
+
     @Schema(name = "prefix", description = "The global prefix to use in this discord guild.")
-    @Value.Default
-    default String getPrefix() {
-        return DEFAULT_PREFIX;
-    }
-
-
-    /**
-     * @return list of role names which are considered administrators for this guild.
-     */
-    @Value.Default
-    default List<String> getAdminRoles() {
-        return new ArrayList<>();
-    }
-
-    /**
-     * @return Hashmap of configuration properties.
-     */
-    @Value.Default
-    default Map<String, String> getProperties() {
-        return new HashMap<>();
-    }
-
-    /**
-     * @return the value of the property.
-     */
-    default Optional<String> getProperty(final String key) {
-        return Optional.ofNullable(getProperties().get(key));
-    }
+    private final String prefix = DEFAULT_PREFIX;
 }

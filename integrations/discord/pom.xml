@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <!--
   ~ Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
   ~
@@ -25,6 +24,7 @@
         <version>1.2.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <artifactId>discord</artifactId>
     <name>KP RPG :: Integration :: Discord</name>
     <description>Integration into the Discord system.</description>
@@ -48,56 +48,13 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.2.0_247</version>
+            <version>4.2.0_228</version>
         </dependency>
-
 
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-cache</artifactId>
+            <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
+            <artifactId>discord-testsupport</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <resources>
-            <resource>
-                <filtering>true</filtering>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <exclude>**/*.docx</exclude>
-                    <exclude>**/*.xlsx</exclude>
-                    <exclude>**/*.zip</exclude>
-                    <exclude>**/*.tgz</exclude>
-                    <exclude>**/*.png</exclude>
-                    <exclude>**/*.jpg</exclude>
-                    <exclude>**/*.gpg</exclude>
-                    <exclude>**/*.license</exclude>
-                    <exclude>**/*.js</exclude>
-                    <exclude>**/*.js.*</exclude>
-                    <exclude>**/*.ttf</exclude>
-                    <exclude>**/*.woff*</exclude>
-                    <exclude>**/*.eot</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.docx</include>
-                    <include>**/*.xlsx</include>
-                    <include>**/*.zip</include>
-                    <include>**/*.tgz</include>
-                    <include>**/*.png</include>
-                    <include>**/*.jpg</include>
-                    <include>**/*.gpg</include>
-                    <include>**/*.license</include>
-                    <include>**/*.js</include>
-                    <include>**/*.js.*</include>
-                    <include>**/*.ttf</include>
-                    <include>**/*.woff*</include>
-                    <include>**/*.eot</include>
-                </includes>
-            </resource>
-        </resources>
-    </build>
 </project>

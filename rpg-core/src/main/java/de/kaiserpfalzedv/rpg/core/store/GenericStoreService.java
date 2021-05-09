@@ -17,9 +17,9 @@
 
 package de.kaiserpfalzedv.rpg.core.store;
 
-import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -35,6 +35,7 @@ import java.util.UUID;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-01-31
  */
+@Slf4j
 public abstract class GenericStoreService<T extends Resource<?>> implements StoreService<T> {
     /**
      * The name based memory store for guilds.
@@ -65,6 +66,8 @@ public abstract class GenericStoreService<T extends Resource<?>> implements Stor
 
     @Override
     public T save(final T object) throws OptimisticLockStoreException {
+        log.trace("Saving: {}", object);
+
         String key = generateStoreKey(object.getMetadata().getNamespace(), object.getMetadata().getName());
         T data = object;
 
@@ -140,9 +143,25 @@ public abstract class GenericStoreService<T extends Resource<?>> implements Stor
      * @return the new metadata.
      */
     protected ResourceMetadata increaseGeneration(final ResourceMetadata metadata) {
-        return ImmutableResourceMetadata.builder()
-                .from(metadata)
+        if (metadata != null) {
+            log.trace("Increasing generation. uid={}, old={}, new={}", metadata.getUid(), metadata.getGeneration(), metadata.getGeneration() + 1);
+        }
+
+        return ResourceMetadata.builder()
+                .kind(metadata.getKind())
+                .apiVersion(metadata.getApiVersion())
+
+                .annotations(metadata.getAnnotations())
+                .labels(metadata.getLabels())
+
+                .uid(metadata.getUid())
+                .namespace(metadata.getNamespace())
+                .name(metadata.getName())
+
                 .generation(metadata.getGeneration() + 1)
+                .created(metadata.getCreated())
+                .deleted(metadata.getDeleted())
+
                 .build();
     }
 

@@ -18,11 +18,14 @@
 package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
+
+import java.util.Optional;
 
 /**
  * Game -- A single RPG game.
@@ -30,12 +33,22 @@ import org.immutables.value.Value;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-02-06
  */
-@Value.Immutable
+@AllArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableGame.class)
-@JsonDeserialize(builder = ImmutableGame.Builder.class)
 @Schema(name = "Game", description = "A game session.")
-public interface Game extends Resource<GameData> {
-    String API_VERSION = "v1";
-    String KIND = "Game";
+public class Game extends Resource<GameData> {
+    public static String API_VERSION = "v1";
+    public static String KIND = "Game";
+
+    @Builder
+    public Game(
+            @NotNull final ResourceMetadata metadata,
+            @NotNull final GameData spec,
+            final ResourceStatus state
+    ) {
+        super(metadata, Optional.of(spec), Optional.ofNullable(state));
+    }
 }

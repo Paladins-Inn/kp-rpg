@@ -18,17 +18,9 @@
 package de.kaiserpfalzedv.rpg.integrations.drivethru.resource;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.io.Serializable;
 
-@Value.Immutable
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableDriveThruResource.class)
-@JsonDeserialize(builder = ImmutableDriveThruResource.Builder.class)
-@Schema(name = "DriveThruResource")
 public interface DriveThruResource extends Serializable {
 }

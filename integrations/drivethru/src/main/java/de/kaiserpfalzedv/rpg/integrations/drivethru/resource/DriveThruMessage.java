@@ -20,30 +20,29 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru.resource;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.beans.Transient;
 import java.util.Optional;
 
-@Value.Immutable
+@AllArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableDriveThruMessage.class)
-@JsonDeserialize(builder = ImmutableDriveThruMessage.Builder.class)
-@Schema(name = "DriveThruMessage")
-public interface DriveThruMessage<T> {
+public class DriveThruMessage<T> {
     @JsonProperty("status")
-    String getStatus();
+    private final String status;
 
     @JsonProperty("message")
-    T getMessage();
+    private final Optional<T> message;
 
     @Transient
     @JsonIgnore
-    @Value.Default
-    default Optional<T> getData() {
-        return Optional.ofNullable(getMessage());
+    public Optional<T> getData() {
+        return getMessage();
     }
 }

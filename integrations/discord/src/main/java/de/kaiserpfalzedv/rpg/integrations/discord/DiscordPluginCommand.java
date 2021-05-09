@@ -17,13 +17,13 @@
 
 package de.kaiserpfalzedv.rpg.integrations.discord;
 
-import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
-import de.kaiserpfalzedv.rpg.core.user.ImmutableUser;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -87,9 +87,14 @@ public interface DiscordPluginCommand {
         Optional<User> store = userStore.findByNameSpaceAndName(DISCORD_NAMESPACE, user.getName());
         User result;
         if (store.isEmpty()) {
-            result = ImmutableUser.builder()
+            HashMap<String, String> annotations = new HashMap<>(3);
+            annotations.put("discord-id", user.getId());
+            annotations.put("discord-avatar-id", user.getAvatarId());
+            annotations.put("discord-avatar-url", user.getEffectiveAvatarUrl());
+
+            result = User.builder()
                     .metadata(
-                            ImmutableResourceMetadata.builder()
+                            ResourceMetadata.builder()
                                     .kind(User.KIND)
                                     .apiVersion(User.API_VERSION)
 
@@ -99,9 +104,7 @@ public interface DiscordPluginCommand {
                                     .generation(0L)
                                     .created(OffsetDateTime.now(Clock.systemUTC()))
 
-                                    .putAnnotations("discord-id", user.getId())
-                                    .putAnnotations("discord-avatar-id", user.getAvatarId())
-                                    .putAnnotations("discord-avatar-url", user.getEffectiveAvatarUrl())
+                                    .annotations(annotations)
 
                                     .build()
                     )

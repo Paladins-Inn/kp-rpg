@@ -18,18 +18,31 @@
 package de.kaiserpfalzedv.rpg.core.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
-@Value.Immutable
+import java.util.Optional;
+
+@AllArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableUser.class)
-@JsonDeserialize(builder = ImmutableUser.Builder.class)
 @Schema(name = "User", description = "a user of the tomb system.")
-public interface User extends Resource<UserData> {
-    String API_VERSION = "v1";
-    String KIND = "User";
+public class User extends Resource<UserData> {
+    public static String API_VERSION = "v1";
+    public static String KIND = "User";
+
+    @Builder
+    public User(
+            @NotNull final ResourceMetadata metadata,
+            @NotNull final UserData spec,
+            final ResourceStatus state
+    ) {
+        super(metadata, Optional.ofNullable(spec), Optional.ofNullable(state));
+    }
 }

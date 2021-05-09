@@ -18,16 +18,36 @@
 package de.kaiserpfalzedv.rpg.integrations.discord.events;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.rpg.core.user.User;
+import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
-@Value.Immutable
+import java.time.OffsetDateTime;
+import java.util.Optional;
+
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableMessageEvent.class)
-@JsonDeserialize(builder = ImmutableMessageEvent.Builder.class)
 @Schema(name = "BaseEvent", description = "The base event for discord events.")
-public interface MessageEvent extends BaseEvent {
-    String getMessage();
+public class MessageEvent extends BaseEvent {
+    private String message;
+
+    @Builder
+    public MessageEvent(
+            @NotNull String id,
+            @NotNull Long responseNumber,
+            @NotNull Optional<Guild> guild,
+            @NotNull Optional<User> user,
+            @NotNull OffsetDateTime timestamp,
+            @NotNull String message
+    ) {
+        super(id, responseNumber, guild, user, timestamp);
+
+        this.message = message;
+    }
 }

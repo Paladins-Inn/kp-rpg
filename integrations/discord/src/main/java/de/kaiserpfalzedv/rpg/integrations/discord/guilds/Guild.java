@@ -18,25 +18,40 @@
 package de.kaiserpfalzedv.rpg.integrations.discord.guilds;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
+
+import java.util.Optional;
 
 /**
  * Guild -- A "server" within Discord.
- *
+ * <p>
  * This data is used for customizing the bot and checking for permissions to use certain functions.
  */
-@Value.Immutable
+@Getter
+@ToString(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableGuild.class)
-@JsonDeserialize(builder = ImmutableGuild.Builder.class)
 @Schema(name = "guild", description = "A single guild (server) within discord.")
-public interface Guild extends Resource<GuildData> {
-    String API_VERSION = "v1";
-    String KIND = "Guild";
+public class Guild extends Resource<GuildData> {
+    public static String API_VERSION = "v1";
+    public static String KIND = "Guild";
 
-    String DISCORD_NAMESPACE = "discord";
+    public static String DISCORD_NAMESPACE = "discord";
+
+    @Builder
+    public Guild(
+            @NotNull final ResourceMetadata metadata,
+            @NotNull final Optional<GuildData> spec,
+            final Optional<ResourceStatus> status
+    ) {
+        super(metadata, spec, status);
+    }
 }

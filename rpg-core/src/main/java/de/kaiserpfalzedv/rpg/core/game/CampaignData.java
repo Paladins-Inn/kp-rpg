@@ -19,12 +19,10 @@ package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.core.resources.DefaultResourceSpec;
 import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.beans.Transient;
 import java.util.List;
@@ -38,19 +36,21 @@ import java.util.Optional;
  * @since 1.2.0 2021-02-06
  */
 @SuppressWarnings("unused")
-@Value.Immutable
+@Builder
+@AllArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableCampaignData.class)
-@JsonDeserialize(builder = ImmutableCampaignData.Builder.class)
 @Schema(name = "CampaignData", description = "The data for a multiple game spanning campaign.")
-public interface CampaignData extends DefaultResourceSpec {
-    String CAMPAIGN_GM = "campaign.gm";
-    String CAMPAIGN_PLAYERS = "campaign.players";
-    String DISCORD_CHANNEL = "discord.channel";
-    String DISCORD_GUILD = "discord.guild";
-    String GAMES = "games";
+public class CampaignData extends DefaultResourceSpec {
+    public static String CAMPAIGN_GM = "campaign.gm";
+    public static String CAMPAIGN_PLAYERS = "campaign.players";
+    public static String DISCORD_CHANNEL = "discord.channel";
+    public static String DISCORD_GUILD = "discord.guild";
+    public static String GAMES = "games";
 
-    String[] STRUCTURED_PROPERTIES = {
+    public static String[] STRUCTURED_PROPERTIES = {
             CAMPAIGN_GM,
             CAMPAIGN_PLAYERS,
             DISCORD_GUILD,
@@ -60,43 +60,38 @@ public interface CampaignData extends DefaultResourceSpec {
 
 
     @Override
-    default String[] getDefaultProperties() {
+    public String[] getDefaultProperties() {
         return STRUCTURED_PROPERTIES;
     }
 
 
-    @Value.Default
     @Transient
     @JsonIgnore
-    default Optional<ResourcePointer> getGameMaster() {
+    public Optional<ResourcePointer> getGameMaster() {
         return getResourcePointer(CAMPAIGN_GM);
     }
 
-    @Value.Default
     @Transient
     @JsonIgnore
-    default List<ResourcePointer> getPlayers() {
+    public List<ResourcePointer> getPlayers() {
         return getResourcePointers(CAMPAIGN_PLAYERS);
     }
 
-    @Value.Default
     @Transient
     @JsonIgnore
-    default Optional<ResourcePointer> getDiscordChannel() {
+    public Optional<ResourcePointer> getDiscordChannel() {
         return getResourcePointer(DISCORD_CHANNEL);
     }
 
-    @Value.Default
     @Transient
     @JsonIgnore
-    default Optional<ResourcePointer> getDiscordGuild() {
+    public Optional<ResourcePointer> getDiscordGuild() {
         return getResourcePointer(DISCORD_GUILD);
     }
 
-    @Value.Default
     @Transient
     @JsonIgnore
-    default List<ResourcePointer> getGames() {
+    public List<ResourcePointer> getGames() {
         return getResourcePointers(GAMES);
     }
 }

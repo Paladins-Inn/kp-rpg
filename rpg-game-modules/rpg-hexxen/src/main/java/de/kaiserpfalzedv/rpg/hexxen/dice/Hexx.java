@@ -19,7 +19,6 @@ package de.kaiserpfalzedv.rpg.hexxen.dice;
 
 import de.kaiserpfalzedv.rpg.core.dice.bag.D6;
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
-import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableDieResult;
 
 import javax.enterprise.context.Dependent;
 
@@ -50,10 +49,10 @@ public class Hexx extends D6 {
                 break;
         }
 
-        return ImmutableDieResult.builder()
+        return DieResult.builder()
                 .die(this)
                 .total(result)
-                .rolls(result)
+                .rolls(new String[]{result})
                 .build();
     }
 

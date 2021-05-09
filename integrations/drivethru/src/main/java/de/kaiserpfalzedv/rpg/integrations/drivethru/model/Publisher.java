@@ -19,27 +19,28 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
-@Value.Immutable
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutablePublisher.class)
-@JsonDeserialize(builder = ImmutablePublisher.Builder.class)
 @Schema(name = "Publisher", description = "A publisher from DriveThruRPG.")
-public interface Publisher extends DriveThruResource {
+public class Publisher implements DriveThruResource {
     /**
-     * @return the DriveThruRPG id.
+     * the DriveThruRPG id.
      */
     @JsonProperty("publishers_id")
-    String getPublisherId();
+    private String publisherId;
 
     /**
-     * @return The DriveThruRPG name.
+     * The DriveThruRPG name.
      */
     @JsonProperty("publishers_name")
-    String getPublisherName();
+    private String publisherName;
 }

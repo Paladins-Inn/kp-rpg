@@ -18,11 +18,9 @@
 package de.kaiserpfalzedv.rpg.core.dice.mat;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.core.dice.Die;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -38,16 +36,23 @@ import java.util.StringJoiner;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-09
  */
-@Value.Immutable
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableDieResult.class)
-@JsonDeserialize(builder = ImmutableDieResult.Builder.class)
 @Schema(name = "DieResult", description = "A generic result of a single die roll.")
-public interface DieResult extends Serializable {
+public class DieResult implements Serializable {
+    private String total;
+    private String[] rolls;
+    private Die die;
+
     /**
      * @return a pure text display of the die roll.
      */
-    default String getDisplay() {
+    public String getDisplay() {
         String rolls = "";
 
         if (getRolls().length >= 2) {
@@ -62,24 +67,7 @@ public interface DieResult extends Serializable {
     /**
      * @return the most terse display of the die roll.
      */
-    default String getShortDisplay() {
+    public String getShortDisplay() {
         return getTotal();
     }
-
-    /**
-     * @return The total result (may be the sum or number of successes).
-     */
-    String getTotal();
-
-    /**
-     * These are the rolls. Raw data.
-     *
-     * @return The single technical rolls.
-     */
-    String[] getRolls();
-
-    /**
-     * @return the die to roll.
-     */
-    Die getDie();
 }

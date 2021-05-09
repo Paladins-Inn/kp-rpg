@@ -17,27 +17,25 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-public class PublisherMessage implements DriveThruMessage<Publisher> {
-    private String status;
-    private Publisher publisher;
+import java.util.Optional;
 
-    @Override
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    @Override
-    public Publisher getMessage() {
-        return publisher;
-    }
-
-    public void setMessage(final Publisher publisher) {
-        this.publisher = publisher;
+@Getter
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
+@Schema(name = "PublisherMessage", description = "The communication wrapper for publishers")
+public class PublisherMessage extends DriveThruMessage<Publisher> {
+    @Builder
+    public PublisherMessage(@NotNull final String status, final Publisher publisher) {
+        super(status, Optional.ofNullable(publisher));
     }
 }

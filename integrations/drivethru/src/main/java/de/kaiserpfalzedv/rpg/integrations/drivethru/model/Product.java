@@ -19,42 +19,43 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
-@Value.Immutable
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableProduct.class)
-@JsonDeserialize(builder = ImmutableProduct.Builder.class)
 @Schema(name = "Product", description = "A product from DriveThruRPG.")
-public interface Product extends DriveThruResource {
+public class Product implements DriveThruResource {
     @JsonProperty("products_id")
-    String getProductsId();
+    private String productsId;
 
     @JsonProperty("products_name")
-    String getProductsName();
+    private String productsName;
 
     @JsonProperty("publishers_id")
-    String getPublisherId();
+    private String publisherId;
 
     @JsonProperty("publishers_name")
-    String getPublisherName();
+    private String publisherName;
 
     @JsonProperty("cover_url")
-    String getCoverURL();
+    private String coverURL;
 
     @JsonProperty("products_thumbnail")
-    String getThumbnail();
+    private String thumbnail;
 
     @JsonProperty("products_thumbnail100")
-    String getThumbnail100();
+    private String thumbnail100;
 
     @JsonProperty("products_thumbnail80")
-    String getThumbnail80();
+    private String thumbnail80;
 
     @JsonProperty("products_thumbnail40")
-    String getThumbnail40();
+    private String thumbnail40;
 }

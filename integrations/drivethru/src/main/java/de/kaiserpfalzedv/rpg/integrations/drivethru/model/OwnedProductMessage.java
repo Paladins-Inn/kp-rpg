@@ -17,27 +17,23 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMultiMessage;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-public class OwnedProductMessage implements DriveThruMultiMessage<OwnedProduct> {
-    private String status;
-    private OwnedProduct[] products;
-
-    @Override
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    @Override
-    public OwnedProduct[] getMessage() {
-        return products;
-    }
-
-    public void setMessage(final OwnedProduct[] products) {
-        this.products = products;
+@Getter
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
+@Schema(name = "OwnedProductMessage", description = "Describes the owned products")
+public class OwnedProductMessage extends DriveThruMultiMessage<OwnedProduct> {
+    @Builder
+    public OwnedProductMessage(@NotNull final String status, @NotNull final OwnedProduct[] products) {
+        super(status, products);
     }
 }

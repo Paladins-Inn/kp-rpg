@@ -18,10 +18,8 @@
 package de.kaiserpfalzedv.rpg.core.dice.mat;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.io.Serializable;
 import java.util.List;
@@ -34,13 +32,19 @@ import java.util.StringJoiner;
  *
  * This is the result of a numeric die roll.
  */
-@Value.Immutable
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableRollTotal.class)
-@JsonDeserialize(builder = ImmutableRollTotal.Builder.class)
 @Schema(name = "RollTotal", description = "A generic result of a die roll.")
-public interface RollTotal extends Serializable {
-    default String getDescription() {
+public class RollTotal implements Serializable {
+    private List<ExpressionTotal> expressions;
+    private Optional<String> comment;
+
+    public String getDescription() {
         StringJoiner result = new StringJoiner(" - ");
 
         for (ExpressionTotal r : getExpressions()) {
@@ -55,18 +59,7 @@ public interface RollTotal extends Serializable {
      *
      * @return FALSE if there is at least one result, TRUE if there are no results
      */
-    default boolean isEmpty() {
+    public boolean isEmpty() {
         return getExpressions().size() == 0;
     }
-
-    /**
-     * @return The results of the di(c)e roll(s).
-     */
-
-    List<ExpressionTotal> getExpressions();
-
-    /**
-     * @return the comment of the user for this roll.
-     */
-    Optional<String> getComment();
 }

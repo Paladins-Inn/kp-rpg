@@ -19,12 +19,10 @@ package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.core.resources.DefaultResourceSpec;
 import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.beans.Transient;
 import java.util.List;
@@ -38,19 +36,21 @@ import java.util.Optional;
  * @since 1.2.0 2021-02-06
  */
 @SuppressWarnings("unused")
-@Value.Immutable
+@Builder
+@AllArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableGameData.class)
-@JsonDeserialize(builder = ImmutableGameData.Builder.class)
 @Schema(name = "GameData", description = "A game session data.")
-public interface GameData extends DefaultResourceSpec {
-    String CAMPAIGN = "campaign";
-    String GAME_GM = "game.gm";
-    String GAME_PLAYERS = "game.players";
-    String DISCORD_GUILD = "discord.guild";
-    String DISCORD_CHANNEL = "discord.channel";
+public class GameData extends DefaultResourceSpec {
+    public static String CAMPAIGN = "campaign";
+    public static String GAME_GM = "game.gm";
+    public static String GAME_PLAYERS = "game.players";
+    public static String DISCORD_GUILD = "discord.guild";
+    public static String DISCORD_CHANNEL = "discord.channel";
 
-    String[] STRUCTURED_PROPERTIES = {
+    public static String[] STRUCTURED_PROPERTIES = {
             CAMPAIGN,
             GAME_GM,
             GAME_PLAYERS,
@@ -60,43 +60,42 @@ public interface GameData extends DefaultResourceSpec {
 
 
     @Override
-    default String[] getDefaultProperties() {
+    public String[] getDefaultProperties() {
         return STRUCTURED_PROPERTIES;
     }
 
 
-    @Value.Default
     @Transient
     @JsonIgnore
-    default Optional<ResourcePointer> getCampaign() {
+    public Optional<ResourcePointer> getCampaign() {
         return getResourcePointer(CAMPAIGN);
     }
 
-    @Value.Default
+
     @Transient
     @JsonIgnore
-    default Optional<ResourcePointer> getGameMaster() {
+    public Optional<ResourcePointer> getGameMaster() {
         return getResourcePointer(GAME_GM);
     }
 
-    @Value.Default
+
     @Transient
     @JsonIgnore
-    default List<ResourcePointer> getPlayers() {
+    public List<ResourcePointer> getPlayers() {
         return getResourcePointers(GAME_PLAYERS);
     }
 
-    @Value.Default
+
     @Transient
     @JsonIgnore
-    default Optional<ResourcePointer> getDiscordChannel() {
+    public Optional<ResourcePointer> getDiscordChannel() {
         return getResourcePointer(DISCORD_CHANNEL);
     }
 
-    @Value.Default
+
     @Transient
     @JsonIgnore
-    default Optional<ResourcePointer> getDiscordGuild() {
+    public Optional<ResourcePointer> getDiscordGuild() {
         return getResourcePointer(DISCORD_GUILD);
     }
 }

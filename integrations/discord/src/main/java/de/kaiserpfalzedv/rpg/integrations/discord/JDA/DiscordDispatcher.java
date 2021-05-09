@@ -18,14 +18,17 @@
 package de.kaiserpfalzedv.rpg.integrations.discord.JDA;
 
 
+import de.kaiserpfalzedv.rpg.core.discord.DiscordMessageHandler;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginNotAllowedException;
 import de.kaiserpfalzedv.rpg.integrations.discord.DontWorkOnDiscordEventException;
 import de.kaiserpfalzedv.rpg.integrations.discord.IgnoreBotsException;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildProvider;
+import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildStoreService;
 import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageChannelPlugin;
-import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageHandler;
 import io.quarkus.runtime.StartupEvent;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -34,16 +37,16 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.Clock;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.StringJoiner;
+import java.util.UUID;
 
 /**
  * DiscordDispatcher -- The plugin based dispatcher for Discord bots.
@@ -52,17 +55,18 @@ import java.util.StringJoiner;
  * @since 1.0.0
  */
 @Singleton // since ListenerAdapter contains a final method, we need a proxy-less implementation.
+@Slf4j
+@ToString
 public class DiscordDispatcher extends ListenerAdapter {
-    private static final Logger LOG = LoggerFactory.getLogger(DiscordDispatcher.class);
-
     /**
      * The plugins to work on.
      */
     private final ArrayList<DiscordMessageChannelPlugin> plugins = new ArrayList<>();
+
     /**
      * The guild provider to load guilds from.
      */
-    private final GuildProvider guildProvider;
+    private final GuildStoreService store;
     /**
      * The message sender for discord messages.
      */
@@ -70,11 +74,11 @@ public class DiscordDispatcher extends ListenerAdapter {
 
     @Inject
     public DiscordDispatcher(
-            final GuildProvider guildProvider,
+            final GuildStoreService store,
             final DiscordMessageHandler sender,
             final Instance<DiscordMessageChannelPlugin> plugins
     ) {
-        this.guildProvider = guildProvider;
+        this.store = store;
         this.sender = sender;
         plugins.forEach(this.plugins::add);
     }
@@ -86,7 +90,7 @@ public class DiscordDispatcher extends ListenerAdapter {
      * @param event The startup event.
      */
     void startup(@Observes StartupEvent event) {
-        LOG.info("Discord Dispatcher: plugins: {}", plugins);
+        log.info("Discord Dispatcher: plugins: {}", plugins);
     }
 
     @Override
@@ -130,7 +134,39 @@ public class DiscordDispatcher extends ListenerAdapter {
     }
 
     private Guild retrieveGuild(@NotNull GenericMessageEvent event) {
-        return event.isFromGuild() ? guildProvider.retrieve(event.getGuild().getName()) : guildProvider.retrieve("no-guild");
+        if (event.isFromGuild()) {
+            return store
+                    .findByNameSpaceAndName(Guild.DISCORD_NAMESPACE, event.getGuild().getName())
+                    .orElse(generateNewGuildEntry(event.getGuild().getName()));
+        }
+
+        return store
+                .findByNameSpaceAndName(Guild.DISCORD_NAMESPACE, "no-guild")
+                .orElse(generateNewGuildEntry("no-guild"));
+    }
+
+    @NotNull
+    private Guild generateNewGuildEntry(final String name) {
+        Guild result = Guild.builder()
+                .metadata(
+                        ResourceMetadata.builder()
+                                .kind(Guild.KIND)
+                                .apiVersion(Guild.API_VERSION)
+
+                                .namespace(Guild.DISCORD_NAMESPACE)
+                                .name(name)
+                                .uid(UUID.randomUUID())
+                                .generation(0L)
+                                .created(OffsetDateTime.now(Clock.systemUTC()))
+
+                                .build()
+                )
+                .build();
+
+        result = store.save(result);
+
+        log.info("Created: guild={}", result);
+        return result;
     }
 
     /**
@@ -145,7 +181,7 @@ public class DiscordDispatcher extends ListenerAdapter {
             final User user
     ) throws DontWorkOnDiscordEventException, DiscordPluginNotAllowedException, IgnoreBotsException {
         if (!(channel instanceof TextChannel)) {
-            LOG.debug("This is no text channel. Can't check permission.");
+            log.debug("This is no text channel. Can't check permission.");
             return;
         }
 
@@ -156,7 +192,7 @@ public class DiscordDispatcher extends ListenerAdapter {
                 sender.sendDM(user, "Sorry, you are not allowed to use this command: " + e.getMessage());
             }
 
-            LOG.warn("{}: plugin={}, user={}, blame={}",
+            log.warn("{}: plugin={}, user={}, blame={}",
                     e.getMessage(), plugin.getName(), user.getName(), e.isBlame());
 
             throw e;
@@ -186,7 +222,7 @@ public class DiscordDispatcher extends ListenerAdapter {
         MDC.put("user.name", user.getName());
         MDC.put("user.id", user.getId());
 
-        LOG.trace("Received event: guild='{}', channel='{}', author='{}', message.id='{}'",
+        log.trace("Received event: guild='{}', channel='{}', author='{}', message.id='{}'",
                 event.isFromGuild() ? event.getGuild().getName() : "no-guild",
                 event.getChannel().getName(),
                 user.getName(),
@@ -209,12 +245,5 @@ public class DiscordDispatcher extends ListenerAdapter {
 
         MDC.remove("user.name");
         MDC.remove("user.id");
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", getClass().getSimpleName() + "[", "]")
-                .add("identity=" + System.identityHashCode(this))
-                .toString();
     }
 }

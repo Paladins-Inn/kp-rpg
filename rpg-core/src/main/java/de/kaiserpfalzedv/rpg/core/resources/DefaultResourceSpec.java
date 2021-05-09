@@ -19,49 +19,30 @@ package de.kaiserpfalzedv.rpg.core.resources;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.beans.Transient;
 import java.io.Serializable;
 import java.util.*;
 
 /**
- * The basic data for every card.
+ * The basic data for every resource.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06
  */
-@SuppressWarnings("unused")
-@Value.Immutable
+@SuppressWarnings({"unused", "OptionalUsedAsFieldOrParameterType"})
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableDefaultResourceSpec.class)
-@JsonDeserialize(builder = ImmutableDefaultResourceSpec.Builder.class)
 @Schema(name = "DefaultResourceSpec", description = "A standardized resource.")
-public interface DefaultResourceSpec extends Serializable {
-    /**
-     * @return A pointer to a picture of this user.
-     */
-    @Schema(name = "picture", description = "The resource address of the picture of this card.")
-    Optional<ResourcePointer> getPicture();
-
-    /**
-     * @return A description of this user.
-     */
-    @Schema(name = "description", description = "A description of the card.")
-    Optional<String> getDescription();
-
-
-    /**
-     * @return Hashmap of configuration properties.
-     */
-    @Schema(name = "properties", description = "A map of plugin properties for this user.")
-    @Value.Default
-    default Map<String, String> getProperties() {
-        return new HashMap<>();
-    }
+public class DefaultResourceSpec implements Serializable {
+    @Schema(name = "properties", description = "A map of plugin properties for spec.")
+    private final Map<String, String> properties = new HashMap<>();
 
     /**
      * Returns a property.
@@ -71,7 +52,7 @@ public interface DefaultResourceSpec extends Serializable {
      */
     @Transient
     @JsonIgnore
-    default Optional<String> getProperty(final String key) {
+    public Optional<String> getProperty(final String key) {
         return Optional.ofNullable(getProperties().get(key));
     }
 
@@ -81,10 +62,9 @@ public interface DefaultResourceSpec extends Serializable {
      *
      * @return the names of the default properties of this resource.
      */
-    @Value.Default
     @Transient
     @JsonIgnore
-    default String[] getDefaultProperties() {
+    public String[] getDefaultProperties() {
         throw new UnsupportedOperationException();
     }
 
@@ -99,7 +79,7 @@ public interface DefaultResourceSpec extends Serializable {
      */
     @Transient
     @JsonIgnore
-    default Optional<ResourcePointer> getResourcePointer(final String key) {
+    public Optional<ResourcePointer> getResourcePointer(final String key) {
         try {
             String property = getProperty(key).orElseThrow();
 
@@ -111,7 +91,7 @@ public interface DefaultResourceSpec extends Serializable {
 
     @Transient
     @JsonIgnore
-    default List<ResourcePointer> getResourcePointers(final String key) {
+    public List<ResourcePointer> getResourcePointers(final String key) {
         try {
             String property = getProperty(key).orElseThrow();
 
@@ -134,7 +114,7 @@ public interface DefaultResourceSpec extends Serializable {
             throw new IllegalStateException("Invalid property for resource pointers: " + property);
         }
 
-        return ImmutableResourcePointer.builder()
+        return Pointer.builder()
                 .kind(data[0])
                 .apiVersion(data[1])
 
@@ -154,10 +134,12 @@ public interface DefaultResourceSpec extends Serializable {
      */
     @Transient
     @JsonIgnore
-    default void saveResourcePointer(final String key, final ResourcePointer pointer) {
-        String data = convertResourcePointerToString(pointer);
+    public void saveResourcePointer(final String key, final ResourcePointer pointer) {
+        if (pointer != null) {
+            String data = convertResourcePointerToString(pointer);
 
-        getProperties().put(key, data);
+            getProperties().put(key, data);
+        }
     }
 
     private String convertResourcePointerToString(ResourcePointer pointer) {
@@ -166,17 +148,19 @@ public interface DefaultResourceSpec extends Serializable {
                 .add(pointer.getApiVersion())
                 .add(pointer.getNamespace())
                 .add(pointer.getName())
-                .add(pointer.getUid().toString())
+                .add(pointer.getUid() != null ? pointer.getUid().toString() : "")
                 .toString();
     }
 
     @Transient
     @JsonIgnore
-    default void saveResourcePointers(final String key, final Collection<ResourcePointer> pointers) {
-        StringJoiner data = new StringJoiner(",");
+    public void saveResourcePointers(final String key, final Collection<ResourcePointer> pointers) {
+        if (pointers != null) {
+            StringJoiner data = new StringJoiner(",");
 
-        pointers.forEach(p -> data.add(convertResourcePointerToString(p)));
+            pointers.forEach(p -> data.add(convertResourcePointerToString(p)));
 
-        getProperties().put(key, data.toString());
+            properties.put(key, data.toString());
+        }
     }
 }

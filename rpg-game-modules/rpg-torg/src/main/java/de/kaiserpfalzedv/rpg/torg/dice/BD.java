@@ -19,7 +19,6 @@ package de.kaiserpfalzedv.rpg.torg.dice;
 
 import de.kaiserpfalzedv.rpg.core.dice.bag.D6;
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
-import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableDieResult;
 
 import javax.enterprise.context.Dependent;
 import java.util.ArrayList;
@@ -52,7 +51,7 @@ public class BD extends D6 {
             rolls.add(Integer.toString(roll, 10));
         } while (roll == 6);
 
-        return ImmutableDieResult.builder()
+        return DieResult.builder()
                 .die(this)
                 .total(Integer.toString(total, 10))
                 .rolls(rolls.toArray(new String[0]))

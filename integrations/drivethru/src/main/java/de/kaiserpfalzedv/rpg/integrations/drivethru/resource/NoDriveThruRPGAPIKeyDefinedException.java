@@ -27,7 +27,6 @@ import de.kaiserpfalzedv.rpg.core.user.User;
  * @since 1.2.0  2021-02-04
  */
 public class NoDriveThruRPGAPIKeyDefinedException extends BaseException {
-    @SuppressWarnings("CdiInjectionPointsInspection")
     public NoDriveThruRPGAPIKeyDefinedException(final User user) {
         super(String.format("User '%s/%s' has no DriveThruAPI key defined.", user.getNameSpace(), user.getName()));
     }

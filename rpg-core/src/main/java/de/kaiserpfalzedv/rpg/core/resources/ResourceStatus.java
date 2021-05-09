@@ -19,15 +19,14 @@ package de.kaiserpfalzedv.rpg.core.resources;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * ResourceStatus -- The state of the managed resource.
@@ -35,39 +34,36 @@ import java.util.List;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-07
  */
-@Value.Immutable
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableResourceStatus.class)
-@JsonDeserialize(builder = ImmutableResourceStatus.Builder.class)
 @JsonPropertyOrder({"observedGeneration,history"})
 @Schema(name = "ResourceStatus", description = "The status of a resource.")
-public interface ResourceStatus extends Serializable {
-    /**
-     * @return the generation of the resource this history is generated for.
-     */
+public class ResourceStatus implements Serializable {
     @Schema(name = "ObservedGeneration", description = "The generation of this resource which is observed.", required = true)
-    Long getObservedGeneration();
+    Long observedGeneration;
 
-    /**
-     * @return a list of changes.
-     */
     @Schema(name = "History", description = "A list of changes of the resource status.")
-    List<ResourceHistory> getHistory();
+    List<ResourceHistory> history;
 
     /**
      * Adds a new history entry.
      *
-     * @param status The status of this entry.
+     * @param status  The status of this entry.
      * @param message The generic message for this history entry.
      * @return TRUE if the history could be added.
      */
     @SuppressWarnings("unused")
-    default ResourceStatus addHistory(final String status, final String message) {
+    public ResourceStatus addHistory(final String status, final String message) {
         getHistory().add(
-                ImmutableResourceHistory.builder()
+                ResourceHistory.builder()
                         .status(status)
                         .timeStamp(OffsetDateTime.now(ZoneOffset.UTC))
-                        .message(message)
+                        .message(Optional.ofNullable(message))
                         .build()
         );
 

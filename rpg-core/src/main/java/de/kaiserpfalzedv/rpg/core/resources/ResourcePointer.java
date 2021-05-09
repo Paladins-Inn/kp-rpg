@@ -17,62 +17,35 @@
 
 package de.kaiserpfalzedv.rpg.core.resources;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
- * ResourcePointer -- A single resource definition pointing to a unique resource on the server.
+ * ResourcePointer --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.0.0 2021-01-07
+ * @since 1.2.0  2021-05-09
  */
-@Value.Immutable
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonPropertyOrder({"kind,apiVersion,namespace,name,selfLink"})
-@Schema(name = "ResourcePointer", description = "A full address of a resource within the system.")
 public interface ResourcePointer extends Serializable {
-    /**
-     * @return The kind of the resource.
-     */
-    @Schema(name = "Kind", description = "The kind (type) of the resource.", required = true)
+    @Schema(name = "kind", description = "The type of the resource")
     String getKind();
 
-    /**
-     * @return The version of the resource.
-     */
-    @Schema(name = "ApiVersion", description = "The version of the resource entry.", required = true)
+    @Schema(name = "apiVersion", description = "The version of this resource")
     String getApiVersion();
 
-
-    /**
-     * @return The namespace of the resource.
-     */
-    @Schema(name = "Namespace", description = "The namespace of the resource.", required = true)
+    @Schema(name = "namespace", description = "The namespace (group) of this resource")
     String getNamespace();
 
-    /**
-     * @return The name of the resource. Must be unique within a namespace.
-     */
-    @Schema(name = "Name", description = "The unique name (within a namespace) of a resource.", required = true)
+    @Schema(name = "name", description = "The unique name of this resource within the namespace")
     String getName();
 
-    /**
-     * @return The unique id of the resource.
-     * @since 1.2.0
-     */
-    @Schema(name = "Uid", description = "The unique id.")
-    UUID getUid();
+    @Schema(name = "uid", description = "The unique identifier of this resource")
+    java.util.UUID getUid();
 
-    /**
-     * @return The local part of the URL to retrieve this resource.
-     */
     @Schema(name = "SelfLink", description = "The local part of the URL to retrieve the resource.", required = true)
     default String getSelfLink() {
         return "/apis/" + getApiVersion() + "/" + getKind() + "/" + getUid();
     }
+
 }

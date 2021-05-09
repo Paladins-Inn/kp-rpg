@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.core.user;
 
-import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -26,6 +26,8 @@ import org.slf4j.MDC;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,21 +46,28 @@ public class TestUser {
     private static final String DATA_API_KEY = "test-api-key";
     private static final String DISCORD_ID = "123123591";
 
-    private static final User DATA = ImmutableUser.builder()
+    private static final User DATA = User.builder()
             .metadata(
                     generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED)
             )
             .spec(
-                    ImmutableUserData.builder()
+                    UserData.builder()
                             .driveThruRPGApiKey(DATA_API_KEY)
-                            .putProperties("discord-id", DISCORD_ID)
+                            .properties(new HashMap<>())
+                            .campaigns(new ArrayList<>())
+                            .games(new ArrayList<>())
+                            .description(null)
+                            .picture(null)
                             .build()
             )
+            .state(null)
             .build();
 
     @BeforeAll
     static void setUp() {
         MDC.put("test-class", TestUser.class.getSimpleName());
+
+        DATA.getSpec().get().getProperties().put("discord-id", DISCORD_ID);
     }
 
     @AfterAll
@@ -75,13 +84,19 @@ public class TestUser {
      * @return The generated metadata
      */
     @SuppressWarnings("SameParameterValue")
-    private static ImmutableResourceMetadata generateMetadata(
+    private static ResourceMetadata generateMetadata(
             final String namespace,
             final String name,
             final UUID uid,
             final OffsetDateTime created
     ) {
-        return ImmutableResourceMetadata.builder()
+        HashMap<String, String> annotations = new HashMap<>(1);
+        annotations.put("valid", "test");
+
+        HashMap<String, String> labels = new HashMap<>();
+        labels.put("test", "valid");
+
+        return ResourceMetadata.builder()
                 .kind(User.KIND)
                 .apiVersion(User.API_VERSION)
 
@@ -91,8 +106,8 @@ public class TestUser {
 
                 .created(created)
 
-                .putAnnotations("valid", "test")
-                .putLabels("test", "valid")
+                .annotations(annotations)
+                .labels(labels)
 
                 .build();
     }

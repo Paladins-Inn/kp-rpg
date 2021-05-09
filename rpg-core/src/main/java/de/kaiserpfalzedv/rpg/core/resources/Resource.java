@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.core.resources;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.beans.Transient;
@@ -35,33 +36,31 @@ import java.util.UUID;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0
  */
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonPropertyOrder({"kind,apiVersion,metadata,spec,status"})
-public interface Resource<D extends Serializable> extends Serializable {
-    /**
-     * @return the metadata of the resource containing the structural parameters.
-     */
+@JsonPropertyOrder({"metadata,spec,status"})
+public class Resource<D extends Serializable> implements Serializable {
+    @EqualsAndHashCode.Include
     @Schema(name = "metadata", description = "Technical data to the resource.", required = true)
-    ResourceMetadata getMetadata();
+    private ResourceMetadata metadata;
 
-    /**
-     * @return the data of the resource.
-     */
     @Schema(name = "spec", description = "The resource data itself.")
-    Optional<D> getSpec();
+    private Optional<D> spec;
 
-    /**
-     * @return the status and history of the resource.
-     */
     @Schema(name = "status", description = "The status of the resource (containing the history).")
-    Optional<ResourceStatus> getStatus();
+    private Optional<ResourceStatus> status;
 
     /**
      * @return the unique identifier of the resource.
      */
     @Transient
     @JsonIgnore
-    default UUID getUid() {
+    public UUID getUid() {
         return getMetadata().getUid();
     }
 
@@ -70,7 +69,7 @@ public interface Resource<D extends Serializable> extends Serializable {
      */
     @Transient
     @JsonIgnore
-    default String getKind() {
+    public String getKind() {
         return getMetadata().getKind();
     }
 
@@ -79,7 +78,7 @@ public interface Resource<D extends Serializable> extends Serializable {
      */
     @Transient
     @JsonIgnore
-    default String getApiVersion() {
+    public String getApiVersion() {
         return getMetadata().getApiVersion();
     }
 
@@ -88,7 +87,7 @@ public interface Resource<D extends Serializable> extends Serializable {
      */
     @Transient
     @JsonIgnore
-    default String getNameSpace() {
+    public String getNameSpace() {
         return getMetadata().getNamespace();
     }
 
@@ -97,7 +96,7 @@ public interface Resource<D extends Serializable> extends Serializable {
      */
     @Transient
     @JsonIgnore
-    default String getName() {
+    public String getName() {
         return getMetadata().getName();
     }
 
@@ -106,7 +105,7 @@ public interface Resource<D extends Serializable> extends Serializable {
      */
     @Transient
     @JsonIgnore
-    default String getDisplayName() {
+    public String getDisplayName() {
         return String.format("%s/%s/%s/%s", getKind(), getApiVersion(), getNameSpace(), getName());
     }
 
@@ -115,7 +114,7 @@ public interface Resource<D extends Serializable> extends Serializable {
      */
     @Transient
     @JsonIgnore
-    default Long getGeneration() {
+    public Long getGeneration() {
         return getMetadata().getGeneration();
     }
 }

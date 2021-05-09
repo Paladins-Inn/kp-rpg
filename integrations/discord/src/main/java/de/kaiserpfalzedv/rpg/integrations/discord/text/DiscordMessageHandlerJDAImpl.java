@@ -17,6 +17,8 @@
 
 package de.kaiserpfalzedv.rpg.integrations.discord.text;
 
+import de.kaiserpfalzedv.rpg.core.discord.DiscordMessageHandler;
+import io.quarkus.arc.AlternativePriority;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -34,6 +36,7 @@ import java.util.UUID;
  * @since 1.0.0 2021-01-11
  */
 @ApplicationScoped
+@AlternativePriority(500)
 public class DiscordMessageHandlerJDAImpl implements DiscordMessageHandler {
     private static final Logger LOG = LoggerFactory.getLogger(DiscordMessageHandlerJDAImpl.class);
 

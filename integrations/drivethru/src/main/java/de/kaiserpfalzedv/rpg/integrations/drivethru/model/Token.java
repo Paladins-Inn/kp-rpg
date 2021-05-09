@@ -20,44 +20,36 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
-import java.beans.Transient;
 import java.time.LocalDateTime;
 
-@Value.Immutable
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableToken.class)
-@JsonDeserialize(builder = ImmutableToken.Builder.class)
 @Schema(name = "DriveThruRPGToken", description = "The access token for DriveThruRPG.")
-public interface Token extends DriveThruResource {
+public class Token implements DriveThruResource {
     @JsonProperty("access_token")
-    String getAccessToken();
-
-    @Transient
+    private String accessToken;
+    @JsonProperty("customers_id")
+    private String customerId;
+    @JsonProperty("expires")
+    private LocalDateTime expireTime;
+    @JsonProperty("server_time")
+    private LocalDateTime serverTime;
     @JsonIgnore
-    @Value.Default
-    default String getBearerToken() {
+    private LocalDateTime localTime;
+    @JsonIgnore
+    private Long expires;
+
+    @JsonIgnore
+    public String getBearerToken() {
         return "Bearer " + getAccessToken();
     }
-
-
-    @JsonProperty("customers_id")
-    String getCustomerId();
-
-    @JsonProperty("expires")
-    LocalDateTime getExpireTime();
-
-    @JsonProperty("server_time")
-    LocalDateTime getServerTime();
-
-    @JsonIgnore
-    LocalDateTime getLocalTime();
-
-    @JsonIgnore
-    Long getExpires();
 }

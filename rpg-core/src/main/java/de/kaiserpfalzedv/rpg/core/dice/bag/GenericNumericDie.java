@@ -19,9 +19,9 @@ package de.kaiserpfalzedv.rpg.core.dice.bag;
 
 import de.kaiserpfalzedv.rpg.core.dice.Die;
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
-import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableDieResult;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -53,10 +53,10 @@ public class GenericNumericDie implements Die {
     @Override
     public DieResult roll() {
         String roll = Integer.toString(rollSingle(), 10);
-        return ImmutableDieResult.builder()
+        return DieResult.builder()
                 .die(this)
                 .total(roll)
-                .rolls(roll)
+                .rolls(Collections.singletonList(roll).toArray(new String[0]))
                 .build();
     }
 

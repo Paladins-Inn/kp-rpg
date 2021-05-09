@@ -18,26 +18,20 @@
 package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
-public class TokenMessage implements DriveThruMessage<Token> {
-    private String status;
-    private Token token;
+import java.util.Optional;
 
-    @Override
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    @Override
-    public Token getMessage() {
-        return token;
-    }
-
-    public void setMessage(final Token token) {
-        this.token = token;
+@Getter
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class TokenMessage extends DriveThruMessage<Token> {
+    @Builder
+    public TokenMessage(@NotNull final String status, @NotNull final Token token) {
+        super(status, Optional.of(token));
     }
 }

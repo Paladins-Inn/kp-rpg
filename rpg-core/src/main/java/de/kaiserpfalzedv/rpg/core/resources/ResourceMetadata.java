@@ -20,68 +20,57 @@ package de.kaiserpfalzedv.rpg.core.resources;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+
 /**
  * Metadata -- common data for every resource of the system.
  *
  * @author klenkes74 {@literal <rlichit@kaiserpfalz-edv.de>}
  * @since 1.0.0
  */
-@Value.Immutable
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableResourceMetadata.class)
-@JsonDeserialize(builder = ImmutableResourceMetadata.Builder.class)
 @JsonPropertyOrder({"uid,generation,owner,created,deleted,annotations,labels"})
 @Schema(name = "ResourceMetadata", description = "The metadata of a resource.")
-public interface ResourceMetadata extends ResourcePointer {
-    /**
-     * During generation of a new resource the generation is 0L. When the resource is persisted,
-     * the generation is incremented.
-     *
-     * @return The generation of this resource. Starting with 1.
-     */
+public class ResourceMetadata implements ResourcePointer {
+    @EqualsAndHashCode.Include
+    @Schema(name = "Uid", description = "The unique id.")
+    private final UUID uid = UUID.randomUUID();
+    @EqualsAndHashCode.Include
     @Schema(name = "generation", description = "The generation of this object. Every change adds 1.", required = true, defaultValue = "0L")
-    @Value.Default
-    default Long getGeneration() {
-        return 0L;
-    }
-
-    /**
-     * @return The owning resource of this resource.
-     */
+    private final Long generation = 0L;
     @Schema(name = "owner", description = "The owning resource. This is a sub-resource or managed resource of the given address.")
-    Optional<ResourcePointer> getOwner();
-
-    /**
-     * @return the creation timestamp.
-     */
+    private final Optional<ResourcePointer> owner = Optional.empty();
     @Schema(name = "created", description = "The timestamp of resource creation.", required = true)
-    OffsetDateTime getCreated();
-
-    /**
-     * @return the deletion timestamp.
-     */
+    private final OffsetDateTime created = OffsetDateTime.now(ZoneOffset.UTC);
     @Schema(name = "deleted", description = "The timestamp of object deletion. Marks an object to be deleted.")
-    Optional<OffsetDateTime> getDeleted();
-
-    /**
-     * Annotations are technical notes to resources.
-     *
-     * @return all annotations.
-     */
+    private final Optional<OffsetDateTime> deleted = Optional.empty();
     @Schema(name = "annotations", description = "A set of annotations to this resource.", maxItems = 256)
-    @Value.Default
-    default Map<String, String> getAnnotations() {
-        return new HashMap<>();
-    }
+    private final Map<String, String> annotations = new HashMap<>();
+    @Schema(name = "labels", description = "A set of labels to this resource.", maxItems = 256)
+    private final Map<String, String> labels = new HashMap<>();
+    @Schema(name = "Kind", description = "The kind (type) of the resource.", required = true)
+    private String kind;
+    @Schema(name = "ApiVersion", description = "The version of the resource entry.", required = true)
+    private String apiVersion;
+    @Schema(name = "Namespace", description = "The namespace of the resource.", required = true)
+    private String namespace;
+    @Schema(name = "Name", description = "The unique name (within a namespace) of a resource.", required = true)
+    private String name;
 
     /**
      * Checks if there is an annotation for this name.
@@ -90,19 +79,8 @@ public interface ResourceMetadata extends ResourcePointer {
      * @return If there is an annotation for this name.
      */
     @JsonIgnore
-    default boolean isAnnotated(final String name) {
+    public boolean isAnnotated(final String name) {
         return getAnnotations().containsKey(name);
-    }
-
-    /**
-     * Labels are tags assigned by users to resources.
-     *
-     * @return all labels.
-     */
-    @Schema(name = "labels", description = "A set of labels to this resource.", maxItems = 256)
-    @Value.Default
-    default Map<String, String> getLabels() {
-        return new HashMap<>();
     }
 
     /**
@@ -112,14 +90,7 @@ public interface ResourceMetadata extends ResourcePointer {
      * @return If the label is there.
      */
     @JsonIgnore
-    default boolean isLabeled(final String name) {
+    public boolean isLabeled(final String name) {
         return getLabels().containsKey(name);
-    }
-
-    @Override
-    @Schema(name = "SelfLink", description = "The local part of the URL to retrieve the resource.", required = true)
-    @Value.Default
-    default String getSelfLink() {
-        return "/apis/" + getApiVersion() + "/" + getKind() + "/" + getUid();
     }
 }

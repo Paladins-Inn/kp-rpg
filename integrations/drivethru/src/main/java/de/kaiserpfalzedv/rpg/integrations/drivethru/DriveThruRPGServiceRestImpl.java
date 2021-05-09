@@ -20,7 +20,10 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru;
 import de.kaiserpfalzedv.rpg.core.user.InvalidUserException;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserData;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.*;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.OwnedProduct;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Product;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Publisher;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Token;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMultiMessage;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoDriveThruRPGAPIKeyDefinedException;
@@ -80,7 +83,7 @@ public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
 
         LOG.trace("Loading access token for user='{}/{}', apiKey='{}'", user.getNameSpace(), user.getName(), u.getDriveThruRPGApiKey().get());
 
-        LinkedHashMap<String, String> response = client.getToken(u.getDriveThruRPGApiKey().get()).getMessage();
+        LinkedHashMap<String, String> response = client.getToken(u.getDriveThruRPGApiKey().get()).getMessage().orElseThrow();
 
         LocalDateTime serverTime = parse(response.get("server_time"));
         LocalDateTime expireTime = parse(response.get("expires"));
@@ -88,7 +91,7 @@ public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
 
         Duration duration = Duration.between(serverTime, expireTime);
 
-        Token result = ImmutableToken.builder()
+        Token result = Token.builder()
                 .accessToken(response.get("access_token"))
                 .customerId(response.get("customers_id"))
                 .expireTime(expireTime)
@@ -129,7 +132,7 @@ public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
     }
 
     @Override
-    @CacheResult(cacheName = "drivethrurpg-ownedproducts")
+    @CacheResult(cacheName = "drivethrurpg-ownedProducts")
     public List<OwnedProduct> getOwnedProducts(final User user) throws NoValidTokenException {
         Token token;
         try {

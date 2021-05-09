@@ -19,33 +19,34 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
-@Value.Immutable
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableOwnedProduct.class)
-@JsonDeserialize(builder = ImmutableOwnedProduct.Builder.class)
 @Schema(name = "OwnedProduct", description = "a product dataset of DriveThruRPG.")
-public interface OwnedProduct extends DriveThruResource {
+public class OwnedProduct implements DriveThruResource {
     @JsonProperty("products_id")
-    String getId();
+    private String id;
 
     @JsonProperty("products_name")
-    String getName();
+    private String name;
 
     @JsonProperty("is_archived")
-    Optional<String> isArchived();
+    private Optional<String> archived;
 
     @JsonProperty("cover_url")
-    Optional<String> getCoverURL();
+    private Optional<String> coverURL;
 
     @JsonProperty("date_purchased")
-    Optional<OffsetDateTime> getDatePurchased();
+    private Optional<OffsetDateTime> datePurchased;
 }

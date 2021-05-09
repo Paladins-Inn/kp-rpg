@@ -17,27 +17,25 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-public class ProductMessage implements DriveThruMessage<Product> {
-    private String status;
-    private Product product;
+import java.util.Optional;
 
-    @Override
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    @Override
-    public Product getMessage() {
-        return product;
-    }
-
-    public void setMessage(final Product product) {
-        this.product = product;
+@Getter
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
+@Schema(name = "ProductMessage", description = "A single product")
+public class ProductMessage extends DriveThruMessage<Product> {
+    @Builder
+    public ProductMessage(@NotNull final String status, final Product product) {
+        super(status, Optional.ofNullable(product));
     }
 }

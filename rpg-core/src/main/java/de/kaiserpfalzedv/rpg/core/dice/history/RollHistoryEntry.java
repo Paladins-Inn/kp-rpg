@@ -18,13 +18,11 @@
 package de.kaiserpfalzedv.rpg.core.dice.history;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
 import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
 import de.kaiserpfalzedv.rpg.core.user.User;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
@@ -39,34 +37,22 @@ import java.time.OffsetDateTime;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-02-05
  */
-@Value.Immutable
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableRollHistoryEntry.class)
-@JsonDeserialize(builder = ImmutableRollHistoryEntry.Builder.class)
 @Schema(name = "RollHistory", description = "A single dice roll.")
-public interface RollHistoryEntry extends Serializable {
-    /**
-     * @return the game this roll history belongs to.
-     */
-    ResourcePointer getGame();
+public class RollHistoryEntry implements Serializable {
+    private ResourcePointer game;
 
-    /**
-     * @return The user who rolled this roll.
-     */
-    User getUser();
+    private User user;
 
-    /**
-     * @return a roll id.
-     */
-    String getRollId();
+    private String rollId;
 
-    /**
-     * @return the time of this roll.
-     */
-    OffsetDateTime getTimestamp();
+    private OffsetDateTime timestamp;
 
-    /**
-     * @return The roll definition.
-     */
-    RollTotal getResult();
+    private RollTotal result;
 }

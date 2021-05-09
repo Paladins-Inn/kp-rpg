@@ -17,22 +17,18 @@
 
 package de.kaiserpfalzedv.rpg.core.dice;
 
+import de.kaiserpfalzedv.rpg.core.dice.bag.*;
 import de.kaiserpfalzedv.rpg.core.dice.mat.ExpressionTotal;
 import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
-import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-import javax.inject.Inject;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@QuarkusTest
 public class TestDiceParser {
     private static final Logger LOG = LoggerFactory.getLogger(TestDiceParser.class);
 
@@ -57,8 +53,7 @@ public class TestDiceParser {
             new DieTestResult("D10/2", "D10", 1)
     };
 
-    @Inject
-    DiceParser sut;
+    private DiceParser sut;
 
 
 
@@ -106,6 +101,20 @@ public class TestDiceParser {
         assertEquals(testInput.dieType, roll.getRolls()[0].getDie().getDieType(), "The die type of '" + testInput.input + "' should be '" + testInput.dieType + "'");
     }
 
+    @BeforeEach
+    void setupEach() {
+        ArrayList<Die> dice = new ArrayList<>();
+        dice.add(new D2());
+        dice.add(new D4());
+        dice.add(new D6());
+        dice.add(new D8());
+        dice.add(new D10());
+        dice.add(new D12());
+        dice.add(new D20());
+        dice.add(new D100());
+
+        sut = new DiceParser(dice);
+    }
 
     @AfterEach
     void tearDownEach() {

@@ -18,14 +18,12 @@
 package de.kaiserpfalzedv.rpg.core.dice.mat;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.core.dice.Die;
 import de.kaiserpfalzedv.rpg.core.dice.LookupTable;
+import lombok.*;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -37,18 +35,25 @@ import java.util.StringJoiner;
  *
  * This is the result of a numeric die roll.
  */
-@Value.Immutable
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableExpressionTotal.class)
-@JsonDeserialize(builder = ImmutableExpressionTotal.Builder.class)
 @Schema(name = "ExpressionTotal", description = "A generic result of an expression.")
-public interface ExpressionTotal extends Serializable {
+public class ExpressionTotal implements Serializable {
+    private DieResult[] rolls;
+    private String expression;
+
+
     /**
      * Displays the roll.
      *
      * @return the expression description.
      */
-    default String getDescription() {
+    public String getDescription() {
         StringJoiner rolls = new StringJoiner(", ", "{", "}");
 
         for (DieResult r : getRolls()) {
@@ -62,29 +67,20 @@ public interface ExpressionTotal extends Serializable {
                 .toString();
     }
 
-    default String getDieIdentifier() {
+    public String getDieIdentifier() {
         return getRolls()[0].getDie().getDieType();
     }
 
-    /**
-     * @return The results of the di(c)e roll(s).
-     */
-    DieResult[] getRolls();
-
-    /**
-     * @return The parsed expression
-     */
-    String getExpression();
-
-    default int getAmountOfDice() {
+    public int getAmountOfDice() {
         return getRolls().length;
     }
 
     /**
      * This calculates the expression. If the die can't be evaluated
+     *
      * @return the calculated expression as result of the roll.
      */
-    default String calculateExpression() {
+    public String calculateExpression() {
         String result = "";
         if (getRolls().length > 0 && getRolls()[0].getDie().isNumericDie()) {
             Die die = getRolls()[0].getDie();

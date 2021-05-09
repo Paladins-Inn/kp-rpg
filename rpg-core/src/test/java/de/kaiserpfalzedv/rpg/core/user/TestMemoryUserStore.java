@@ -17,8 +17,9 @@
 
 package de.kaiserpfalzedv.rpg.core.user;
 
-import de.kaiserpfalzedv.rpg.core.resources.ImmutableResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.store.OptimisticLockStoreException;
+import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -56,28 +57,30 @@ public class TestMemoryUserStore {
     private static final OffsetDateTime OTHER_CREATED = OffsetDateTime.now(Clock.systemUTC());
     private static final String OTHER_API_KEY = "other-api-key";
 
-    private static final User DATA = ImmutableUser.builder()
+    private static final User DATA = User.builder()
             .metadata(
-                    generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED)
+                    generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 0L)
             )
             .spec(
-                    ImmutableUserData.builder()
+                    UserData.builder()
                             .driveThruRPGApiKey(DATA_API_KEY)
-                            .build()
-            )
-            .build();
-
-    private static final User OTHER = ImmutableUser.builder()
-            .metadata(
-                    generateMetadata(OTHER_NAMESPACE, OTHER_NAME, OTHER_UID, OTHER_CREATED)
-            )
-            .spec(
-                    ImmutableUserData.builder()
-                            .driveThruRPGApiKey(OTHER_API_KEY)
                             .properties(new HashMap<>())
                             .build()
             )
             .build();
+
+    private static final User OTHER =
+            User.builder()
+                    .metadata(
+                            generateMetadata(OTHER_NAMESPACE, OTHER_NAME, OTHER_UID, OTHER_CREATED, null, 0L)
+                    )
+                    .spec(
+                            UserData.builder()
+                                    .driveThruRPGApiKey(OTHER_API_KEY)
+                                    .properties(new HashMap<>())
+                                    .build()
+                    )
+                    .build();
 
 
     /**
@@ -126,29 +129,35 @@ public class TestMemoryUserStore {
         assertEquals(1L, result.get().getMetadata().getGeneration());
     }
 
-    @Test
-    void shouldThrowOptimisticLockExceptionWhenTheNewGenerationIsNotHighEnough() {
-        MDC.put("test", "throw-optmistic-lock-exception");
+    /**
+     * Sets up a metadata set.
+     *
+     * @param namespace the namespace of the data set.
+     * @param name      the name of the data set.
+     * @param uid       UUID of the data set.
+     * @return The generated metadata
+     */
+    private static ResourceMetadata generateMetadata(
+            @NotNull final String namespace,
+            @NotNull final String name,
+            @NotNull final UUID uid,
+            @NotNull final OffsetDateTime created,
+            final OffsetDateTime deleted,
+            final Long generation
+    ) {
+        return ResourceMetadata.builder()
+                .kind(User.KIND)
+                .apiVersion(User.API_VERSION)
 
-        sut.save(
-                ImmutableUser.builder()
-                        .from(DATA)
-                        .metadata(
-                                ImmutableResourceMetadata.builder()
-                                        .from(DATA.getMetadata())
-                                        .generation(100L)
-                                        .build()
-                        )
-                        .build()
-        );
+                .namespace(namespace)
+                .name(name)
+                .uid(uid)
 
-        try {
-            sut.save(DATA);
+                .created(created)
+                .deleted(Optional.ofNullable(deleted))
+                .generation(generation)
 
-            fail("There should have been an OptimisticLockStoreException!");
-        } catch (OptimisticLockStoreException e) {
-            // every thing is fine. We wanted this exception
-        }
+                .build();
     }
 
     @Test
@@ -243,31 +252,31 @@ public class TestMemoryUserStore {
         MDC.clear();
     }
 
+    @Test
+    void shouldThrowOptimisticLockExceptionWhenTheNewGenerationIsNotHighEnough() {
+        MDC.put("test", "throw-optmistic-lock-exception");
 
-    /**
-     * Sets up a metadata set.
-     *
-     * @param namespace the namespace of the data set.
-     * @param name the name of the data set.
-     * @param uid UUID of the data set.
-     * @return The generated metadata
-     */
-    private static ImmutableResourceMetadata generateMetadata(
-            final String namespace,
-            final String name,
-            final UUID uid,
-            final OffsetDateTime created
-    ) {
-        return ImmutableResourceMetadata.builder()
-                .kind(User.KIND)
-                .apiVersion(User.API_VERSION)
+        sut.save(
+                User.builder()
+                        .metadata(
+                                generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 100L)
 
-                .namespace(namespace)
-                .name(name)
-                .uid(uid)
+                        )
+                        .spec(
+                                UserData.builder()
+                                        .driveThruRPGApiKey(DATA.getSpec().get().getDriveThruRPGApiKey().orElse(null))
+                                        .properties(DATA.getSpec().get().getProperties())
+                                        .build()
+                        )
+                        .build()
+        );
 
-                .created(created)
+        try {
+            sut.save(DATA);
 
-                .build();
+            fail("There should have been an OptimisticLockStoreException!");
+        } catch (OptimisticLockStoreException e) {
+            // every thing is fine. We wanted this exception
+        }
     }
 }

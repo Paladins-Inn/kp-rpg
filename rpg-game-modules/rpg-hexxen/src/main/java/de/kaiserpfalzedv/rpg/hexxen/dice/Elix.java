@@ -19,7 +19,6 @@ package de.kaiserpfalzedv.rpg.hexxen.dice;
 
 import de.kaiserpfalzedv.rpg.core.dice.bag.D6;
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
-import de.kaiserpfalzedv.rpg.core.dice.mat.ImmutableDieResult;
 
 import javax.enterprise.context.Dependent;
 
@@ -41,10 +40,10 @@ public class Elix extends D6 {
 
         String result = (roll == 6) ? "3" : Integer.toString(roll, 10);
 
-        return ImmutableDieResult.builder()
+        return DieResult.builder()
                 .die(this)
                 .total(result)
-                .rolls(result)
+                .rolls(new String[]{result})
                 .build();
     }
 

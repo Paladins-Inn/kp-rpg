@@ -26,9 +26,9 @@
         <version>1.2.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>datastore</artifactId>
-    <name>KP RPG :: Integration :: DataStore</name>
-    <description>The data store for TOMB.</description>
+    <artifactId>datastore-mongodb</artifactId>
+    <name>KP RPG :: DataStore :: MongoDB</name>
+    <description>The mongodb based data store for TOMB.</description>
 
     <properties>
         <activate.jcenter>true</activate.jcenter>

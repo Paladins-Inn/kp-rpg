@@ -18,46 +18,52 @@
 package de.kaiserpfalzedv.rpg.integrations.discord.events;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
-@Value.Immutable
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+@AllArgsConstructor
+@RequiredArgsConstructor
+@ToString
+@EqualsAndHashCode(of = {"id"})
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableBaseEvent.class)
-@JsonDeserialize(builder = ImmutableBaseEvent.Builder.class)
 @Schema(name = "BaseEvent", description = "The base event for discord events.")
-public interface BaseEvent {
+public abstract class BaseEvent {
     /**
-     * @return The message id of the event.
+     * The message id of the event.
      */
-    @Schema(name = "MessageId", description = "The id of the event.")
-    String getId();
+    @Schema(name = "MessageId", description = "The unique id of the event.")
+    private String id;
 
     /**
-     * @return The response sequence number within discord.
+     * The response sequence number within discord.
      */
     @Schema(name = "ResponseSequence", description = "The response sequence number of this event.")
-    Long getResponseNumber();
+    private Long responseNumber;
 
     /**
-     * @return The guild this event was generated in (if any).
+     * The guild this event was generated in (if any).
      */
-    Optional<Guild> getGuild();
+    @Schema(name = "guild", description = "The guild the event is generated in (if any)", nullable = true)
+    private Optional<Guild> guild;
 
     /**
-     * @return The user for who the event has been created.
+     * The user for who the event has been created.
      */
-    Optional<User> getUser();
+    @Schema(name = "user", description = "The user for whom the event has been created (if any)", nullable = true)
+    private Optional<User> user;
 
     /**
-     * @return The timestamp of this event.
+     * The timestamp of this event.
      */
-    OffsetDateTime getTimestamp();
+    @Schema(name = "timestamp", description = "The timestamp of the event")
+    private OffsetDateTime timestamp;
 }

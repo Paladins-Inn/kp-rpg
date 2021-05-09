@@ -21,10 +21,10 @@
     <version>1.2.0-SNAPSHOT</version>
 
     <parent>
-        <artifactId>kp-rpg</artifactId>
+        <artifactId>kp-rpg-parent</artifactId>
         <groupId>de.kaiserpfalz-edv.rpg</groupId>
         <version>1.2.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../rpg-parent/pom.xml</relativePath>
     </parent>
 
     <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
@@ -37,6 +37,7 @@
     <modules>
         <module>mongodb-testsupport</module>
         <module>oauth2-testsupport</module>
+        <module>discord-testsupport</module>
     </modules>
 
     <dependencyManagement>

@@ -18,13 +18,11 @@
 package de.kaiserpfalzedv.rpg.integrations.discord;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
+import lombok.*;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.immutables.value.Value;
 
 /**
  * The context for plugin commands.
@@ -32,34 +30,37 @@ import org.immutables.value.Value;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-02-04
  */
-@Value.Immutable
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonSerialize(as = ImmutableDiscordPluginContext.class)
-@JsonDeserialize(builder = ImmutableDiscordPluginContext.Builder.class)
 @Schema(name = "card", description = "a single card definition.")
-public interface DiscordPluginContext {
+public class DiscordPluginContext {
     /**
-     * @return the plugin generating this context.
+     * the plugin generating this context.
      */
-    DiscordPlugin getPlugin();
+    private DiscordPlugin plugin;
 
     /**
-     * @return the guild this event was created in.
+     * the guild this event was created in.
      */
-    Guild getGuild();
+    private Guild guild;
 
     /**
-     * @return the user of the event.
+     * the user of the event.
      */
-    User getUser();
+    private User user;
 
     /**
-     * @return the channel of the event.
+     * the channel of the event.
      */
-    MessageChannel getChannel();
+    private MessageChannel channel;
 
     /**
-     * @return the raw argument to the command.
+     * the raw argument to the command.
      */
-    String getArgument();
+    private String argument;
 }
