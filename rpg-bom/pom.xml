@@ -29,7 +29,7 @@
 
 
     <properties>
-        <vaadin.version>14.5.3</vaadin.version>
+        <vaadin.version>19.0.6</vaadin.version>
         <discord.version>3.5.0_329</discord.version>
 
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
