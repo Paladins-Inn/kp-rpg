@@ -134,9 +134,6 @@ public class TestListOwnedProductCommand {
 
                                 .namespace(Guild.DISCORD_NAMESPACE)
                                 .name(VALID_USER)
-                                .uid(UUID.randomUUID())
-
-                                .created(OffsetDateTime.now(Clock.systemUTC()))
 
                                 .build()
                 )

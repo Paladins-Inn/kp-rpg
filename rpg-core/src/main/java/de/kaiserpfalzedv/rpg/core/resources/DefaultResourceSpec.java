@@ -32,7 +32,7 @@ import java.util.*;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06
  */
-@SuppressWarnings({"unused", "OptionalUsedAsFieldOrParameterType"})
+@SuppressWarnings({"unused"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -42,7 +42,7 @@ import java.util.*;
 @Schema(name = "DefaultResourceSpec", description = "A standardized resource.")
 public class DefaultResourceSpec implements Serializable {
     @Schema(name = "properties", description = "A map of plugin properties for spec.")
-    private final Map<String, String> properties = new HashMap<>();
+    private Map<String, String> properties = new HashMap<>();
 
     /**
      * Returns a property.

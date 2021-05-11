@@ -33,6 +33,8 @@ import java.util.UUID;
 /**
  * Metadata -- common data for every resource of the system.
  *
+ * Default values for the lombok builder are set in {@link ResourceMetadataBuilder}.
+ *
  * @author klenkes74 {@literal <rlichit@kaiserpfalz-edv.de>}
  * @since 1.0.0
  */
@@ -49,20 +51,20 @@ import java.util.UUID;
 public class ResourceMetadata implements ResourcePointer {
     @EqualsAndHashCode.Include
     @Schema(name = "Uid", description = "The unique id.")
-    private final UUID uid = UUID.randomUUID();
+    private UUID uid;
     @EqualsAndHashCode.Include
     @Schema(name = "generation", description = "The generation of this object. Every change adds 1.", required = true, defaultValue = "0L")
-    private final Long generation = 0L;
+    private Long generation;
     @Schema(name = "owner", description = "The owning resource. This is a sub-resource or managed resource of the given address.")
-    private final Optional<ResourcePointer> owner = Optional.empty();
+    private Optional<ResourcePointer> owner;
     @Schema(name = "created", description = "The timestamp of resource creation.", required = true)
-    private final OffsetDateTime created = OffsetDateTime.now(ZoneOffset.UTC);
+    private OffsetDateTime created;
     @Schema(name = "deleted", description = "The timestamp of object deletion. Marks an object to be deleted.")
-    private final Optional<OffsetDateTime> deleted = Optional.empty();
+    private Optional<OffsetDateTime> deleted;
     @Schema(name = "annotations", description = "A set of annotations to this resource.", maxItems = 256)
-    private final Map<String, String> annotations = new HashMap<>();
+    private Map<String, String> annotations;
     @Schema(name = "labels", description = "A set of labels to this resource.", maxItems = 256)
-    private final Map<String, String> labels = new HashMap<>();
+    private Map<String, String> labels;
     @Schema(name = "Kind", description = "The kind (type) of the resource.", required = true)
     private String kind;
     @Schema(name = "ApiVersion", description = "The version of the resource entry.", required = true)
@@ -71,6 +73,19 @@ public class ResourceMetadata implements ResourcePointer {
     private String namespace;
     @Schema(name = "Name", description = "The unique name (within a namespace) of a resource.", required = true)
     private String name;
+
+    /**
+     * Initializer class for the lombok builder for {@link ResourceMetadata}.
+     */
+    public static class ResourceMetadataBuilder {
+        private UUID uid = UUID.randomUUID();
+        private Long generation = 0L;
+        private Optional<ResourcePointer> owner = Optional.empty();
+        private OffsetDateTime created = OffsetDateTime.now(ZoneOffset.UTC);
+        private Optional<OffsetDateTime> deleted = Optional.empty();
+        private Map<String, String> annotations = new HashMap<>();
+        private Map<String, String> labels = new HashMap<>();
+    }
 
     /**
      * Checks if there is an annotation for this name.

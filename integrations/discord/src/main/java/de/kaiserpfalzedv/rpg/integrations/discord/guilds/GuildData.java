@@ -44,11 +44,11 @@ public class GuildData implements Serializable {
     public static String DEFAULT_PREFIX = "tb!";
 
     @Schema(name = "adminRoles", description = "The roles needed for being seen as admin.")
-    private final List<String> adminRoles = new ArrayList<>();
+    private List<String> adminRoles = new ArrayList<>();
 
     @Schema(name = "properties", description = "Configuration properties")
-    private final Map<String, String> properties = new HashMap<>();
+    private Map<String, String> properties = new HashMap<>();
 
     @Schema(name = "prefix", description = "The global prefix to use in this discord guild.")
-    private final String prefix = DEFAULT_PREFIX;
+    private String prefix = DEFAULT_PREFIX;
 }

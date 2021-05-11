@@ -26,6 +26,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.beans.Transient;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -36,7 +37,6 @@ import java.util.Optional;
  * @since 1.2.0 2021-02-06
  */
 @SuppressWarnings("unused")
-@Builder
 @AllArgsConstructor
 @Getter
 @ToString
@@ -58,6 +58,23 @@ public class GameData extends DefaultResourceSpec {
             DISCORD_CHANNEL
     };
 
+    @Builder
+    public GameData(
+            final Map<String, String> properties,
+            final ResourcePointer campaign,
+            final ResourcePointer gameMaster,
+            final List<ResourcePointer> players,
+            final ResourcePointer discordGuild,
+            final ResourcePointer discordChannel
+    ) {
+        super(properties);
+
+        saveResourcePointer(CAMPAIGN, campaign);
+        saveResourcePointer(GAME_GM, gameMaster);
+        saveResourcePointers(GAME_PLAYERS, players);
+        saveResourcePointer(DISCORD_GUILD, discordGuild);
+        saveResourcePointer(DISCORD_CHANNEL, discordChannel);
+    }
 
     @Override
     public String[] getDefaultProperties() {
