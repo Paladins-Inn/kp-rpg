@@ -17,46 +17,38 @@
 
 package de.kaiserpfalzedv.rpg.hexxen.dice;
 
+import de.kaiserpfalzedv.rpg.core.dice.Die;
+import de.kaiserpfalzedv.rpg.core.dice.bag.D6;
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
 
-import javax.enterprise.context.Dependent;
+import java.util.ArrayList;
 
 /**
- * Blut die -- a die with symbols used by HeXXen 1733.
- *
- * The following table is used for lookups:
- *
- * 2,3 = B (1 Blut), 4,5 = BB (2 Blut), 6 = BB (3 Blut)
+ * HeXXenDie --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.0.0 2021-01-06
+ * @since 1.2.0  2021-05-12
  */
-@Dependent
-public class Blut extends HeXXenDie {
-    @Override
-    public DieResult roll() {
-        DieResult rollResult = die.roll();
-        int roll = Integer.parseInt(rollResult.getTotal());
+public abstract class HeXXenDie implements Die {
+    protected D6 die;
 
-        String result = " ";
-        switch (roll) {
-            case 2:
-            case 3:
-                result = "B";
-                break;
-            case 4:
-            case 5:
-                result = "BB";
-                break;
-            case 6:
-                result = "BBB";
-                break;
+    public HeXXenDie() {
+        this.die = new D6();
+    }
+
+
+    public final DieResult[] roll(final int number) {
+        ArrayList<DieResult> results = new ArrayList<>(number);
+
+        for (int i = 1; i <= number; i++) {
+            results.add(roll());
         }
 
-        return DieResult.builder()
-                .die(this)
-                .total(result)
-                .rolls(new String[]{result})
-                .build();
+        return results.toArray(new DieResult[0]);
+    }
+
+    @Override
+    public boolean isNumericDie() {
+        return false;
     }
 }

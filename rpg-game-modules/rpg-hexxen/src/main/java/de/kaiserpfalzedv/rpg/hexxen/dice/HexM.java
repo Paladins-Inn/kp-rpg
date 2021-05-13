@@ -17,7 +17,6 @@
 
 package de.kaiserpfalzedv.rpg.hexxen.dice;
 
-import de.kaiserpfalzedv.rpg.core.dice.bag.D6;
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
 
 import javax.enterprise.context.Dependent;
@@ -33,10 +32,11 @@ import javax.enterprise.context.Dependent;
  * @since 1.0.0 2021-01-06
  */
 @Dependent
-public class HexM extends D6 {
+public class HexM extends HeXXenDie {
     @Override
     public DieResult roll() {
-        int roll = rollSingle();
+        DieResult rollResult = die.roll();
+        int roll = Integer.parseInt(rollResult.getTotal());
 
         String result = " ";
         switch (roll) {
@@ -52,10 +52,5 @@ public class HexM extends D6 {
                 .total(result)
                 .rolls(new String[]{result})
                 .build();
-    }
-
-    @Override
-    public boolean isNumericDie() {
-        return false;
     }
 }

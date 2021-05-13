@@ -17,15 +17,17 @@
 
 package de.kaiserpfalzedv.rpg.torg.dice;
 
-import de.kaiserpfalzedv.rpg.core.dice.bag.D6;
+import de.kaiserpfalzedv.rpg.core.dice.Die;
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.enterprise.context.Dependent;
 import java.util.ArrayList;
 
 /**
  * BD is an exploding D6.
- *
+ * <p>
  * If a 6 is rolled, it is added as 5 and another die is rolled and added. If a 6 is rolled again, 5 will be added and
  * another die is rolled again. You recognize the pattern.
  *
@@ -33,7 +35,33 @@ import java.util.ArrayList;
  * @since 2021-01-02
  */
 @Dependent
-public class BD extends D6 {
+@ToString
+@EqualsAndHashCode
+public class BD implements Die {
+    public final DieResult[] roll(final int number) {
+        ArrayList<DieResult> results = new ArrayList<>(number);
+
+        for (int i = 1; i <= number; i++) {
+            results.add(roll());
+        }
+
+        return results.toArray(new DieResult[0]);
+    }
+
+    @Override
+    public boolean isNumericDie() {
+        return true;
+    }
+
+    /**
+     * The die roll itself.
+     * @return the numeric result of the roll of this die.
+     */
+    private int rollSingle() {
+        return (int) (Math.random() * 7);
+    }
+
+
     @Override
     public DieResult roll() {
         int total = 0;

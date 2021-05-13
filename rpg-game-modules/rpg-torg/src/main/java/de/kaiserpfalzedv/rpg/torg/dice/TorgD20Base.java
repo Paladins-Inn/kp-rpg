@@ -15,35 +15,48 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.hexxen.dice;
+package de.kaiserpfalzedv.rpg.torg.dice;
 
+import de.kaiserpfalzedv.rpg.core.dice.Die;
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
+import lombok.ToString;
 
-import javax.enterprise.context.Dependent;
+import java.util.ArrayList;
 
 /**
- * Exlixir die -- a die with symbols used by HeXXen 1733.
- *
- * The following table is used for lookups:
- *
- * 1-5 = 1-5, 6=3
+ * TorgD20Base --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.0.0 2021-01-06
+ * @since 0.3.0  2021-05-12
  */
-@Dependent
-public class Elix extends HeXXenDie {
+@ToString
+public abstract class TorgD20Base implements Die {
+    /**
+     * The die roll itself.
+     *
+     * @return the numeric result of the roll of this die.
+     */
+    protected int rollSingle() {
+        return (int) (Math.random() * 21);
+    }
+
+    public final DieResult[] roll(final int number) {
+        ArrayList<DieResult> results = new ArrayList<>(number);
+
+        for (int i = 1; i <= number; i++) {
+            results.add(roll());
+        }
+
+        return results.toArray(new DieResult[0]);
+    }
+
     @Override
-    public DieResult roll() {
-        DieResult rollResult = die.roll();
-        int roll = Integer.parseInt(rollResult.getTotal());
+    public String getDieType() {
+        return getClass().getSimpleName();
+    }
 
-        String result = (roll == 6) ? "3" : Integer.toString(roll, 10);
-
-        return DieResult.builder()
-                .die(this)
-                .total(result)
-                .rolls(new String[]{result})
-                .build();
+    @Override
+    public boolean isNumericDie() {
+        return true;
     }
 }

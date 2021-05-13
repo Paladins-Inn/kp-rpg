@@ -18,9 +18,10 @@
 package de.kaiserpfalzedv.rpg.torg.dice;
 
 import de.kaiserpfalzedv.rpg.core.dice.LookupTable;
-import de.kaiserpfalzedv.rpg.core.dice.bag.D20;
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
 import de.kaiserpfalzedv.rpg.torg.BonusChart;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.enterprise.context.Dependent;
 import java.util.ArrayList;
@@ -28,14 +29,16 @@ import java.util.Optional;
 
 /**
  * This is an exploding D20 with no minimum value when exploding.
- *
+ * <p>
  * Every 10 and 20 is rerolled until no 10 or 20 is rolled any more.
  *
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2021-01-02
  */
 @Dependent
-public class T20 extends D20 {
+@ToString
+@EqualsAndHashCode
+public class T20 extends TorgD20Base {
     @Override
     public DieResult roll() {
         int total = 0;

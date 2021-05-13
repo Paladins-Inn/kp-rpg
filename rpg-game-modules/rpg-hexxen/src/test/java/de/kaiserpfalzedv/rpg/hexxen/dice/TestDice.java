@@ -56,24 +56,6 @@ public class TestDice {
         Assertions.assertNotEquals(dice[0], dice[1]);
     }
 
-    @Test
-    public void shouldReturnAHash() {
-        MDC.put("test", "check-hashcode");
-
-        assertEquals(37, dice[0].hashCode(), "Wrong hash code for " + dice[0].getClass().getSimpleName());
-    }
-
-    @Test
-    public void shouldGiveANiceTostring() {
-        MDC.put("test", "check-string");
-
-        for (Die die : dice) {
-            String result = die.toString();
-
-            assertTrue(result.startsWith(die.getDieType() + "["));
-        }
-    }
-
 
     @AfterEach
     void tearDownEach() {
