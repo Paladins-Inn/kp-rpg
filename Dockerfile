@@ -53,7 +53,7 @@ ARG MVN_PARAMETER="--batch-mode --no-transfer-progress \
     -Dskip.site=true \
     -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false"
 
-# RUN mvn ${MVN_PARAMETER} -N clean install
+RUN mvn ${MVN_PARAMETER} -N clean install
 RUN cd rpg-bom && mvn ${MVN_PARAMETER} clean install
 RUN cd rpg-parent && mvn ${MVN_PARAMETER} clean install
 RUN cd rpg-core && mvn ${MVN_PARAMETER} clean install
