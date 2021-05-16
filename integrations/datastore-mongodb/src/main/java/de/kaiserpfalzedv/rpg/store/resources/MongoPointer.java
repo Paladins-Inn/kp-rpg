@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.store.resources;
 
+import de.kaiserpfalzedv.rpg.core.resources.Pointer;
 import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
 import lombok.*;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
@@ -37,7 +38,7 @@ import java.util.UUID;
 @Getter
 @ToString
 @EqualsAndHashCode
-public class MongoResourcePointer implements ResourcePointer {
+public class MongoPointer implements ResourcePointer {
     public String kind;
     public String apiVersion;
 
@@ -45,7 +46,7 @@ public class MongoResourcePointer implements ResourcePointer {
     public String name;
     public UUID uid;
 
-    public MongoResourcePointer(final ResourcePointer orig) {
+    public MongoPointer(final ResourcePointer orig) {
         kind = orig.getKind();
         apiVersion = orig.getApiVersion();
 
@@ -55,14 +56,20 @@ public class MongoResourcePointer implements ResourcePointer {
 
     @BsonIgnore
     @Transient
-    public ResourcePointer data() {
-        return data(null);
+    public Pointer data() {
+        return Pointer.builder()
+                .kind(kind)
+                .apiVersion(apiVersion)
+                .namespace(namespace)
+                .name(name)
+                .uid(uid)
+                .build();
     }
 
     @BsonIgnore
     @Transient
-    public MongoResourcePointer data(final ObjectId id) {
-        return MongoResourcePointer.builder()
+    public MongoPointer data(final ObjectId id) {
+        return MongoPointer.builder()
                 .kind(kind)
                 .apiVersion(apiVersion)
 

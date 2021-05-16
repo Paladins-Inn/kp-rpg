@@ -24,10 +24,12 @@ import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildData;
 import de.kaiserpfalzedv.rpg.store.resources.MongoResource;
 import io.quarkus.mongodb.panache.MongoEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.beans.Transient;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +39,7 @@ import java.util.Optional;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0 2021-01-31
  */
-@Builder
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -74,26 +76,28 @@ public class MongoGuild extends MongoResource<Guild> {
 
         if (spec != null) {
             data
-                    .adminRoles(spec.adminRoles)
-                    .properties(spec.properties)
+                    .adminRoles(spec.adminRoles != null ? spec.adminRoles : new ArrayList<>())
+                    .properties(spec.properties != null ? spec.properties : new HashMap<>())
                     .prefix(spec.prefix);
         }
 
         if (status != null) {
             List<ResourceHistory> history = new ArrayList<>();
 
-            this.status.history.forEach(h -> {
-                history.add(ResourceHistory.builder()
-                        .status(h.status)
-                        .timeStamp(h.timeStamp.timeStamp())
-                        .message(Optional.ofNullable(h.message))
-                        .build()
-                );
-            });
+            if (!this.status.history.isEmpty()) {
+                this.status.history.forEach(h -> {
+                    history.add(ResourceHistory.builder()
+                            .status(h.status)
+                            .timeStamp(h.timeStamp.timeStamp())
+                            .message(Optional.ofNullable(h.message))
+                            .build()
+                    );
+                });
 
-            status
-                    .observedGeneration(this.status.observedGeneration)
-                    .history(history);
+                status
+                        .observedGeneration(this.status.observedGeneration)
+                        .history(history);
+            }
         }
 
         return Guild.builder()

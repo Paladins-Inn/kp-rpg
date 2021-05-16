@@ -19,7 +19,9 @@ package de.kaiserpfalzedv.rpg.core.resources;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.beans.Transient;
@@ -33,16 +35,18 @@ import java.util.*;
  * @since 1.0.0 2021-01-06
  */
 @SuppressWarnings({"unused"})
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = DefaultResourceSpec.DefaultResourceSpecBuilder.class)
 @Schema(name = "DefaultResourceSpec", description = "A standardized resource.")
 public class DefaultResourceSpec implements Serializable {
     @Schema(name = "properties", description = "A map of plugin properties for spec.")
-    private Map<String, String> properties = new HashMap<>();
+    private Map<String, String> properties;
 
     /**
      * Returns a property.

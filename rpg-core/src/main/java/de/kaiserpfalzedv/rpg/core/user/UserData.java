@@ -19,15 +19,16 @@ package de.kaiserpfalzedv.rpg.core.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.core.resources.DefaultResourceSpec;
+import de.kaiserpfalzedv.rpg.core.resources.Pointer;
 import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.beans.Transient;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -36,13 +37,15 @@ import java.util.Optional;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06
  */
-@SuppressWarnings({"unused", "OptionalUsedAsFieldOrParameterType"})
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = UserData.UserDataBuilder.class)
 @Schema(name = "userData", description = "Registered User.")
 public class UserData extends DefaultResourceSpec {
     public static String CAMPAIGNS = "campaigns";
@@ -54,29 +57,14 @@ public class UserData extends DefaultResourceSpec {
     };
 
     private Optional<String> description;
-    private Optional<ResourcePointer> picture;
+    private Optional<Pointer> picture;
+
     @Schema(name = "driveThruRPGApiKey", description = "The API Key for DriveThruRPG.")
     private Optional<String> driveThruRPGApiKey;
 
-    @Builder
-    public UserData(
-            final Map<String, String> properties,
-            final String driveThruRPGApiKey,
-            final String description,
-            final ResourcePointer picture,
-            final Collection<ResourcePointer> campaigns,
-            final Collection<ResourcePointer> games
-    ) {
-        super(properties);
 
-        this.driveThruRPGApiKey = Optional.ofNullable(driveThruRPGApiKey);
-        this.description = Optional.ofNullable(description);
-        this.picture = Optional.ofNullable(picture);
-
-        saveResourcePointers(CAMPAIGNS, campaigns);
-        saveResourcePointers(GAMES, games);
-    }
-
+    @Transient
+    @JsonIgnore
     @Override
     public String[] getDefaultProperties() {
         return STRUCTURED_PROPERTIES;

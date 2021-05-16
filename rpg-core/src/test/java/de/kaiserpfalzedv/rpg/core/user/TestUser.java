@@ -26,8 +26,8 @@ import org.slf4j.MDC;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,12 +52,8 @@ public class TestUser {
             )
             .spec(
                     UserData.builder()
-                            .driveThruRPGApiKey(DATA_API_KEY)
-                            .properties(new HashMap<>())
-                            .campaigns(new ArrayList<>())
-                            .games(new ArrayList<>())
-                            .description(null)
-                            .picture(null)
+                            .withDriveThruRPGApiKey(Optional.of(DATA_API_KEY))
+                            .withProperties(new HashMap<>())
                             .build()
             )
             .state(null)
@@ -67,7 +63,7 @@ public class TestUser {
     static void setUp() {
         MDC.put("test-class", TestUser.class.getSimpleName());
 
-        DATA.getSpec().get().getProperties().put("discord-id", DISCORD_ID);
+        DATA.getSpec().orElseThrow().getProperties().put("discord-id", DISCORD_ID);
     }
 
     @AfterAll

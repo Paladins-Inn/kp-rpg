@@ -26,7 +26,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
-@Builder
+@Builder(setterPrefix = "with")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

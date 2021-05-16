@@ -84,8 +84,10 @@ public interface DiscordPluginCommand {
      */
     default User loadUserFromStoreOrCreateNewUser(final DiscordPluginContext context, final UserStoreService userStore) {
         net.dv8tion.jda.api.entities.User user = context.getUser();
+
         Optional<User> store = userStore.findByNameSpaceAndName(DISCORD_NAMESPACE, user.getName());
         User result;
+
         if (store.isEmpty()) {
             HashMap<String, String> annotations = new HashMap<>(3);
             annotations.put("discord-id", user.getId());

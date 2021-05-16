@@ -21,13 +21,14 @@ import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginCommand;
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginContext;
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginException;
+import de.kaiserpfalzedv.rpg.integrations.discord.DontWorkOnDiscordEventException;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageChannelPlugin;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.DriveThruRPGService;
 import io.quarkus.runtime.StartupEvent;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -43,9 +44,9 @@ import java.util.List;
  * @since 1.2.0  2021-02-04
  */
 @ApplicationScoped
+@ToString
+@Slf4j
 public class DriveThruRPGPlugin implements DiscordMessageChannelPlugin {
-    private static final Logger LOG = LoggerFactory.getLogger(DriveThruRPGPlugin.class);
-
     private static final String PLUGIN_PREFIX = "dtr";
 
     /**
@@ -69,7 +70,7 @@ public class DriveThruRPGPlugin implements DiscordMessageChannelPlugin {
     }
 
     public void startup(@Observes final StartupEvent event) {
-        LOG.info("Created discord DriveThruRPG plugin {}: service={}, userStore={}, commands={}",
+        log.info("Created discord DriveThruRPG plugin {}: service={}, userStore={}, commands={}",
                 this, service, userStore, commands);
     }
 
@@ -82,6 +83,7 @@ public class DriveThruRPGPlugin implements DiscordMessageChannelPlugin {
         String pluginPrefix = loadGuildPrefix(guild) + PLUGIN_PREFIX;
 
         if (message.startsWith(pluginPrefix)) {
+            log.trace("command: message={}", message);
             String arg = message.substring(pluginPrefix.length() + 1);
             String[] args = arg.split(" ", 2);
 
@@ -96,19 +98,24 @@ public class DriveThruRPGPlugin implements DiscordMessageChannelPlugin {
 
                 try {
                     c.execute(ctx);
+                } catch (DontWorkOnDiscordEventException e) {
+                    // log nothing. Every but one plugin will throw this exception ...
                 } catch (DiscordPluginException e) {
-                    LOG.error("PluginCommand '{} {}' threw an exception: {}", pluginPrefix, c.getCommand(), e.getMessage());
+                    log.error("PluginCommand '{} {}' threw an exception: {}", pluginPrefix, c.getCommand(), e.getMessage());
                 }
             }
         }
     }
 
     private String loadGuildPrefix(Guild guild) {
-        String guildPrefix = "";
+        String prefix = DEFAULT_GUILD_PREFIX;
         if (guild.getSpec().isPresent()) {
-            guildPrefix = guild.getSpec().get().getPrefix();
+            prefix = guild.getSpec().get().getPrefix();
+            if (prefix == null) {
+                prefix = "tb!";
+            }
         }
-        return guildPrefix;
+        return prefix;
     }
 
     @Override

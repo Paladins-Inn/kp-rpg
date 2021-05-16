@@ -17,18 +17,18 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.OwnedProduct;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Product;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Publisher;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.OwnedProductMessage;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.ProductMessage;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.PublisherMessage;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMultiMessage;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.jboss.resteasy.annotations.jaxrs.QueryParam;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.LinkedHashMap;
+
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
  * The client to retrieve publisher data.
@@ -41,17 +41,17 @@ import java.util.LinkedHashMap;
 public interface DriveThruRPGClient {
     @POST
     @Path("/token")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
     DriveThruMessage<LinkedHashMap<String, String>> getToken(
             @HeaderParam("Authorization") String authorization
     );
 
     @GET
     @Path("/customers/{customerId}/products")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    DriveThruMultiMessage<OwnedProduct> getOwnedProducts(
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
+    OwnedProductMessage getOwnedProducts(
             @HeaderParam("Authorization") String bearerToken,
             @PathParam("customerId") String customerId,
             @QueryParam("page") long page,
@@ -62,17 +62,17 @@ public interface DriveThruRPGClient {
 
     @GET
     @Path("/publishers/{publisherId}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    DriveThruMessage<Publisher> getPublisher(
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
+    PublisherMessage getPublisher(
             @PathParam("publisherId") String publisherId
     );
 
     @GET
     @Path("/products/{productId}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    DriveThruMessage<Product> getProduct(
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
+    ProductMessage getProduct(
             @PathParam("productId") String productId
     );
 }

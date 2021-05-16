@@ -17,25 +17,35 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import java.beans.Transient;
 import java.util.Optional;
 
+@Builder(builderClassName = "ProductMessageBuilder", toBuilder = true, setterPrefix = "with")
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = ProductMessage.ProductMessageBuilder.class)
 @Schema(name = "ProductMessage", description = "A single product")
-public class ProductMessage extends DriveThruMessage<Product> {
-    @Builder
-    public ProductMessage(@NotNull final String status, final Product product) {
-        super(status, Optional.ofNullable(product));
+public class ProductMessage {
+    @JsonProperty("status")
+    private String status;
+
+    @JsonProperty("message")
+    private Product message;
+
+    @Transient
+    @JsonIgnore
+    public Optional<Product> getData() {
+        return Optional.ofNullable(message);
     }
 }

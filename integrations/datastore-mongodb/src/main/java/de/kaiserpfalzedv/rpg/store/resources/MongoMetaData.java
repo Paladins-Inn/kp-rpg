@@ -42,7 +42,7 @@ public class MongoMetaData implements ResourcePointer {
     public String name;
     public UUID uid;
 
-    public MongoResourcePointer owner;
+    public MongoPointer owner;
 
     public Long generation;
 
@@ -66,7 +66,7 @@ public class MongoMetaData implements ResourcePointer {
         this((ResourcePointer) orig);
 
         if (orig.getOwner() != null) {
-            orig.getOwner().ifPresent(o -> owner = new MongoResourcePointer(o));
+            orig.getOwner().ifPresent(o -> owner = new MongoPointer(o));
         }
 
         generation = orig.getGeneration();

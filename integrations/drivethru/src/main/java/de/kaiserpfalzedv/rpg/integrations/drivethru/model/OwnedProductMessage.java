@@ -17,23 +17,41 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMultiMessage;
-import jakarta.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import java.beans.Transient;
+import java.util.List;
+
+@Builder(builderClassName = "OwnedProductMessageBuilder", toBuilder = true)
 @Getter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = OwnedProductMessage.OwnedProductMessageBuilder.class)
 @Schema(name = "OwnedProductMessage", description = "Describes the owned products")
-public class OwnedProductMessage extends DriveThruMultiMessage<OwnedProduct> {
-    @Builder
-    public OwnedProductMessage(@NotNull final String status, @NotNull final OwnedProduct[] products) {
-        super(status, products);
+public class OwnedProductMessage {
+    @JsonProperty("status")
+    private final String status;
+
+    @JsonProperty("message")
+    private final OwnedProduct[] message;
+
+    @Transient
+    @JsonIgnore
+    public List<OwnedProduct> getData() {
+        return List.of(getMessage());
+    }
+
+    @JsonPOJOBuilder(withPrefix = "")
+    public static class OwnedProductMessageBuilder {
     }
 }

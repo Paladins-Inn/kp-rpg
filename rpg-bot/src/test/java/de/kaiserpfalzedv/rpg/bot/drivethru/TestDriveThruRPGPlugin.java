@@ -23,6 +23,7 @@ import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildData;
 import de.kaiserpfalzedv.rpg.test.discord.*;
 import io.quarkus.test.junit.QuarkusTest;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -39,8 +40,10 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
@@ -50,6 +53,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
  * @since 1.2.0  2021-02-05
  */
 @QuarkusTest
+@Slf4j
 public class TestDriveThruRPGPlugin {
     /**
      * A valid api key (40 digits, hex).
@@ -77,6 +81,7 @@ public class TestDriveThruRPGPlugin {
             )
             .spec(Optional.of(
                     GuildData.builder()
+                            .prefix("tb!")
                             .build()
             ))
             .build();
@@ -123,8 +128,18 @@ public class TestDriveThruRPGPlugin {
         sut.workOnMessage(GUILD, input);
 
         Optional<de.kaiserpfalzedv.rpg.core.user.User> user = userStore.findByNameSpaceAndName(Guild.DISCORD_NAMESPACE, DISCORD_USER.getName());
+        log.debug("user={}", user);
 
-        assertEquals(VALID_DISCORD_API_KEY, user.orElseThrow().getSpec().orElseThrow().getDriveThruRPGApiKey().orElseThrow());
+        user.ifPresentOrElse(
+                u -> u.getSpec().ifPresentOrElse(
+                        s -> s.getDriveThruRPGApiKey().ifPresentOrElse(
+                                k -> assertThat(k, is(VALID_DISCORD_API_KEY)),
+                                () -> fail("No API Key defined")
+                        ),
+                        () -> fail("No user spec loaded.")
+                ),
+                () -> fail("No user found.")
+        );
     }
 
     @Test

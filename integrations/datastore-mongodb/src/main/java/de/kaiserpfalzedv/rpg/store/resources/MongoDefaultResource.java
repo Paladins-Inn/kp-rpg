@@ -15,34 +15,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.integrations.drivethru.resource;
+package de.kaiserpfalzedv.rpg.store.resources;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
+import de.kaiserpfalzedv.rpg.core.resources.Resource;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 
-import java.beans.Transient;
-import java.util.List;
+import java.util.HashMap;
 
-@AllArgsConstructor
+/**
+ * MongoDefaultResource --
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 0.3.0  2021-05-16
+ */
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 @Getter
-@ToString
-@EqualsAndHashCode
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-public class DriveThruMultiMessage<T extends DriveThruResource> {
-    @JsonProperty("status")
-    private final String status;
-
-    @JsonProperty("message")
-    private final T[] message;
-
-    @Transient
-    @JsonIgnore
-    public List<T> getData() {
-        return List.of(getMessage());
-    }
+public abstract class MongoDefaultResource<T extends Resource<?>> extends MongoResource<T> {
+    @JsonProperty("properties")
+    @BsonProperty("properties")
+    public HashMap<String, String> properties;
 }

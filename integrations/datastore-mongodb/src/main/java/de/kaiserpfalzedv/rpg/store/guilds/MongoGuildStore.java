@@ -29,6 +29,7 @@ import io.quarkus.mongodb.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -45,11 +46,12 @@ import java.util.UUID;
  */
 @ApplicationScoped
 @AlternativePriority(500)
+@Slf4j
 public class MongoGuildStore extends MongoResourceStore<Guild, MongoGuild> implements GuildStoreService, PanacheMongoRepository<MongoGuild> {
 
 
     public void startUp(@Observes StartupEvent event) {
-        LOG.info("started: {}", this);
+        log.info("started: {}", this);
     }
 
     @PostConstruct
@@ -74,7 +76,7 @@ public class MongoGuildStore extends MongoResourceStore<Guild, MongoGuild> imple
     public PanacheQuery<MongoGuild> query(final String query, final Parameters parameters) {
         PanacheQuery<MongoGuild> result = find(query, parameters);
 
-        LOG.trace("query: query='{}', count={}", query, result.count());
+        log.trace("query: query='{}', count={}", query, result.count());
         return result;
     }
 
@@ -95,7 +97,7 @@ public class MongoGuildStore extends MongoResourceStore<Guild, MongoGuild> imple
 
     private Optional<Guild> repairKind(Optional<Guild> input) {
         if (input.isEmpty() || Guild.KIND.equals(input.get().getKind())) {
-            LOG.trace("Do not rewrite: guild={}", input.orElse(null));
+            log.trace("Do not rewrite: guild={}", input.orElse(null));
             return input;
         }
 
@@ -103,12 +105,12 @@ public class MongoGuildStore extends MongoResourceStore<Guild, MongoGuild> imple
         MongoGuild data = new MongoGuild(output);
         update(data);
 
-        LOG.debug("Returning rewritten: guild={}", output);
+        log.debug("Returning rewritten: guild={}", output);
         return Optional.of(output);
     }
 
     private Guild rewriteGuild(@NotNull final Guild input) {
-        LOG.trace("Rewriting: guild={}", input);
+        log.trace("Rewriting: guild={}", input);
         long generation = input.getGeneration() + 1;
 
         ResourceMetadata metadata = rewriteMetadata(input, generation);

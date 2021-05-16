@@ -47,5 +47,4 @@ public interface ResourcePointer extends Serializable {
     default String getSelfLink() {
         return "/apis/" + getApiVersion() + "/" + getKind() + "/" + getUid();
     }
-
 }

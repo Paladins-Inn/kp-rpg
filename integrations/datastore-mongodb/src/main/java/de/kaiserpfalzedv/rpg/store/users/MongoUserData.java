@@ -18,47 +18,71 @@
 package de.kaiserpfalzedv.rpg.store.users;
 
 import de.kaiserpfalzedv.rpg.core.user.UserData;
-import de.kaiserpfalzedv.rpg.store.resources.MongoResourcePointer;
+import de.kaiserpfalzedv.rpg.store.resources.MongoPointer;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 
+import java.beans.Transient;
 import java.util.HashMap;
+import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class MongoUserData {
     public String description;
-    public MongoResourcePointer picture;
+    public MongoPointer picture;
     public String driveThruApiKey;
 
     public HashMap<String, String> properties;
 
-    public MongoUserData(UserData orig) {
+    public MongoUserData(@NotNull final UserData orig) {
         properties = new HashMap<>();
 
-        if (orig.getDescription().isPresent()) {
-            description = orig.getDescription().get();
-        }
+        if (orig != null) {
+            orig.getDescription().ifPresentOrElse(
+                    d -> description = d,
+                    () -> description = null
+            );
 
-        if (orig.getPicture().isPresent()) {
-            picture = new MongoResourcePointer(orig.getPicture().get());
-        }
+            if (orig.getPicture() != null)
+                orig.getPicture().ifPresentOrElse(
+                        p -> picture = MongoPointer.builder()
+                                .kind(p.getKind())
+                                .apiVersion(p.getApiVersion())
+                                .namespace(p.getNamespace())
+                                .name(p.getName())
+                                .uid(p.getUid())
+                                .build(),
+                        () -> picture = null
+                );
 
-        if (orig.getDriveThruRPGApiKey().isPresent()) {
-            driveThruApiKey = orig.getDriveThruRPGApiKey().get();
-        }
+            if (orig.getDriveThruRPGApiKey() != null)
+                orig.getDriveThruRPGApiKey().ifPresentOrElse(
+                        k -> driveThruApiKey = k,
+                        () -> driveThruApiKey = null
+                );
 
-        properties.putAll(orig.getProperties());
+            if (orig.getProperties() != null)
+                properties.putAll(orig.getProperties());
+        }
     }
 
+    @Transient
+    @BsonIgnore
     public UserData data() {
-        UserData.UserDataBuilder result = UserData.builder();
+        UserData.UserDataBuilder result = UserData.builder()
+                .withDescription(Optional.ofNullable(description))
+                .withProperties(properties)
+                .withDriveThruRPGApiKey(Optional.ofNullable(driveThruApiKey));
 
-        if (description != null) result.description(description);
-        if (picture != null) result.picture(picture.data());
-        if (driveThruApiKey != null) result.driveThruRPGApiKey(driveThruApiKey);
-
-        result.properties(properties);
+        if (picture != null)
+            result.withPicture(Optional.ofNullable(picture.data()));
 
         return result.build();
     }

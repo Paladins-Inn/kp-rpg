@@ -17,30 +17,42 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-@Builder
+@Builder(builderClassName = "PublisherBuilder", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = Publisher.PublisherBuilder.class)
 @Schema(name = "Publisher", description = "A publisher from DriveThruRPG.")
 public class Publisher implements DriveThruResource {
     /**
      * the DriveThruRPG id.
      */
+    @NotNull
+    @Positive
     @JsonProperty("publishers_id")
     private String publisherId;
 
     /**
      * The DriveThruRPG name.
      */
+    @NotNull
+    @Size(min = 1, max = 1000)
     @JsonProperty("publishers_name")
     private String publisherName;
+
+    @JsonPOJOBuilder(withPrefix = "")
+    public static class PublisherBuilder {
+    }
 }

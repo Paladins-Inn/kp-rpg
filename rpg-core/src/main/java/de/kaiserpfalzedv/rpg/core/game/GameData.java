@@ -19,14 +19,18 @@ package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.core.resources.DefaultResourceSpec;
 import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.beans.Transient;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -37,11 +41,13 @@ import java.util.Optional;
  * @since 1.2.0 2021-02-06
  */
 @SuppressWarnings("unused")
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @Getter
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = GameData.GameDataBuilder.class)
 @Schema(name = "GameData", description = "A game session data.")
 public class GameData extends DefaultResourceSpec {
     public static String CAMPAIGN = "campaign";
@@ -57,24 +63,6 @@ public class GameData extends DefaultResourceSpec {
             DISCORD_GUILD,
             DISCORD_CHANNEL
     };
-
-    @Builder
-    public GameData(
-            final Map<String, String> properties,
-            final ResourcePointer campaign,
-            final ResourcePointer gameMaster,
-            final List<ResourcePointer> players,
-            final ResourcePointer discordGuild,
-            final ResourcePointer discordChannel
-    ) {
-        super(properties);
-
-        saveResourcePointer(CAMPAIGN, campaign);
-        saveResourcePointer(GAME_GM, gameMaster);
-        saveResourcePointers(GAME_PLAYERS, players);
-        saveResourcePointer(DISCORD_GUILD, discordGuild);
-        saveResourcePointer(DISCORD_CHANNEL, discordChannel);
-    }
 
     @Override
     public String[] getDefaultProperties() {

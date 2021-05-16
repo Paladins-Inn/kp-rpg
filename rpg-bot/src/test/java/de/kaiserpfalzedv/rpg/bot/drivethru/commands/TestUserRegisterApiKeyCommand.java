@@ -17,7 +17,6 @@
 
 package de.kaiserpfalzedv.rpg.bot.drivethru.commands;
 
-import de.kaiserpfalzedv.rpg.bot.drivethru.UserRegisterApiKeyCommand;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
@@ -96,7 +95,6 @@ public class TestUserRegisterApiKeyCommand {
     private final UserRegisterApiKeyCommand sut;
 
 
-    @SuppressWarnings("CdiInjectionPointsInspection")
     @Inject
     public TestUserRegisterApiKeyCommand(
             final UserRegisterApiKeyCommand sut,

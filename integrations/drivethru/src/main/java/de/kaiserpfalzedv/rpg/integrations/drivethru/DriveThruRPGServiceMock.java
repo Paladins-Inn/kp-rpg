@@ -26,9 +26,11 @@ import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Publisher;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Token;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoDriveThruRPGAPIKeyDefinedException;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoValidTokenException;
+import io.quarkus.arc.AlternativePriority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.context.Dependent;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -52,6 +54,8 @@ import static java.time.ZoneOffset.UTC;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-02-06
  */
+@Dependent
+@AlternativePriority(50)
 public class DriveThruRPGServiceMock implements DriveThruRPGService {
     private static final Logger LOG = LoggerFactory.getLogger(DriveThruRPGServiceMock.class);
 
@@ -83,25 +87,25 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
         LocalDateTime now = LocalDateTime.now(UTC);
 
         Token token = Token.builder()
-                .accessToken(UUID.randomUUID().toString())
-                .customerId(user.getName().split("#")[1])
+                .withAccessToken(UUID.randomUUID().toString())
+                .withCustomerId(user.getName().split("#")[1])
 
-                .expireTime(LocalDateTime.MAX)
-                .serverTime(now)
-                .localTime(now)
-                .expires(LocalDateTime.MAX.toEpochSecond(UTC) - now.toEpochSecond(UTC))
+                .withExpireTime(LocalDateTime.MAX)
+                .withServerTime(now)
+                .withLocalTime(now)
+                .withExpires(LocalDateTime.MAX.toEpochSecond(UTC) - now.toEpochSecond(UTC))
 
                 .build();
 
         if ("invalid#0003".equalsIgnoreCase(user.getName())) {
             token = Token.builder()
-                    .accessToken(UUID.randomUUID().toString())
-                    .customerId(user.getName().split("#")[1])
+                    .withAccessToken(UUID.randomUUID().toString())
+                    .withCustomerId(user.getName().split("#")[1])
 
-                    .expireTime(now)
-                    .serverTime(now.minusHours(1))
-                    .localTime(now.minusHours(1))
-                    .expires(3600L)
+                    .withExpireTime(now)
+                    .withServerTime(now.minusHours(1))
+                    .withLocalTime(now.minusHours(1))
+                    .withExpires(3600L)
 
                     .build();
         }
@@ -127,7 +131,16 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
         LOG.trace("Product created. productId={}", productId);
         String productUrl = "https://nowhere/product/" + productId;
         return Optional.of(
-                Product.builder()
+                new Product(
+                        productId, "Product Nr. 1",
+                        "1", "Publisher Nr. 1",
+                        productUrl + "/cover",
+                        productUrl + "/thumb",
+                        productUrl + "/thumb100",
+                        productUrl + "/thumb80",
+                        productUrl + "/thumb40"
+                )
+                /*Product.builder()
                         .productsId(productId)
                         .productsName("Product Nr. 1")
 
@@ -140,7 +153,7 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
                         .thumbnail80(productUrl + "/thumb80")
                         .thumbnail100(productUrl + "/thumb100")
 
-                        .build()
+                        .build()*/
         );
     }
 

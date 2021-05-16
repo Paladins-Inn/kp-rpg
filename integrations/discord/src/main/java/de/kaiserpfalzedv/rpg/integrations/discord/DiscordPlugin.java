@@ -22,13 +22,17 @@ import java.util.List;
 
 /**
  * DiscordPlugin -- The basic plugin for the discord handler.
- *
+ * <p>
  * The methods defined here are the most basic methods of every plugin.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0 2021-01-30
  */
 public interface DiscordPlugin {
+    /** The default prefix if not reset by the guild admin. */
+    String DEFAULT_GUILD_PREFIX = "tb!";
+
+
     /**
      * @return The name of the plugin. Defaults to {@link Class#getSimpleName()}.
      */

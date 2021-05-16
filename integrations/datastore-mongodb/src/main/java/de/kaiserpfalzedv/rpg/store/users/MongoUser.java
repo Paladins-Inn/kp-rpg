@@ -21,11 +21,13 @@ import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.store.resources.MongoResource;
 import io.quarkus.mongodb.panache.MongoEntity;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.beans.Transient;
-import java.util.StringJoiner;
 
 /**
  * The stored user data.
@@ -33,9 +35,12 @@ import java.util.StringJoiner;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0 2021-01-30
  */
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @MongoEntity(collection = "users")
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class MongoUser extends MongoResource<User> {
     public MongoUserData spec;
 
@@ -67,16 +72,5 @@ public class MongoUser extends MongoResource<User> {
 
 
         return result.build();
-    }
-
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", MongoUser.class.getSimpleName() + "[", "]")
-                .add("identity=" + System.identityHashCode(this))
-                .add("uid=" + uid)
-                .add("nameSpace='" + nameSpace + "'")
-                .add("name='" + name + "'")
-                .toString();
     }
 }

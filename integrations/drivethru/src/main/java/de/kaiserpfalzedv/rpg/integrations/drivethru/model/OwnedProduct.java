@@ -19,6 +19,8 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -26,13 +28,14 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
-@Builder
+@Builder(builderClassName = "OwnedProductBuilder", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = OwnedProduct.OwnedProductBuilder.class)
 @Schema(name = "OwnedProduct", description = "a product dataset of DriveThruRPG.")
 public class OwnedProduct implements DriveThruResource {
     @JsonProperty("products_id")
@@ -49,4 +52,8 @@ public class OwnedProduct implements DriveThruResource {
 
     @JsonProperty("date_purchased")
     private Optional<OffsetDateTime> datePurchased;
+
+    @JsonPOJOBuilder(withPrefix = "")
+    public static class OwnedProductBuilder {
+    }
 }

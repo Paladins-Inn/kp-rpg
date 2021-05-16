@@ -15,22 +15,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.drivethru;
+package de.kaiserpfalzedv.rpg.bot.drivethru.commands;
 
+import de.kaiserpfalzedv.rpg.bot.drivethru.DriveThruRPGPluginCommand;
+import de.kaiserpfalzedv.rpg.bot.drivethru.InvalidDriveThruRPGTokenException;
 import de.kaiserpfalzedv.rpg.core.discord.DiscordMessageHandler;
-import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
+import de.kaiserpfalzedv.rpg.core.resources.Pointer;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserData;
 import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginContext;
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginException;
 import de.kaiserpfalzedv.rpg.integrations.discord.DontWorkOnDiscordEventException;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.ChannelType;
 
 import javax.enterprise.context.Dependent;
-import java.util.ArrayList;
-import java.util.List;
+import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.Optional;
 
 /**
@@ -40,6 +44,8 @@ import java.util.Optional;
  * @since 1.2.0  2021-02-04
  */
 @Dependent
+@ToString
+@EqualsAndHashCode
 @Slf4j
 public class UserRegisterApiKeyCommand implements DriveThruRPGPluginCommand {
     /**
@@ -56,12 +62,15 @@ public class UserRegisterApiKeyCommand implements DriveThruRPGPluginCommand {
      *
      * @param userStore The user store service to load/save user data from/to.
      */
+    @Inject
     public UserRegisterApiKeyCommand(
             final UserStoreService userStore,
             final DiscordMessageHandler sender
     ) {
         this.userStore = userStore;
         this.sender = sender;
+
+        log.trace("Created {}: store={}, sender={}", getClass().getSimpleName(), userStore, sender);
     }
 
     @Override
@@ -89,29 +98,32 @@ public class UserRegisterApiKeyCommand implements DriveThruRPGPluginCommand {
 
     private User addTokenToUser(final User user, final String apiKey) {
         Optional<String> description = Optional.empty();
-        Optional<ResourcePointer> picture = Optional.empty();
-        List<ResourcePointer> campaigns = new ArrayList<>();
-        List<ResourcePointer> games = new ArrayList<>();
+        Optional<Pointer> picture = Optional.empty();
+        HashMap<String, String> properties = new HashMap<>();
+
 
         if (user.getSpec() != null && user.getSpec().isPresent()) {
             UserData data = user.getSpec().get();
             description = data.getDescription();
             picture = data.getPicture();
-            campaigns = data.getCampaigns();
-            games = data.getGames();
+            properties.putAll(data.getProperties());
         }
 
-        return User.builder()
+        User saved = User.builder()
                 .metadata(user.getMetadata())
                 .spec(UserData.builder()
-                        .description(description.orElse(null))
-                        .picture(picture.orElse(null))
-                        .campaigns(campaigns)
-                        .games(games)
-                        .driveThruRPGApiKey(apiKey)
+                        .withDescription(description)
+                        .withPicture(picture)
+                        .withProperties(properties)
+                        .withDriveThruRPGApiKey(Optional.ofNullable((apiKey)))
                         .build()
                 )
                 .build();
+
+        saved = userStore.save(saved);
+
+        log.trace("Saved user. user={}", saved);
+        return saved;
     }
 
 

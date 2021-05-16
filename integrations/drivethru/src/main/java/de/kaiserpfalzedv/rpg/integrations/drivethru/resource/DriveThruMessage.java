@@ -20,29 +20,31 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru.resource;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.*;
 
 import java.beans.Transient;
+import java.io.Serializable;
 import java.util.Optional;
 
+@Builder(setterPrefix = "with")
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-public class DriveThruMessage<T> {
+@JsonDeserialize(builder = DriveThruMessage.DriveThruMessageBuilder.class)
+public class DriveThruMessage<T extends Serializable> {
     @JsonProperty("status")
-    private final String status;
+    private String status;
 
     @JsonProperty("message")
-    private final Optional<T> message;
+    private T message;
 
     @Transient
     @JsonIgnore
     public Optional<T> getData() {
-        return getMessage();
+        return Optional.ofNullable(message);
     }
 }

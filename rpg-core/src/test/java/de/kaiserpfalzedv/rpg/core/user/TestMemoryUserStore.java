@@ -63,8 +63,8 @@ public class TestMemoryUserStore {
             )
             .spec(
                     UserData.builder()
-                            .driveThruRPGApiKey(DATA_API_KEY)
-                            .properties(new HashMap<>())
+                            .withDriveThruRPGApiKey(Optional.of(DATA_API_KEY))
+                            .withProperties(new HashMap<>())
                             .build()
             )
             .build();
@@ -76,8 +76,8 @@ public class TestMemoryUserStore {
                     )
                     .spec(
                             UserData.builder()
-                                    .driveThruRPGApiKey(OTHER_API_KEY)
-                                    .properties(new HashMap<>())
+                                    .withDriveThruRPGApiKey(Optional.of(OTHER_API_KEY))
+                                    .withProperties(new HashMap<>())
                                     .build()
                     )
                     .build();
@@ -142,7 +142,7 @@ public class TestMemoryUserStore {
             @NotNull final String name,
             @NotNull final UUID uid,
             @NotNull final OffsetDateTime created,
-            final OffsetDateTime deleted,
+            @SuppressWarnings("SameParameterValue") final OffsetDateTime deleted,
             final Long generation
     ) {
         return ResourceMetadata.builder()
@@ -254,7 +254,7 @@ public class TestMemoryUserStore {
 
     @Test
     void shouldThrowOptimisticLockExceptionWhenTheNewGenerationIsNotHighEnough() {
-        MDC.put("test", "throw-optmistic-lock-exception");
+        MDC.put("test", "throw-optimistic-lock-exception");
 
         sut.save(
                 User.builder()
@@ -264,8 +264,8 @@ public class TestMemoryUserStore {
                         )
                         .spec(
                                 UserData.builder()
-                                        .driveThruRPGApiKey(DATA.getSpec().get().getDriveThruRPGApiKey().orElse(null))
-                                        .properties(DATA.getSpec().get().getProperties())
+                                        .withDriveThruRPGApiKey(DATA.getSpec().orElseThrow().getDriveThruRPGApiKey())
+                                        .withProperties(DATA.getSpec().get().getProperties())
                                         .build()
                         )
                         .build()

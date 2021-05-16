@@ -17,7 +17,6 @@
 
 package de.kaiserpfalzedv.rpg.bot.drivethru.commands;
 
-import de.kaiserpfalzedv.rpg.bot.drivethru.ListOwnedProductCommand;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserData;
@@ -35,13 +34,12 @@ import de.kaiserpfalzedv.rpg.test.discord.DiscordMessageHandlerMock;
 import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.ChannelType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import javax.inject.Inject;
@@ -56,10 +54,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBResource.class)
+@Slf4j
 public class TestListOwnedProductCommand {
     public static final String VALID_USER = "klenkes74#0355";
     public static final String INVALID_USER = "invalid#0003";
-    private static final Logger LOG = LoggerFactory.getLogger(TestListOwnedProductCommand.class);
     private static final Guild GUILD = Guild.builder()
             .metadata(
                     ResourceMetadata.builder()
@@ -139,7 +137,7 @@ public class TestListOwnedProductCommand {
                 )
                 .spec(
                         UserData.builder()
-                                .driveThruRPGApiKey(VALID_DISCORD_API_KEY)
+                                .withDriveThruRPGApiKey(Optional.of(VALID_DISCORD_API_KEY))
                                 .build()
                 )
                 .build();
@@ -192,7 +190,7 @@ public class TestListOwnedProductCommand {
             fail("There should be an exception!");
         } catch (DiscordPluginException e) {
             assertTrue(sender.isDMSent());
-            LOG.debug("Found expected exception: '" + e.getMessage() + "'", e);
+            log.debug("Found expected exception: '" + e.getMessage() + "'", e);
         }
     }
 

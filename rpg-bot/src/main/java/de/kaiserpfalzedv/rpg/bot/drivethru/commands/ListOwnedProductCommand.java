@@ -15,8 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.bot.drivethru;
+package de.kaiserpfalzedv.rpg.bot.drivethru.commands;
 
+import de.kaiserpfalzedv.rpg.bot.drivethru.DriveThruRPGPluginCommand;
 import de.kaiserpfalzedv.rpg.core.discord.DiscordMessageHandler;
 import de.kaiserpfalzedv.rpg.core.user.InvalidUserException;
 import de.kaiserpfalzedv.rpg.core.user.User;
@@ -30,9 +31,8 @@ import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoDriveThruRPGAPIKe
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoValidTokenException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.ChannelType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -47,9 +47,8 @@ import java.util.StringJoiner;
 @ApplicationScoped
 @ToString
 @EqualsAndHashCode
+@Slf4j
 public class ListOwnedProductCommand implements DriveThruRPGPluginCommand {
-    private static final Logger LOG = LoggerFactory.getLogger(ListOwnedProductCommand.class);
-
     /**
      * main service to do the job.
      */
@@ -66,8 +65,8 @@ public class ListOwnedProductCommand implements DriveThruRPGPluginCommand {
     @Inject
     public ListOwnedProductCommand(
             final DriveThruRPGService service,
-            @SuppressWarnings("CdiInjectionPointsInspection") final UserStoreService userStore,
-            @SuppressWarnings("CdiInjectionPointsInspection") final DiscordMessageHandler sender
+            final UserStoreService userStore,
+            final DiscordMessageHandler sender
     ) {
         this.service = service;
         this.userStore = userStore;
@@ -92,15 +91,17 @@ public class ListOwnedProductCommand implements DriveThruRPGPluginCommand {
 
             result.forEach(s -> sj.add(formatProduct(s)));
 
-            LOG.debug("Listed {} products.", result.size());
+            log.debug("Listed {} products.", result.size());
             sender.sendTextMessage(context.getChannel(), sj.toString());
         } catch (NoValidTokenException | InvalidUserException | NoDriveThruRPGAPIKeyDefinedException e) {
             sender.sendDM(context.getUser(), "Sorry, your api-key is invalid. Please check it.");
-            LOG.warn("Invalid api-key for driveThruRPG.");
+            log.warn("Invalid api-key for driveThruRPG.");
         }
     }
 
     private void validate(final DiscordPluginContext context, final User user) throws DiscordPluginException {
+        log.trace("Validating: context={}, user={}", context, user);
+
         if (!ChannelType.TEXT.equals(context.getChannel().getType())) {
             throw new DontWorkOnDiscordEventException(context.getPlugin());
         }
@@ -115,7 +116,7 @@ public class ListOwnedProductCommand implements DriveThruRPGPluginCommand {
     }
 
     private String formatProduct(final OwnedProduct data) {
-        LOG.trace("Formatting product: id={}, name='{}'", data.getId(), data.getName());
+        log.trace("Formatting product: id={}, name='{}'", data.getId(), data.getName());
 
         return data.getName() + " <"
                 + data.getCoverURL() + "> ("

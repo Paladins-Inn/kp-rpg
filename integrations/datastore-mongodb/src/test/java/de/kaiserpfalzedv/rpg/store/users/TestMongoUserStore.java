@@ -74,9 +74,8 @@ public class TestMongoUserStore {
                             .namespace(NAMESPACE)
                             .name(NAME)
                             .uid(UID)
-                            .generation(0L)
-
                             .owner(Optional.empty())
+                            .generation(0L)
 
                             .created(CREATED)
                             .deleted(Optional.empty())
@@ -88,9 +87,9 @@ public class TestMongoUserStore {
             )
             .spec(
                     UserData.builder()
-                            .description("A discord user.")
-                            .driveThruRPGApiKey("API-KEY")
-                            .properties(new HashMap<>())
+                            .withDescription(Optional.of("A discord user."))
+                            .withDriveThruRPGApiKey(Optional.of("API-KEY"))
+                            .withProperties(new HashMap<>())
                             .build()
             )
             .state(

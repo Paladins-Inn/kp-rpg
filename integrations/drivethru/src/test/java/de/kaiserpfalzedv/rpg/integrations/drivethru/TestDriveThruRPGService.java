@@ -29,47 +29,46 @@ import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoDriveThruRPGAPIKe
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoValidTokenException;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import javax.inject.Inject;
 import java.time.Clock;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @QuarkusTest
 @QuarkusTestResource(DriveThruRPGServiceResource.class)
+@Slf4j
 public class TestDriveThruRPGService {
-    static private final Logger LOG = LoggerFactory.getLogger(TestDriveThruRPGService.class);
     private static final User DEFAULT_USER = User.builder()
             .metadata(
                     ResourceMetadata.builder()
                             .kind(User.KIND)
                             .apiVersion(User.API_VERSION)
-
                             .namespace("discord")
                             .name("test#1234")
-                            .uid(UUID.randomUUID())
-
-                            .generation(0L)
                             .created(OffsetDateTime.now(Clock.systemUTC()))
-
                             .build()
             )
             .spec(
                     UserData.builder()
-                            .description("Test-user for API calls")
-                            .driveThruRPGApiKey("API-KEY")
+                            .withProperties(new HashMap<>())
+                            .withDescription(Optional.of("Test-user for API calls"))
+                            .withDriveThruRPGApiKey(Optional.of("API-KEY"))
                             .build()
             )
             .build();
@@ -81,15 +80,22 @@ public class TestDriveThruRPGService {
         this.sut = sut;
     }
 
+    @BeforeAll
+    static void setUp() {
+        MDC.put("test-class", log.getName());
+    }
+
     @Test
     public void shouldRetrieveOwnedProductsWhenCorrectAPIKeyIsGiven() throws NoValidTokenException, InvalidUserException, NoDriveThruRPGAPIKeyDefinedException {
         MDC.put("test", "retrieve-owned-products");
 
         List<OwnedProduct> result = sut.getOwnedProducts(DEFAULT_USER);
+        log.trace("results={}", result);
 
-        LOG.trace("results={}", result);
-        assertNotNull(result);
-        assertTrue(result.size() > 0);
+        assertThat("No result found.", result, notNullValue());
+        assertThat("Empty result set.", result.size(), greaterThan(0));
+
+        assertThat("No ID for the first result element.", result.get(0).getId(), notNullValue());
     }
 
     @Test
@@ -98,16 +104,13 @@ public class TestDriveThruRPGService {
 
         Optional<Product> result = sut.getProduct("PRODUCT");
 
-        assertTrue(result.isPresent());
-    }
-
-    @Test
-    public void shouldRetrievePublisher() {
-        MDC.put("test", "retrieve-single-publisher");
-
-        Optional<Publisher> result = sut.getPublisher("PUBLISHER");
-
-        assertTrue(result.isPresent());
+        result.ifPresentOrElse(
+                p -> {
+                    assertThat(p.getProductsId(), is("1"));
+                    assertThat(p.getProductsName(), is("Dept. 7 Adv. Class Update: Scion of Masada"));
+                },
+                () -> fail("There is no product.")
+        );
     }
 
 
@@ -116,9 +119,19 @@ public class TestDriveThruRPGService {
         MDC.remove("test");
     }
 
-    @BeforeAll
-    static void setUp() {
-        MDC.put("test-class", LOG.getName());
+    @Test
+    public void shouldRetrievePublisher() {
+        MDC.put("test", "retrieve-single-publisher");
+
+        Optional<Publisher> result = sut.getPublisher("PUBLISHER");
+
+        result.ifPresentOrElse(
+                t -> {
+                    assertThat(t.getPublisherId(), is("2"));
+                    assertThat(t.getPublisherName(), is("Chaosium"));
+                },
+                () -> fail("There was no publisher received!")
+        );
     }
 
     @AfterAll
@@ -131,8 +144,11 @@ public class TestDriveThruRPGService {
         MDC.put("test", "retrieve-token");
 
         Token result = sut.getToken(DEFAULT_USER);
+        log.trace("result={}", result);
 
-        LOG.trace("result={}", result);
-        assertNotNull(result);
+        assertThat(result.getAccessToken(), is("TOKEN"));
+        assertThat(result.getCustomerId(), is("CUST"));
+        assertThat(result.getExpires(), is(3600L));
+        assertThat(result.getServerTime(), is(LocalDateTime.parse("2021-01-29T16:58:08")));
     }
 }

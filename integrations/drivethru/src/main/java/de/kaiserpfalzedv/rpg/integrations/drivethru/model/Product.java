@@ -19,17 +19,19 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-@Builder
-@AllArgsConstructor
+@Builder(builderClassName = "ProductBuilder", toBuilder = true, setterPrefix = "with")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = Product.ProductBuilder.class)
 @Schema(name = "Product", description = "A product from DriveThruRPG.")
 public class Product implements DriveThruResource {
     @JsonProperty("products_id")

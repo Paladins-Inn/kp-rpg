@@ -24,6 +24,7 @@ import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,11 @@ public class MongoResourceStatus {
         history = new ArrayList<>();
     }
 
-    public MongoResourceStatus(ResourceStatus orig) {
+    public MongoResourceStatus(Optional<ResourceStatus> origOptional) {
+        if (!origOptional.isPresent())
+            return;
+
+        ResourceStatus orig = origOptional.get();
         observedGeneration = orig.getObservedGeneration();
 
         if (!orig.getHistory().isEmpty()) {
@@ -81,6 +86,9 @@ public class MongoResourceStatus {
         entry.message = message;
         entry.timeStamp = new MongoOffsetDateTime(OffsetDateTime.now(Clock.systemUTC()));
 
+        if (history == null) {
+            history = new ArrayList<>();
+        }
         history.add(entry);
     }
 

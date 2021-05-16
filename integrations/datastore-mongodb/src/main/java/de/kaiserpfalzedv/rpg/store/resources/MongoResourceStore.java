@@ -25,9 +25,8 @@ import de.kaiserpfalzedv.rpg.core.store.StoreService;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -41,21 +40,19 @@ import java.util.UUID;
  * @param <T> The default immutable resource.
  * @param <M> The MongoDB variant of the resource.
  */
+@Slf4j
 public abstract class MongoResourceStore<T extends Resource<?>, M extends MongoResource<T>> implements StoreService<T>, PanacheMongoRepository<M> {
-    protected Logger LOG = LoggerFactory.getLogger(MongoResourceStore.class);
 
     @PostConstruct
     public MongoResourceStore<T, M> setUp() {
-        LOG = LoggerFactory.getLogger(getClass());
-
-        LOG.info("MongoRepository created: resource={}", empty().getClass().getSimpleName());
+        log.info("MongoRepository created: resource={}", empty().getClass().getSimpleName());
 
         return this;
     }
 
     @PreDestroy
     public void tearDown() {
-        LOG.info("MongoRepository destroyed: resource={}, count={}",
+        log.info("MongoRepository destroyed: resource={}, count={}",
                 empty().getClass().getSimpleName(),
                 M.findAll().count()
         );
@@ -79,7 +76,7 @@ public abstract class MongoResourceStore<T extends Resource<?>, M extends MongoR
 
     @Override
     public Optional<T> findByNameSpaceAndName(final String nameSpace, final String name) {
-        LOG.trace("loading: nameSpace={}, name={}", nameSpace, name);
+        log.trace("loading: nameSpace={}, name={}", nameSpace, name);
 
         Optional<M> result = namespaceAndNameQuery(nameSpace, name).firstResultOptional();
 
@@ -88,7 +85,7 @@ public abstract class MongoResourceStore<T extends Resource<?>, M extends MongoR
 
     @Override
     public Optional<T> findByUid(final UUID uid) {
-        LOG.trace("loading: uid={}", uid);
+        log.trace("loading: uid={}", uid);
 
         Optional<M> result = uidQuery(uid).firstResultOptional();
 
@@ -101,7 +98,7 @@ public abstract class MongoResourceStore<T extends Resource<?>, M extends MongoR
     }
 
     public T save(final T object, final M toSave) throws OptimisticLockStoreException, DuplicateStoreException {
-        LOG.trace("persisting: {}", object);
+        log.trace("persisting: {}", object);
 
         toSave.data(object);
 
@@ -113,13 +110,13 @@ public abstract class MongoResourceStore<T extends Resource<?>, M extends MongoR
             if (toSave.uid == null) {
                 toSave.uid = UUID.randomUUID();
 
-                LOG.warn("Added UID to data: uid={}, nameSpace='{}', name='{}'", toSave.uid, toSave.nameSpace, toSave.name);
+                log.warn("Added UID to data: uid={}, nameSpace='{}', name='{}'", toSave.uid, toSave.nameSpace, toSave.name);
             }
         }
 
         toSave.updateHistory();
         persistOrUpdate(toSave);
-        LOG.debug("persisted: {}", toSave);
+        log.debug("persisted: {}", toSave);
 
         try {
             return toSave.data();
@@ -147,7 +144,7 @@ public abstract class MongoResourceStore<T extends Resource<?>, M extends MongoR
 
     @Override
     public void remove(final T object) {
-        LOG.info("remove: uid={}, nameSpace={}, name={}",
+        log.info("remove: uid={}, nameSpace={}, name={}",
                 object.getUid(),
                 object.getNameSpace(),
                 object.getName()
@@ -158,14 +155,14 @@ public abstract class MongoResourceStore<T extends Resource<?>, M extends MongoR
 
     @Override
     public void remove(String nameSpace, String name) {
-        LOG.trace("remove: nameSpace='{}', name='{}'", nameSpace, name);
+        log.trace("remove: nameSpace='{}', name='{}'", nameSpace, name);
 
         namespaceAndNameQuery(nameSpace, name).stream().forEach(this::delete);
     }
 
     @Override
     public void remove(final UUID uid) {
-        LOG.trace("remove: uid={}", uid);
+        log.trace("remove: uid={}", uid);
 
         uidQuery(uid).stream().forEach(this::delete);
     }
@@ -188,11 +185,11 @@ public abstract class MongoResourceStore<T extends Resource<?>, M extends MongoR
     @NotNull
     private Optional<T> convertResult(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") final Optional<M> result) {
         if (result.isEmpty()) {
-            LOG.debug("query: no result found!");
+            log.debug("query: no result found!");
             return Optional.empty();
         }
 
-        LOG.debug("Loaded: {}", result);
+        log.debug("Loaded: {}", result);
         return Optional.of(result.get().data());
     }
 

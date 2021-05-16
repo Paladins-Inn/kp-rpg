@@ -17,25 +17,43 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import java.beans.Transient;
 import java.util.Optional;
 
+@Builder(builderClassName = "PublisherMessageBuilder", toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = PublisherMessage.PublisherMessageBuilder.class)
 @Schema(name = "PublisherMessage", description = "The communication wrapper for publishers")
-public class PublisherMessage extends DriveThruMessage<Publisher> {
-    @Builder
-    public PublisherMessage(@NotNull final String status, final Publisher publisher) {
-        super(status, Optional.ofNullable(publisher));
+@Slf4j
+public class PublisherMessage {
+    @JsonProperty("status")
+    private String status;
+
+    @JsonProperty("message")
+    private Publisher message;
+
+    @Transient
+    @JsonIgnore
+    public Optional<Publisher> getData() {
+        return Optional.ofNullable(message);
+    }
+
+
+    @JsonPOJOBuilder(withPrefix = "")
+    public static class PublisherMessageBuilder {
     }
 }

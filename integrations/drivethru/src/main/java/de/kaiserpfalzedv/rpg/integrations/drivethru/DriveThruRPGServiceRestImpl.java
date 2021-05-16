@@ -20,25 +20,20 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru;
 import de.kaiserpfalzedv.rpg.core.user.InvalidUserException;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserData;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.OwnedProduct;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Product;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Publisher;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Token;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMultiMessage;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.*;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoDriveThruRPGAPIKeyDefinedException;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoValidTokenException;
 import io.quarkus.arc.AlternativePriority;
 import io.quarkus.cache.CacheResult;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
@@ -51,9 +46,8 @@ import java.util.Optional;
  */
 @ApplicationScoped
 @AlternativePriority(100)
+@Slf4j
 public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
-    private static final Logger LOG = LoggerFactory.getLogger(DriveThruRPGServiceRestImpl.class);
-
     /**
      * Date/time formatter for parsing the json results.
      */
@@ -67,6 +61,8 @@ public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
     @Inject
     public DriveThruRPGServiceRestImpl(@RestClient final DriveThruRPGClient client) {
         this.client = client;
+
+        log.debug("Created {}. client={}", getClass().getSimpleName(), client);
     }
 
     @Override
@@ -81,9 +77,10 @@ public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
             throw new NoDriveThruRPGAPIKeyDefinedException(user);
         }
 
-        LOG.trace("Loading access token for user='{}/{}', apiKey='{}'", user.getNameSpace(), user.getName(), u.getDriveThruRPGApiKey().get());
+        log.trace("Loading access token for user='{}/{}', apiKey='{}'", user.getNameSpace(), user.getName(), u.getDriveThruRPGApiKey().get());
 
-        LinkedHashMap<String, String> response = client.getToken(u.getDriveThruRPGApiKey().get()).getMessage().orElseThrow();
+        LinkedHashMap<String, String> response = client.getToken(u.getDriveThruRPGApiKey().get()).getMessage();
+        log.trace("Token loaded. token={}", response);
 
         LocalDateTime serverTime = parse(response.get("server_time"));
         LocalDateTime expireTime = parse(response.get("expires"));
@@ -92,15 +89,15 @@ public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
         Duration duration = Duration.between(serverTime, expireTime);
 
         Token result = Token.builder()
-                .accessToken(response.get("access_token"))
-                .customerId(response.get("customers_id"))
-                .expireTime(expireTime)
-                .serverTime(serverTime)
-                .localTime(localTime)
-                .expires(duration.getSeconds())
+                .withAccessToken(response.get("access_token"))
+                .withCustomerId(response.get("customers_id"))
+                .withExpireTime(expireTime)
+                .withServerTime(serverTime)
+                .withLocalTime(localTime)
+                .withExpires(duration.getSeconds())
                 .build();
 
-        LOG.debug("DriveThru: token={}", result);
+        log.debug("DriveThru: token={}", result);
         return result;
     }
 
@@ -111,11 +108,11 @@ public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
     @Override
     @CacheResult(cacheName = "drivethrurpg-products")
     public Optional<Product> getProduct(final String productId) {
-        LOG.trace("retrieving products for: product={}", productId);
+        log.trace("retrieving products for: product={}", productId);
 
-        DriveThruMessage<Product> result = client.getProduct(productId);
+        ProductMessage result = client.getProduct(productId);
 
-        LOG.debug("DriveThru: product={}", result.getData());
+        log.debug("DriveThru: product={}", result.getData());
         return result.getData();
     }
 
@@ -123,11 +120,11 @@ public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
     @Override
     @CacheResult(cacheName = "drivethrurpg-publishers")
     public Optional<Publisher> getPublisher(final String publisherId) {
-        LOG.trace("retrieving publisher for: publisher={}", publisherId);
+        log.trace("retrieving publisher for: publisher={}", publisherId);
 
-        DriveThruMessage<Publisher> result = client.getPublisher(publisherId);
+        PublisherMessage result = client.getPublisher(publisherId);
+        log.debug("DriveThru: publisher={}", result);
 
-        LOG.debug("DriveThru: publisher={}", result.getData());
         return result.getData();
     }
 
@@ -141,11 +138,11 @@ public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
             throw new NoValidTokenException(user);
         }
 
-        LOG.trace("retrieving owned products for: user={}, token={}", user, token);
+        log.trace("retrieving owned products for: user={}, token={}", user, token);
 
-        DriveThruMultiMessage<OwnedProduct> result = client.getOwnedProducts(token.getBearerToken(), token.getCustomerId(), 1L, 1000, 0);
+        OwnedProductMessage result = client.getOwnedProducts(token.getBearerToken(), token.getCustomerId(), 1L, 1000, 0);
 
-        LOG.debug("DriveThru: ownedProducts.count={}", result.getData().size());
-        return result.getData();
+        log.debug("DriveThru: ownedProducts.count={}", result.getData().size());
+        return result.getData() != null ? result.getData() : Collections.emptyList();
     }
 }

@@ -19,10 +19,13 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.common.Slf4jNotifier;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 import java.util.Collections;
 import java.util.Map;
+
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 
 /**
  * A mocked version of the DriveThruRPG api.
@@ -35,7 +38,9 @@ public class DriveThruRPGServiceResource implements QuarkusTestResourceLifecycle
 
     @Override
     public Map<String, String> start() {
-        mockServer = new WireMockServer();
+        mockServer = new WireMockServer(
+                options().notifier(new Slf4jNotifier(true))
+        );
         mockServer.start();
 
         WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/api/v1/token"))
@@ -62,6 +67,15 @@ public class DriveThruRPGServiceResource implements QuarkusTestResourceLifecycle
                                 .withBodyFile("publisher-2.json")
                 )
         );
+
+        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/api/v1/publisherfake/PUBLISHER"))
+                .willReturn(
+                        WireMock.aResponse()
+                                .withHeader("Content-Type", "application/json")
+                                .withBodyFile("publisher-fake.json")
+                )
+        );
+
 
         WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/api/v1/products/PRODUCT"))
                 .willReturn(

@@ -30,7 +30,7 @@ import java.util.List;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-01-31
  */
-@Builder
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -62,8 +62,8 @@ public class MongoGuildData {
         if (prefix != null) result.prefix(prefix);
 
         result
-                .adminRoles(adminRoles)
-                .properties(properties);
+                .adminRoles(adminRoles != null ? adminRoles : new ArrayList<>())
+                .properties(properties != null ? properties : new HashMap<>());
 
         return result.build();
     }

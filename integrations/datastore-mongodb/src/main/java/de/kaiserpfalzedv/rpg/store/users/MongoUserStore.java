@@ -24,11 +24,13 @@ import io.quarkus.arc.AlternativePriority;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 @AlternativePriority(500)
+@Slf4j
 public class MongoUserStore extends MongoResourceStore<User, MongoUser> implements UserStoreService, PanacheMongoRepository<MongoUser> {
     @Override
     public MongoUser empty() {
@@ -39,7 +41,7 @@ public class MongoUserStore extends MongoResourceStore<User, MongoUser> implemen
     public PanacheQuery<MongoUser> query(final String query, final Parameters parameters) {
         PanacheQuery<MongoUser> result = find(query, parameters);
 
-        LOG.trace("query: query='{}', parameters={}, count={}", query, parameters.map(), result.count());
+        log.trace("query: query='{}', parameters={}, count={}", query, parameters.map(), result.count());
         return result;
     }
 }

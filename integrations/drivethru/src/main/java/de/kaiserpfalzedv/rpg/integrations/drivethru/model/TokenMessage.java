@@ -17,21 +17,31 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
-import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruMessage;
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.*;
 
+import java.beans.Transient;
 import java.util.Optional;
 
+@Builder(setterPrefix = "with")
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class TokenMessage extends DriveThruMessage<Token> {
-    @Builder
-    public TokenMessage(@NotNull final String status, @NotNull final Token token) {
-        super(status, Optional.of(token));
+@ToString
+@EqualsAndHashCode
+@JsonDeserialize(builder = TokenMessage.TokenMessageBuilder.class)
+public class TokenMessage {
+    @JsonProperty("status")
+    private String status;
+
+    @JsonProperty("message")
+    private Token message;
+
+    @Transient
+    @JsonIgnore
+    public Optional<Token> getData() {
+        return Optional.ofNullable(message);
     }
 }

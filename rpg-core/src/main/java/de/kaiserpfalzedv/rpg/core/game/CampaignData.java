@@ -19,9 +19,14 @@ package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.core.resources.DefaultResourceSpec;
 import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.beans.Transient;
@@ -36,12 +41,13 @@ import java.util.Optional;
  * @since 1.2.0 2021-02-06
  */
 @SuppressWarnings("unused")
-@Builder
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @Getter
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = CampaignData.CampaignDataBuilder.class)
 @Schema(name = "CampaignData", description = "The data for a multiple game spanning campaign.")
 public class CampaignData extends DefaultResourceSpec {
     public static String CAMPAIGN_GM = "campaign.gm";

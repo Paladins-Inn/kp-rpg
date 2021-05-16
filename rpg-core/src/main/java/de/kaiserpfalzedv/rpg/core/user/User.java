@@ -29,7 +29,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Getter
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(name = "User", description = "a user of the tomb system.")
