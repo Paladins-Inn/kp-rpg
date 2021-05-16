@@ -18,6 +18,7 @@
 package de.kaiserpfalzedv.rpg.integrations.discord.guilds;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -35,6 +36,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = Guild.GuildBuilder.class)
 @Schema(name = "guild", description = "A single guild (server) within discord.")
 public class Guild extends Resource<GuildData> {
     public static String API_VERSION = "v1";

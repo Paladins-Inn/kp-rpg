@@ -36,7 +36,7 @@ import java.util.StringJoiner;
  */
 @Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode

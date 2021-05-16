@@ -49,6 +49,11 @@ public class TestUser {
     private static final String DISCORD_ID = "123123591";
 
     private static final HashMap<String, String> DATA_PROPERTIES = new HashMap<>();
+
+    static {
+        DATA_PROPERTIES.put("discord-id", DISCORD_ID);
+    }
+
     private static final User DATA = User.builder()
             .withMetadata(
                     generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED)
@@ -60,10 +65,6 @@ public class TestUser {
                             .build()
             ))
             .build();
-
-    static {
-        DATA_PROPERTIES.put("discord-id", DISCORD_ID);
-    }
 
     @BeforeAll
     static void setUp() {

@@ -39,7 +39,7 @@ import java.util.UUID;
  * @author klenkes74 {@literal <rlichit@kaiserpfalz-edv.de>}
  * @since 1.0.0
  */
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+@SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "FieldMayBeFinal"})
 @Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -54,48 +54,36 @@ public class ResourceMetadata implements ResourcePointer {
     @EqualsAndHashCode.Include
     @Schema(name = "Uid", description = "The unique id.")
     @Builder.Default
-    private final UUID uid = UUID.randomUUID();
+    private UUID uid = UUID.randomUUID();
     @EqualsAndHashCode.Include
     @Schema(name = "generation", description = "The generation of this object. Every change adds 1.", required = true, defaultValue = "0L")
     @Builder.Default
-    private final Long generation = 0L;
+    private Long generation = 0L;
     @Schema(name = "owner", description = "The owning resource. This is a sub-resource or managed resource of the given address.")
     @Builder.Default
-    private final Optional<ResourcePointer> owner = Optional.empty();
+    private Optional<ResourcePointer> owner = Optional.empty();
     @Schema(name = "created", description = "The timestamp of resource creation.", required = true)
     @Builder.Default
-    private final OffsetDateTime created = OffsetDateTime.now(ZoneOffset.UTC);
+    private OffsetDateTime created = OffsetDateTime.now(ZoneOffset.UTC);
     @Schema(name = "deleted", description = "The timestamp of object deletion. Marks an object to be deleted.")
     @Builder.Default
-    private final Optional<OffsetDateTime> deleted = Optional.empty();
+    private Optional<OffsetDateTime> deleted = Optional.empty();
     @Schema(name = "annotations", description = "A set of annotations to this resource.", maxItems = 256)
     @Singular
-    private final Map<String, String> annotations = new HashMap<>();
+    private Map<String, String> annotations = new HashMap<>();
     @Schema(name = "labels", description = "A set of labels to this resource.", maxItems = 256)
     @Singular
-    private final Map<String, String> labels = new HashMap<>();
+    private Map<String, String> labels = new HashMap<>();
     @Schema(name = "Kind", description = "The kind (type) of the resource.", required = true)
     private String kind;
     @Schema(name = "ApiVersion", description = "The version of the resource entry.", required = true)
     @Builder.Default
-    private final String apiVersion = "v1";
+    private String apiVersion = "v1";
     @Schema(name = "Namespace", description = "The namespace of the resource.", required = true)
     private String namespace;
     @Schema(name = "Name", description = "The unique name (within a namespace) of a resource.", required = true)
     private String name;
 
-    /**
-     * Initializer class for the lombok builder for {@link ResourceMetadata}.
-     */
-    public static class ResourceMetadataBuilder {
-        private final UUID uid = UUID.randomUUID();
-        private final Long generation = 0L;
-        private final Optional<ResourcePointer> owner = Optional.empty();
-        private final OffsetDateTime created = OffsetDateTime.now(ZoneOffset.UTC);
-        private final Optional<OffsetDateTime> deleted = Optional.empty();
-        private final Map<String, String> annotations = new HashMap<>();
-        private final Map<String, String> labels = new HashMap<>();
-    }
 
     /**
      * Checks if there is an annotation for this name.
