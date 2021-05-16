@@ -53,20 +53,20 @@ ARG MVN_PARAMETER="--batch-mode --no-transfer-progress \
     -Dskip.site=true \
     -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false"
 
-RUN mvn ${MVN_PARAMETER} -N clean install
-RUN cd rpg-bom && mvn ${MVN_PARAMETER} clean install
-RUN cd rpg-parent && mvn ${MVN_PARAMETER} clean install
-RUN cd rpg-core && mvn ${MVN_PARAMETER} clean install
+RUN mvn ${MVN_PARAMETER} clean install
+#RUN cd rpg-bom && mvn ${MVN_PARAMETER} clean install
+#RUN cd rpg-parent && mvn ${MVN_PARAMETER} clean install
+#RUN cd rpg-core && mvn ${MVN_PARAMETER} clean install
 
-RUN cd testsupport && mvn ${MVN_PARAMETER} clean install
-RUN cd rpg-game-modules && mvn ${MVN_PARAMETER} clean install
+#RUN cd testsupport && mvn ${MVN_PARAMETER} clean install
+#RUN cd rpg-game-modules && mvn ${MVN_PARAMETER} clean install
 
-RUN cd integrations && mvn ${MVN_PARAMETER} -N clean install
-RUN cd integrations/discord && mvn ${MVN_PARAMETER} clean install
-RUN cd integrations/drivethru && mvn ${MVN_PARAMETER} clean install
-RUN cd integrations/datastore && mvn ${MVN_PARAMETER} clean install
+#RUN cd integrations && mvn ${MVN_PARAMETER} -N clean install
+#RUN cd integrations/discord && mvn ${MVN_PARAMETER} clean install
+#RUN cd integrations/drivethru && mvn ${MVN_PARAMETER} clean install
+#RUN cd integrations/datastore && mvn ${MVN_PARAMETER} clean install
 
-RUN cd rpg-bot && mvn ${MVN_PARAMETER} clean install
+#RUN cd rpg-bot && mvn ${MVN_PARAMETER} clean install
 
 RUN cp -a rpg-bot/target/app-runner.jar /app.jar
 
