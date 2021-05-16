@@ -20,7 +20,6 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -28,7 +27,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
-@Builder(builderClassName = "OwnedProductBuilder", toBuilder = true)
+@SuppressWarnings("FieldMayBeFinal")
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -45,15 +45,14 @@ public class OwnedProduct implements DriveThruResource {
     private String name;
 
     @JsonProperty("is_archived")
-    private Optional<String> archived;
+    @Builder.Default
+    private Optional<String> archived = Optional.empty();
 
     @JsonProperty("cover_url")
-    private Optional<String> coverURL;
+    @Builder.Default
+    private Optional<String> coverURL = Optional.empty();
 
     @JsonProperty("date_purchased")
-    private Optional<OffsetDateTime> datePurchased;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class OwnedProductBuilder {
-    }
+    @Builder.Default
+    private Optional<OffsetDateTime> datePurchased = Optional.empty();
 }

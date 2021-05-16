@@ -38,7 +38,6 @@ import javax.inject.Inject;
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -65,23 +64,21 @@ public class TestDriveThruRPGPlugin {
     private static final String INVALID_DISCORD_API_KEY = "deadbeafdeadbeafd-adbeafdeadbeafdeadbeaf";
 
     private static final Guild GUILD = Guild.builder()
-            .metadata(
+            .withMetadata(
                     ResourceMetadata.builder()
-                            .kind(Guild.KIND)
-                            .apiVersion(Guild.API_VERSION)
+                            .withKind(Guild.KIND)
+                            .withApiVersion(Guild.API_VERSION)
 
-                            .namespace(Guild.DISCORD_NAMESPACE)
-                            .name("the-guild")
+                            .withNamespace(Guild.DISCORD_NAMESPACE)
+                            .withName("the-guild")
 
-                            .uid(UUID.randomUUID())
-                            .generation(0L)
-                            .created(OffsetDateTime.now(Clock.systemUTC()))
+                            .withCreated(OffsetDateTime.now(Clock.systemUTC()))
 
                             .build()
             )
-            .spec(Optional.of(
+            .withSpec(Optional.of(
                     GuildData.builder()
-                            .prefix("tb!")
+                            .withPrefix("tb!")
                             .build()
             ))
             .build();

@@ -43,10 +43,7 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.time.Clock;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * DiscordDispatcher -- The plugin based dispatcher for Discord bots.
@@ -148,16 +145,13 @@ public class DiscordDispatcher extends ListenerAdapter {
     @NotNull
     private Guild generateNewGuildEntry(final String name) {
         Guild result = Guild.builder()
-                .metadata(
+                .withMetadata(
                         ResourceMetadata.builder()
-                                .kind(Guild.KIND)
-                                .apiVersion(Guild.API_VERSION)
+                                .withKind(Guild.KIND)
+                                .withApiVersion(Guild.API_VERSION)
 
-                                .namespace(Guild.DISCORD_NAMESPACE)
-                                .name(name)
-                                .uid(UUID.randomUUID())
-                                .generation(0L)
-                                .created(OffsetDateTime.now(Clock.systemUTC()))
+                                .withNamespace(Guild.DISCORD_NAMESPACE)
+                                .withName(name)
 
                                 .build()
                 )

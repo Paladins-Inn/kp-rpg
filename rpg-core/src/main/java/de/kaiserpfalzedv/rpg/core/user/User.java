@@ -19,15 +19,15 @@ package de.kaiserpfalzedv.rpg.core.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import java.util.Optional;
-
-@AllArgsConstructor
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@NoArgsConstructor
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -36,13 +36,4 @@ import java.util.Optional;
 public class User extends Resource<UserData> {
     public static String API_VERSION = "v1";
     public static String KIND = "User";
-
-    @Builder
-    public User(
-            @NotNull final ResourceMetadata metadata,
-            @NotNull final UserData spec,
-            final ResourceStatus state
-    ) {
-        super(metadata, Optional.ofNullable(spec), Optional.ofNullable(state));
-    }
 }

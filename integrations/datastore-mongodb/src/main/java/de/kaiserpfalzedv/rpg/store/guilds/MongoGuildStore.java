@@ -18,7 +18,6 @@
 package de.kaiserpfalzedv.rpg.store.guilds;
 
 import de.kaiserpfalzedv.rpg.core.resources.ResourceHistory;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildStoreService;
@@ -113,50 +112,32 @@ public class MongoGuildStore extends MongoResourceStore<Guild, MongoGuild> imple
         log.trace("Rewriting: guild={}", input);
         long generation = input.getGeneration() + 1;
 
-        ResourceMetadata metadata = rewriteMetadata(input, generation);
-        ResourceStatus status = addHistory(input, generation);
-
-        return Guild.builder()
-                .metadata(metadata)
-                .spec(input.getSpec())
-                .status(Optional.of(status))
-                .build();
-    }
-
-    private ResourceMetadata rewriteMetadata(Guild input, long generation) {
-        ResourceMetadata inputMetadata = input.getMetadata();
-        return ResourceMetadata.builder()
-                .kind(Guild.KIND)
-                .namespace(inputMetadata.getNamespace())
-                .name(inputMetadata.getName())
-                .uid(inputMetadata.getUid())
-                .generation(generation)
-
-                .annotations(inputMetadata.getAnnotations())
-                .labels(inputMetadata.getLabels())
-                .owner(inputMetadata.getOwner())
-
-                .created(inputMetadata.getCreated())
-                .deleted(inputMetadata.getDeleted())
-
+        return input.toBuilder()
+                .withMetadata(
+                        input.getMetadata().toBuilder()
+                                .withKind(Guild.KIND)
+                                .withGeneration(generation)
+                                .build()
+                )
+                .withStatus(Optional.ofNullable(addHistory(input, generation)))
                 .build();
     }
 
     private ResourceStatus addHistory(Guild input, long generation) {
         ResourceStatus inputStatus = input
                 .getStatus()
-                .orElse(ResourceStatus.builder().observedGeneration(input.getGeneration()).build());
+                .orElse(ResourceStatus.builder().withObservedGeneration(input.getGeneration()).build());
         List<ResourceHistory> history = inputStatus.getHistory();
         history.add(ResourceHistory.builder()
-                .status("repaired")
-                .message(Optional.of("Rewrote kind of this resource from 'User' to 'Guild'."))
-                .timeStamp(OffsetDateTime.now(Clock.systemUTC()))
+                .withStatus("repaired")
+                .withMessage(Optional.of("Rewrote kind of this resource from 'User' to 'Guild'."))
+                .withTimeStamp(OffsetDateTime.now(Clock.systemUTC()))
                 .build()
         );
 
         return ResourceStatus.builder()
-                .observedGeneration(generation)
-                .history(history)
+                .withObservedGeneration(generation)
+                .withHistory(history)
                 .build();
     }
 }

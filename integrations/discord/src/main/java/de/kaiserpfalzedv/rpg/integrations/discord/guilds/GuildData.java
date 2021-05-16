@@ -18,6 +18,7 @@
 package de.kaiserpfalzedv.rpg.integrations.discord.guilds;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -33,22 +34,26 @@ import java.util.Map;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06
  */
-@Builder
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = GuildData.GuildDataBuilder.class)
 @Schema(name = "guildData", description = "The data for a guild (server) within Discord.")
 public class GuildData implements Serializable {
     public static String DEFAULT_PREFIX = "tb!";
 
     @Schema(name = "adminRoles", description = "The roles needed for being seen as admin.")
-    private List<String> adminRoles = new ArrayList<>();
+    @Builder.Default
+    private final List<String> adminRoles = new ArrayList<>();
 
     @Schema(name = "properties", description = "Configuration properties")
-    private Map<String, String> properties = new HashMap<>();
+    @Builder.Default
+    private final Map<String, String> properties = new HashMap<>();
 
     @Schema(name = "prefix", description = "The global prefix to use in this discord guild.")
-    private String prefix = DEFAULT_PREFIX;
+    @Builder.Default
+    private final String prefix = DEFAULT_PREFIX;
 }

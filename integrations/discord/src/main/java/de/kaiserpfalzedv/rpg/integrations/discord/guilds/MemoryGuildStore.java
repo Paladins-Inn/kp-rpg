@@ -31,14 +31,4 @@ import javax.enterprise.context.ApplicationScoped;
 @AlternativePriority(100)
 @ApplicationScoped
 public class MemoryGuildStore extends GenericStoreService<Guild> implements GuildStoreService {
-    @Override
-    public Guild increaseGeneration(final Guild data) {
-        return Guild.builder()
-                .metadata(
-                        increaseGeneration(data.getMetadata())
-                )
-                .spec(data.getSpec())
-                .status(data.getStatus())
-                .build();
-    }
 }

@@ -19,7 +19,7 @@ package de.kaiserpfalzedv.rpg.core.dice.history;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
-import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
+import de.kaiserpfalzedv.rpg.core.resources.Pointer;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -37,7 +37,7 @@ import java.time.OffsetDateTime;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-02-05
  */
-@Builder
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
@@ -46,7 +46,7 @@ import java.time.OffsetDateTime;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(name = "RollHistory", description = "A single dice roll.")
 public class RollHistoryEntry implements Serializable {
-    private ResourcePointer game;
+    private Pointer game;
 
     private User user;
 

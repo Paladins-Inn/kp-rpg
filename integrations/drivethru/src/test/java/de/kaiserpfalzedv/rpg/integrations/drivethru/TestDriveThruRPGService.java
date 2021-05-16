@@ -55,22 +55,22 @@ import static org.junit.jupiter.api.Assertions.fail;
 @Slf4j
 public class TestDriveThruRPGService {
     private static final User DEFAULT_USER = User.builder()
-            .metadata(
+            .withMetadata(
                     ResourceMetadata.builder()
-                            .kind(User.KIND)
-                            .apiVersion(User.API_VERSION)
-                            .namespace("discord")
-                            .name("test#1234")
-                            .created(OffsetDateTime.now(Clock.systemUTC()))
+                            .withKind(User.KIND)
+                            .withApiVersion(User.API_VERSION)
+                            .withNamespace("discord")
+                            .withName("test#1234")
+                            .withCreated(OffsetDateTime.now(Clock.systemUTC()))
                             .build()
             )
-            .spec(
+            .withSpec(Optional.of(
                     UserData.builder()
                             .withProperties(new HashMap<>())
                             .withDescription(Optional.of("Test-user for API calls"))
                             .withDriveThruRPGApiKey(Optional.of("API-KEY"))
                             .build()
-            )
+            ))
             .build();
 
     private final DriveThruRPGService sut;

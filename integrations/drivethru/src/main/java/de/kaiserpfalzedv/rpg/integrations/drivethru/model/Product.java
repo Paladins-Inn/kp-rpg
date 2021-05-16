@@ -24,7 +24,7 @@ import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-@Builder(builderClassName = "ProductBuilder", toBuilder = true, setterPrefix = "with")
+@Builder(setterPrefix = "with", toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

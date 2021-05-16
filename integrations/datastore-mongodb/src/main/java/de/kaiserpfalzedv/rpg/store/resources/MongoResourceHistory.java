@@ -20,6 +20,8 @@ package de.kaiserpfalzedv.rpg.store.resources;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceHistory;
 import lombok.*;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 
@@ -29,7 +31,7 @@ import java.util.Optional;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-01-31
  */
-@Builder
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -37,25 +39,28 @@ import java.util.Optional;
 @EqualsAndHashCode
 public class MongoResourceHistory {
     public String status;
-    public MongoOffsetDateTime timeStamp;
+    public MongoOffsetDateTime timeStamp = new MongoOffsetDateTime(OffsetDateTime.now(ZoneOffset.UTC));
     public String message;
 
     public MongoResourceHistory(final ResourceHistory orig) {
         status = orig.getStatus();
-        timeStamp = new MongoOffsetDateTime(orig.getTimeStamp());
 
-        if (orig.getMessage() != null && orig.getMessage().isPresent()) {
-            message = orig.getMessage().get();
+        if (orig.getTimeStamp() != null) {
+            timeStamp = new MongoOffsetDateTime(orig.getTimeStamp());
         }
+
+        orig.getMessage().ifPresentOrElse(
+                m -> message = m,
+                () -> {
+                }
+        );
     }
 
     public ResourceHistory history() {
-        ResourceHistory.ResourceHistoryBuilder result = ResourceHistory.builder()
-                .status(status)
-                .timeStamp(timeStamp.timeStamp());
-
-        if (message != null) result.message(Optional.of(message));
-
-        return result.build();
+        return ResourceHistory.builder()
+                .withStatus(status)
+                .withTimeStamp(timeStamp.timeStamp())
+                .withMessage(Optional.ofNullable(message))
+                .build();
     }
 }

@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 public class MongoResourceStatus {
     public Long observedGeneration;
@@ -94,17 +93,21 @@ public class MongoResourceStatus {
 
     public ResourceStatus data() {
         return ResourceStatus.builder()
-
-                .observedGeneration(observedGeneration)
-                .history(history())
+                .withObservedGeneration(observedGeneration != null ? observedGeneration : 0L)
+                .withHistory(history())
 
                 .build();
     }
 
     public List<ResourceHistory> history() {
-        return history.stream()
-                .map(MongoResourceHistory::history)
-                .collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<ResourceHistory> resourceHistories = new ArrayList<>();
+
+        for (MongoResourceHistory mongoResourceHistory : history) {
+            ResourceHistory resourceHistory = mongoResourceHistory.history();
+            resourceHistories.add(resourceHistory);
+        }
+
+        return resourceHistories;
     }
 
     @Override

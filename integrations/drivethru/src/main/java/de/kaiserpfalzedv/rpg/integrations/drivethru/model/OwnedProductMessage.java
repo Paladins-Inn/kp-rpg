@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -31,7 +30,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import java.beans.Transient;
 import java.util.List;
 
-@Builder(builderClassName = "OwnedProductMessageBuilder", toBuilder = true)
+@Builder(setterPrefix = "with", toBuilder = true)
 @Getter
 @ToString
 @EqualsAndHashCode
@@ -49,9 +48,5 @@ public class OwnedProductMessage {
     @JsonIgnore
     public List<OwnedProduct> getData() {
         return List.of(getMessage());
-    }
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class OwnedProductMessageBuilder {
     }
 }

@@ -27,7 +27,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import java.beans.Transient;
 import java.util.Optional;
 
-@Builder(builderClassName = "ProductMessageBuilder", toBuilder = true, setterPrefix = "with")
+@Builder(setterPrefix = "with", toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

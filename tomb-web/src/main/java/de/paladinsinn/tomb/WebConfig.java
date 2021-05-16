@@ -34,7 +34,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //@EnableWebMvc
 @Component
 public class WebConfig implements WebMvcConfigurer {
-    private static final Logger LOG = LoggerFactory.getLogger(WebConfig.class);
+    private static final Logger log = LoggerFactory.getLogger(WebConfig.class);
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {

@@ -31,14 +31,4 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 @AlternativePriority(100)
 public class MemoryRollHistoryStore extends GenericStoreService<RollHistory> implements RollHistoryStoreService {
-    @Override
-    public RollHistory increaseGeneration(final RollHistory data) {
-        return RollHistory.builder()
-                .metadata(
-                        increaseGeneration(data.getMetadata())
-                )
-                .spec(data.getSpec().orElse(null))
-                .state(data.getStatus().orElse(null))
-                .build();
-    }
 }

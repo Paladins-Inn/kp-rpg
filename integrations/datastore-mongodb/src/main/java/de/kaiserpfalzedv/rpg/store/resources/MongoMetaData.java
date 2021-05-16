@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
-@Builder
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -49,8 +49,10 @@ public class MongoMetaData implements ResourcePointer {
     public MongoOffsetDateTime created;
     public MongoOffsetDateTime deleted;
 
-    public HashMap<String, String> annotations;
-    public HashMap<String, String> labels;
+    @Builder.Default
+    public HashMap<String, String> annotations = new HashMap<>();
+    @Builder.Default
+    public HashMap<String, String> labels = new HashMap<>();
 
 
     public MongoMetaData(final ResourcePointer orig) {
@@ -86,23 +88,23 @@ public class MongoMetaData implements ResourcePointer {
     public ResourceMetadata data(final ObjectId id) {
         annotations.put("mongo-id", id.toHexString());
 
-        ResourceMetadata.ResourceMetadataBuilder result = ResourceMetadata.builder()
-                .kind(kind)
-                .apiVersion(apiVersion)
+        return ResourceMetadata.builder()
+                .withKind(kind)
+                .withApiVersion(apiVersion)
 
-                .namespace(namespace)
-                .name(name)
-                .uid(uid)
-                .generation(generation)
+                .withNamespace(namespace)
+                .withName(name)
+                .withUid(uid)
+                .withGeneration(generation)
 
-                .created(created.timeStamp())
+                .withCreated(created.timeStamp())
 
-                .annotations(annotations)
-                .labels(labels);
+                .withAnnotations(annotations)
+                .withLabels(labels)
 
-        if (owner != null) result.owner(Optional.of(owner.data()));
-        if (deleted != null) result.deleted(Optional.of(deleted.timeStamp()));
+                .withOwner(Optional.ofNullable(owner != null ? owner.data() : null))
+                .withDeleted(Optional.ofNullable(deleted != null ? deleted.timeStamp() : null))
 
-        return result.build();
+                .build();
     }
 }

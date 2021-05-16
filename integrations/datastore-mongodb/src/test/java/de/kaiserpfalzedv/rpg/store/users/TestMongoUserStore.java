@@ -27,12 +27,11 @@ import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import javax.inject.Inject;
@@ -54,56 +53,56 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @QuarkusTest
 @QuarkusTestResource(MongoDBResource.class)
+@Slf4j
 public class TestMongoUserStore {
-    private static final Logger LOG = LoggerFactory.getLogger(TestMongoUserStore.class);
-
     private static final String NAMESPACE = Guild.DISCORD_NAMESPACE;
     private static final String NAME = "klenkes74#0355";
     private static final UUID UID = UUID.randomUUID();
     private static final OffsetDateTime CREATED = OffsetDateTime.now(ZoneOffset.UTC);
 
+    private static final HashMap<String, String> DATA_ANNOTATIONS = new HashMap<>();
     /**
      * Default data created during setup of tests.
      */
     private static final User data = User.builder()
-            .metadata(
+            .withMetadata(
                     ResourceMetadata.builder()
-                            .kind(User.KIND)
-                            .apiVersion(User.API_VERSION)
+                            .withKind(User.KIND)
+                            .withApiVersion(User.API_VERSION)
 
-                            .namespace(NAMESPACE)
-                            .name(NAME)
-                            .uid(UID)
-                            .owner(Optional.empty())
-                            .generation(0L)
+                            .withNamespace(NAMESPACE)
+                            .withName(NAME)
+                            .withUid(UID)
 
-                            .created(CREATED)
-                            .deleted(Optional.empty())
+                            .withCreated(CREATED)
 
-                            .annotations(Collections.singletonMap("test", "true"))
-                            .labels(Collections.emptyMap())
+                            .withAnnotations(DATA_ANNOTATIONS)
 
                             .build()
             )
-            .spec(
+            .withSpec(Optional.of(
                     UserData.builder()
                             .withDescription(Optional.of("A discord user."))
                             .withDriveThruRPGApiKey(Optional.of("API-KEY"))
                             .withProperties(new HashMap<>())
                             .build()
-            )
-            .state(
+            ))
+            .withStatus(Optional.of(
                     ResourceStatus.builder()
-                            .observedGeneration(1L)
-                            .history(Collections.singletonList(
+                            .withObservedGeneration(1L)
+                            .withHistory(Collections.singletonList(
                                     ResourceHistory.builder()
-                                            .status("created")
-                                            .timeStamp(CREATED)
+                                            .withStatus("created")
+                                            .withTimeStamp(CREATED)
                                             .build()
                             ))
                             .build()
-            )
+            ))
             .build();
+
+    static {
+        DATA_ANNOTATIONS.put("test", "true");
+    }
 
 
     private final UserStoreService sut;
@@ -128,7 +127,7 @@ public class TestMongoUserStore {
         MDC.put("test", "not-present-without-user");
 
         Optional<User> result = sut.findByNameSpaceAndName("no-namespace", "no-card");
-        LOG.trace("result={}", result);
+        log.trace("result={}", result);
 
         assertFalse(result.isPresent(), "There should be no card no-namespace/no-card");
     }
@@ -140,7 +139,7 @@ public class TestMongoUserStore {
         sut.save(data);
 
         Optional<User> result = sut.findByNameSpaceAndName(NAMESPACE, NAME);
-        LOG.trace("result={}", result);
+        log.trace("result={}", result);
 
         assertTrue(result.isPresent(), "There should be an user " + NAMESPACE + "/" + NAME);
     }
@@ -152,7 +151,7 @@ public class TestMongoUserStore {
         sut.save(data);
 
         Optional<User> result = sut.findByUid(UID);
-        LOG.trace("result={}", result);
+        log.trace("result={}", result);
 
         assertTrue(result.isPresent(), "There should be an user with UID " + UID);
     }

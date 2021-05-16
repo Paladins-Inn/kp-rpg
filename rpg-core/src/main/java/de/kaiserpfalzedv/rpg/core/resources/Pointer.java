@@ -19,6 +19,7 @@ package de.kaiserpfalzedv.rpg.core.resources;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -30,13 +31,14 @@ import java.util.UUID;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-07
  */
-@Builder
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = Pointer.PointerBuilder.class)
 @JsonPropertyOrder({"kind,apiVersion,namespace,name,selfLink"})
 @Schema(name = "ResourcePointer", description = "A full address of a resource within the system.")
 public class Pointer implements ResourcePointer {
@@ -44,7 +46,8 @@ public class Pointer implements ResourcePointer {
     private String kind;
 
     @Schema(name = "ApiVersion", description = "The version of the resource entry.", required = true)
-    private String apiVersion;
+    @Builder.Default
+    private final String apiVersion = "v1";
 
     @Schema(name = "Namespace", description = "The namespace of the resource.", required = true)
     private String namespace;
@@ -53,5 +56,6 @@ public class Pointer implements ResourcePointer {
     private String name;
 
     @Schema(name = "Uid", description = "The unique id.")
-    private UUID uid;
+    @Builder.Default
+    private final UUID uid = UUID.randomUUID();
 }

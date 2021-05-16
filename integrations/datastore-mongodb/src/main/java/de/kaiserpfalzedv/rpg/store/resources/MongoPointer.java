@@ -32,7 +32,7 @@ import java.util.UUID;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-01-31
  */
-@Builder
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -58,11 +58,11 @@ public class MongoPointer implements ResourcePointer {
     @Transient
     public Pointer data() {
         return Pointer.builder()
-                .kind(kind)
-                .apiVersion(apiVersion)
-                .namespace(namespace)
-                .name(name)
-                .uid(uid)
+                .withKind(kind)
+                .withApiVersion(apiVersion)
+                .withNamespace(namespace)
+                .withName(name)
+                .withUid(uid)
                 .build();
     }
 
@@ -70,13 +70,13 @@ public class MongoPointer implements ResourcePointer {
     @Transient
     public MongoPointer data(final ObjectId id) {
         return MongoPointer.builder()
-                .kind(kind)
-                .apiVersion(apiVersion)
+                .withKind(kind)
+                .withApiVersion(apiVersion)
 
-                .namespace(namespace)
-                .name(name)
+                .withNamespace(namespace)
+                .withName(name)
 
-                .uid(uid)
+                .withUid(uid)
 
                 .build();
     }

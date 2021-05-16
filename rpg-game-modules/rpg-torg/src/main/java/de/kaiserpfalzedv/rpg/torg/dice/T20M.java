@@ -58,9 +58,9 @@ public class T20M extends TorgD20Base {
         } while (roll == 10 || roll == 20);
 
         return DieResult.builder()
-                .die(this)
-                .total(Integer.toString(total, 10))
-                .rolls(rolls.toArray(new String[0]))
+                .withDie(this)
+                .withTotal(Integer.toString(total, 10))
+                .withRolls(rolls.toArray(new String[0]))
                 .build();
     }
 

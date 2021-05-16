@@ -26,7 +26,6 @@ import de.kaiserpfalzedv.rpg.integrations.discord.fake.FakeDiscordMessageChannel
 import de.kaiserpfalzedv.rpg.integrations.discord.fake.FakeMessageChannel;
 import de.kaiserpfalzedv.rpg.integrations.discord.fake.FakeUser;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildData;
 import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -40,10 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import javax.inject.Inject;
-import java.time.Clock;
-import java.time.OffsetDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,24 +49,16 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestUserRegisterApiKeyCommand {
     private static final Logger LOG = LoggerFactory.getLogger(TestUserRegisterApiKeyCommand.class);
     private static final Guild GUILD = Guild.builder()
-            .metadata(
+            .withMetadata(
                     ResourceMetadata.builder()
-                            .kind(Guild.KIND)
-                            .apiVersion(Guild.API_VERSION)
+                            .withKind(Guild.KIND)
+                            .withApiVersion(Guild.API_VERSION)
 
-                            .namespace(Guild.DISCORD_NAMESPACE)
-                            .name("the-guild")
-
-                            .uid(UUID.randomUUID())
-                            .generation(0L)
-                            .created(OffsetDateTime.now(Clock.systemUTC()))
+                            .withNamespace(Guild.DISCORD_NAMESPACE)
+                            .withName("the-guild")
 
                             .build()
             )
-            .spec(Optional.of(
-                    GuildData.builder()
-                            .build()
-            ))
             .build();
 
     /**
@@ -118,11 +106,11 @@ public class TestUserRegisterApiKeyCommand {
     public void shouldSaveTheApiKeyWhenTheKeyIsValid() throws DiscordPluginException {
         MDC.put("test", "save-valid-api");
         DiscordPluginContext ctx = DiscordPluginContext.builder()
-                .plugin(new FakeDiscordMessageChannelPlugin())
-                .guild(GUILD)
-                .channel(new FakeMessageChannel("the-channel", ChannelType.PRIVATE))
-                .user(new FakeUser("klenkes74#0355"))
-                .argument(VALID_DISCORD_API_KEY)
+                .withPlugin(new FakeDiscordMessageChannelPlugin())
+                .withGuild(GUILD)
+                .withChannel(new FakeMessageChannel("the-channel", ChannelType.PRIVATE))
+                .withUser(new FakeUser("klenkes74#0355"))
+                .withArgument(VALID_DISCORD_API_KEY)
                 .build();
 
         sut.execute(ctx);
@@ -138,11 +126,11 @@ public class TestUserRegisterApiKeyCommand {
     public void shouldThrowAnExceptionWhenTheKeyIsInvalid() {
         MDC.put("test", "save-valid-api");
         DiscordPluginContext ctx = DiscordPluginContext.builder()
-                .plugin(new FakeDiscordMessageChannelPlugin())
-                .guild(GUILD)
-                .channel(new FakeMessageChannel("the-channel", ChannelType.PRIVATE))
-                .user(new FakeUser("klenkes74#0355"))
-                .argument(INVALID_DISCORD_API_KEY)
+                .withPlugin(new FakeDiscordMessageChannelPlugin())
+                .withGuild(GUILD)
+                .withChannel(new FakeMessageChannel("the-channel", ChannelType.PRIVATE))
+                .withUser(new FakeUser("klenkes74#0355"))
+                .withArgument(INVALID_DISCORD_API_KEY)
                 .build();
 
         try {

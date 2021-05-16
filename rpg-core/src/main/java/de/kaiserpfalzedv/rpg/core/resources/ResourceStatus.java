@@ -19,12 +19,14 @@ package de.kaiserpfalzedv.rpg.core.resources;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,21 +36,24 @@ import java.util.Optional;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-07
  */
-@Builder
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = ResourceStatus.ResourceStatusBuilder.class)
 @JsonPropertyOrder({"observedGeneration,history"})
 @Schema(name = "ResourceStatus", description = "The status of a resource.")
 public class ResourceStatus implements Serializable {
     @Schema(name = "ObservedGeneration", description = "The generation of this resource which is observed.", required = true)
-    Long observedGeneration;
+    @Builder.Default
+    Long observedGeneration = 0L;
 
     @Schema(name = "History", description = "A list of changes of the resource status.")
-    List<ResourceHistory> history;
+    @Builder.Default
+    List<ResourceHistory> history = new ArrayList<>();
 
     /**
      * Adds a new history entry.
@@ -61,9 +66,9 @@ public class ResourceStatus implements Serializable {
     public ResourceStatus addHistory(final String status, final String message) {
         getHistory().add(
                 ResourceHistory.builder()
-                        .status(status)
-                        .timeStamp(OffsetDateTime.now(ZoneOffset.UTC))
-                        .message(Optional.ofNullable(message))
+                        .withStatus(status)
+                        .withTimeStamp(OffsetDateTime.now(ZoneOffset.UTC))
+                        .withMessage(Optional.ofNullable(message))
                         .build()
         );
 

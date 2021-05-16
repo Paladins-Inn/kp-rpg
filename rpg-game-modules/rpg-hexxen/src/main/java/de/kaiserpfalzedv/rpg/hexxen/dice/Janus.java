@@ -48,9 +48,9 @@ public class Janus extends HeXXenDie {
         }
 
         return DieResult.builder()
-                .die(this)
-                .total(result)
-                .rolls(new String[]{result})
+                .withDie(this)
+                .withTotal(result)
+                .withRolls(new String[]{result})
                 .build();
     }
 }

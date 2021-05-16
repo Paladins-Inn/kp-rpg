@@ -18,36 +18,22 @@
 package de.kaiserpfalzedv.rpg.integrations.discord.events;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.kaiserpfalzedv.rpg.core.user.User;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
-import jakarta.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import java.time.OffsetDateTime;
-import java.util.Optional;
-
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = MessageEvent.MessageEventBuilder.class)
 @Schema(name = "BaseEvent", description = "The base event for discord events.")
 public class MessageEvent extends BaseEvent {
+    @JsonProperty("message")
     private String message;
-
-    @Builder
-    public MessageEvent(
-            @NotNull String id,
-            @NotNull Long responseNumber,
-            @NotNull Optional<Guild> guild,
-            @NotNull Optional<User> user,
-            @NotNull OffsetDateTime timestamp,
-            @NotNull String message
-    ) {
-        super(id, responseNumber, guild, user, timestamp);
-
-        this.message = message;
-    }
 }

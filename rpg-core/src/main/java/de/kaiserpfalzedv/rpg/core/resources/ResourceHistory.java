@@ -18,11 +18,13 @@
 package de.kaiserpfalzedv.rpg.core.resources;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 
@@ -33,21 +35,24 @@ import java.util.Optional;
  * @since 1.0.0
  */
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-@Builder
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = ResourceHistory.ResourceHistoryBuilder.class)
 @Schema(name = "ResourceHistory", description = "A single history entry of a change.")
 public class ResourceHistory implements Serializable {
     @Schema(name = "TimeStamp", description = "The timestamp of the change.", required = true)
-    private OffsetDateTime timeStamp;
+    @Builder.Default
+    private final OffsetDateTime timeStamp = OffsetDateTime.now(ZoneOffset.UTC);
 
     @Schema(name = "Status", description = "The resource status after the change.", required = true)
     private String status;
 
     @Schema(name = "Message", description = "The human readable description of the change.")
-    private Optional<String> message;
+    @Builder.Default
+    private final Optional<String> message = Optional.empty();
 }

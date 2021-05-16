@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -29,7 +28,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import java.beans.Transient;
 import java.util.Optional;
 
-@Builder(builderClassName = "PublisherMessageBuilder", toBuilder = true)
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -50,10 +49,5 @@ public class PublisherMessage {
     @JsonIgnore
     public Optional<Publisher> getData() {
         return Optional.ofNullable(message);
-    }
-
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class PublisherMessageBuilder {
     }
 }

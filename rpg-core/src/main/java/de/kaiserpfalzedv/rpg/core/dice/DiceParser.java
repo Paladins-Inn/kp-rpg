@@ -77,7 +77,7 @@ public class DiceParser {
             parseSingleDie(d).ifPresent(expressions::add);
         }
 
-        return result.expressions(expressions).build();
+        return result.withExpressions(expressions).build();
     }
 
     /**
@@ -144,8 +144,8 @@ public class DiceParser {
             }
 
             ExpressionTotal result = ExpressionTotal.builder()
-                    .rolls(die.roll(amount))
-                    .expression(expression)
+                    .withRolls(die.roll(amount))
+                    .withExpression(expression)
                     .build();
 
             LOG.debug("Parsed die: {}", result);

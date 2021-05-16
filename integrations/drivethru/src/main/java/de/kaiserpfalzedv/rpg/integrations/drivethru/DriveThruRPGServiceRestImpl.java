@@ -33,7 +33,7 @@ import javax.inject.Inject;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
@@ -143,6 +143,6 @@ public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
         OwnedProductMessage result = client.getOwnedProducts(token.getBearerToken(), token.getCustomerId(), 1L, 1000, 0);
 
         log.debug("DriveThru: ownedProducts.count={}", result.getData().size());
-        return result.getData() != null ? result.getData() : Collections.emptyList();
+        return result.getData() != null ? result.getData() : new ArrayList<>();
     }
 }

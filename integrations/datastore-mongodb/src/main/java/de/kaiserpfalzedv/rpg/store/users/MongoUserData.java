@@ -53,11 +53,11 @@ public class MongoUserData {
             if (orig.getPicture() != null)
                 orig.getPicture().ifPresentOrElse(
                         p -> picture = MongoPointer.builder()
-                                .kind(p.getKind())
-                                .apiVersion(p.getApiVersion())
-                                .namespace(p.getNamespace())
-                                .name(p.getName())
-                                .uid(p.getUid())
+                                .withKind(p.getKind())
+                                .withApiVersion(p.getApiVersion())
+                                .withNamespace(p.getNamespace())
+                                .withName(p.getName())
+                                .withUid(p.getUid())
                                 .build(),
                         () -> picture = null
                 );

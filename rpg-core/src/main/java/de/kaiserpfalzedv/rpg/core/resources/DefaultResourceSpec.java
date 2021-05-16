@@ -46,7 +46,8 @@ import java.util.*;
 @Schema(name = "DefaultResourceSpec", description = "A standardized resource.")
 public class DefaultResourceSpec implements Serializable {
     @Schema(name = "properties", description = "A map of plugin properties for spec.")
-    private Map<String, String> properties;
+    @Singular
+    private final Map<String, String> properties = new HashMap<>();
 
     /**
      * Returns a property.
@@ -119,13 +120,13 @@ public class DefaultResourceSpec implements Serializable {
         }
 
         return Pointer.builder()
-                .kind(data[0])
-                .apiVersion(data[1])
+                .withKind(data[0])
+                .withApiVersion(data[1])
 
-                .namespace(data[2])
-                .name(data[3])
+                .withNamespace(data[2])
+                .withName(data[3])
 
-                .uid(UUID.fromString(data[4]))
+                .withUid(UUID.fromString(data[4]))
 
                 .build();
     }

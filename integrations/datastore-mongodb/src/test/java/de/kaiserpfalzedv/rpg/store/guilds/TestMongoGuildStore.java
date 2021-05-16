@@ -58,47 +58,49 @@ public class TestMongoGuildStore {
     private static final OffsetDateTime CREATED = OffsetDateTime.now(ZoneOffset.UTC);
     private static final String PREFIX = "test!";
 
+
+    private static final HashMap<String, String> DATA_ANNOTATIONS = new HashMap<>();
     /**
      * Default data created during setup of tests.
      */
     private static final Guild DATA = Guild.builder()
-            .metadata(
+            .withMetadata(
                     ResourceMetadata.builder()
-                            .kind(Guild.KIND)
-                            .apiVersion(Guild.API_VERSION)
+                            .withKind(Guild.KIND)
+                            .withApiVersion(Guild.API_VERSION)
 
-                            .namespace(NAMESPACE)
-                            .name(NAME)
-                            .uid(UID)
+                            .withNamespace(NAMESPACE)
+                            .withName(NAME)
+                            .withUid(UID)
 
-                            .owner(Optional.empty())
+                            .withCreated(CREATED)
 
-                            .created(CREATED)
-                            .deleted(Optional.empty())
-
-                            .annotations(Collections.singletonMap("test", "true"))
-                            .labels(Collections.emptyMap())
+                            .withAnnotations(DATA_ANNOTATIONS)
 
                             .build()
             )
-            .spec(Optional.of(
+            .withSpec(Optional.of(
                     GuildData.builder()
-                            .prefix(PREFIX)
-                            .properties(new HashMap<>())
+                            .withPrefix(PREFIX)
+                            .withProperties(new HashMap<>())
                             .build()
             ))
-            .status(Optional.of(
+            .withStatus(Optional.of(
                     ResourceStatus.builder()
-                            .observedGeneration(0L)
-                            .history(Collections.singletonList(
+                            .withObservedGeneration(0L)
+                            .withHistory(Collections.singletonList(
                                     ResourceHistory.builder()
-                                            .status("created")
-                                            .timeStamp(CREATED)
+                                            .withStatus("created")
+                                            .withTimeStamp(CREATED)
                                             .build()
                             ))
                             .build()
             ))
             .build();
+
+    static {
+        DATA_ANNOTATIONS.put("test", "true");
+    }
 
     private final GuildStoreService sut;
 
@@ -186,25 +188,24 @@ public class TestMongoGuildStore {
         MDC.put("test", "repair-wrong-saved-guild");
 
         Guild invalid = Guild.builder()
-                .metadata(
+                .withMetadata(
                         ResourceMetadata.builder()
-                                .kind(User.KIND)
-                                .namespace(DATA.getNameSpace())
-                                .name("invalid-kind")
-                                .uid(UUID.randomUUID())
-                                .generation(DATA.getGeneration())
+                                .withKind(User.KIND)
+                                .withNamespace(DATA.getNameSpace())
+                                .withName("invalid-kind")
+                                .withGeneration(DATA.getGeneration())
 
-                                .owner(DATA.getMetadata().getOwner())
-                                .annotations(DATA.getMetadata().getAnnotations())
-                                .labels(DATA.getMetadata().getLabels())
+                                .withOwner(DATA.getMetadata().getOwner())
+                                .withAnnotations(DATA.getMetadata().getAnnotations())
+                                .withLabels(DATA.getMetadata().getLabels())
 
-                                .created(OffsetDateTime.now(Clock.systemUTC()))
-                                .deleted(DATA.getMetadata().getDeleted())
+                                .withCreated(OffsetDateTime.now(Clock.systemUTC()))
+                                .withDeleted(DATA.getMetadata().getDeleted())
 
                                 .build()
                 )
-                .spec(Optional.empty())
-                .status(Optional.empty())
+                .withSpec(Optional.empty())
+                .withStatus(Optional.empty())
                 .build();
 
         sut.save(invalid);

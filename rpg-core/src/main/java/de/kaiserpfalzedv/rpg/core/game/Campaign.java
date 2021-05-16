@@ -18,14 +18,11 @@
 package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-
-import java.util.Optional;
 
 /**
  * Campaign -- A campaign consisting of multiple RPG {@link Game}s.
@@ -33,23 +30,16 @@ import java.util.Optional;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-02-06
  */
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = Campaign.CampaignBuilder.class)
 @Schema(name = "Campaign", description = "A campaign consisting of multiple games.")
 public class Campaign extends Resource<CampaignData> {
     String API_VERSION = "v1";
     String KIND = "Campaign";
-
-    @Builder
-    public Campaign(
-            @NotNull final ResourceMetadata metadata,
-            @NotNull final CampaignData spec,
-            final ResourceStatus state
-    ) {
-        super(metadata, Optional.of(spec), Optional.ofNullable(state));
-    }
 }

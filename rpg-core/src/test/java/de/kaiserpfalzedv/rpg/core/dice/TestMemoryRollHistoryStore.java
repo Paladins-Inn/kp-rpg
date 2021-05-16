@@ -52,10 +52,10 @@ public class TestMemoryRollHistoryStore {
     private static final SerializableList<RollHistoryEntry> ENTRIES = new SerializableList<>();
 
     private static final RollHistory DATA = RollHistory.builder()
-            .metadata(
+            .withMetadata(
                     generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 0L)
             )
-            .spec(ENTRIES)
+            .withSpec(Optional.of(ENTRIES))
             .build();
 
 
@@ -82,16 +82,16 @@ public class TestMemoryRollHistoryStore {
             final Long generation
     ) {
         return ResourceMetadata.builder()
-                .kind(User.KIND)
-                .apiVersion(User.API_VERSION)
+                .withKind(User.KIND)
+                .withApiVersion(User.API_VERSION)
 
-                .namespace(namespace)
-                .name(name)
-                .uid(uid)
+                .withNamespace(namespace)
+                .withName(name)
+                .withUid(uid)
 
-                .created(created)
-                .deleted(Optional.ofNullable(deleted))
-                .generation(generation)
+                .withCreated(created)
+                .withDeleted(Optional.ofNullable(deleted))
+                .withGeneration(generation)
 
                 .build();
     }
@@ -154,7 +154,7 @@ public class TestMemoryRollHistoryStore {
 
         sut.save(
                 RollHistory.builder()
-                        .metadata(generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 100L))
+                        .withMetadata(generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 100L))
                         .build()
         );
 

@@ -27,7 +27,7 @@ import java.beans.Transient;
 import java.io.Serializable;
 import java.util.Optional;
 
-@Builder(setterPrefix = "with")
+@Builder(setterPrefix = "with", toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

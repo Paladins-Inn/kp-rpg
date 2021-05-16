@@ -20,7 +20,6 @@ package de.kaiserpfalzedv.rpg.bot.drivethru.commands;
 import de.kaiserpfalzedv.rpg.bot.drivethru.DriveThruRPGPluginCommand;
 import de.kaiserpfalzedv.rpg.bot.drivethru.InvalidDriveThruRPGTokenException;
 import de.kaiserpfalzedv.rpg.core.discord.DiscordMessageHandler;
-import de.kaiserpfalzedv.rpg.core.resources.Pointer;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserData;
 import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
@@ -34,7 +33,6 @@ import net.dv8tion.jda.api.entities.ChannelType;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import java.util.HashMap;
 import java.util.Optional;
 
 /**
@@ -97,33 +95,22 @@ public class UserRegisterApiKeyCommand implements DriveThruRPGPluginCommand {
     }
 
     private User addTokenToUser(final User user, final String apiKey) {
-        Optional<String> description = Optional.empty();
-        Optional<Pointer> picture = Optional.empty();
-        HashMap<String, String> properties = new HashMap<>();
+        User.UserBuilder saved = user.toBuilder();
 
+        user.getSpec().ifPresentOrElse(
+                s -> saved.withSpec(Optional.of(
+                        s.toBuilder()
+                                .withDriveThruRPGApiKey(Optional.of(apiKey))
+                                .build()
+                )),
+                () -> saved.withSpec(Optional.of(
+                        UserData.builder()
+                                .withDriveThruRPGApiKey(Optional.of(apiKey))
+                                .build()
+                ))
+        );
 
-        if (user.getSpec() != null && user.getSpec().isPresent()) {
-            UserData data = user.getSpec().get();
-            description = data.getDescription();
-            picture = data.getPicture();
-            properties.putAll(data.getProperties());
-        }
-
-        User saved = User.builder()
-                .metadata(user.getMetadata())
-                .spec(UserData.builder()
-                        .withDescription(description)
-                        .withPicture(picture)
-                        .withProperties(properties)
-                        .withDriveThruRPGApiKey(Optional.ofNullable((apiKey)))
-                        .build()
-                )
-                .build();
-
-        saved = userStore.save(saved);
-
-        log.trace("Saved user. user={}", saved);
-        return saved;
+        return userStore.save(saved.build());
     }
 
 

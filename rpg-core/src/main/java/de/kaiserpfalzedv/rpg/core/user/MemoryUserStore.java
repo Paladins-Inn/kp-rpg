@@ -31,14 +31,4 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 @AlternativePriority(100)
 public class MemoryUserStore extends GenericStoreService<User> implements UserStoreService {
-    @Override
-    public User increaseGeneration(final User data) {
-        return User.builder()
-                .metadata(
-                        increaseGeneration(data.getMetadata())
-                )
-                .spec(data.getSpec().orElse(null))
-                .state(data.getStatus().orElse(null))
-                .build();
-    }
 }

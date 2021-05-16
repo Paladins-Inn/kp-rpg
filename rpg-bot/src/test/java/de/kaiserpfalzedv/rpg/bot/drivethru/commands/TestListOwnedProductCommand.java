@@ -46,7 +46,6 @@ import javax.inject.Inject;
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -59,21 +58,17 @@ public class TestListOwnedProductCommand {
     public static final String VALID_USER = "klenkes74#0355";
     public static final String INVALID_USER = "invalid#0003";
     private static final Guild GUILD = Guild.builder()
-            .metadata(
+            .withMetadata(
                     ResourceMetadata.builder()
-                            .kind(Guild.KIND)
-                            .apiVersion(Guild.API_VERSION)
+                            .withKind(Guild.KIND)
+                            .withApiVersion(Guild.API_VERSION)
 
-                            .namespace(Guild.DISCORD_NAMESPACE)
-                            .name("the-guild")
-
-                            .uid(UUID.randomUUID())
-                            .generation(0L)
-                            .created(OffsetDateTime.now(Clock.systemUTC()))
+                            .withNamespace(Guild.DISCORD_NAMESPACE)
+                            .withName("the-guild")
 
                             .build()
             )
-            .spec(Optional.of(
+            .withSpec(Optional.of(
                     GuildData.builder()
                             .build()
             ))
@@ -98,7 +93,6 @@ public class TestListOwnedProductCommand {
      */
     private final ListOwnedProductCommand sut;
 
-    @SuppressWarnings("CdiInjectionPointsInspection")
     @Inject
     public TestListOwnedProductCommand(
             final UserStoreService userStore
@@ -125,33 +119,34 @@ public class TestListOwnedProductCommand {
         MDC.put("test", "load-with-valid-api-key");
 
         User valid = User.builder()
-                .metadata(
+                .withMetadata(
                         ResourceMetadata.builder()
-                                .kind(User.KIND)
-                                .apiVersion(User.API_VERSION)
+                                .withKind(User.KIND)
+                                .withApiVersion(User.API_VERSION)
 
-                                .namespace(Guild.DISCORD_NAMESPACE)
-                                .name(VALID_USER)
+                                .withNamespace(Guild.DISCORD_NAMESPACE)
+                                .withName(VALID_USER)
 
                                 .build()
                 )
-                .spec(
+                .withSpec(Optional.of(
                         UserData.builder()
                                 .withDriveThruRPGApiKey(Optional.of(VALID_DISCORD_API_KEY))
                                 .build()
-                )
+                ))
                 .build();
         userStore.save(valid);
 
-        DiscordPluginContext ctx = DiscordPluginContext.builder()
-                .plugin(new FakeDiscordMessageChannelPlugin())
-                .guild(GUILD)
-                .channel(new FakeMessageChannel("the-channel", ChannelType.TEXT))
-                .user(new FakeUser(VALID_USER))
-                .argument("")
-                .build();
+        DiscordPluginContext.DiscordPluginContextBuilder ctxBuilder = DiscordPluginContext.builder();
 
-        sut.execute(ctx);
+        ctxBuilder
+                .withPlugin(new FakeDiscordMessageChannelPlugin())
+                .withGuild(GUILD)
+                .withChannel(new FakeMessageChannel("the-channel", ChannelType.TEXT))
+                .withUser(new FakeUser(VALID_USER))
+                .withArgument("");
+
+        sut.execute(ctxBuilder.build());
 
         assertTrue(sender.isTextMessageSent());
     }
@@ -159,16 +154,15 @@ public class TestListOwnedProductCommand {
     @Test
     public void shouldThrowAnExceptionWhenTheApiKeyIsInvalid() {
         User invalid = User.builder()
-                .metadata(
+                .withMetadata(
                         ResourceMetadata.builder()
-                                .kind(User.KIND)
-                                .apiVersion(User.API_VERSION)
+                                .withKind(User.KIND)
+                                .withApiVersion(User.API_VERSION)
 
-                                .namespace(Guild.DISCORD_NAMESPACE)
-                                .name(INVALID_USER)
-                                .uid(UUID.randomUUID())
+                                .withNamespace(Guild.DISCORD_NAMESPACE)
+                                .withName(INVALID_USER)
 
-                                .created(OffsetDateTime.now(Clock.systemUTC()))
+                                .withCreated(OffsetDateTime.now(Clock.systemUTC()))
 
                                 .build()
                 )
@@ -177,11 +171,11 @@ public class TestListOwnedProductCommand {
 
         MDC.put("test", "load-with-invalid-api-key");
         DiscordPluginContext ctx = DiscordPluginContext.builder()
-                .plugin(new FakeDiscordMessageChannelPlugin())
-                .guild(GUILD)
-                .channel(new FakeMessageChannel("the-channel", ChannelType.TEXT))
-                .user(new FakeUser(INVALID_USER))
-                .argument("")
+                .withPlugin(new FakeDiscordMessageChannelPlugin())
+                .withGuild(GUILD)
+                .withChannel(new FakeMessageChannel("the-channel", ChannelType.TEXT))
+                .withUser(new FakeUser(INVALID_USER))
+                .withArgument("")
                 .build();
 
         try {
@@ -190,7 +184,6 @@ public class TestListOwnedProductCommand {
             fail("There should be an exception!");
         } catch (DiscordPluginException e) {
             assertTrue(sender.isDMSent());
-            log.debug("Found expected exception: '" + e.getMessage() + "'", e);
         }
     }
 

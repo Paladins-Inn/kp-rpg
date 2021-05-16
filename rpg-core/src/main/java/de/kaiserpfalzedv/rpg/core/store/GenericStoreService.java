@@ -19,11 +19,12 @@ package de.kaiserpfalzedv.rpg.core.store;
 
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.StringJoiner;
 import java.util.UUID;
 
 /**
@@ -35,6 +36,8 @@ import java.util.UUID;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-01-31
  */
+@ToString
+@EqualsAndHashCode
 @Slf4j
 public abstract class GenericStoreService<T extends Resource<?>> implements StoreService<T> {
     /**
@@ -118,14 +121,23 @@ public abstract class GenericStoreService<T extends Resource<?>> implements Stor
      * @param data The data to store.
      * @return The data object with an increased generation.
      */
-    public abstract T increaseGeneration(final T data);
+    public T increaseGeneration(final T data) {
+        //noinspection unchecked
+        return (T) data.toBuilder()
+                .withMetadata(
+                        data.getMetadata().toBuilder()
+                                .withGeneration(data.getGeneration() + 1)
+                                .build()
+                )
+                .build();
+    }
 
 
     /**
      * Checks if the generation of stored >= generation of data.
      *
      * @param stored the stored resource.
-     * @param data the resource to be stored.
+     * @param data   the resource to be stored.
      * @throws OptimisticLockStoreException If the generation of the new data is not higher than the already stored data
      */
     private void checkGeneration(final T stored, final T data) throws OptimisticLockStoreException {
@@ -147,30 +159,8 @@ public abstract class GenericStoreService<T extends Resource<?>> implements Stor
             log.trace("Increasing generation. uid={}, old={}, new={}", metadata.getUid(), metadata.getGeneration(), metadata.getGeneration() + 1);
         }
 
-        return ResourceMetadata.builder()
-                .kind(metadata.getKind())
-                .apiVersion(metadata.getApiVersion())
-
-                .annotations(metadata.getAnnotations())
-                .labels(metadata.getLabels())
-
-                .uid(metadata.getUid())
-                .namespace(metadata.getNamespace())
-                .name(metadata.getName())
-
-                .generation(metadata.getGeneration() + 1)
-                .created(metadata.getCreated())
-                .deleted(metadata.getDeleted())
-
+        return metadata.toBuilder()
+                .withGeneration(metadata.getGeneration() + 1)
                 .build();
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", GenericStoreService.class.getSimpleName() + "[", "]")
-                .add("identity=" + System.identityHashCode(this))
-                .add("namedStore=" + namedStore.size())
-                .add("uidStore=" + uidStore.size())
-                .toString();
     }
 }

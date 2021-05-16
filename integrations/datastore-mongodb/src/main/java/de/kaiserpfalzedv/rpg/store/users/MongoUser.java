@@ -28,6 +28,7 @@ import lombok.experimental.SuperBuilder;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.beans.Transient;
+import java.util.Optional;
 
 /**
  * The stored user data.
@@ -59,18 +60,10 @@ public class MongoUser extends MongoResource<User> {
     @BsonIgnore
     @Transient
     public User data() {
-        User.UserBuilder result = User.builder()
-                .metadata(metadata.data(id));
-
-        if (spec != null) {
-            result.spec(spec.data());
-        }
-
-        if (status != null) {
-            result.state(status.data());
-        }
-
-
-        return result.build();
+        return User.builder()
+                .withMetadata(metadata.data(id))
+                .withSpec(Optional.ofNullable(spec != null ? spec.data() : null))
+                .withStatus(Optional.ofNullable(status != null ? status.data() : null))
+                .build();
     }
 }

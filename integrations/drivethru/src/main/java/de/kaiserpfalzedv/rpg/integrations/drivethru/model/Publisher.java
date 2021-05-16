@@ -19,7 +19,6 @@ package de.kaiserpfalzedv.rpg.integrations.drivethru.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -27,7 +26,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-@Builder(builderClassName = "PublisherBuilder", toBuilder = true)
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -51,8 +50,4 @@ public class Publisher implements DriveThruResource {
     @Size(min = 1, max = 1000)
     @JsonProperty("publishers_name")
     private String publisherName;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class PublisherBuilder {
-    }
 }

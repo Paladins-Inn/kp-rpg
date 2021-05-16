@@ -24,28 +24,32 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
 @ToString
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(name = "BaseEvent", description = "The base event for discord events.")
 public abstract class BaseEvent {
     /**
      * The message id of the event.
      */
+    @EqualsAndHashCode.Include
     @Schema(name = "MessageId", description = "The unique id of the event.")
     private String id;
 
     /**
      * The response sequence number within discord.
      */
+    @EqualsAndHashCode.Include
     @Schema(name = "ResponseSequence", description = "The response sequence number of this event.")
     private Long responseNumber;
 

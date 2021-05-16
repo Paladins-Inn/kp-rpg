@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.core.resources;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -39,36 +40,45 @@ import java.util.UUID;
  * @since 1.0.0
  */
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-@Builder
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = ResourceMetadata.ResourceMetadataBuilder.class)
 @JsonPropertyOrder({"uid,generation,owner,created,deleted,annotations,labels"})
 @Schema(name = "ResourceMetadata", description = "The metadata of a resource.")
 public class ResourceMetadata implements ResourcePointer {
     @EqualsAndHashCode.Include
     @Schema(name = "Uid", description = "The unique id.")
-    private UUID uid;
+    @Builder.Default
+    private final UUID uid = UUID.randomUUID();
     @EqualsAndHashCode.Include
     @Schema(name = "generation", description = "The generation of this object. Every change adds 1.", required = true, defaultValue = "0L")
-    private Long generation;
+    @Builder.Default
+    private final Long generation = 0L;
     @Schema(name = "owner", description = "The owning resource. This is a sub-resource or managed resource of the given address.")
-    private Optional<ResourcePointer> owner;
+    @Builder.Default
+    private final Optional<ResourcePointer> owner = Optional.empty();
     @Schema(name = "created", description = "The timestamp of resource creation.", required = true)
-    private OffsetDateTime created;
+    @Builder.Default
+    private final OffsetDateTime created = OffsetDateTime.now(ZoneOffset.UTC);
     @Schema(name = "deleted", description = "The timestamp of object deletion. Marks an object to be deleted.")
-    private Optional<OffsetDateTime> deleted;
+    @Builder.Default
+    private final Optional<OffsetDateTime> deleted = Optional.empty();
     @Schema(name = "annotations", description = "A set of annotations to this resource.", maxItems = 256)
-    private Map<String, String> annotations;
+    @Singular
+    private final Map<String, String> annotations = new HashMap<>();
     @Schema(name = "labels", description = "A set of labels to this resource.", maxItems = 256)
-    private Map<String, String> labels;
+    @Singular
+    private final Map<String, String> labels = new HashMap<>();
     @Schema(name = "Kind", description = "The kind (type) of the resource.", required = true)
     private String kind;
     @Schema(name = "ApiVersion", description = "The version of the resource entry.", required = true)
-    private String apiVersion;
+    @Builder.Default
+    private final String apiVersion = "v1";
     @Schema(name = "Namespace", description = "The namespace of the resource.", required = true)
     private String namespace;
     @Schema(name = "Name", description = "The unique name (within a namespace) of a resource.", required = true)
@@ -78,13 +88,13 @@ public class ResourceMetadata implements ResourcePointer {
      * Initializer class for the lombok builder for {@link ResourceMetadata}.
      */
     public static class ResourceMetadataBuilder {
-        private UUID uid = UUID.randomUUID();
-        private Long generation = 0L;
-        private Optional<ResourcePointer> owner = Optional.empty();
-        private OffsetDateTime created = OffsetDateTime.now(ZoneOffset.UTC);
-        private Optional<OffsetDateTime> deleted = Optional.empty();
-        private Map<String, String> annotations = new HashMap<>();
-        private Map<String, String> labels = new HashMap<>();
+        private final UUID uid = UUID.randomUUID();
+        private final Long generation = 0L;
+        private final Optional<ResourcePointer> owner = Optional.empty();
+        private final OffsetDateTime created = OffsetDateTime.now(ZoneOffset.UTC);
+        private final Optional<OffsetDateTime> deleted = Optional.empty();
+        private final Map<String, String> annotations = new HashMap<>();
+        private final Map<String, String> labels = new HashMap<>();
     }
 
     /**

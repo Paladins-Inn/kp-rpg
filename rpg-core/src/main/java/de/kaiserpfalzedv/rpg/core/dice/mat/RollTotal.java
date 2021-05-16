@@ -18,10 +18,12 @@
 package de.kaiserpfalzedv.rpg.core.dice.mat;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -32,17 +34,21 @@ import java.util.StringJoiner;
  *
  * This is the result of a numeric die roll.
  */
-@Builder
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
+@JsonDeserialize(builder = RollTotal.RollTotalBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(name = "RollTotal", description = "A generic result of a die roll.")
 public class RollTotal implements Serializable {
-    private List<ExpressionTotal> expressions;
-    private Optional<String> comment;
+    @Builder.Default
+    private final List<ExpressionTotal> expressions = new ArrayList<>();
+
+    @Builder.Default
+    private final Optional<String> comment = Optional.empty();
 
     public String getDescription() {
         StringJoiner result = new StringJoiner(" - ");

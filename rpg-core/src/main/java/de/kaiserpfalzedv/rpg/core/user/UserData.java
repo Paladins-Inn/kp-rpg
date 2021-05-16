@@ -56,11 +56,14 @@ public class UserData extends DefaultResourceSpec {
             GAMES
     };
 
-    private Optional<String> description;
-    private Optional<Pointer> picture;
+    @Builder.Default
+    private final Optional<String> description = Optional.empty();
+    @Builder.Default
+    private final Optional<Pointer> picture = Optional.empty();
 
     @Schema(name = "driveThruRPGApiKey", description = "The API Key for DriveThruRPG.")
-    private Optional<String> driveThruRPGApiKey;
+    @Builder.Default
+    private final Optional<String> driveThruRPGApiKey = Optional.empty();
 
 
     @Transient

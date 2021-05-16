@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.beans.Transient;
@@ -37,6 +38,7 @@ import java.util.UUID;
  * @since 1.0.0
  */
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -50,10 +52,12 @@ public class Resource<D extends Serializable> implements Serializable {
     private ResourceMetadata metadata;
 
     @Schema(name = "spec", description = "The resource data itself.")
-    private Optional<D> spec;
+    @Builder.Default
+    private final Optional<D> spec = Optional.empty();
 
     @Schema(name = "status", description = "The status of the resource (containing the history).")
-    private Optional<ResourceStatus> status;
+    @Builder.Default
+    private final Optional<ResourceStatus> status = Optional.empty();
 
     /**
      * @return the unique identifier of the resource.

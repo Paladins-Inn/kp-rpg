@@ -18,6 +18,7 @@
 package de.kaiserpfalzedv.rpg.core.user;
 
 import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-01-31
  */
+@Slf4j
 public class TestUser {
     private static final UUID DATA_UID = UUID.randomUUID();
     private static final String DATA_NAMESPACE = "testNS";
@@ -46,24 +48,26 @@ public class TestUser {
     private static final String DATA_API_KEY = "test-api-key";
     private static final String DISCORD_ID = "123123591";
 
+    private static final HashMap<String, String> DATA_PROPERTIES = new HashMap<>();
     private static final User DATA = User.builder()
-            .metadata(
+            .withMetadata(
                     generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED)
             )
-            .spec(
+            .withSpec(Optional.of(
                     UserData.builder()
                             .withDriveThruRPGApiKey(Optional.of(DATA_API_KEY))
-                            .withProperties(new HashMap<>())
+                            .withProperties(DATA_PROPERTIES)
                             .build()
-            )
-            .state(null)
+            ))
             .build();
+
+    static {
+        DATA_PROPERTIES.put("discord-id", DISCORD_ID);
+    }
 
     @BeforeAll
     static void setUp() {
         MDC.put("test-class", TestUser.class.getSimpleName());
-
-        DATA.getSpec().orElseThrow().getProperties().put("discord-id", DISCORD_ID);
     }
 
     @AfterAll
@@ -93,17 +97,17 @@ public class TestUser {
         labels.put("test", "valid");
 
         return ResourceMetadata.builder()
-                .kind(User.KIND)
-                .apiVersion(User.API_VERSION)
+                .withKind(User.KIND)
+                .withApiVersion(User.API_VERSION)
 
-                .namespace(namespace)
-                .name(name)
-                .uid(uid)
+                .withNamespace(namespace)
+                .withName(name)
+                .withUid(uid)
 
-                .created(created)
+                .withCreated(created)
 
-                .annotations(annotations)
-                .labels(labels)
+                .withAnnotations(annotations)
+                .withLabels(labels)
 
                 .build();
     }

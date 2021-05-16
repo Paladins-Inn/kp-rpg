@@ -21,11 +21,8 @@ import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
 
-import java.time.Clock;
-import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.UUID;
 
 import static de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild.DISCORD_NAMESPACE;
 
@@ -95,18 +92,15 @@ public interface DiscordPluginCommand {
             annotations.put("discord-avatar-url", user.getEffectiveAvatarUrl());
 
             result = User.builder()
-                    .metadata(
+                    .withMetadata(
                             ResourceMetadata.builder()
-                                    .kind(User.KIND)
-                                    .apiVersion(User.API_VERSION)
+                                    .withKind(User.KIND)
+                                    .withApiVersion(User.API_VERSION)
 
-                                    .namespace(DISCORD_NAMESPACE)
-                                    .name(context.getUser().getName())
-                                    .uid(UUID.randomUUID())
-                                    .generation(0L)
-                                    .created(OffsetDateTime.now(Clock.systemUTC()))
+                                    .withNamespace(DISCORD_NAMESPACE)
+                                    .withName(context.getUser().getName())
 
-                                    .annotations(annotations)
+                                    .withAnnotations(annotations)
 
                                     .build()
                     )

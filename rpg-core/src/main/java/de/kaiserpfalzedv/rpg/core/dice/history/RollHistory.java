@@ -17,21 +17,22 @@
 
 package de.kaiserpfalzedv.rpg.core.dice.history;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceStatus;
 import de.kaiserpfalzedv.rpg.core.resources.SerializableList;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 /**
  * RollHistory -- The history of rolls for an user in a session.
@@ -39,27 +40,23 @@ import java.util.Optional;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-02-05
  */
+@SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @Getter
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@JsonDeserialize(builder = RollHistory.RollHistoryBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(name = "RollHistory", description = "The roll history of an user in a special channel.")
 public class RollHistory extends Resource<SerializableList<RollHistoryEntry>> {
     public static String KIND = "RollHistory";
     public static String API_VERSION = "v1";
 
-
-    @Builder
-    public RollHistory(
-            @NotNull final ResourceMetadata metadata,
-            final SerializableList<RollHistoryEntry> spec,
-            final ResourceStatus state
-    ) {
-        super(metadata, Optional.ofNullable(spec), Optional.ofNullable(state));
-    }
-
     /**
      * @return The list of history entries.
      */
+    @JsonIgnore
+    @Transient
     public List<RollHistoryEntry> getList() {
         try {
             return getSpec().orElseThrow();

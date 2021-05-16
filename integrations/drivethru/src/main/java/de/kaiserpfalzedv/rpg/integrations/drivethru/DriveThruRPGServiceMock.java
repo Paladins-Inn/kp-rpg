@@ -174,8 +174,8 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
         LOG.trace("Publisher created. publisherId={}", publisherId);
         return Optional.of(
                 Publisher.builder()
-                        .publisherId(publisherId)
-                        .publisherName("Publisher Nr. " + publisherId)
+                        .withPublisherId(publisherId)
+                        .withPublisherName("Publisher Nr. " + publisherId)
                         .build()
         );
     }
@@ -209,12 +209,12 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
         for (int i = 1; i < count + 1; i++) {
             result.add(
                     OwnedProduct.builder()
-                            .id(Integer.toString(i, 10))
-                            .name("Product Nr. " + i)
-                            .coverURL(Optional.of("https://nowhere/product/" + i + "/cover"))
+                            .withId(Integer.toString(i, 10))
+                            .withName("Product Nr. " + i)
+                            .withCoverURL(Optional.of("https://nowhere/product/" + i + "/cover"))
 
-                            .datePurchased(Optional.of(OffsetDateTime.now(UTC).minusMonths(3L)))
-                            .archived(Optional.of("0"))
+                            .withDatePurchased(Optional.of(OffsetDateTime.now(UTC).minusMonths(3L)))
+                            .withArchived(Optional.of("0"))
                             .build()
             );
         }

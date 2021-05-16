@@ -58,25 +58,25 @@ public class TestMemoryGuildStore {
     private static final String OTHER_PREFIX = "other!";
 
     private static final Guild DATA = Guild.builder()
-            .metadata(
+            .withMetadata(
                     generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 0L)
             )
-            .spec(Optional.of(
+            .withSpec(Optional.of(
                     GuildData.builder()
-                            .prefix(DATA_PREFIX)
-                            .properties(new HashMap<>())
+                            .withPrefix(DATA_PREFIX)
+                            .withProperties(new HashMap<>())
                             .build()
             ))
             .build();
 
     private static final Guild OTHER = Guild.builder()
-            .metadata(
+            .withMetadata(
                     generateMetadata(OTHER_NAMESPACE, OTHER_NAME, OTHER_UID, OTHER_CREATED, null, 0L)
             )
-            .spec(Optional.of(
+            .withSpec(Optional.of(
                     GuildData.builder()
-                            .prefix(OTHER_PREFIX)
-                            .properties(new HashMap<>())
+                            .withPrefix(OTHER_PREFIX)
+                            .withProperties(new HashMap<>())
                             .build()
             ))
             .build();
@@ -115,16 +115,16 @@ public class TestMemoryGuildStore {
             final Long generation
     ) {
         return ResourceMetadata.builder()
-                .kind(Guild.KIND)
-                .apiVersion(Guild.API_VERSION)
+                .withKind(Guild.KIND)
+                .withApiVersion(Guild.API_VERSION)
 
-                .namespace(namespace)
-                .name(name)
-                .uid(uid)
+                .withNamespace(namespace)
+                .withName(name)
+                .withUid(uid)
 
-                .created(created)
-                .deleted(Optional.ofNullable(deleted))
-                .generation(generation)
+                .withCreated(created)
+                .withDeleted(Optional.ofNullable(deleted))
+                .withGeneration(generation)
 
                 .build();
     }
@@ -154,8 +154,15 @@ public class TestMemoryGuildStore {
         log.trace("result: {}", result);
 
         assertTrue(result.isPresent(), "The data should have been stored!");
-        assertThat(result.get(), equalToObject(DATA));
-        assertEquals(1L, result.get().getMetadata().getGeneration());
+        assertThat(result.get(), equalToObject(
+                DATA.toBuilder()
+                        .withMetadata(
+                                DATA.getMetadata().toBuilder().withGeneration(DATA.getGeneration() + 1).build()
+                        )
+                        .build()
+                )
+        );
+        assertEquals(DATA.getGeneration() + 1, result.get().getMetadata().getGeneration());
     }
 
     @Test
@@ -260,12 +267,12 @@ public class TestMemoryGuildStore {
         MDC.put("test", "throw-optmistic-lock-exception");
 
         sut.save(
-                Guild.builder()
-                        .metadata(
-                                generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 100L)
+                DATA.toBuilder()
+                        .withMetadata(
+                                DATA.getMetadata().toBuilder()
+                                        .withGeneration(DATA.getGeneration() + 100)
+                                        .build()
                         )
-                        .spec(DATA.getSpec())
-                        .status(DATA.getStatus())
                         .build()
         );
 

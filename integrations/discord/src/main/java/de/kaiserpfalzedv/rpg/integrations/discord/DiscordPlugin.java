@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.integrations.discord;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,7 +47,7 @@ public interface DiscordPlugin {
      * @return A list of roles the caller of this command needs to have.
      */
     default List<String> rolesRequired() {
-        return Collections.emptyList();
+        return new ArrayList<>();
     }
 
     /**

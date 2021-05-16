@@ -54,9 +54,9 @@ public class GenericNumericDie implements Die {
     public DieResult roll() {
         String roll = Integer.toString(rollSingle(), 10);
         return DieResult.builder()
-                .die(this)
-                .total(roll)
-                .rolls(Collections.singletonList(roll).toArray(new String[0]))
+                .withDie(this)
+                .withTotal(roll)
+                .withRolls(Collections.singletonList(roll).toArray(new String[0]))
                 .build();
     }
 

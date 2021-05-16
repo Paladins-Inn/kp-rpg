@@ -25,7 +25,7 @@ import lombok.*;
 import java.beans.Transient;
 import java.util.Optional;
 
-@Builder(setterPrefix = "with")
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

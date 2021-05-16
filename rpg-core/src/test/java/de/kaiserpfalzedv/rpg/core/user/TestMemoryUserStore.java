@@ -58,28 +58,28 @@ public class TestMemoryUserStore {
     private static final String OTHER_API_KEY = "other-api-key";
 
     private static final User DATA = User.builder()
-            .metadata(
+            .withMetadata(
                     generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 0L)
             )
-            .spec(
+            .withSpec(Optional.of(
                     UserData.builder()
                             .withDriveThruRPGApiKey(Optional.of(DATA_API_KEY))
                             .withProperties(new HashMap<>())
                             .build()
-            )
+            ))
             .build();
 
     private static final User OTHER =
             User.builder()
-                    .metadata(
+                    .withMetadata(
                             generateMetadata(OTHER_NAMESPACE, OTHER_NAME, OTHER_UID, OTHER_CREATED, null, 0L)
                     )
-                    .spec(
+                    .withSpec(Optional.of(
                             UserData.builder()
                                     .withDriveThruRPGApiKey(Optional.of(OTHER_API_KEY))
                                     .withProperties(new HashMap<>())
                                     .build()
-                    )
+                    ))
                     .build();
 
 
@@ -146,16 +146,16 @@ public class TestMemoryUserStore {
             final Long generation
     ) {
         return ResourceMetadata.builder()
-                .kind(User.KIND)
-                .apiVersion(User.API_VERSION)
+                .withKind(User.KIND)
+                .withApiVersion(User.API_VERSION)
 
-                .namespace(namespace)
-                .name(name)
-                .uid(uid)
+                .withNamespace(namespace)
+                .withName(name)
+                .withUid(uid)
 
-                .created(created)
-                .deleted(Optional.ofNullable(deleted))
-                .generation(generation)
+                .withCreated(created)
+                .withDeleted(Optional.ofNullable(deleted))
+                .withGeneration(generation)
 
                 .build();
     }
@@ -258,16 +258,16 @@ public class TestMemoryUserStore {
 
         sut.save(
                 User.builder()
-                        .metadata(
+                        .withMetadata(
                                 generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 100L)
 
                         )
-                        .spec(
+                        .withSpec(Optional.of(
                                 UserData.builder()
                                         .withDriveThruRPGApiKey(DATA.getSpec().orElseThrow().getDriveThruRPGApiKey())
                                         .withProperties(DATA.getSpec().get().getProperties())
                                         .build()
-                        )
+                        ))
                         .build()
         );
 

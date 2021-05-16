@@ -76,34 +76,32 @@ public class MongoGuild extends MongoResource<Guild> {
 
         if (spec != null) {
             data
-                    .adminRoles(spec.adminRoles != null ? spec.adminRoles : new ArrayList<>())
-                    .properties(spec.properties != null ? spec.properties : new HashMap<>())
-                    .prefix(spec.prefix);
+                    .withAdminRoles(spec.adminRoles != null ? spec.adminRoles : new ArrayList<>())
+                    .withProperties(spec.properties != null ? spec.properties : new HashMap<>())
+                    .withPrefix(spec.prefix);
         }
 
         if (status != null) {
             List<ResourceHistory> history = new ArrayList<>();
 
             if (!this.status.history.isEmpty()) {
-                this.status.history.forEach(h -> {
-                    history.add(ResourceHistory.builder()
-                            .status(h.status)
-                            .timeStamp(h.timeStamp.timeStamp())
-                            .message(Optional.ofNullable(h.message))
-                            .build()
-                    );
-                });
+                this.status.history.forEach(h -> history.add(ResourceHistory.builder()
+                        .withStatus(h.status)
+                        .withTimeStamp(h.timeStamp.timeStamp())
+                        .withMessage(Optional.ofNullable(h.message))
+                        .build()
+                ));
 
                 status
-                        .observedGeneration(this.status.observedGeneration)
-                        .history(history);
+                        .withObservedGeneration(this.status.observedGeneration)
+                        .withHistory(history);
             }
         }
 
         return Guild.builder()
-                .metadata(metadata.data(id))
-                .spec(Optional.ofNullable(data.build()))
-                .status(Optional.ofNullable(status.build()))
+                .withMetadata(metadata.data(id))
+                .withSpec(Optional.ofNullable(data.build()))
+                .withStatus(Optional.ofNullable(status.build()))
                 .build();
     }
 }

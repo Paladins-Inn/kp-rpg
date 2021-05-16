@@ -38,9 +38,11 @@ import java.util.List;
 public class MongoGuildData {
     public String prefix;
 
-    public List<String> adminRoles;
+    @Builder.Default
+    public List<String> adminRoles = new ArrayList<>();
 
-    public HashMap<String, String> properties;
+    @Builder.Default
+    public HashMap<String, String> properties = new HashMap<>();
 
     public MongoGuildData(final GuildData orig) {
         adminRoles = new ArrayList<>();
@@ -57,14 +59,10 @@ public class MongoGuildData {
     }
 
     public GuildData data() {
-        GuildData.GuildDataBuilder result = GuildData.builder();
-
-        if (prefix != null) result.prefix(prefix);
-
-        result
-                .adminRoles(adminRoles != null ? adminRoles : new ArrayList<>())
-                .properties(properties != null ? properties : new HashMap<>());
-
-        return result.build();
+        return GuildData.builder()
+                .withPrefix(prefix != null ? prefix : null)
+                .withAdminRoles(adminRoles != null ? adminRoles : new ArrayList<>())
+                .withProperties(properties != null ? properties : new HashMap<>())
+                .build();
     }
 }
