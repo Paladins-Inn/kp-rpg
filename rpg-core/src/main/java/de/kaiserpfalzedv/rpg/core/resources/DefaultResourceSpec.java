@@ -45,9 +45,10 @@ import java.util.*;
 @JsonDeserialize(builder = DefaultResourceSpec.DefaultResourceSpecBuilder.class)
 @Schema(name = "DefaultResourceSpec", description = "A standardized resource.")
 public class DefaultResourceSpec implements Serializable {
+    @SuppressWarnings("FieldMayBeFinal")
     @Schema(name = "properties", description = "A map of plugin properties for spec.")
     @Singular
-    private final Map<String, String> properties = new HashMap<>();
+    private Map<String, String> properties = new HashMap<>();
 
     /**
      * Returns a property.
