@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.core.ui.i18n;
 
-import com.sun.istack.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Locale;
 

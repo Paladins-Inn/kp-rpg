@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.core.ui.components;
 
-import com.sun.istack.NotNull;
+import jakarta.validation.constraints.NotNull;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.html.NativeButton;

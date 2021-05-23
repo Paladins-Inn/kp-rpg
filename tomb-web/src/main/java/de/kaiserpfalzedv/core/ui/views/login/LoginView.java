@@ -18,7 +18,7 @@
 package de.kaiserpfalzedv.core.ui.views.login;
 
 import ch.carnet.kasparscherrer.LanguageSelect;
-import com.sun.istack.NotNull;
+import jakarta.validation.constraints.NotNull;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;

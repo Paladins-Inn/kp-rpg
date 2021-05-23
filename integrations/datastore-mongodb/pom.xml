@@ -56,5 +56,10 @@
             <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
             <artifactId>mongodb-testsupport</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.github.cbartosiak</groupId>
+            <artifactId>bson-codecs-jsr310</artifactId>
+            <version>3.5.4</version>
+        </dependency>
     </dependencies>
 </project>

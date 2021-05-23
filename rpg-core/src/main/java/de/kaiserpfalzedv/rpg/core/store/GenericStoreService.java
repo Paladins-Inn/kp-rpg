@@ -18,7 +18,6 @@
 package de.kaiserpfalzedv.rpg.core.store;
 
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -71,27 +70,35 @@ public abstract class GenericStoreService<T extends Resource<?>> implements Stor
     public T save(final T object) throws OptimisticLockStoreException {
         log.trace("Saving: {}", object);
 
-        String key = generateStoreKey(object.getMetadata().getNamespace(), object.getMetadata().getName());
-        T data = object;
+        String key = generateStoreKey(object.getNamespace(), object.getName());
 
-        if (namedStore.containsKey(key)) {
-            T stored = namedStore.get(key);
-            data = increaseGeneration(object);
+        //noinspection unchecked
+        T data = (!namedStore.containsKey(key))
+                ? object
+                : (T) object.toBuilder().withGeneration(object.getGeneration() + 1).build();
 
-            checkGeneration(stored, data);
-        }
+        checkOptimisticLocking(key, data);
 
         namedStore.put(key, data);
-        uidStore.put(data.getMetadata().getUid(), data);
+        uidStore.put(object.getUid(), data);
         return data;
+    }
+
+    private void checkOptimisticLocking(final String key, final T object) {
+        if (
+                namedStore.containsKey(key)
+                        && (namedStore.get(key).getGeneration() >= object.getGeneration())
+        ) {
+            throw new OptimisticLockStoreException(namedStore.get(key).getGeneration(), object.getGeneration());
+        }
     }
 
     @Override
     public void remove(final T object) {
-        String key = generateStoreKey(object.getMetadata().getNamespace(), object.getMetadata().getName());
+        String key = generateStoreKey(object.getNamespace(), object.getName());
 
         namedStore.remove(key);
-        uidStore.remove(object.getMetadata().getUid());
+        uidStore.remove(object.getUid());
     }
 
     @Override
@@ -99,7 +106,7 @@ public abstract class GenericStoreService<T extends Resource<?>> implements Stor
         String key = generateStoreKey(nameSpace, name);
 
         if (namedStore.containsKey(key)) {
-            uidStore.remove(namedStore.get(key).getMetadata().getUid());
+            uidStore.remove(namedStore.get(key).getUid());
             namedStore.remove(key);
         }
     }
@@ -108,59 +115,10 @@ public abstract class GenericStoreService<T extends Resource<?>> implements Stor
     public void remove(final UUID uid) {
         if (uidStore.containsKey(uid)) {
             T data = uidStore.get(uid);
-            String key = generateStoreKey(data.getMetadata().getNamespace(), data.getMetadata().getName());
+            String key = generateStoreKey(data.getNamespace(), data.getName());
 
             namedStore.remove(key);
             uidStore.remove(uid);
         }
-    }
-
-    /**
-     * Increases the generation of the data to store.
-     *
-     * @param data The data to store.
-     * @return The data object with an increased generation.
-     */
-    public T increaseGeneration(final T data) {
-        //noinspection unchecked
-        return (T) data.toBuilder()
-                .withMetadata(
-                        data.getMetadata().toBuilder()
-                                .withGeneration(data.getGeneration() + 1)
-                                .build()
-                )
-                .build();
-    }
-
-
-    /**
-     * Checks if the generation of stored >= generation of data.
-     *
-     * @param stored the stored resource.
-     * @param data   the resource to be stored.
-     * @throws OptimisticLockStoreException If the generation of the new data is not higher than the already stored data
-     */
-    private void checkGeneration(final T stored, final T data) throws OptimisticLockStoreException {
-        long storedGeneration = stored.getMetadata().getGeneration();
-        long dataGeneration = data.getMetadata().getGeneration();
-
-        if (storedGeneration > dataGeneration)
-            throw new OptimisticLockStoreException(storedGeneration, dataGeneration);
-    }
-
-    /**
-     * Increases the generation of the metadata by 1.
-     *
-     * @param metadata the original data.
-     * @return the new metadata.
-     */
-    protected ResourceMetadata increaseGeneration(final ResourceMetadata metadata) {
-        if (metadata != null) {
-            log.trace("Increasing generation. uid={}, old={}, new={}", metadata.getUid(), metadata.getGeneration(), metadata.getGeneration() + 1);
-        }
-
-        return metadata.toBuilder()
-                .withGeneration(metadata.getGeneration() + 1)
-                .build();
     }
 }

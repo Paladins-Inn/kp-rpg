@@ -33,6 +33,6 @@ public class InvalidUserException extends BaseException {
      */
     @SuppressWarnings("CdiInjectionPointsInspection")
     public InvalidUserException(final User user) {
-        super(String.format("The user '%s/%s' has no data set!", user.getNameSpace(), user.getName()));
+        super(String.format("The user '%s/%s' has no data set!", user.getNamespace(), user.getName()));
     }
 }

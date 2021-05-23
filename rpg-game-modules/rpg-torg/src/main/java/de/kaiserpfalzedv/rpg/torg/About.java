@@ -17,14 +17,18 @@
 
 package de.kaiserpfalzedv.rpg.torg;
 
+import java.time.OffsetDateTime;
 import java.util.StringJoiner;
 
 /**
- *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-05
  */
 public class About {
+    public static final String TORG_NAMESPACE = "torg";
+    public static final OffsetDateTime DEFAULT_CREATION = OffsetDateTime.parse("2021-05-23T11:53:00+02:00");
+
+
     @Override
     public String toString() {
         return new StringJoiner(", ", About.class.getSimpleName() + "[", "]")

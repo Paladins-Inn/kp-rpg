@@ -18,7 +18,7 @@
 package de.kaiserpfalzedv.rpg.core.store;
 
 import de.kaiserpfalzedv.rpg.core.api.BaseSystemException;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
 
 /**
  * DuplicateStoreException -- There is already an object with this metadata.
@@ -27,16 +27,15 @@ import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
  * @since 1.2.0  2021-01-31
  */
 public class DuplicateStoreException extends BaseSystemException {
-    private final ResourceMetadata stored;
-    private final ResourceMetadata duplicate;
+    private final ResourcePointer stored;
+    private final ResourcePointer duplicate;
 
     /**
      * @param stored    the already stored resource metadata.
      * @param duplicate the new resource metadata.
      * @since 1.2.0
      */
-    @SuppressWarnings("CdiInjectionPointsInspection")
-    public DuplicateStoreException(final ResourceMetadata stored, final ResourceMetadata duplicate) {
+    public DuplicateStoreException(final ResourcePointer stored, final ResourcePointer duplicate) {
         super(String.format("Duplicate element found. resource='%s', nameSpace='%s', name='%s'",
                 stored.getKind(), stored.getNamespace(), stored.getName()
         ));
@@ -49,7 +48,7 @@ public class DuplicateStoreException extends BaseSystemException {
      * @return the generation stored in the data store.
      */
     @SuppressWarnings("unused")
-    public ResourceMetadata getStoredGeneration() {
+    public ResourcePointer getStoredGeneration() {
         return stored;
     }
 
@@ -57,7 +56,7 @@ public class DuplicateStoreException extends BaseSystemException {
      * @return the generation that should be saved.
      */
     @SuppressWarnings("unused")
-    public ResourceMetadata getSaveGeneration() {
+    public ResourcePointer getSaveGeneration() {
         return duplicate;
     }
 }

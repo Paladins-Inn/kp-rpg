@@ -28,6 +28,6 @@ import de.kaiserpfalzedv.rpg.core.user.User;
  */
 public class NoDriveThruRPGAPIKeyDefinedException extends BaseException {
     public NoDriveThruRPGAPIKeyDefinedException(final User user) {
-        super(String.format("User '%s/%s' has no DriveThruAPI key defined.", user.getNameSpace(), user.getName()));
+        super(String.format("User '%s/%s' has no DriveThruAPI key defined.", user.getNamespace(), user.getName()));
     }
 }

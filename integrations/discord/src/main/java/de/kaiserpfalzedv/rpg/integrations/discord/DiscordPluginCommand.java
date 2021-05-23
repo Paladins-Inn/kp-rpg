@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.integrations.discord;
 
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.Metadata;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
 
@@ -92,16 +92,14 @@ public interface DiscordPluginCommand {
             annotations.put("discord-avatar-url", user.getEffectiveAvatarUrl());
 
             result = User.builder()
+                    .withKind(User.KIND)
+                    .withApiVersion(User.API_VERSION)
+                    .withNamespace(DISCORD_NAMESPACE)
+                    .withName(context.getUser().getName())
+
                     .withMetadata(
-                            ResourceMetadata.builder()
-                                    .withKind(User.KIND)
-                                    .withApiVersion(User.API_VERSION)
-
-                                    .withNamespace(DISCORD_NAMESPACE)
-                                    .withName(context.getUser().getName())
-
+                            Metadata.builder()
                                     .withAnnotations(annotations)
-
                                     .build()
                     )
                     .build();

@@ -18,7 +18,7 @@
 package de.kaiserpfalzedv.core.ui.i18n;
 
 import ch.carnet.kasparscherrer.LanguageSelect;
-import com.sun.istack.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Locale;
 

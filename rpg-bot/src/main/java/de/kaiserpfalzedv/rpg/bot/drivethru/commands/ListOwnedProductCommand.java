@@ -107,7 +107,7 @@ public class ListOwnedProductCommand implements DriveThruRPGPluginCommand {
         }
 
         try {
-            user.getSpec().orElseThrow().getDriveThruRPGApiKey().orElseThrow();
+            user.getData().orElseThrow().getDriveThruRPGApiKey().orElseThrow();
         } catch (NoSuchElementException e) {
             sender.sendDM(context.getUser(), "Sorry, I found no api key for you. please set one via 'dtr token <api key>'.");
 

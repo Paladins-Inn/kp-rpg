@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.integrations.discord;
 
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.Metadata;
 import de.kaiserpfalzedv.rpg.core.store.OptimisticLockStoreException;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
 import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildData;
@@ -58,27 +58,37 @@ public class TestMemoryGuildStore {
     private static final String OTHER_PREFIX = "other!";
 
     private static final Guild DATA = Guild.builder()
+            .withKind(Guild.KIND)
+            .withApiVersion(Guild.API_VERSION)
+            .withNamespace(DATA_NAMESPACE)
+            .withName(DATA_NAME)
+            .withUid(DATA_UID)
+            .withGeneration(0L)
+
             .withMetadata(
-                    generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 0L)
+                    generateMetadata(DATA_CREATED, null)
             )
-            .withSpec(Optional.of(
+            .withSpec(
                     GuildData.builder()
                             .withPrefix(DATA_PREFIX)
                             .withProperties(new HashMap<>())
                             .build()
-            ))
+            )
             .build();
 
     private static final Guild OTHER = Guild.builder()
+            .withNamespace(OTHER_NAMESPACE)
+            .withName(OTHER_NAME)
+            .withUid(OTHER_UID)
             .withMetadata(
-                    generateMetadata(OTHER_NAMESPACE, OTHER_NAME, OTHER_UID, OTHER_CREATED, null, 0L)
+                    generateMetadata(OTHER_CREATED, null)
             )
-            .withSpec(Optional.of(
+            .withSpec(
                     GuildData.builder()
                             .withPrefix(OTHER_PREFIX)
                             .withProperties(new HashMap<>())
                             .build()
-            ))
+            )
             .build();
 
 
@@ -101,30 +111,15 @@ public class TestMemoryGuildStore {
     /**
      * Sets up a metadata set.
      *
-     * @param namespace the namespace of the data set.
-     * @param name      the name of the data set.
-     * @param uid       UUID of the data set.
      * @return The generated metadata
      */
-    private static ResourceMetadata generateMetadata(
-            final String namespace,
-            final String name,
-            final UUID uid,
+    private static Metadata generateMetadata(
             final OffsetDateTime created,
-            final OffsetDateTime deleted,
-            final Long generation
+            final OffsetDateTime deleted
     ) {
-        return ResourceMetadata.builder()
-                .withKind(Guild.KIND)
-                .withApiVersion(Guild.API_VERSION)
-
-                .withNamespace(namespace)
-                .withName(name)
-                .withUid(uid)
-
+        return Metadata.builder()
                 .withCreated(created)
-                .withDeleted(Optional.ofNullable(deleted))
-                .withGeneration(generation)
+                .withDeleted(deleted)
 
                 .build();
     }
@@ -156,13 +151,11 @@ public class TestMemoryGuildStore {
         assertTrue(result.isPresent(), "The data should have been stored!");
         assertThat(result.get(), equalToObject(
                 DATA.toBuilder()
-                        .withMetadata(
-                                DATA.getMetadata().toBuilder().withGeneration(DATA.getGeneration() + 1).build()
-                        )
+                        .withGeneration(DATA.getGeneration() + 1)
                         .build()
                 )
         );
-        assertEquals(DATA.getGeneration() + 1, result.get().getMetadata().getGeneration());
+        assertEquals(DATA.getGeneration() + 1, result.get().getGeneration());
     }
 
     @Test
@@ -264,15 +257,11 @@ public class TestMemoryGuildStore {
 
     @Test
     void shouldThrowOptimisticLockExceptionWhenTheNewGenerationIsNotHighEnough() {
-        MDC.put("test", "throw-optmistic-lock-exception");
+        MDC.put("test", "throw-optimistic-lock-exception");
 
         sut.save(
                 DATA.toBuilder()
-                        .withMetadata(
-                                DATA.getMetadata().toBuilder()
-                                        .withGeneration(DATA.getGeneration() + 100)
-                                        .build()
-                        )
+                        .withGeneration(DATA.getGeneration() + 100)
                         .build()
         );
 

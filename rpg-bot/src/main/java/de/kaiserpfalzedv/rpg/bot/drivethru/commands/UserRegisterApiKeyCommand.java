@@ -33,7 +33,7 @@ import net.dv8tion.jda.api.entities.ChannelType;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * UserRegisterApiKeyCommand -- This command will register the DriveThruRPG API Key for the given user.
@@ -95,22 +95,20 @@ public class UserRegisterApiKeyCommand implements DriveThruRPGPluginCommand {
     }
 
     private User addTokenToUser(final User user, final String apiKey) {
-        User.UserBuilder saved = user.toBuilder();
+        AtomicReference<UserData> spec = new AtomicReference<>();
 
-        user.getSpec().ifPresentOrElse(
-                s -> saved.withSpec(Optional.of(
-                        s.toBuilder()
-                                .withDriveThruRPGApiKey(Optional.of(apiKey))
-                                .build()
-                )),
-                () -> saved.withSpec(Optional.of(
-                        UserData.builder()
-                                .withDriveThruRPGApiKey(Optional.of(apiKey))
-                                .build()
-                ))
+        user.getData().ifPresentOrElse(
+                d -> spec.set(d.toBuilder()
+                        .withDriveThruRPGKey(apiKey)
+                        .build()),
+                () -> spec.set(UserData.builder()
+                        .withDriveThruRPGKey(apiKey)
+                        .build())
         );
 
-        return userStore.save(saved.build());
+        return userStore.save(user.toBuilder()
+                .withSpec(spec.get())
+                .build());
     }
 
 

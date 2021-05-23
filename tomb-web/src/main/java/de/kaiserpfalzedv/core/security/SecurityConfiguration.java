@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.core.security;
 
-import com.sun.istack.NotNull;
+import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

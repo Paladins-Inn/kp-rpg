@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.beans.Transient;
@@ -37,88 +39,88 @@ import java.util.UUID;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0
  */
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString
+@ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonPropertyOrder({"metadata,spec,status"})
-public class Resource<D extends Serializable> implements Serializable {
+public class Resource<D extends Serializable> implements Serializable, ResourcePointer {
+    @BsonId
     @EqualsAndHashCode.Include
+    @ToString.Include
+    @Schema(name = "Uid", description = "The unique id.")
+    @Builder.Default
+    private final UUID uid = UUID.randomUUID();
+
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    @Schema(name = "Kind", description = "The kind (type) of the resource.", required = true)
+    private String kind;
+
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    @Schema(name = "ApiVersion", description = "The version of the resource entry.", required = true)
+    @Builder.Default
+    private final String apiVersion = "v1";
+
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    @Schema(name = "Namespace", description = "The namespace of the resource.", required = true)
+    private String namespace;
+
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    @Schema(name = "Name", description = "The unique name (within a namespace) of a resource.", required = true)
+    private String name;
+
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    @Schema(name = "generation", description = "The generation of this object. Every change adds 1.", required = true, defaultValue = "0L")
+    @Builder.Default
+    private Long generation = 0L;
+
     @Schema(name = "metadata", description = "Technical data to the resource.", required = true)
-    private ResourceMetadata metadata;
+    protected Metadata metadata;
 
     @Schema(name = "spec", description = "The resource data itself.")
     @Builder.Default
-    private final Optional<D> spec = Optional.empty();
+    protected D spec = null;
 
     @Schema(name = "status", description = "The status of the resource (containing the history).")
     @Builder.Default
-    private final Optional<ResourceStatus> status = Optional.empty();
-
-    /**
-     * @return the unique identifier of the resource.
-     */
-    @Transient
-    @JsonIgnore
-    public UUID getUid() {
-        return getMetadata().getUid();
-    }
-
-    /**
-     * @return the type of the resource.
-     */
-    @Transient
-    @JsonIgnore
-    public String getKind() {
-        return getMetadata().getKind();
-    }
-
-    /**
-     * @return the version of the resource definition.
-     */
-    @Transient
-    @JsonIgnore
-    public String getApiVersion() {
-        return getMetadata().getApiVersion();
-    }
-
-    /**
-     * @return the namespace of the resource.
-     */
-    @Transient
-    @JsonIgnore
-    public String getNameSpace() {
-        return getMetadata().getNamespace();
-    }
-
-    /**
-     * @return the name of the resource.
-     */
-    @Transient
-    @JsonIgnore
-    public String getName() {
-        return getMetadata().getName();
-    }
+    protected Status status = null;
 
     /**
      * @return the display name of the resource
      */
     @Transient
     @JsonIgnore
+    @BsonIgnore
     public String getDisplayName() {
-        return String.format("%s/%s/%s/%s", getKind(), getApiVersion(), getNameSpace(), getName());
+        return String.format("%s/%s/%s/%s", getKind(), getApiVersion(), getNamespace(), getName());
     }
 
-    /**
-     * @return The generation of this resource.
-     */
     @Transient
     @JsonIgnore
-    public Long getGeneration() {
-        return getMetadata().getGeneration();
+    @BsonIgnore
+    public void increaseGeneration() {
+        generation++;
+    }
+
+    @Transient
+    @JsonIgnore
+    @BsonIgnore
+    public Optional<D> getData() {
+        return Optional.ofNullable(spec);
+    }
+
+    @Transient
+    @JsonIgnore
+    @BsonIgnore
+    public Optional<Status> getState() {
+        return Optional.ofNullable(status);
     }
 }

@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.core.user;
 
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.Metadata;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -28,7 +28,6 @@ import org.slf4j.MDC;
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,15 +54,21 @@ public class TestUser {
     }
 
     private static final User DATA = User.builder()
+            .withKind(User.KIND)
+            .withApiVersion(User.API_VERSION)
+            .withNamespace(DATA_NAMESPACE)
+            .withName(DATA_NAME)
+            .withUid(DATA_UID)
+
             .withMetadata(
-                    generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED)
+                    generateMetadata(DATA_CREATED)
             )
-            .withSpec(Optional.of(
+            .withSpec(
                     UserData.builder()
-                            .withDriveThruRPGApiKey(Optional.of(DATA_API_KEY))
+                            .withDriveThruRPGKey(DATA_API_KEY)
                             .withProperties(DATA_PROPERTIES)
                             .build()
-            ))
+            )
             .build();
 
     @BeforeAll
@@ -79,16 +84,10 @@ public class TestUser {
     /**
      * Sets up a metadata set.
      *
-     * @param namespace the namespace of the data set.
-     * @param name      the name of the data set.
-     * @param uid       UUID of the data set.
      * @return The generated metadata
      */
     @SuppressWarnings("SameParameterValue")
-    private static ResourceMetadata generateMetadata(
-            final String namespace,
-            final String name,
-            final UUID uid,
+    private static Metadata generateMetadata(
             final OffsetDateTime created
     ) {
         HashMap<String, String> annotations = new HashMap<>(1);
@@ -97,14 +96,7 @@ public class TestUser {
         HashMap<String, String> labels = new HashMap<>();
         labels.put("test", "valid");
 
-        return ResourceMetadata.builder()
-                .withKind(User.KIND)
-                .withApiVersion(User.API_VERSION)
-
-                .withNamespace(namespace)
-                .withName(name)
-                .withUid(uid)
-
+        return Metadata.builder()
                 .withCreated(created)
 
                 .withAnnotations(annotations)
@@ -117,7 +109,7 @@ public class TestUser {
     void shouldReturnDiscordIdWhenUserHasAnDiscordIdSet() {
         MDC.put("test", "read-discord-id");
 
-        assertEquals(DISCORD_ID, DATA.getSpec().orElseThrow().getProperty("discord-id").orElseThrow());
+        assertEquals(DISCORD_ID, DATA.getData().orElseThrow().getProperty("discord-id").orElseThrow());
     }
 
     @Test

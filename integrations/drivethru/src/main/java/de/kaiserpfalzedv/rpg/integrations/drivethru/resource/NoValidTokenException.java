@@ -32,7 +32,7 @@ public class NoValidTokenException extends BaseException {
     }
 
     public NoValidTokenException(final User user) {
-        super(String.format("Could not create a DriveThruRPG token for user '%s/%s'.", user.getNameSpace(), user.getName()));
+        super(String.format("Could not create a DriveThruRPG token for user '%s/%s'.", user.getNamespace(), user.getName()));
     }
 
 }
