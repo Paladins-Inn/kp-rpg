@@ -19,7 +19,7 @@ package de.kaiserpfalzedv.rpg.integrations.discord.JDA;
 
 
 import de.kaiserpfalzedv.rpg.core.discord.DiscordMessageHandler;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.Metadata;
 import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginNotAllowedException;
 import de.kaiserpfalzedv.rpg.integrations.discord.DontWorkOnDiscordEventException;
 import de.kaiserpfalzedv.rpg.integrations.discord.IgnoreBotsException;
@@ -145,16 +145,13 @@ public class DiscordDispatcher extends ListenerAdapter {
     @NotNull
     private Guild generateNewGuildEntry(final String name) {
         Guild result = Guild.builder()
-                .withMetadata(
-                        ResourceMetadata.builder()
-                                .withKind(Guild.KIND)
-                                .withApiVersion(Guild.API_VERSION)
+                .withKind(Guild.KIND)
+                .withApiVersion(Guild.API_VERSION)
+                .withNamespace(Guild.DISCORD_NAMESPACE)
+                .withName(name)
 
-                                .withNamespace(Guild.DISCORD_NAMESPACE)
-                                .withName(name)
+                .withMetadata(Metadata.builder().build())
 
-                                .build()
-                )
                 .build();
 
         result = store.save(result);

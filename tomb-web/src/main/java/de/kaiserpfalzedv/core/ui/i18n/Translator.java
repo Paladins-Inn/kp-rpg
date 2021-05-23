@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.core.ui.i18n;
 
-import com.sun.istack.NotNull;
+import jakarta.validation.constraints.NotNull;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.i18n.I18NProvider;
 import com.vaadin.flow.router.BeforeEnterEvent;

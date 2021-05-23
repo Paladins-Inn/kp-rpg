@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.integrations.discord.guilds;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -32,6 +33,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
  * This data is used for customizing the bot and checking for permissions to use certain functions.
  */
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
+@AllArgsConstructor
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

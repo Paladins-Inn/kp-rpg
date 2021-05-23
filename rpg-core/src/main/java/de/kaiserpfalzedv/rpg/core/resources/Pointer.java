@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.util.UUID;
@@ -36,12 +37,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Getter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Pointer.PointerBuilder.class)
 @JsonPropertyOrder({"kind,apiVersion,namespace,name,selfLink"})
 @Schema(name = "ResourcePointer", description = "A full address of a resource within the system.")
 public class Pointer implements ResourcePointer {
+    @BsonId
+    @Schema(name = "Uid", description = "The unique id.")
+    @Builder.Default
+    @EqualsAndHashCode.Include
+    private final UUID uid = UUID.randomUUID();
+
     @Schema(name = "Kind", description = "The kind (type) of the resource.", required = true)
     private String kind;
 
@@ -54,8 +61,4 @@ public class Pointer implements ResourcePointer {
 
     @Schema(name = "Name", description = "The unique name (within a namespace) of a resource.", required = true)
     private String name;
-
-    @Schema(name = "Uid", description = "The unique id.")
-    @Builder.Default
-    private final UUID uid = UUID.randomUUID();
 }

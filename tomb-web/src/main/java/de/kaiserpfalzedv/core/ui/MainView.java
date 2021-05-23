@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.core.ui;
 
-import com.sun.istack.NotNull;
+import jakarta.validation.constraints.NotNull;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;

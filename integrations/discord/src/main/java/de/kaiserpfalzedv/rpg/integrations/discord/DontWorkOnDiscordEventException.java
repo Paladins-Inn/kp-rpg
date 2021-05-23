@@ -24,7 +24,6 @@ package de.kaiserpfalzedv.rpg.integrations.discord;
  * @since 1.2.0
  */
 public class DontWorkOnDiscordEventException extends DiscordPluginException {
-    @SuppressWarnings("CdiInjectionPointsInspection")
     public DontWorkOnDiscordEventException(final DiscordPlugin plugin) {
         super(plugin, "Event not supported.");
     }

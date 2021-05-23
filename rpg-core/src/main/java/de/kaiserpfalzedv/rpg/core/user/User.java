@@ -21,13 +21,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import de.kaiserpfalzedv.rpg.core.resources.Resource;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

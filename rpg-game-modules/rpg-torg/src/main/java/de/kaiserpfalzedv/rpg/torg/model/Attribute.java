@@ -1,0 +1,52 @@
+/*
+ * Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package de.kaiserpfalzedv.rpg.torg.model;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.sun.xml.bind.v2.schemagen.xmlschema.AttributeType;
+import lombok.*;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+/**
+ * Attribute -- A single attribute of the person.
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.2.0  2021-05-23
+ */
+@Builder(setterPrefix = "with", toBuilder = true)
+@AllArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
+@JsonDeserialize(builder = Attribute.AttributeBuilder.class)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
+@Schema(description = "A single attribute with its values")
+public class Attribute {
+    @Schema(description = "Name of the attribute.")
+    private final AttributeType name;
+
+    @Schema(description = "Base value of the attribute.")
+    private final Integer base;
+
+    @Schema(description = "The modification to the attribute.", nullable = true)
+    private final Integer mod;
+
+    @Schema(description = "The total value of this attribute")
+    private final Integer value;
+}

@@ -25,6 +25,7 @@ import de.kaiserpfalzedv.rpg.core.resources.Pointer;
 import de.kaiserpfalzedv.rpg.core.resources.ResourcePointer;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.beans.Transient;
@@ -37,7 +38,6 @@ import java.util.Optional;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-06
  */
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -57,16 +57,17 @@ public class UserData extends DefaultResourceSpec {
     };
 
     @Builder.Default
-    private final Optional<String> description = Optional.empty();
+    private final String description = null;
     @Builder.Default
-    private final Optional<Pointer> picture = Optional.empty();
+    private final Pointer picture = null;
 
     @Schema(name = "driveThruRPGApiKey", description = "The API Key for DriveThruRPG.")
     @Builder.Default
-    private final Optional<String> driveThruRPGApiKey = Optional.empty();
+    private final String driveThruRPGKey = null;
 
 
     @Transient
+    @BsonIgnore
     @JsonIgnore
     @Override
     public String[] getDefaultProperties() {
@@ -77,6 +78,7 @@ public class UserData extends DefaultResourceSpec {
      * @return The campaigns owned by this user.
      */
     @Transient
+    @BsonIgnore
     @JsonIgnore
     public List<ResourcePointer> getCampaigns() {
         return getResourcePointers(CAMPAIGNS);
@@ -86,8 +88,16 @@ public class UserData extends DefaultResourceSpec {
      * @return The games owned by this user.
      */
     @Transient
+    @BsonIgnore
     @JsonIgnore
     public List<ResourcePointer> getGames() {
         return getResourcePointers(GAMES);
+    }
+
+    @Transient
+    @BsonIgnore
+    @JsonIgnore
+    public Optional<String> getDriveThruRPGApiKey() {
+        return Optional.ofNullable(driveThruRPGKey);
     }
 }

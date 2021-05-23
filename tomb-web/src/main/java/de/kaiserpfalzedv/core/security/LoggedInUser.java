@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.core.security;
 
-import com.sun.istack.NotNull;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 
 /**

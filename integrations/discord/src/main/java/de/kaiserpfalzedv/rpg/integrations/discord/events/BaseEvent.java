@@ -28,9 +28,7 @@ import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -57,13 +55,13 @@ public abstract class BaseEvent {
      * The guild this event was generated in (if any).
      */
     @Schema(name = "guild", description = "The guild the event is generated in (if any)", nullable = true)
-    private Optional<Guild> guild;
+    private Guild guild;
 
     /**
      * The user for who the event has been created.
      */
     @Schema(name = "user", description = "The user for whom the event has been created (if any)", nullable = true)
-    private Optional<User> user;
+    private User user;
 
     /**
      * The timestamp of this event.

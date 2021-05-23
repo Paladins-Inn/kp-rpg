@@ -59,7 +59,7 @@ public class RollHistory extends Resource<SerializableList<RollHistoryEntry>> {
     @Transient
     public List<RollHistoryEntry> getList() {
         try {
-            return getSpec().orElseThrow();
+            return getData().orElseThrow();
         } catch (NoSuchElementException e) {
             return new ArrayList<>();
         }

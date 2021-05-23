@@ -17,15 +17,14 @@
 
 package de.kaiserpfalzedv.rpg.core.user;
 
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.Metadata;
 import de.kaiserpfalzedv.rpg.core.store.OptimisticLockStoreException;
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import java.time.Clock;
@@ -42,9 +41,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-01-31
  */
+@Slf4j
 public class TestMemoryUserStore {
-    private static final Logger LOG = LoggerFactory.getLogger(TestMemoryUserStore.class);
-
     private static final UUID DATA_UID = UUID.randomUUID();
     private static final String DATA_NAMESPACE = "testNS";
     private static final String DATA_NAME = "testName";
@@ -58,28 +56,42 @@ public class TestMemoryUserStore {
     private static final String OTHER_API_KEY = "other-api-key";
 
     private static final User DATA = User.builder()
+            .withKind(User.KIND)
+            .withApiVersion(User.API_VERSION)
+            .withNamespace(DATA_NAMESPACE)
+            .withName(DATA_NAME)
+            .withUid(DATA_UID)
+            .withGeneration(0L)
+
             .withMetadata(
-                    generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 0L)
+                    generateMetadata(DATA_CREATED, null)
             )
-            .withSpec(Optional.of(
+            .withSpec(
                     UserData.builder()
-                            .withDriveThruRPGApiKey(Optional.of(DATA_API_KEY))
+                            .withDriveThruRPGKey(DATA_API_KEY)
                             .withProperties(new HashMap<>())
                             .build()
-            ))
+            )
             .build();
 
     private static final User OTHER =
             User.builder()
+                    .withKind(User.KIND)
+                    .withApiVersion(User.API_VERSION)
+                    .withNamespace(OTHER_NAMESPACE)
+                    .withName(OTHER_NAME)
+                    .withUid(OTHER_UID)
+                    .withGeneration(0L)
+
                     .withMetadata(
-                            generateMetadata(OTHER_NAMESPACE, OTHER_NAME, OTHER_UID, OTHER_CREATED, null, 0L)
+                            generateMetadata(OTHER_CREATED, null)
                     )
-                    .withSpec(Optional.of(
+                    .withSpec(
                             UserData.builder()
-                                    .withDriveThruRPGApiKey(Optional.of(OTHER_API_KEY))
+                                    .withDriveThruRPGKey(OTHER_API_KEY)
                                     .withProperties(new HashMap<>())
                                     .build()
-                    ))
+                    )
                     .build();
 
 
@@ -106,7 +118,7 @@ public class TestMemoryUserStore {
         sut.save(DATA);
 
         Optional<User> result = sut.findByNameSpaceAndName(DATA_NAMESPACE, DATA_NAME);
-        LOG.trace("result: {}", result);
+        log.trace("result: {}", result);
 
         assertTrue(result.isPresent(), "The data should have been stored!");
         assertEquals(DATA, result.get());
@@ -121,42 +133,26 @@ public class TestMemoryUserStore {
         sut.save(DATA); // update data
 
         Optional<User> result = sut.findByNameSpaceAndName(DATA_NAMESPACE, DATA_NAME);
-        LOG.trace("result: {}", result);
+        log.trace("result: {}", result);
 
         assertTrue(result.isPresent(), "The data should have been stored!");
-        assertNotEquals(DATA, result.get());
+        assertNotEquals(DATA.getGeneration(), result.get().getGeneration());
 
-        assertEquals(1L, result.get().getMetadata().getGeneration());
+        assertEquals(1L, result.get().getGeneration());
     }
 
     /**
      * Sets up a metadata set.
      *
-     * @param namespace the namespace of the data set.
-     * @param name      the name of the data set.
-     * @param uid       UUID of the data set.
      * @return The generated metadata
      */
-    private static ResourceMetadata generateMetadata(
-            @NotNull final String namespace,
-            @NotNull final String name,
-            @NotNull final UUID uid,
+    private static Metadata generateMetadata(
             @NotNull final OffsetDateTime created,
-            @SuppressWarnings("SameParameterValue") final OffsetDateTime deleted,
-            final Long generation
+            @SuppressWarnings("SameParameterValue") final OffsetDateTime deleted
     ) {
-        return ResourceMetadata.builder()
-                .withKind(User.KIND)
-                .withApiVersion(User.API_VERSION)
-
-                .withNamespace(namespace)
-                .withName(name)
-                .withUid(uid)
-
+        return Metadata.builder()
                 .withCreated(created)
-                .withDeleted(Optional.ofNullable(deleted))
-                .withGeneration(generation)
-
+                .withDeleted(deleted)
                 .build();
     }
 
@@ -257,17 +253,8 @@ public class TestMemoryUserStore {
         MDC.put("test", "throw-optimistic-lock-exception");
 
         sut.save(
-                User.builder()
-                        .withMetadata(
-                                generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 100L)
-
-                        )
-                        .withSpec(Optional.of(
-                                UserData.builder()
-                                        .withDriveThruRPGApiKey(DATA.getSpec().orElseThrow().getDriveThruRPGApiKey())
-                                        .withProperties(DATA.getSpec().get().getProperties())
-                                        .build()
-                        ))
+                DATA.toBuilder()
+                        .withGeneration(100L)
                         .build()
         );
 

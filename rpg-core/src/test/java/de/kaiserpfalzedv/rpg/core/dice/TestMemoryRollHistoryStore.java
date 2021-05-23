@@ -21,7 +21,7 @@ import de.kaiserpfalzedv.rpg.core.dice.history.MemoryRollHistoryStore;
 import de.kaiserpfalzedv.rpg.core.dice.history.RollHistory;
 import de.kaiserpfalzedv.rpg.core.dice.history.RollHistoryEntry;
 import de.kaiserpfalzedv.rpg.core.dice.history.RollHistoryStoreService;
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.Metadata;
 import de.kaiserpfalzedv.rpg.core.resources.SerializableList;
 import de.kaiserpfalzedv.rpg.core.store.OptimisticLockStoreException;
 import de.kaiserpfalzedv.rpg.core.user.User;
@@ -52,10 +52,17 @@ public class TestMemoryRollHistoryStore {
     private static final SerializableList<RollHistoryEntry> ENTRIES = new SerializableList<>();
 
     private static final RollHistory DATA = RollHistory.builder()
+            .withKind(User.KIND)
+            .withApiVersion(User.API_VERSION)
+            .withNamespace(DATA_NAMESPACE)
+            .withName(DATA_NAME)
+            .withUid(DATA_UID)
+            .withGeneration(0L)
+
             .withMetadata(
-                    generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 0L)
+                    generateMetadata(DATA_CREATED, null)
             )
-            .withSpec(Optional.of(ENTRIES))
+            .withSpec(ENTRIES)
             .build();
 
 
@@ -67,32 +74,16 @@ public class TestMemoryRollHistoryStore {
     /**
      * Sets up a metadata set.
      *
-     * @param namespace the namespace of the data set.
-     * @param name      the name of the data set.
-     * @param uid       UUID of the data set.
      * @return The generated metadata
      */
     @SuppressWarnings("SameParameterValue")
-    private static ResourceMetadata generateMetadata(
-            final String namespace,
-            final String name,
-            final UUID uid,
+    private static Metadata generateMetadata(
             final OffsetDateTime created,
-            final OffsetDateTime deleted,
-            final Long generation
+            final OffsetDateTime deleted
     ) {
-        return ResourceMetadata.builder()
-                .withKind(User.KIND)
-                .withApiVersion(User.API_VERSION)
-
-                .withNamespace(namespace)
-                .withName(name)
-                .withUid(uid)
-
+        return Metadata.builder()
                 .withCreated(created)
-                .withDeleted(Optional.ofNullable(deleted))
-                .withGeneration(generation)
-
+                .withDeleted(deleted)
                 .build();
     }
 
@@ -135,9 +126,9 @@ public class TestMemoryRollHistoryStore {
     void shouldSaveNewDataWhenDataIsAlreadyStoredYet() {
         MDC.put("test", "update-stored-data");
 
-        sut.save(DATA); // store data first time
+        RollHistory data = sut.save(DATA); // store data first time
 
-        sut.save(DATA); // update data
+        sut.save(data); // update data
 
         Optional<RollHistory> result = sut.findByNameSpaceAndName(DATA_NAMESPACE, DATA_NAME);
         log.trace("result: {}", result);
@@ -145,7 +136,7 @@ public class TestMemoryRollHistoryStore {
         assertTrue(result.isPresent(), "The data should have been stored!");
         assertNotEquals(DATA, result.get());
 
-        assertEquals(1L, result.get().getMetadata().getGeneration());
+        assertEquals(1L, result.get().getGeneration());
     }
 
     @Test
@@ -153,8 +144,8 @@ public class TestMemoryRollHistoryStore {
         MDC.put("test", "throw-optimistic-lock-exception");
 
         sut.save(
-                RollHistory.builder()
-                        .withMetadata(generateMetadata(DATA_NAMESPACE, DATA_NAME, DATA_UID, DATA_CREATED, null, 100L))
+                DATA.toBuilder()
+                        .withGeneration(1L)
                         .build()
         );
 

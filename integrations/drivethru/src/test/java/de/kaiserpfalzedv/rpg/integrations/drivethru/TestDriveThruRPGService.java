@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
-import de.kaiserpfalzedv.rpg.core.resources.ResourceMetadata;
+import de.kaiserpfalzedv.rpg.core.resources.Metadata;
 import de.kaiserpfalzedv.rpg.core.user.InvalidUserException;
 import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.core.user.UserData;
@@ -55,22 +55,22 @@ import static org.junit.jupiter.api.Assertions.fail;
 @Slf4j
 public class TestDriveThruRPGService {
     private static final User DEFAULT_USER = User.builder()
+            .withKind(User.KIND)
+            .withApiVersion(User.API_VERSION)
+            .withNamespace("discord")
+            .withName("test#1234")
             .withMetadata(
-                    ResourceMetadata.builder()
-                            .withKind(User.KIND)
-                            .withApiVersion(User.API_VERSION)
-                            .withNamespace("discord")
-                            .withName("test#1234")
+                    Metadata.builder()
                             .withCreated(OffsetDateTime.now(Clock.systemUTC()))
                             .build()
             )
-            .withSpec(Optional.of(
+            .withSpec(
                     UserData.builder()
                             .withProperties(new HashMap<>())
-                            .withDescription(Optional.of("Test-user for API calls"))
-                            .withDriveThruRPGApiKey(Optional.of("API-KEY"))
+                            .withDescription("Test-user for API calls")
+                            .withDriveThruRPGKey("API-KEY")
                             .build()
-            ))
+            )
             .build();
 
     private final DriveThruRPGService sut;

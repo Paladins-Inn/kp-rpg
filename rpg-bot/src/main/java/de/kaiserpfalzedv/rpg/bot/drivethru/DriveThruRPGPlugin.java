@@ -109,8 +109,8 @@ public class DriveThruRPGPlugin implements DiscordMessageChannelPlugin {
 
     private String loadGuildPrefix(Guild guild) {
         String prefix = DEFAULT_GUILD_PREFIX;
-        if (guild.getSpec().isPresent()) {
-            prefix = guild.getSpec().get().getPrefix();
+        if (guild.getData().isPresent()) {
+            prefix = guild.getData().get().getPrefix();
             if (prefix == null) {
                 prefix = "tb!";
             }

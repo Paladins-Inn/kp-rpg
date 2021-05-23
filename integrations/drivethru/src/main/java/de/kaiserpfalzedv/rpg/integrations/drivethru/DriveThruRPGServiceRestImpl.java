@@ -68,16 +68,16 @@ public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
     @Override
     @CacheResult(cacheName = "drivethrurpg-token")
     public Token getToken(final User user) throws InvalidUserException, NoDriveThruRPGAPIKeyDefinedException, NoValidTokenException {
-        if (user.getSpec().isEmpty()) {
+        if (user.getData().isEmpty()) {
             throw new InvalidUserException(user);
         }
-        UserData u = user.getSpec().get();
+        UserData u = user.getSpec();
 
         if (u.getDriveThruRPGApiKey().isEmpty()) {
             throw new NoDriveThruRPGAPIKeyDefinedException(user);
         }
 
-        log.trace("Loading access token for user='{}/{}', apiKey='{}'", user.getNameSpace(), user.getName(), u.getDriveThruRPGApiKey().get());
+        log.trace("Loading access token for user='{}/{}', apiKey='{}'", user.getNamespace(), user.getName(), u.getDriveThruRPGApiKey().get());
 
         LinkedHashMap<String, String> response = client.getToken(u.getDriveThruRPGApiKey().get()).getMessage();
         log.trace("Token loaded. token={}", response);
