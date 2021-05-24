@@ -1,0 +1,80 @@
+## This is basic continuous integration build for your Quarkus application.
+
+name: Release
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  java-build:
+    runs-on: [ java ]
+    steps:
+      - name: Checkout sources
+        id: checkout-sources
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        id: setup-java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Build
+        id: build-java
+        run: mvn package -B -Pproduction
+
+      - name: Set Image name and version
+        run: |
+          echo "IMAGE=$(cat target/classes/Dockerfile | grep APP_NAME= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
+          echo "VERSION=$(cat target/classes/Dockerfile | grep APP_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
+
+      - name: Upload Artifact
+        id: upload-jar
+        uses: actions/upload-artifact@v2
+        with:
+          name: dci
+          path: |
+            rpg-bot/target/app-runner.jar
+            rpg-bot/target/Dockerfile
+          retention-days: 1
+
+
+  container-build:
+    runs-on: [ podman ]
+    needs: java-build
+    steps:
+      - name: checkout sources
+        id: checkout-sources
+        uses: actions/checkout@v2
+
+      - name: retrieve jar and dockerfile
+        id: retrieve-jar
+        uses: actions/download-artifact@v2
+        with:
+          name: dci
+
+      - name: Set Image name and version
+        run: |
+          echo "IMAGE=$(cat classes/Dockerfile | grep APP_NAME= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
+          echo "VERSION=$(cat classes/Dockerfile | grep APP_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
+
+      - name: Buildah
+        id: build-container
+        uses: redhat-actions/buildah-build@v2
+        with:
+          image: ${{ env.IMAGE }}
+          tags: ${{ env.VERSION }} latest ${{ github.sha }}
+          dockerfiles: |
+            ./Dockerfile
+          context: ./
+
+      - name: Push To quay
+        id: push-to-quay
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ env.IMAGE }}
+          tags: ${{ env.VERSION }} latest ${{ github.sha }}
+          registry: ${{ secrets.QUAY_REPO }}
+          username: ${{ secrets.QUAY_USER }}
+          password: ${{ secrets.QUAY_TOKEN }}
