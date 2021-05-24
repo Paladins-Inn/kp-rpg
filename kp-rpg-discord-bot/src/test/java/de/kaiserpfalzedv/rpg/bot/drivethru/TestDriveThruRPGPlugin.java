@@ -17,11 +17,11 @@
 
 package de.kaiserpfalzedv.rpg.bot.drivethru;
 
-import de.kaiserpfalzedv.rpg.core.resources.Metadata;
-import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildData;
-import de.kaiserpfalzedv.rpg.test.discord.*;
+import de.kaiserpfalzedv.commons.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.user.UserStoreService;
+import de.kaiserpfalzedv.commons.discord.guilds.Guild;
+import de.kaiserpfalzedv.commons.discord.guilds.GuildData;
+import de.kaiserpfalzedv.commons.test.discord.*;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -122,7 +122,7 @@ public class TestDriveThruRPGPlugin {
 
         sut.workOnMessage(GUILD, input);
 
-        Optional<de.kaiserpfalzedv.rpg.core.user.User> user = userStore.findByNameSpaceAndName(Guild.DISCORD_NAMESPACE, DISCORD_USER.getName());
+        Optional<de.kaiserpfalzedv.commons.core.user.User> user = userStore.findByNameSpaceAndName(Guild.DISCORD_NAMESPACE, DISCORD_USER.getName());
         log.debug("user={}", user);
 
         user.ifPresentOrElse(
@@ -151,7 +151,7 @@ public class TestDriveThruRPGPlugin {
 
         sut.workOnMessage(GUILD, input);
 
-        Optional<de.kaiserpfalzedv.rpg.core.user.User> user = userStore.findByNameSpaceAndName(Guild.DISCORD_NAMESPACE, DISCORD_USER.getName());
+        Optional<de.kaiserpfalzedv.commons.core.user.User> user = userStore.findByNameSpaceAndName(Guild.DISCORD_NAMESPACE, DISCORD_USER.getName());
 
         if (user.isPresent() && user.get().getData().isPresent() && user.get().getData().get().getDriveThruRPGApiKey().isPresent()) {
             assertNotEquals(INVALID_DISCORD_API_KEY, user.orElseThrow().getData().orElseThrow().getDriveThruRPGApiKey().orElseThrow());

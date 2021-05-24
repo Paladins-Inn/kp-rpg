@@ -17,11 +17,12 @@
 
 package de.kaiserpfalzedv.rpg.store;
 
-import de.kaiserpfalzedv.rpg.core.store.DuplicateStoreException;
-import de.kaiserpfalzedv.rpg.core.store.OptimisticLockStoreException;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildData;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildStoreService;
+import de.kaiserpfalzedv.commons.core.mongodb.BaseMongoRepository;
+import de.kaiserpfalzedv.commons.core.store.DuplicateStoreException;
+import de.kaiserpfalzedv.commons.core.store.OptimisticLockStoreException;
+import de.kaiserpfalzedv.commons.discord.guilds.Guild;
+import de.kaiserpfalzedv.commons.discord.guilds.GuildData;
+import de.kaiserpfalzedv.commons.discord.guilds.GuildStoreService;
 import io.quarkus.arc.AlternativePriority;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;

@@ -17,25 +17,20 @@
 
 package de.kaiserpfalzedv.rpg.core.api;
 
-import lombok.Getter;
+import de.kaiserpfalzedv.commons.core.api.BaseSystemException;
 import lombok.ToString;
 
+import java.util.StringJoiner;
 import java.util.UUID;
 
 /**
- * The base class for all checked exceptions of the KP RPG Services.
+ * The base class for all unchecked exceptions of the KP RPG Services
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-08
  */
-@Getter
-@ToString
-public abstract class BaseException extends Exception {
-    /**
-     * A unique ID for this exception.
-     */
-    private final UUID uuid = UUID.randomUUID();
-
+@ToString(callSuper = true)
+public abstract class RPGBaseSystemException extends BaseSystemException {
     /**
      * Constructs a new exception with the specified detail message.  The
      * cause is not initialized, and may subsequently be initialized by
@@ -46,7 +41,7 @@ public abstract class BaseException extends Exception {
      * @since 1.0.0
      */
     @SuppressWarnings("CdiInjectionPointsInspection")
-    public BaseException(final String message) {
+    public RPGBaseSystemException(final String message) {
         super(message);
     }
 
@@ -64,7 +59,7 @@ public abstract class BaseException extends Exception {
      *         unknown.)
      * @since  1.0.0
      */
-    public BaseException(final String message, final Throwable cause) {
+    public RPGBaseSystemException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
@@ -82,7 +77,7 @@ public abstract class BaseException extends Exception {
      *         unknown.)
      * @since  1.0.0
      */
-    public BaseException(final Throwable cause) {
+    public RPGBaseSystemException(final Throwable cause) {
         super(cause);
     }
 
@@ -99,7 +94,7 @@ public abstract class BaseException extends Exception {
      *                           be writable
      * @since 1.0.0
      */
-    public BaseException(final String message, final Throwable cause, final boolean enableSuppression, final boolean writableStackTrace) {
+    public RPGBaseSystemException(final String message, final Throwable cause, final boolean enableSuppression, final boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

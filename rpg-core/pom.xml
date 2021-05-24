@@ -33,6 +33,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>de.kaiserpfalz-edv.commons</groupId>
+            <artifactId>kp-commons-core</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>net.objecthunter</groupId>
             <artifactId>exp4j</artifactId>
         </dependency>

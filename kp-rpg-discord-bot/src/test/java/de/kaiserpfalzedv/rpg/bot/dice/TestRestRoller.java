@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.bot.dice;
 
-import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
+import de.kaiserpfalzedv.commons.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;

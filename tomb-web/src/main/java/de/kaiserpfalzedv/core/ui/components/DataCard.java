@@ -82,8 +82,8 @@ import static com.vaadin.flow.component.Unit.PIXELS;
  * @since 0.1.0  2021-03-28
  */
 @SuppressWarnings("unused")
+@Slf4j
 public class DataCard extends HorizontalLayout implements Serializable, AutoCloseable, LocaleChangeObserver, TranslatableComponent {
-    private static final Logger LOG = LoggerFactory.getLogger(DataCard.class);
     private final HashSet<TranslatableComponent> translatables = new HashSet<>();
     private Locale locale;
     private Component logo;
@@ -341,7 +341,7 @@ public class DataCard extends HorizontalLayout implements Serializable, AutoClos
                 try {
                     ((AutoCloseable) c).close();
                 } catch (Exception e) {
-                    LOG.error("Problem while closing the component.", e);
+                    log.error("Problem while closing the component.", e);
                 }
             }
         }
@@ -350,7 +350,7 @@ public class DataCard extends HorizontalLayout implements Serializable, AutoClos
 
     @Override
     public void localeChange(LocaleChangeEvent event) {
-        LOG.trace("Locale change event. component={}, locale={}", this, event.getLocale());
+        log.trace("Locale change event. component={}, locale={}", this, event.getLocale());
 
         setLocale(event.getLocale());
         translate();
@@ -358,7 +358,7 @@ public class DataCard extends HorizontalLayout implements Serializable, AutoClos
 
     @Override
     public void translate() {
-        LOG.trace("Translate DataCard. card={}, locale={}", this, locale);
+        log.trace("Translate DataCard. card={}, locale={}", this, locale);
 
         for (TranslatableComponent t : translatables) {
             t.translate();
@@ -380,7 +380,7 @@ public class DataCard extends HorizontalLayout implements Serializable, AutoClos
 
     @Override
     public void close() throws Exception {
-        LOG.debug("Closing card. card={}", this);
+        log.debug("Closing card. card={}", this);
 
         dataHeader.removeAll();
         dataDescription.removeAll();

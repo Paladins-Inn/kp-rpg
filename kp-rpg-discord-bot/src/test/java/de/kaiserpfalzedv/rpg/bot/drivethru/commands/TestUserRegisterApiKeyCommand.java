@@ -17,24 +17,23 @@
 
 package de.kaiserpfalzedv.rpg.bot.drivethru.commands;
 
-import de.kaiserpfalzedv.rpg.core.resources.Metadata;
-import de.kaiserpfalzedv.rpg.core.user.User;
-import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginContext;
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginException;
-import de.kaiserpfalzedv.rpg.integrations.discord.fake.FakeDiscordMessageChannelPlugin;
-import de.kaiserpfalzedv.rpg.integrations.discord.fake.FakeMessageChannel;
-import de.kaiserpfalzedv.rpg.integrations.discord.fake.FakeUser;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
-import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
+import de.kaiserpfalzedv.commons.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.user.User;
+import de.kaiserpfalzedv.commons.core.user.UserStoreService;
+import de.kaiserpfalzedv.commons.discord.DiscordPluginContext;
+import de.kaiserpfalzedv.commons.discord.DiscordPluginException;
+import de.kaiserpfalzedv.commons.discord.fake.FakeDiscordMessageChannelPlugin;
+import de.kaiserpfalzedv.commons.discord.fake.FakeMessageChannel;
+import de.kaiserpfalzedv.commons.discord.fake.FakeUser;
+import de.kaiserpfalzedv.commons.discord.guilds.Guild;
+import de.kaiserpfalzedv.commons.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.ChannelType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import javax.inject.Inject;
@@ -45,8 +44,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBResource.class)
+@Slf4j
 public class TestUserRegisterApiKeyCommand {
-    private static final Logger LOG = LoggerFactory.getLogger(TestUserRegisterApiKeyCommand.class);
     private static final Guild GUILD = Guild.builder()
             .withKind(Guild.KIND)
             .withApiVersion(Guild.API_VERSION)
@@ -112,7 +111,7 @@ public class TestUserRegisterApiKeyCommand {
         sut.execute(ctx);
 
         Optional<User> user = userStore.findByNameSpaceAndName(Guild.DISCORD_NAMESPACE, "klenkes74#0355");
-        LOG.debug("result={}", user);
+        log.debug("result={}", user);
 
         assertTrue(user.isPresent(), "No user found!");
         assertTrue(user.get().getData().isPresent(), "No spec in user!");
@@ -135,7 +134,7 @@ public class TestUserRegisterApiKeyCommand {
 
             fail("There should be an exception!");
         } catch (DiscordPluginException e) {
-            LOG.debug("Found expected exception: '" + e.getMessage() + "'", e);
+            log.debug("Found expected exception: '" + e.getMessage() + "'", e);
         }
     }
 

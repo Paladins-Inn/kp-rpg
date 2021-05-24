@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.core.dice.history;
 
-import de.kaiserpfalzedv.rpg.core.store.GenericStoreService;
+import de.kaiserpfalzedv.commons.core.store.GenericStoreService;
 import io.quarkus.arc.AlternativePriority;
 
 import javax.enterprise.context.ApplicationScoped;

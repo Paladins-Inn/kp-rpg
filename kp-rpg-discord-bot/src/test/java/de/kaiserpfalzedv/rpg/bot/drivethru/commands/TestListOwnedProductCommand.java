@@ -17,21 +17,21 @@
 
 package de.kaiserpfalzedv.rpg.bot.drivethru.commands;
 
-import de.kaiserpfalzedv.rpg.core.resources.Metadata;
-import de.kaiserpfalzedv.rpg.core.user.User;
-import de.kaiserpfalzedv.rpg.core.user.UserData;
-import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginContext;
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginException;
-import de.kaiserpfalzedv.rpg.integrations.discord.fake.FakeDiscordMessageChannelPlugin;
-import de.kaiserpfalzedv.rpg.integrations.discord.fake.FakeMessageChannel;
-import de.kaiserpfalzedv.rpg.integrations.discord.fake.FakeUser;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.GuildData;
+import de.kaiserpfalzedv.commons.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.user.User;
+import de.kaiserpfalzedv.commons.core.user.UserData;
+import de.kaiserpfalzedv.commons.core.user.UserStoreService;
+import de.kaiserpfalzedv.commons.discord.DiscordPluginContext;
+import de.kaiserpfalzedv.commons.discord.DiscordPluginException;
+import de.kaiserpfalzedv.commons.discord.fake.FakeDiscordMessageChannelPlugin;
+import de.kaiserpfalzedv.commons.discord.fake.FakeMessageChannel;
+import de.kaiserpfalzedv.commons.discord.fake.FakeUser;
+import de.kaiserpfalzedv.commons.discord.guilds.Guild;
+import de.kaiserpfalzedv.commons.discord.guilds.GuildData;
+import de.kaiserpfalzedv.commons.test.discord.DiscordMessageHandlerMock;
+import de.kaiserpfalzedv.commons.test.mongodb.MongoDBResource;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.DriveThruRPGService;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.DriveThruRPGServiceMock;
-import de.kaiserpfalzedv.rpg.test.discord.DiscordMessageHandlerMock;
-import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.extern.slf4j.Slf4j;

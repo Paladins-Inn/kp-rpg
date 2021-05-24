@@ -17,8 +17,9 @@
 
 package de.kaiserpfalzedv.rpg.bot.drivethru;
 
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPlugin;
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginException;
+
+import de.kaiserpfalzedv.commons.discord.DiscordPlugin;
+import de.kaiserpfalzedv.commons.discord.DiscordPluginException;
 
 /**
  * InvalidDriveThruRPGTokenException -- The API KEY given is no valid DriveThruRPG api key.

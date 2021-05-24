@@ -41,8 +41,8 @@ import java.util.Optional;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 0.1.0  2021-04-11
  */
+@Slf4j
 public abstract class RpgForm<T extends Resource> extends Composite<Div> implements LocaleChangeObserver, TranslatableComponent, Serializable, AutoCloseable {
-    private static final Logger LOG = LoggerFactory.getLogger(RpgForm.class);
     protected final LoggedInUser user;
     protected final FormLayout form = new FormLayout();
     protected T data;
@@ -82,7 +82,7 @@ public abstract class RpgForm<T extends Resource> extends Composite<Div> impleme
     }
 
     public void setData(T data) {
-        LOG.debug("Set data. old={}, new={}", this.data, data);
+        log.debug("Set data. old={}, new={}", this.data, data);
 
         this.oldData = this.data;
         this.data = data;
@@ -101,14 +101,14 @@ public abstract class RpgForm<T extends Resource> extends Composite<Div> impleme
 
     @Override
     public void fireEvent(ComponentEvent<?> event) {
-        LOG.trace("Fire event. event={}", event);
+        log.trace("Fire event. event={}", event);
 
         getEventBus().fireEvent(event);
     }
 
     @Override
     public void localeChange(LocaleChangeEvent event) {
-        LOG.trace("Change locale event. locale={}", event.getLocale());
+        log.trace("Change locale event. locale={}", event.getLocale());
 
         setLocale(event.getLocale());
     }
@@ -116,7 +116,7 @@ public abstract class RpgForm<T extends Resource> extends Composite<Div> impleme
     @Override
     public void setLocale(Locale locale) {
         if (this.locale != null && this.locale.equals(locale)) {
-            LOG.debug("Locale has not changed. Ignoring event. locale={}", this.locale);
+            log.debug("Locale has not changed. Ignoring event. locale={}", this.locale);
             return;
         }
 
@@ -129,14 +129,14 @@ public abstract class RpgForm<T extends Resource> extends Composite<Div> impleme
         try {
             return super.getTranslation(key);
         } catch (NullPointerException e) {
-            LOG.warn("Can't call translator from vaadin: {}", e.getMessage());
+            log.warn("Can't call translator from vaadin: {}", e.getMessage());
             return "!" + key;
         }
     }
 
     @Override
     public void close() throws Exception {
-        LOG.debug("Closing form.");
+        log.debug("Closing form.");
 
         getContent().removeAll();
         form.removeAll();

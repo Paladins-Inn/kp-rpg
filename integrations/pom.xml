@@ -33,9 +33,7 @@
     <description>Integration in external services.</description>
 
     <modules>
-        <module>discord</module>
         <module>drivethru</module>
         <module>datastore-mongodb</module>
-        <module>google</module>
     </modules>
 </project>

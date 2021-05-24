@@ -32,8 +32,6 @@ import javax.servlet.http.HttpServletResponse;
  * @since 0.1.0  2021-03-26
  */
 public class CustomRequestCache extends HttpSessionRequestCache {
-    private static final Logger LOG = LoggerFactory.getLogger(CustomRequestCache.class);
-
     /**
      * {@inheritDoc}
      * <p>

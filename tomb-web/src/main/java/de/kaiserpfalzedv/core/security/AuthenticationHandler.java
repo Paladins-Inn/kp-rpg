@@ -47,8 +47,8 @@ import static java.time.ZoneOffset.UTC;
  * @since 0.1.0  2021-04-05
  */
 @Service
+@Sfl4j
 public class AuthenticationHandler extends SavedRequestAwareAuthenticationSuccessHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(AuthenticationHandler.class);
 
     private final PersonRepository repository;
     private final String defaultLocale;
@@ -78,7 +78,7 @@ public class AuthenticationHandler extends SavedRequestAwareAuthenticationSucces
 
         Person user = repository.findByUsername(authentication.getName());
         if (user == null) {
-            LOG.error("Authentication problem. User not found. authenticationName='{}'", authentication.getName());
+            log.error("Authentication problem. User not found. authenticationName='{}'", authentication.getName());
             return;
         }
 
@@ -86,10 +86,10 @@ public class AuthenticationHandler extends SavedRequestAwareAuthenticationSucces
 
         repository.save(user);
 
-        LOG.debug("Saved login. user='{}', lastLogin={}", authentication.getName(), user.getStatus().getLastLogin());
+        log.debug("Saved login. user='{}', lastLogin={}", authentication.getName(), user.getStatus().getLastLogin());
 
         VaadinSession.getCurrent().setLocale(user.getLocale());
-        LOG.debug("Set locale. locale={}", user.getLocale());
+        log.debug("Set locale. locale={}", user.getLocale());
 
         super.onAuthenticationSuccess(request, response, authentication);
     }

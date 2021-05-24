@@ -65,9 +65,9 @@ import static com.vaadin.flow.component.Unit.PIXELS;
 @Route(RegistrationView.ROUTE + "/:token?")
 @I18nPageTitle("registration.caption")
 @CssImport("./views/edit-view.css")
+@Slf4j
 public class RegistrationView extends TorgScreen implements BeforeEnterObserver, LocaleChangeObserver, TranslatableComponent {
     public static final String ROUTE = "register";
-    private static final Logger LOG = LoggerFactory.getLogger(RegistrationView.class);
     @Value("${application.registration.redirect-url}")
     public String redirectPage = "https://www.ritter-der-stuerme.de/user-registered";
 
@@ -238,7 +238,7 @@ public class RegistrationView extends TorgScreen implements BeforeEnterObserver,
             locale = VaadinSession.getCurrent().getLocale();
         }
 
-        LOG.trace("Translating form. locale={}", locale.getDisplayName());
+        log.trace("Translating form. locale={}", locale.getDisplayName());
 
         title.setText(getTranslation("registration.caption"));
         description.setText(getTranslation("registration.help"));
@@ -266,11 +266,11 @@ public class RegistrationView extends TorgScreen implements BeforeEnterObserver,
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         Optional<String> tokenString = event.getRouteParameters().get("token");
-        LOG.trace("confirming new user. token={}", tokenString);
+        log.trace("confirming new user. token={}", tokenString);
 
         tokenString.ifPresent(token -> {
             try {
-                LOG.info("Confirming token. token={}", token);
+                log.info("Confirming token. token={}", token);
 
                 ConfirmationTokenEvent cte = new ConfirmationTokenEvent(this, UUID.fromString(token));
                 fireEvent(cte);
@@ -300,7 +300,7 @@ public class RegistrationView extends TorgScreen implements BeforeEnterObserver,
     @Override
     public void setLocale(Locale locale) {
         if (this.locale != null && this.locale.equals(locale)) {
-            LOG.debug("Locale not changed. current={}, new={}", this.locale.getDisplayName(), locale.getDisplayName());
+            log.debug("Locale not changed. current={}, new={}", this.locale.getDisplayName(), locale.getDisplayName());
             return;
         }
 

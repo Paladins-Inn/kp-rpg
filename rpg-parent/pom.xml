@@ -48,8 +48,8 @@
     </licenses>
 
     <organization>
-        <name>Kaiserpfalz EDV-Service</name>
-        <url>https://www.kaiserpfalz-edv.de</url>
+        <name>Paladins Inn</name>
+        <url>https://www.paladins-inn.de</url>
     </organization>
 
     <developers>
@@ -66,23 +66,16 @@
                 <picUrl>https://secure.gravatar.com/avatar/3b5c4008dc30b266341632f9931aab56</picUrl>
             </properties>
 
-            <organization>Kaiserpfalz EDV-Service</organization>
-            <organizationUrl>https://www.kaiserpfalz-edv.de</organizationUrl>
+            <organization>Paladins Inn</organization>
+            <organizationUrl>https://www.paladins-inn.de</organizationUrl>
             <timezone>Europe/Berlin</timezone>
         </developer>
     </developers>
 
     <issueManagement>
-        <url>https://github.com/klenkes74/kp-rpg/issues</url>
+        <url>https://github.com/Paladins-Inn/kp-rpg/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
-
-    <scm>
-        <url>https://github.com/klenkes74/kp-rpg</url>
-        <connection>scm:git:git://github.com/klenkes74/kp-rpg.git</connection>
-        <developerConnection>scm:git:git@github.com:klenkes74/kp-rpg.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
 
     <dependencyManagement>
         <dependencies>
@@ -113,6 +106,7 @@
         <skip.site>false</skip.site>
 
         <war.output.directory>undefined</war.output.directory>
+        <delombok.output>${project.build.directory}/delombok</delombok.output>
 
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.source>11</maven.compiler.source>
@@ -135,6 +129,7 @@
         <maven-site-plugin.version>3.9.1</maven-site-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
+        <lombok-maven-plugin.version>1.18.20.0</lombok-maven-plugin.version>
     </properties>
 
     <reporting>
@@ -201,11 +196,30 @@
                 </plugin>
 
                 <plugin>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok-maven-plugin</artifactId>
+                    <version>${lombok-maven-plugin.version}</version>
+                    <configuration>
+                        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                        <outputDirectory>${delombok.output}</outputDirectory>
+                        <addOutputDirectory>false</addOutputDirectory>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>delombok</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>${maven-javadoc-plugin.version}</version>
                     <configuration>
                         <skip>${skip.javadoc}</skip>
+                        <sourcepath>${delombok.output}</sourcepath>
                     </configuration>
                     <executions>
                         <execution>
@@ -600,15 +614,59 @@
         </profile>
 
         <profile>
-            <id>release</id>
+            <id>helm</id>
+
             <activation>
-                <property>
-                    <name>release</name>
-                </property>
+                <file>
+                    <exists>src/main/helm</exists>
+                </file>
             </activation>
 
             <build>
+                <resources>
+                    <resource>
+                        <filtering>true</filtering>
+                        <directory>src/main/helm</directory>
+                        <excludes>
+                            <exclude>**/*.docx</exclude>
+                            <exclude>**/*.xlsx</exclude>
+                            <exclude>**/*.zip</exclude>
+                            <exclude>**/*.tgz</exclude>
+                            <exclude>**/*.png</exclude>
+                            <exclude>**/*.jpg</exclude>
+                            <exclude>**/*.gpg</exclude>
+                            <exclude>**/*.license</exclude>
+                        </excludes>
+                        <targetPath>../helm</targetPath>
+                    </resource>
+                    <resource>
+                        <filtering>false</filtering>
+                        <directory>src/main/helm</directory>
+                        <includes>
+                            <include>**/*.docx</include>
+                            <include>**/*.xlsx</include>
+                            <include>**/*.zip</include>
+                            <include>**/*.tgz</include>
+                            <include>**/*.png</include>
+                            <include>**/*.jpg</include>
+                            <include>**/*.gpg</include>
+                            <include>**/*.license</include>
+                        </includes>
+                        <targetPath>../helm</targetPath>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+
+        <profile>
+            <id>release</id>
+
+            <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok-maven-plugin</artifactId>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>

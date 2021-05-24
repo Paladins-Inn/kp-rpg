@@ -81,9 +81,8 @@ import static com.vaadin.flow.component.Unit.PIXELS;
 @JsModule("./styles/shared-styles.js")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 @CssImport("./views/delphi-council-is.css")
+@Sfl4j
 public class MainView extends AppLayout implements LocaleChangeObserver, TranslatableComponent {
-    private static final Logger LOG = LoggerFactory.getLogger(MainView.class);
-
     @Autowired
     private ServiceRef<Translator> translator;
 
@@ -118,15 +117,15 @@ public class MainView extends AppLayout implements LocaleChangeObserver, Transla
 
     private void setLastLoggedIn() {
         if (user != null) {
-            LOG.debug("Setting last login date to user. user='{}'", user.getPerson().getUsername());
+            log.debug("Setting last login date to user. user='{}'", user.getPerson().getUsername());
 
             user.getPerson().getStatus().setLastLogin(OffsetDateTime.now(ZoneOffset.UTC));
             user.setPerson(personRepository.save(user.getPerson()));
 
             locale = user.getPerson().getLocale();
-            LOG.debug("Setting locale to user locale. locale={}", locale);
+            log.debug("Setting locale to user locale. locale={}", locale);
         } else {
-            LOG.info("No user logged in.");
+            log.info("No user logged in.");
             locale = VaadinSession.getCurrent().getLocale();
         }
     }
@@ -162,7 +161,7 @@ public class MainView extends AppLayout implements LocaleChangeObserver, Transla
 
         menu.addItem(getTranslation("avatar.menu.account-settings"),
                 e -> {
-                    LOG.info("User opens settings menu. event={}", e);
+                    log.info("User opens settings menu. event={}", e);
 
                     e.getSource().getUI().ifPresent(ui -> ui.navigate(
                             PersonEditView.class,
@@ -173,7 +172,7 @@ public class MainView extends AppLayout implements LocaleChangeObserver, Transla
 
         menu.addItem(getTranslation("buttons.logout.caption"),
                 e -> {
-                    LOG.info("User wanted to log out. event={}", e);
+                    log.info("User wanted to log out. event={}", e);
                     e.getSource().getUI().ifPresent(ui -> ui.getPage().open("/logout", "_self"));
                 }
         );
@@ -237,7 +236,7 @@ public class MainView extends AppLayout implements LocaleChangeObserver, Transla
             Secured secured = t.getAnnotation(Secured.class);
 
             if (secured == null || Arrays.stream(secured.value()).anyMatch(roles::contains)) {
-                LOG.trace(
+                log.trace(
                         "View is either free or role matches. view={}, roles={}, rolesAllowed={}",
                         t.getSimpleName(),
                         roles,
@@ -248,7 +247,7 @@ public class MainView extends AppLayout implements LocaleChangeObserver, Transla
                 Tab tab = createTab(getTranslation(t.getSimpleName()), t);
                 result.add(tab);
             } else {
-                LOG.debug("View is not allowed for user. view={}, roles={}, rolesAllowed={}",
+                log.debug("View is not allowed for user. view={}, roles={}, rolesAllowed={}",
                         t.getSimpleName(),
                         roles,
                         Arrays.asList(secured.value())
@@ -282,7 +281,7 @@ public class MainView extends AppLayout implements LocaleChangeObserver, Transla
 
     @Override
     public void localeChange(@NotNull final LocaleChangeEvent event) {
-        LOG.trace("Language change event. locale={}", event.getLocale());
+        log.trace("Language change event. locale={}", event.getLocale());
 
         Locale locale = event.getLocale();
 
@@ -291,7 +290,7 @@ public class MainView extends AppLayout implements LocaleChangeObserver, Transla
 
     public void setLocale(@NotNull final Locale locale) {
         if (this.locale != null && this.locale.equals(locale)) {
-            LOG.trace("Language did not change - ignoring event. locale={}", this.locale);
+            log.trace("Language did not change - ignoring event. locale={}", this.locale);
             return;
         }
 

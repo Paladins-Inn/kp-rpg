@@ -17,8 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.core.dice.history;
 
-import de.kaiserpfalzedv.rpg.core.store.StoreService;
-
+import de.kaiserpfalzedv.commons.core.store.StoreService;
 /**
  * RollHistoryStoreService -- The data store for the dice roll history.
  *

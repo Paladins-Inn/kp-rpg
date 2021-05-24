@@ -29,7 +29,6 @@ import javax.ws.rs.core.MediaType;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class RestRoller {
-    private static final Logger LOG = LoggerFactory.getLogger(RestRoller.class);
     @Inject
     DiceRoller roller;
 

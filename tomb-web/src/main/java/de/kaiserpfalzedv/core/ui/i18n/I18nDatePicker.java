@@ -40,8 +40,8 @@ import java.util.Locale;
  */
 @Service
 @Scope("prototype")
+@Slf4j
 public class I18nDatePicker extends DatePicker implements LocaleChangeObserver {
-    private static final Logger LOG = LoggerFactory.getLogger(I18nDatePicker.class);
 
     private Locale locale;
 
@@ -52,7 +52,7 @@ public class I18nDatePicker extends DatePicker implements LocaleChangeObserver {
     }
 
     private void translate() {
-        LOG.debug("Translating. component={}, locale={}", this, locale);
+        log.debug("Translating. component={}, locale={}", this, locale);
 
         setI18n(new DatePicker.DatePickerI18n()
                 .setWeek(getTranslation("input.datepicker.week"))

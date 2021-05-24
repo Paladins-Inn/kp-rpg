@@ -17,14 +17,14 @@
 
 package de.kaiserpfalzedv.rpg.store;
 
-import de.kaiserpfalzedv.rpg.core.resources.History;
-import de.kaiserpfalzedv.rpg.core.resources.Metadata;
-import de.kaiserpfalzedv.rpg.core.resources.Status;
-import de.kaiserpfalzedv.rpg.core.user.User;
-import de.kaiserpfalzedv.rpg.core.user.UserData;
-import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
-import de.kaiserpfalzedv.rpg.test.mongodb.MongoDBResource;
+import de.kaiserpfalzedv.commons.core.resources.History;
+import de.kaiserpfalzedv.commons.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.resources.Status;
+import de.kaiserpfalzedv.commons.core.user.User;
+import de.kaiserpfalzedv.commons.core.user.UserData;
+import de.kaiserpfalzedv.commons.core.user.UserStoreService;
+import de.kaiserpfalzedv.commons.discord.guilds.Guild;
+import de.kaiserpfalzedv.commons.test.mongodb.MongoDBResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.extern.slf4j.Slf4j;

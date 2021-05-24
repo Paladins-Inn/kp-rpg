@@ -34,8 +34,6 @@ import org.slf4j.LoggerFactory;
  */
 @Slf4j
 public class TestJsonConversion {
-    private static final Logger LOG = LoggerFactory.getLogger(TestJsonConversion.class);
-
     @Test
     public void shouldCOnvert() throws JsonProcessingException {
         ProductMessage source = ProductMessage.builder()

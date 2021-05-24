@@ -21,16 +21,22 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
-    <groupId>de.kaiserpfalz-edv.rpg</groupId>
+    <parent>
+        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <artifactId>kp-rpg-root</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
     <artifactId>rpg-bom</artifactId>
     <version>1.2.0-SNAPSHOT</version>
 
     <name>KP RPG :: Bill of Materials</name>
 
-
     <properties>
         <vaadin.version>14.5.3</vaadin.version>
         <discord.version>3.5.0_329</discord.version>
+        <kp-commons.version>2.0.2-SNAPSHOT</kp-commons.version>
 
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
@@ -42,6 +48,14 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>de.kaiserpfalz-edv.commons</groupId>
+                <artifactId>kp-commons-bom</artifactId>
+                <version>${kp-commons.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
@@ -97,34 +111,8 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>discord</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
                 <artifactId>drivethru</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
-                <artifactId>mongodb-testsupport</artifactId>
-                <version>${project.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
-                <artifactId>oauth2-testsupport</artifactId>
-                <version>${project.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
-                <artifactId>discord-testsupport</artifactId>
-                <version>${project.version}</version>
-                <scope>test</scope>
             </dependency>
 
 
@@ -148,7 +136,7 @@
                 <version>3.0.0</version>
             </dependency>
 
-            <!-- lombok - syntactical suggar -->
+            <!-- lombok - syntactical sugar -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>

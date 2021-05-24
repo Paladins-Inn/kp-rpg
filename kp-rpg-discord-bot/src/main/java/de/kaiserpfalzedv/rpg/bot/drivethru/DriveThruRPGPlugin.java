@@ -17,13 +17,13 @@
 
 package de.kaiserpfalzedv.rpg.bot.drivethru;
 
-import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginCommand;
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginContext;
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginException;
-import de.kaiserpfalzedv.rpg.integrations.discord.DontWorkOnDiscordEventException;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
-import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageChannelPlugin;
+import de.kaiserpfalzedv.commons.core.user.UserStoreService;
+import de.kaiserpfalzedv.commons.discord.DiscordPluginCommand;
+import de.kaiserpfalzedv.commons.discord.DiscordPluginContext;
+import de.kaiserpfalzedv.commons.discord.DiscordPluginException;
+import de.kaiserpfalzedv.commons.discord.DontWorkOnDiscordEventException;
+import de.kaiserpfalzedv.commons.discord.guilds.Guild;
+import de.kaiserpfalzedv.commons.discord.text.DiscordMessageChannelPlugin;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.DriveThruRPGService;
 import io.quarkus.runtime.StartupEvent;
 import lombok.ToString;

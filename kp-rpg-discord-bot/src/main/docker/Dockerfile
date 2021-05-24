@@ -26,13 +26,6 @@ FROM registry.access.redhat.com/ubi8/ubi-minimal:8.3
 ARG JAVA_PACKAGE=java-11-openjdk-headless
 ARG RUN_JAVA_VERSION=1.3.8
 
-# Configure the JAVA_OPTIONS, you can add -XshowSettings:vm to also display the heap size.
-ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager" \
-    LANG='en_GB.UTF-8' \
-    LANGUAGE='en_GB:en' \
-    APP_NAME="${project.artifactId}" \
-    VERSION="${project.version}"
-
 # Install java and the run-java script
 # Also set up permissions for user `1001`
 RUN microdnf install curl ca-certificates ${JAVA_PACKAGE} \
@@ -47,8 +40,17 @@ RUN microdnf install curl ca-certificates ${JAVA_PACKAGE} \
     && chmod 540 /deployments/run-java.sh \
     && echo "securerandom.source=file:/dev/urandom" >> /etc/alternatives/jre/lib/security/java.security
 
+COPY ./app-runner.jar /deployments/app.jar
 
-LABEL io.k8s.description="This is a discord bot and connected webservice for supporting RPG tabletop games online without providing a VTT." \
+# Configure the JAVA_OPTIONS, you can add -XshowSettings:vm to also display the heap size.
+ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager" \
+    LANG='en_GB.UTF-8' \
+    LANGUAGE='en_GB:en' \
+    APP_NAME="${project.artifactId}" \
+    APP_VERSION="${project.version}"
+
+LABEL \
+    io.k8s.description="This is a discord bot and connected webservice for supporting RPG tabletop games online without providing a VTT." \
     io.k8s.display-name="TOMB Discord Bot" \
     io.openshift.expose-services="8080/TCP" \
     io.openshift.tags="quarkus rpg discord" \
@@ -56,8 +58,6 @@ LABEL io.k8s.description="This is a discord bot and connected webservice for sup
     summary="Provides a supporting system for online tabletop RPG playing." \
     vendor="Kaiserpfalz EDV-Service" \
     version="${project.version}"
-
-COPY ./app-runner.jar /deployments/app.jar
 
 EXPOSE 8080
 USER 1001

@@ -17,9 +17,9 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
-import de.kaiserpfalzedv.rpg.core.user.InvalidUserException;
-import de.kaiserpfalzedv.rpg.core.user.User;
-import de.kaiserpfalzedv.rpg.core.user.UserData;
+import de.kaiserpfalzedv.commons.core.user.InvalidUserException;
+import de.kaiserpfalzedv.commons.core.user.User;
+import de.kaiserpfalzedv.commons.core.user.UserData;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.*;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoDriveThruRPGAPIKeyDefinedException;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoValidTokenException;

@@ -27,6 +27,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -42,7 +43,7 @@ import java.util.Set;
 @JsonDeserialize(builder = Prerequisites.PrerequisitesBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(description = "The prerequisites for obtaining a perk.")
-public class Prerequisites {
+public class Prerequisites implements Serializable {
     @Schema(description = "Skills that are a prerequisite.", nullable = true)
     private final Set<Skill> skills;
 

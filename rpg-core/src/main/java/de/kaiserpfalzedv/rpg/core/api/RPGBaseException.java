@@ -17,21 +17,20 @@
 
 package de.kaiserpfalzedv.rpg.core.api;
 
-import java.util.StringJoiner;
+import de.kaiserpfalzedv.commons.core.api.BaseException;
+import lombok.Getter;
+import lombok.ToString;
+
 import java.util.UUID;
 
 /**
- * The base class for all unchecked exceptions of the KP RPG Services
+ * The base class for all checked exceptions of the KP RPG Services.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-08
  */
-public abstract class BaseSystemException extends RuntimeException {
-    /**
-     * A unique ID for this exception.
-     */
-    private final UUID uuid = UUID.randomUUID();
-
+@ToString(callSuper = true)
+public abstract class RPGBaseException extends BaseException {
     /**
      * Constructs a new exception with the specified detail message.  The
      * cause is not initialized, and may subsequently be initialized by
@@ -42,7 +41,7 @@ public abstract class BaseSystemException extends RuntimeException {
      * @since 1.0.0
      */
     @SuppressWarnings("CdiInjectionPointsInspection")
-    public BaseSystemException(final String message) {
+    public RPGBaseException(final String message) {
         super(message);
     }
 
@@ -60,7 +59,7 @@ public abstract class BaseSystemException extends RuntimeException {
      *         unknown.)
      * @since  1.0.0
      */
-    public BaseSystemException(final String message, final Throwable cause) {
+    public RPGBaseException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
@@ -78,7 +77,7 @@ public abstract class BaseSystemException extends RuntimeException {
      *         unknown.)
      * @since  1.0.0
      */
-    public BaseSystemException(final Throwable cause) {
+    public RPGBaseException(final Throwable cause) {
         super(cause);
     }
 
@@ -95,21 +94,7 @@ public abstract class BaseSystemException extends RuntimeException {
      *                           be writable
      * @since 1.0.0
      */
-    public BaseSystemException(final String message, final Throwable cause, final boolean enableSuppression, final boolean writableStackTrace) {
+    public RPGBaseException(final String message, final Throwable cause, final boolean enableSuppression, final boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
-    }
-    /**
-     * @return The unique ID of this exception
-     */
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", getClass().getSimpleName() + "[", "]")
-                .add("identity=" + System.identityHashCode(this))
-                .add("uuid=" + uuid)
-                .toString();
     }
 }

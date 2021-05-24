@@ -18,9 +18,9 @@
 package de.kaiserpfalzedv.rpg.core.dice.history;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import de.kaiserpfalzedv.commons.core.resources.Pointer;
+import de.kaiserpfalzedv.commons.core.user.User;
 import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
-import de.kaiserpfalzedv.rpg.core.resources.Pointer;
-import de.kaiserpfalzedv.rpg.core.user.User;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 

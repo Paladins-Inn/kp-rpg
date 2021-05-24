@@ -17,14 +17,14 @@
 
 package de.kaiserpfalzedv.rpg.core.dice;
 
+import de.kaiserpfalzedv.commons.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.resources.SerializableList;
+import de.kaiserpfalzedv.commons.core.store.OptimisticLockStoreException;
+import de.kaiserpfalzedv.commons.core.user.User;
 import de.kaiserpfalzedv.rpg.core.dice.history.MemoryRollHistoryStore;
 import de.kaiserpfalzedv.rpg.core.dice.history.RollHistory;
 import de.kaiserpfalzedv.rpg.core.dice.history.RollHistoryEntry;
 import de.kaiserpfalzedv.rpg.core.dice.history.RollHistoryStoreService;
-import de.kaiserpfalzedv.rpg.core.resources.Metadata;
-import de.kaiserpfalzedv.rpg.core.resources.SerializableList;
-import de.kaiserpfalzedv.rpg.core.store.OptimisticLockStoreException;
-import de.kaiserpfalzedv.rpg.core.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.slf4j.MDC;

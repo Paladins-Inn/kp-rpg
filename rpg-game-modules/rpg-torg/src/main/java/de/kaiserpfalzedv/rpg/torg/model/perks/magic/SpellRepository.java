@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg.model.perks.magic;
 
-import de.kaiserpfalzedv.rpg.store.BaseMongoRepository;
+import de.kaiserpfalzedv.commons.core.mongodb.BaseMongoRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 

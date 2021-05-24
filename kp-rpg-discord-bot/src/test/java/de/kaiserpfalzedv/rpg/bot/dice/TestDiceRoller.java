@@ -18,6 +18,7 @@
 package de.kaiserpfalzedv.rpg.bot.dice;
 
 import io.quarkus.test.junit.QuarkusTest;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,9 +38,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @since 1.0.0 2021-01-11
  */
 @QuarkusTest
+@Slf4j
 public class TestDiceRoller {
-    private static final Logger LOG = LoggerFactory.getLogger(TestDiceRoller.class);
-
     @Inject
     DiceRoller sut;
 
@@ -60,7 +60,7 @@ public class TestDiceRoller {
         String comment = "Kommentar";
         String input = "1d6 # " + comment;
 
-        LOG.info("Calling {} with input: {}", sut, input);
+        log.info("Calling {} with input: {}", sut, input);
         String result = sut.work(input);
 
         assertTrue(result.startsWith(comment), "The comment should be returned!");

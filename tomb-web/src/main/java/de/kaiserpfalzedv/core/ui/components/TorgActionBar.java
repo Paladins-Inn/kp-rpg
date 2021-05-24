@@ -38,9 +38,8 @@ import java.util.Map;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 0.1.0  2021-04-07
  */
+@Slf4j
 public class TorgActionBar extends HorizontalLayout implements LocaleChangeObserver, TranslatableComponent {
-    private static final Logger LOG = LoggerFactory.getLogger(TorgActionBar.class);
-
     private final String i18nKey;
     private final Object[] i18nParameters;
     private final ComponentEventListener<ClickEvent<NativeButton>> save;
@@ -68,7 +67,7 @@ public class TorgActionBar extends HorizontalLayout implements LocaleChangeObser
         if (cancel != null) {
             this.cancel = cancel;
         } else {
-            LOG.debug("Adding back button as cancel.");
+            log.debug("Adding back button as cancel.");
 
             this.cancel = event -> event.getSource()
                     .getUI().ifPresent(ui -> ui.getPage().getHistory().back());
@@ -141,7 +140,7 @@ public class TorgActionBar extends HorizontalLayout implements LocaleChangeObser
                 try {
                     ((AutoCloseable) b).close();
                 } catch (Exception e) {
-                    LOG.error("Problem while closing. button=" + b, e);
+                    log.error("Problem while closing. button=" + b, e);
                 }
             }
         });
@@ -154,7 +153,7 @@ public class TorgActionBar extends HorizontalLayout implements LocaleChangeObser
             @NotNull final ComponentEventListener<ClickEvent<NativeButton>> action
     ) {
         if (action != null) {
-            LOG.trace("Add button. i18nKey={}, i18nParameters={}", i18nKey, i18nParameters);
+            log.trace("Add button. i18nKey={}, i18nParameters={}", i18nKey, i18nParameters);
 
             add(new TorgButton(
                     i18nKey,
@@ -176,7 +175,7 @@ public class TorgActionBar extends HorizontalLayout implements LocaleChangeObser
 
             translate();
         } else {
-            LOG.debug("Locale didn't change - ignoring change. old={}, new={}", this.locale, locale);
+            log.debug("Locale didn't change - ignoring change. old={}, new={}", this.locale, locale);
         }
     }
 }

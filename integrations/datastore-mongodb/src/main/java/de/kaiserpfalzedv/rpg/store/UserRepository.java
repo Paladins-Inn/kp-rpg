@@ -17,12 +17,13 @@
 
 package de.kaiserpfalzedv.rpg.store;
 
-import de.kaiserpfalzedv.rpg.core.store.DuplicateStoreException;
-import de.kaiserpfalzedv.rpg.core.store.OptimisticLockStoreException;
-import de.kaiserpfalzedv.rpg.core.user.User;
-import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
+import de.kaiserpfalzedv.commons.core.mongodb.BaseMongoRepository;
+import de.kaiserpfalzedv.commons.core.store.DuplicateStoreException;
+import de.kaiserpfalzedv.commons.core.store.OptimisticLockStoreException;
+import de.kaiserpfalzedv.commons.core.user.User;
+import de.kaiserpfalzedv.commons.core.user.UserData;
+import de.kaiserpfalzedv.commons.core.user.UserStoreService;
 import io.quarkus.arc.AlternativePriority;
-import io.quarkus.mongodb.panache.PanacheMongoRepositoryBase;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -39,7 +40,7 @@ import java.util.UUID;
 @ApplicationScoped
 @AlternativePriority(500)
 @Slf4j
-public class UserRepository implements PanacheMongoRepositoryBase<User, UUID>, UserStoreService {
+public class UserRepository extends BaseMongoRepository<User, UserData> implements UserStoreService {
     @Override
     public Optional<User> findByNameSpaceAndName(String nameSpace, String name) {
         return find(

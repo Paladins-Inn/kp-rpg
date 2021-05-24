@@ -31,8 +31,6 @@ import org.springframework.context.annotation.Scope;
  */
 @Configuration
 public class TranslatorProvider {
-    private static final Logger LOG = LoggerFactory.getLogger(TranslatorProvider.class);
-
     @Scope("singleton")
     @Bean
     public Translator translator() {

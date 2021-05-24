@@ -36,9 +36,8 @@ import java.util.Locale;
  * @since 0.1.0  2021-04-04
  */
 @Scope("prototype")
+@Slf4j
 public class LocaleProvider implements LocaleChangeObserver {
-    private static final Logger LOG = LoggerFactory.getLogger(LocaleProvider.class);
-
     private Locale locale;
 
     @Value("spring.web.locale")
@@ -46,12 +45,12 @@ public class LocaleProvider implements LocaleChangeObserver {
 
     @PostConstruct
     public void init() {
-        LOG.debug("Setting default locale. service={}, defaultLocale='{}'", this, defaultLocale);
+        log.debug("Setting default locale. service={}, defaultLocale='{}'", this, defaultLocale);
 
         try {
             locale = Locale.forLanguageTag(defaultLocale);
         } catch (Exception e) {
-            LOG.error("Could not load locale, using java default locale. service={}, defaultLocale='{}', javaLocale={}",
+            log.error("Could not load locale, using java default locale. service={}, defaultLocale='{}', javaLocale={}",
                     this, defaultLocale, Locale.getDefault());
 
             locale = Locale.getDefault();
@@ -60,14 +59,14 @@ public class LocaleProvider implements LocaleChangeObserver {
 
     @Override
     public void localeChange(@NotNull final LocaleChangeEvent event) {
-        LOG.debug("Switching locale. service={}, oldLocale={}, newLocale={}", this, locale, event.getLocale());
+        log.debug("Switching locale. service={}, oldLocale={}, newLocale={}", this, locale, event.getLocale());
 
         locale = event.getLocale();
     }
 
     @Bean
     public Locale getCurrentLocale() {
-        LOG.trace("Returning locale. service={}, locale={}", this, locale);
+        log.trace("Returning locale. service={}, locale={}", this, locale);
         return locale;
     }
 }

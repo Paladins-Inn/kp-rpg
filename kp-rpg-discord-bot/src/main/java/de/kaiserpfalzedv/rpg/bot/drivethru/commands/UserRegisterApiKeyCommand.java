@@ -17,15 +17,15 @@
 
 package de.kaiserpfalzedv.rpg.bot.drivethru.commands;
 
+import de.kaiserpfalzedv.commons.core.discord.DiscordMessageHandler;
+import de.kaiserpfalzedv.commons.core.user.User;
+import de.kaiserpfalzedv.commons.core.user.UserData;
+import de.kaiserpfalzedv.commons.core.user.UserStoreService;
+import de.kaiserpfalzedv.commons.discord.DiscordPluginContext;
+import de.kaiserpfalzedv.commons.discord.DiscordPluginException;
+import de.kaiserpfalzedv.commons.discord.DontWorkOnDiscordEventException;
 import de.kaiserpfalzedv.rpg.bot.drivethru.DriveThruRPGPluginCommand;
 import de.kaiserpfalzedv.rpg.bot.drivethru.InvalidDriveThruRPGTokenException;
-import de.kaiserpfalzedv.rpg.core.discord.DiscordMessageHandler;
-import de.kaiserpfalzedv.rpg.core.user.User;
-import de.kaiserpfalzedv.rpg.core.user.UserData;
-import de.kaiserpfalzedv.rpg.core.user.UserStoreService;
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginContext;
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginException;
-import de.kaiserpfalzedv.rpg.integrations.discord.DontWorkOnDiscordEventException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;

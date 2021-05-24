@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg.model.perks.psionic;
 
-import de.kaiserpfalzedv.rpg.core.resources.Resource;
+import de.kaiserpfalzedv.commons.core.resources.Resource;
 import de.kaiserpfalzedv.rpg.torg.About;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

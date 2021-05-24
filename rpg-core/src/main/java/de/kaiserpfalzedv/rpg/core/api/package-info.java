@@ -18,6 +18,9 @@
 /**
  * de.kaiserpfalzedv.rpg.core.api -- Base API classes used within the whole system.
  *
+ * All exceptions in the KP-RPG project are based on either the {@link de.kaiserpfalzedv.rpg.core.api.RPGBaseException}
+ * or {@link de.kaiserpfalzedv.rpg.core.api.RPGBaseSystemException} (for runtime exceptions).
+ *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-08
  */

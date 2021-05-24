@@ -17,7 +17,8 @@
 
 package de.kaiserpfalzedv.rpg.bot.drivethru;
 
-import de.kaiserpfalzedv.rpg.integrations.discord.DiscordPluginCommand;
+
+import de.kaiserpfalzedv.commons.discord.DiscordPluginCommand;
 
 /**
  * A single command for the ProductPlugin.

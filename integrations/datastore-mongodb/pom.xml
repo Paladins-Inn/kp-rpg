@@ -40,10 +40,19 @@
             <artifactId>rpg-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>de.kaiserpfalz-edv.rpg</groupId>
-            <artifactId>discord</artifactId>
+            <groupId>de.kaiserpfalz-edv.commons</groupId>
+            <artifactId>kp-commons-discord</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.commons.test-support</groupId>
+            <artifactId>mongodb-testsupport</artifactId>
+            <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.cbartosiak</groupId>
+            <artifactId>bson-codecs-jsr310</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-mongodb-client</artifactId>
@@ -51,15 +60,6 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-mongodb-panache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
-            <artifactId>mongodb-testsupport</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.github.cbartosiak</groupId>
-            <artifactId>bson-codecs-jsr310</artifactId>
-            <version>3.5.4</version>
         </dependency>
     </dependencies>
 </project>

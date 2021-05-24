@@ -48,8 +48,8 @@ import static com.vaadin.flow.component.Unit.PIXELS;
  * @since 0.1.0  2021-04-07
  */
 @SuppressWarnings("unused")
+@Slf4j
 public class Avatar extends Span implements HasSize, LocaleChangeObserver, TranslatableComponent {
-    private static final Logger LOG = LoggerFactory.getLogger(Avatar.class);
     private final String i18nPrefix;
     private final Image avatar = new Image();
     private final MemoryBuffer avatarBuffer = new MemoryBuffer();
@@ -91,7 +91,7 @@ public class Avatar extends Span implements HasSize, LocaleChangeObserver, Trans
                         Notification.Position.BOTTOM_STRETCH
                 );
             } catch (IOException ioException) {
-                LOG.error(
+                log.error(
                         "Upload of the avatar failed. file='{}', type='{}'",
                         avatarBuffer.getFileData(), avatarBuffer.getFileData().getMimeType()
                 );
@@ -130,7 +130,7 @@ public class Avatar extends Span implements HasSize, LocaleChangeObserver, Trans
     @Override
     public void setLocale(Locale locale) {
         if (this.locale != null && this.locale.equals(locale)) {
-            LOG.debug("locale did not change - ignoring event. old={}, new={}", this.locale, locale);
+            log.debug("locale did not change - ignoring event. old={}, new={}", this.locale, locale);
             return;
         }
 

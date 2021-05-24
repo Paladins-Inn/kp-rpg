@@ -42,9 +42,8 @@ import java.util.UUID;
  * @since 0.1.0  2021-04-06
  */
 @CssImport("./views/delphi-council-is.css")
+@Sfl4j
 public class TorgButton extends NativeButton implements TranslatableComponent, LocaleChangeObserver {
-    private static final Logger LOG = LoggerFactory.getLogger(TorgButton.class);
-
     private final String i18nBase;
     private final Object[] i18nParameters;
 
@@ -71,10 +70,10 @@ public class TorgButton extends NativeButton implements TranslatableComponent, L
                 i18nBase,
                 e -> e.getSource().getUI().ifPresent(ui -> {
                     if (routeParameters != null) {
-                        LOG.debug("TorgButton pressed. target={}, parameters={}", target, routeParameters);
+                        log.debug("TorgButton pressed. target={}, parameters={}", target, routeParameters);
                         ui.navigate(target, routeParameters);
                     } else {
-                        LOG.debug("TorgButton pressed. target={}", target);
+                        log.debug("TorgButton pressed. target={}", target);
                         ui.navigate(target);
                     }
                 }),

@@ -36,8 +36,6 @@ import java.util.stream.Stream;
  * @since 0.1.0  2021-03-26
  */
 public final class SecurityUtils {
-    private static final Logger LOG = LoggerFactory.getLogger(SecurityUtils.class);
-
     private SecurityUtils() {
         // Util methods only
     }

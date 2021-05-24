@@ -17,8 +17,8 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
-import de.kaiserpfalzedv.rpg.core.user.InvalidUserException;
-import de.kaiserpfalzedv.rpg.core.user.User;
+import de.kaiserpfalzedv.commons.core.user.InvalidUserException;
+import de.kaiserpfalzedv.commons.core.user.User;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.OwnedProduct;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Product;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Publisher;

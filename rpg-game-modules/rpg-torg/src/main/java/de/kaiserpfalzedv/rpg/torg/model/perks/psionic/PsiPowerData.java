@@ -19,7 +19,6 @@ package de.kaiserpfalzedv.rpg.torg.model.perks.psionic;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.rpg.core.resources.Resource;
 import de.kaiserpfalzedv.rpg.torg.model.Armor;
 import de.kaiserpfalzedv.rpg.torg.model.Attack;
 import de.kaiserpfalzedv.rpg.torg.model.Axiom;
@@ -33,6 +32,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -49,7 +49,7 @@ import java.util.Set;
 @JsonDeserialize(builder = PsiPowerData.PsiPowerDataBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(description = "The spell definition.")
-public class PsiPowerData extends Resource<PsiPowerData> {
+public class PsiPowerData implements Serializable {
     @Size(max = 5000, message = "The textual description must not be larger than 5000 characters.")
     @Schema(description = "A textual description of this spell.", nullable = true, maxLength = 5000)
     private final String description;

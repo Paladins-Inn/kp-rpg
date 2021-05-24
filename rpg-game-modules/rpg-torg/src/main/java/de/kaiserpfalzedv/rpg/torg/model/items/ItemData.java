@@ -19,7 +19,7 @@ package de.kaiserpfalzedv.rpg.torg.model.items;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.rpg.core.resources.Resource;
+import de.kaiserpfalzedv.commons.core.resources.Resource;
 import de.kaiserpfalzedv.rpg.torg.model.Armor;
 import de.kaiserpfalzedv.rpg.torg.model.Attack;
 import de.kaiserpfalzedv.rpg.torg.model.Axiom;
@@ -33,6 +33,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,11 +46,11 @@ import java.util.Set;
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @Getter
-@ToString(callSuper = true, onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
 @JsonDeserialize(builder = ItemData.ItemDataBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(description = "Gear and equipment.")
-public class ItemData extends Resource<ItemData> {
+public class ItemData implements Serializable {
     @Size(max = 5000, message = "The textual description must not be larger than 5000 characters.")
     @Schema(description = "A textual description of this spell.", nullable = true, maxLength = 5000)
     private final String description;

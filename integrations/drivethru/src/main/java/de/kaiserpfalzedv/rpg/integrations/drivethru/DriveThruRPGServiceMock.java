@@ -17,9 +17,9 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
+import de.kaiserpfalzedv.commons.core.user.InvalidUserException;
+import de.kaiserpfalzedv.commons.core.user.User;
 import de.kaiserpfalzedv.rpg.core.dice.bag.D100;
-import de.kaiserpfalzedv.rpg.core.user.InvalidUserException;
-import de.kaiserpfalzedv.rpg.core.user.User;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.OwnedProduct;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Product;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Publisher;
@@ -27,8 +27,7 @@ import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Token;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoDriveThruRPGAPIKeyDefinedException;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoValidTokenException;
 import io.quarkus.arc.AlternativePriority;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.Dependent;
 import java.time.LocalDateTime;
@@ -56,9 +55,8 @@ import static java.time.ZoneOffset.UTC;
  */
 @Dependent
 @AlternativePriority(50)
+@Slf4j
 public class DriveThruRPGServiceMock implements DriveThruRPGService {
-    private static final Logger LOG = LoggerFactory.getLogger(DriveThruRPGServiceMock.class);
-
     /**
      * Mocks the token service.
      *
@@ -72,15 +70,15 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
     public Token getToken(final User user) throws InvalidUserException, NoDriveThruRPGAPIKeyDefinedException, NoValidTokenException {
         switch (user.getName().toLowerCase(Locale.ROOT)) {
             case "invalid#0001":
-                LOG.debug("Throwing InvalidUserException. user='{}'", user.getDisplayName());
+                log.debug("Throwing InvalidUserException. user='{}'", user.getDisplayName());
                 throw new InvalidUserException(user);
 
             case "invalid#0002":
-                LOG.debug("Throwing NoDriveThruRPGAPIKeyDefinedException. user='{}'", user.getDisplayName());
+                log.debug("Throwing NoDriveThruRPGAPIKeyDefinedException. user='{}'", user.getDisplayName());
                 throw new NoDriveThruRPGAPIKeyDefinedException(user);
 
             case "invalid#0004":
-                LOG.debug("Throwing NoValidTokenException. user='{}'", user.getDisplayName());
+                log.debug("Throwing NoValidTokenException. user='{}'", user.getDisplayName());
                 throw new NoValidTokenException(user);
         }
 
@@ -110,7 +108,7 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
                     .build();
         }
 
-        LOG.trace("Token created. user='{}', token={}", user.getDisplayName(), token);
+        log.trace("Token created. user='{}', token={}", user.getDisplayName(), token);
         return token;
     }
 
@@ -124,11 +122,11 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
     @Override
     public Optional<Product> getProduct(final String productId) {
         if (Integer.parseInt(productId, 10) < 0) {
-            LOG.trace("Product not found. productId={}", productId);
+            log.trace("Product not found. productId={}", productId);
             return Optional.empty();
         }
 
-        LOG.trace("Product created. productId={}", productId);
+        log.trace("Product created. productId={}", productId);
         String productUrl = "https://nowhere/product/" + productId;
         return Optional.of(
                 new Product(
@@ -167,11 +165,11 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
     @Override
     public Optional<Publisher> getPublisher(final String publisherId) {
         if (Integer.parseInt(publisherId, 10) < 0) {
-            LOG.trace("No publisher found. publisherId={}", publisherId);
+            log.trace("No publisher found. publisherId={}", publisherId);
             return Optional.empty();
         }
 
-        LOG.trace("Publisher created. publisherId={}", publisherId);
+        log.trace("Publisher created. publisherId={}", publisherId);
         return Optional.of(
                 Publisher.builder()
                         .withPublisherId(publisherId)
@@ -219,7 +217,7 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
             );
         }
 
-        LOG.trace("Created owned products: user='{}', count={}", user.getDisplayName(), result.size());
+        log.trace("Created owned products: user='{}', count={}", user.getDisplayName(), result.size());
         return result;
     }
 }

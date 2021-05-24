@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg.model.Book;
 
+import de.kaiserpfalzedv.commons.core.mongodb.BaseMongoRepository;
 import io.quarkus.mongodb.panache.PanacheMongoRepositoryBase;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -29,5 +30,5 @@ import java.util.UUID;
  * @since 1.2.0  2021-05-23
  */
 @ApplicationScoped
-public class PublisherRepository implements PanacheMongoRepositoryBase<Publisher, UUID> {
+public class PublisherRepository extends BaseMongoRepository<Publisher, PublisherData> {
 }

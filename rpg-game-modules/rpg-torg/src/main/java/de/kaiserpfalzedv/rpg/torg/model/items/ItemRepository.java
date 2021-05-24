@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg.model.items;
 
-import de.kaiserpfalzedv.rpg.store.BaseMongoRepository;
+import de.kaiserpfalzedv.commons.core.mongodb.BaseMongoRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 

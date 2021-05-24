@@ -17,8 +17,8 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.resource;
 
-import de.kaiserpfalzedv.rpg.core.api.BaseException;
-import de.kaiserpfalzedv.rpg.core.user.User;
+import de.kaiserpfalzedv.commons.core.user.User;
+import de.kaiserpfalzedv.rpg.core.api.RPGBaseException;
 
 /**
  * NoDriveThruRPGAPIKeyDefinedException -- The user has no registered API Key for DriveThruRPG.
@@ -26,7 +26,7 @@ import de.kaiserpfalzedv.rpg.core.user.User;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-02-04
  */
-public class NoDriveThruRPGAPIKeyDefinedException extends BaseException {
+public class NoDriveThruRPGAPIKeyDefinedException extends RPGBaseException {
     public NoDriveThruRPGAPIKeyDefinedException(final User user) {
         super(String.format("User '%s/%s' has no DriveThruAPI key defined.", user.getNamespace(), user.getName()));
     }

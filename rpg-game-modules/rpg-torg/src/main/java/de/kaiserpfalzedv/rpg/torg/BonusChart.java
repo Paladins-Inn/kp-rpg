@@ -18,8 +18,7 @@
 package de.kaiserpfalzedv.rpg.torg;
 
 import de.kaiserpfalzedv.rpg.core.dice.LookupTable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.Dependent;
 
@@ -32,9 +31,8 @@ import javax.enterprise.context.Dependent;
  * @since 2020-01-03
  */
 @Dependent
+@Slf4j
 public class BonusChart implements LookupTable {
-    static private final Logger LOG = LoggerFactory.getLogger(BonusChart.class);
-
     @Override
     public int lookup(final int roll) {
         int result = 0;
@@ -79,7 +77,7 @@ public class BonusChart implements LookupTable {
                 break;
         }
 
-        LOG.debug("Bonus chart lookup: roll={}, result={}", roll, result);
+        log.debug("Bonus chart lookup: roll={}, result={}", roll, result);
         return result;
     }
 }

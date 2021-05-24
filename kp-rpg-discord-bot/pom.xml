@@ -41,8 +41,8 @@
             <artifactId>rpg-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>de.kaiserpfalz-edv.rpg</groupId>
-            <artifactId>discord</artifactId>
+            <groupId>de.kaiserpfalz-edv.commons</groupId>
+            <artifactId>kp-commons-discord</artifactId>
         </dependency>
         <dependency>
             <groupId>de.kaiserpfalz-edv.rpg</groupId>
@@ -90,12 +90,14 @@
         </dependency>
 
         <dependency>
-            <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
+            <groupId>de.kaiserpfalz-edv.commons.test-support</groupId>
             <artifactId>mongodb-testsupport</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>de.kaiserpfalz-edv.rpg.test-support</groupId>
+            <groupId>de.kaiserpfalz-edv.commons.test-support</groupId>
             <artifactId>discord-testsupport</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

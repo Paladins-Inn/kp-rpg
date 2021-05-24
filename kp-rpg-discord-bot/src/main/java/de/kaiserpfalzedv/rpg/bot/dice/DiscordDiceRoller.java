@@ -17,10 +17,10 @@
 
 package de.kaiserpfalzedv.rpg.bot.dice;
 
-import de.kaiserpfalzedv.rpg.core.discord.DiscordMessageHandler;
-import de.kaiserpfalzedv.rpg.integrations.discord.JDA.NullDiscordUser;
-import de.kaiserpfalzedv.rpg.integrations.discord.guilds.Guild;
-import de.kaiserpfalzedv.rpg.integrations.discord.text.DiscordMessageChannelPlugin;
+import de.kaiserpfalzedv.commons.core.discord.DiscordMessageHandler;
+import de.kaiserpfalzedv.commons.discord.JDA.NullDiscordUser;
+import de.kaiserpfalzedv.commons.discord.guilds.Guild;
+import de.kaiserpfalzedv.commons.discord.text.DiscordMessageChannelPlugin;
 import io.quarkus.runtime.StartupEvent;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

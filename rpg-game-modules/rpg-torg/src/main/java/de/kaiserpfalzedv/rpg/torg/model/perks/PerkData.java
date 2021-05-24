@@ -19,7 +19,6 @@ package de.kaiserpfalzedv.rpg.torg.model.perks;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.rpg.core.resources.Resource;
 import de.kaiserpfalzedv.rpg.torg.model.Armor;
 import de.kaiserpfalzedv.rpg.torg.model.Attack;
 import de.kaiserpfalzedv.rpg.torg.model.Clearance;
@@ -31,6 +30,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -44,19 +44,23 @@ import java.util.Set;
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @Getter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = false)
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 @JsonDeserialize(builder = PerkData.PerkDataBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(description = "The perk definition.")
-public class PerkData extends Resource<PerkData> {
+public class PerkData implements Serializable {
     @Size(max = 5000, message = "The textual description must not be larger than 5000 characters.")
     @Schema(description = "A textual description of this spell.", nullable = true, maxLength = 5000)
     private final String description;
 
+    @ToString.Include
+    @EqualsAndHashCode.Include
     @Schema(description = "Sub category of this perk")
     private final String subCategory;
 
+    @ToString.Include
+    @EqualsAndHashCode.Include
     @Schema(description = "The minimum clearance level for this spell.")
     private final Clearance clearance;
 

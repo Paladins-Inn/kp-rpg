@@ -26,7 +26,7 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>rpg-saga</artifactId>
-  <name>KP RPG :: SAGA</name>
+  <name>KP RPG :: Module :: SAGA</name>
   <description>The SAGA special services.</description>
 
   <dependencies>

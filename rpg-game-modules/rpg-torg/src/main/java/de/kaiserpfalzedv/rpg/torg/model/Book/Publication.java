@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg.model.Book;
 
-import de.kaiserpfalzedv.rpg.core.resources.Resource;
+import de.kaiserpfalzedv.commons.core.resources.Resource;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

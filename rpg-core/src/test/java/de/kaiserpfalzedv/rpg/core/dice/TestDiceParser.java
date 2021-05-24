@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.core.dice;
 import de.kaiserpfalzedv.rpg.core.dice.bag.*;
 import de.kaiserpfalzedv.rpg.core.dice.mat.ExpressionTotal;
 import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +30,8 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 public class TestDiceParser {
-    private static final Logger LOG = LoggerFactory.getLogger(TestDiceParser.class);
-
-    private static final int DEFAULT_THROW = 2;
     private static final DieTestResult[] tests = {
             new DieTestResult("sin(d6)", "D6", 1),
             new DieTestResult("(W20+5+2)/2", "D20", 1),
@@ -89,7 +88,7 @@ public class TestDiceParser {
             @SuppressWarnings("OptionalUsedAsFieldOrParameterType") final RollTotal result,
             final DieTestResult testInput
     ) {
-        LOG.trace("Checking test: expected={}, input={}, amount={}, type={}",
+        log.trace("Checking test: expected={}, input={}, amount={}, type={}",
                 result, testInput.input, testInput.amount, testInput.dieType);
 
 

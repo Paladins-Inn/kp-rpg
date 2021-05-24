@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg.data;
 
-import de.kaiserpfalzedv.rpg.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.resources.Metadata;
 import de.kaiserpfalzedv.rpg.torg.About;
 import de.kaiserpfalzedv.rpg.torg.model.Book.Publication;
 import de.kaiserpfalzedv.rpg.torg.model.Book.PublicationData;

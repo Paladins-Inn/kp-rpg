@@ -19,7 +19,7 @@ package de.kaiserpfalzedv.rpg.torg.model.items;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.rpg.core.resources.Resource;
+import de.kaiserpfalzedv.commons.core.resources.Resource;
 import de.kaiserpfalzedv.rpg.torg.About;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
