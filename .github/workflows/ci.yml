@@ -26,8 +26,8 @@ jobs:
 
       - name: Set Image name and version
         run: |
-          echo "IMAGE=$(cat target/classes/Dockerfile | grep APP_NAME= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
-          echo "VERSION=$(cat target/classes/Dockerfile | grep APP_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
+          echo "IMAGE=$(cat rpg-bot/target/Dockerfile | grep APP_NAME= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
+          echo "VERSION=$(cat rpg-bot/target/Dockerfile | grep APP_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
 
       - name: Image name and version
         run: echo "Working on image '${{ env.IMAGE }}:${{ env.VERSION }}'."
@@ -59,8 +59,8 @@ jobs:
 
       - name: Set Image name and version
         run: |
-          echo "IMAGE=$(cat classes/Dockerfile | grep APP_NAME= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
-          echo "VERSION=$(cat classes/Dockerfile | grep APP_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
+          echo "IMAGE=$(cat ./Dockerfile | grep APP_NAME= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
+          echo "VERSION=$(cat ./Dockerfile | grep APP_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
 
       - name: Buildah
         id: build-container
