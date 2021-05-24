@@ -22,17 +22,9 @@ jobs:
 
       - name: Build
         id: build-java
-        run: mvn deploy -B -Pproduction,release -DskipTests=true
+        run: mvn deploy -U -B -Pproduction,release -DskipTests=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set Image name and version
-        run: |
-          echo "IMAGE=$(cat kp-rpg-discord-bot/target/Dockerfile | grep APP_NAME= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
-          echo "VERSION=$(cat kp-rpg-discord-bot/target/Dockerfile | grep APP_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
-
-      - name: Image name and version
-        run: echo "Working on image '${{ env.IMAGE }}:${{ env.VERSION }}'."
 
       - name: Upload Artifact
         id: upload-jar
@@ -63,6 +55,9 @@ jobs:
         run: |
           echo "IMAGE=$(cat ./Dockerfile | grep APP_NAME= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
           echo "VERSION=$(cat ./Dockerfile | grep APP_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
+
+      - name: Image name and version
+        run: echo "Working on image '${{ env.IMAGE }}:${{ env.VERSION }}'."
 
       - name: Buildah
         id: build-container
