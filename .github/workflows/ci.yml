@@ -22,7 +22,7 @@ jobs:
 
       - name: Build
         id: build-java
-        run: mvn package -B -Pproduction
+        run: mvn package -B -Pproduction -DskipTests=true
 
       - name: Set Image name and version
         run: |
