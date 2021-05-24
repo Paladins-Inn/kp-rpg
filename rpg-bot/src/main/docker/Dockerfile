@@ -48,19 +48,18 @@ RUN microdnf install curl ca-certificates ${JAVA_PACKAGE} \
     && echo "securerandom.source=file:/dev/urandom" >> /etc/alternatives/jre/lib/security/java.security
 
 
-LABEL io.k8s.description="This is a discord bot and connected webservice for supporting RPG tabletop games online without providing a VTT."
-LABEL io.k8s.display-name="TOMB Discord Bot"
-LABEL io.openshift.expose-services="8080/TCP"
-LABEL io.openshift.tags="quarkus rpg discord"
-LABEL maintainer="Kaiserpfalz EDV-Service"
-LABEL summary="Provides a supporting system for online tabletop RPG playing."
-LABEL vendor="Kaiserpfalz EDV-Service"
-LABEL version="${project.version}"
+LABEL io.k8s.description="This is a discord bot and connected webservice for supporting RPG tabletop games online without providing a VTT." \
+    io.k8s.display-name="TOMB Discord Bot" \
+    io.openshift.expose-services="8080/TCP" \
+    io.openshift.tags="quarkus rpg discord" \
+    maintainer="Kaiserpfalz EDV-Service" \
+    summary="Provides a supporting system for online tabletop RPG playing." \
+    vendor="Kaiserpfalz EDV-Service" \
+    version="${project.version}"
 
-COPY target/*-runner.jar /deployments/app.jar
+COPY ./app-runner.jar /deployments/app.jar
 
 EXPOSE 8080
-EXPOSE 8443
 USER 1001
 
 ENTRYPOINT [ "/deployments/run-java.sh" ]
