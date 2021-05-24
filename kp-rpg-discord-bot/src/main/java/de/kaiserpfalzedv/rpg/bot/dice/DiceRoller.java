@@ -42,7 +42,7 @@ public class DiceRoller {
 
     /**
      * return all results.
-     * 
+     *
      * @param dieRollString The roll to parse.
      * @return All results instead of a parsed string like in {@link #work(String)}
      */

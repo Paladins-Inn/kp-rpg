@@ -1,0 +1,294 @@
+---
+kind: Template
+apiVersion: template.openshift.io/v1
+labels:
+  template: kp-rpg-service
+metadata:
+  name: kp-rpg-service
+  annotations:
+    description: >-
+      kp-rpg-service is the internet service for supporting tabletop RPG.
+    iconClass: icon-redis
+    openshift.io/display-name: kp-rpg
+    openshift.io/documentation-url: 'https://github.com/klenkes74/kp-rpg'
+    openshift.io/long-description: >-
+      KP-RPG tabletop RPG services
+    openshift.io/provider-display-name: 'Kaiserpfalz EDV-Service'
+    openshift.io/support-url: 'https://github.com/klenkes74/kp-rpg/issues'
+    tags: 'quarkus'
+message: |-
+  You installed the KP-RPG service!
+
+  The service and the data stores (mariadb and elasticsearch) have been
+  installed. You can access the service as:
+
+  Service URI: ${ROUTE_URL}
+parameters:
+  - name: ROUTE_URL
+    displayName: Gitlab Service URL
+    description: The URL for the service. The gitlab will connect here. It has to be configured as PARCER_SERVICE_URL in Gitlab.
+    required: true
+  - name: NAMESPACE
+    displayName: OpenShift Namespace
+    description: Namespace this software is installed in.
+    required: true
+  - name: CORS
+    displayName: CORS Domain (UI)
+    description: The domain the UI is running on.
+    value: parcer
+    required: true
+  - name: DISCORD_TOKEN
+    displayName: Discord Token
+    description: The authentication token for the bot
+    required: true
+  - name: BACKEND_IMAGE
+    dipsplayName: Container image
+    description: Container image for the kp-rpg-discord-bot
+    value: quay.io/klenkes74/kp-rpg-discord-bot
+    required: true
+  - name: BACKEND_VERSION
+    displayName: Image version
+    description: Container image version of the kp-rpg-discord-bot
+    value: 1.0.0
+    required: true
+  - name: BACKEND_MEM_REQUESTS
+    displayName: Discord Bot Memory (requested)
+    description: The requested memory of the par/CER/ backend.
+    value: 512Mi
+    required: true
+  - name: BACKEND_CPU_REQUESTS
+    displayName: Discord Bot CPU (requested)
+    description: The requested CPU of the par/CER/ backend.
+    value: 500m
+    required: true
+  - name: BACKEND_MEM_LIMITS
+    displayName: Discord Bot Memory (max)
+    description: The maximum memory of the par/CER/ backend.
+    value: 512Mi
+    required: true
+  - name: BACKEND_CPU_LIMITS
+    displayName: Discord Bot CPU (max)
+    description: The maximum CPU of the par/CER/ backend.
+    value: 500m
+    required: true
+objects:
+  - kind: ImageStream
+    apiVersion: image.openshift.io/v1
+    metadata:
+      name: kp-rpg-discord-bot
+      labels:
+        delete: kp-rpg-service
+    spec:
+      dockerImageRepository: '${BACKEND_IMAGE}'
+      lookupPolicy:
+        local: true
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: kp-rpg-service
+      annotations:
+        template.openshift.io/expose-uri: 'http://{.spec.clusterIP}:{.spec.ports[?(.name="http")].port}'
+      labels:
+        app.kubernetes.io/name: kp-rpg
+        app.kubernetes.io/version: '${BACKEND_VERSION}'
+        app.kubernetes.io/runtime: kp-rpg-discord-bot
+        delete: kp-rpg-service
+    spec:
+      ports:
+        - name: http
+          port: 8080
+          protocol: TCP
+        - name: https
+          port: 8443
+          protocol: TCP
+      selector:
+        app.kubernetes.io/name: kp-rpg
+        app.kubernetes.io/version: '${BACKEND_VERSION}'
+        app.kubernetes.io/runtime: kp-rpg-discord-bot
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: kp-rpg-service
+      annotations:
+        template.openshift.io/expose-uri: '${ROUTE_URL}'
+      labels:
+        app.kubernetes.io/name: kp-rpg
+        app.kubernetes.io/version: '${BACKEND_VERSION}'
+        app.kubernetes.io/runtime: kp-rpg-discord-bot
+        delete: kp-rpg-service
+    spec:
+      host: '${ROUTE_URL}'
+      port:
+        targetPort: http
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: kp-rpg-service
+        weight: 100
+      wildcardPolicy: None
+  - kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: '8080'
+        prometheus.io/scrape: 'true'
+      labels:
+        app.kubernetes.io/name: kp-rpg
+        app.kubernetes.io/version: '${BACKEND_VERSION}'
+        app.kubernetes.io/runtime: kp-rpg-discord-bot
+        delete: kp-rpg-service
+      name: kp-rpg-service
+    spec:
+      replicas: 1
+      revisionHistoryLimit: 3
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: kp-rpg
+          app.kubernetes.io/version: '${BACKEND_VERSION}'
+          app.kubernetes.io/runtime: kp-rpg-discord-bot
+      strategy:
+        rollingUpdate:
+          maxSurge: 100%
+          maxUnavailable: 0%
+        type: RollingUpdate
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: kp-rpg
+            app.kubernetes.io/version: '${BACKEND_VERSION}'
+            app.kubernetes.io/runtime: kp-rpg-discord-bot
+            delete: kp-rpg-service
+        spec:
+          restartPolicy: Always
+          containers:
+            - name: parcer
+              image: 'docker-registry.default.svc:5000/${NAMESPACE}/kp-rpg-discord-bot:${BACKEND_VERSION}'
+              imagePullPolicy: Always
+              env:
+                - name: KUBERNETES_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: metadata.namespace
+                - name: QUARKUS_LOG_CONSOLE_JSON
+                  value: 'false'
+                - name: QUARKUS_LOG_LEVEL
+                  value: INFO
+                - name: QUARKUS_LOG_CATEGORY_DE_KAISERPFALZEDV_LEVEL
+                  value: DEBUG
+              resources:
+                limits:
+                  cpu: '${BACKEND_CPU_LIMITS}'
+                  memory: '${BACKEND_MEM_LIMITS}'
+                requests:
+                  cpu: '${BACKEND_CPU_REQUESTS}'
+                  memory: '${BACKEND_MEM_REQUESTS}'
+              ports:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+                - containerPort: 8443
+                  name: https
+                  protocol: TCP
+              livenessProbe:
+                httpGet:
+                  path: /health/live
+                  port: 8080
+                  scheme: HTTP
+                periodSeconds: 20
+                timeoutSeconds: 5
+                initialDelaySeconds: 10
+                successThreshold: 1
+                failureThreshold: 3
+              readinessProbe:
+                httpGet:
+                  path: /health/ready
+                  port: 8080
+                  scheme: HTTP
+                periodSeconds: 20
+                timeoutSeconds: 5
+                initialDelaySeconds: 10
+                successThreshold: 1
+                failureThreshold: 1
+              volumeMounts:
+                - mountPath: /deployments/config/application.properties
+                  name: config-volume
+                  subPath: application.properties
+          volumes:
+            - configMap:
+                defaultMode: 420
+                items:
+                  - key: application.properties
+                    path: application.properties
+                name: kp-rpg-discord-configuration
+              name: config-volume
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: kp-rpg-discord-configuration
+    labels:
+      delete: kp-rpg-service
+    data:
+      application.properties: |-
+        quarkus.application.name=kp-rpg-discord-bot
+        quarkus.application.version=1.0.0
+        #
+        discord.token=${DISCORD_TOKEN}
+        #
+        quarkus.locales=[en-GB, en-US, de-DE]
+        quarkus.default-locale=de-DE
+        quarkus.http.body.handle-file-uploads=true
+        quarkus.http.body.delete-uploaded-files-on-end=true
+        quarkus.http.record-request-start-time=true
+        quarkus.http.access-log.enabled=true
+        quarkus.http.access-log.pattern=common
+        quarkus.jaeger.enabled=true
+        quarkus.jaeger.metrics.enabled=true
+        quarkus.log.metrics.enabled=true
+        quarkus.health.extensions.enabled=true
+        quarkus.smallrye-openapi.path=/openapi
+        quarkus.smallrye-openapi.store-schema-directory=target
+        quarkus.swagger-ui.path=/docs
+        quarkus.swagger-ui.always-include=true
+        quarkus.swagger-ui.enable=true
+        #
+        #
+        %dev.quarkus.log.console.json=false
+        #
+        %test.quarkus.log.console.json=false
+        #
+        # OpenShift deployment
+        quarkus.package.type=uber-jar
+        quarkus.package.output-name=app
+        quarkus.openshift.jar-directory=/deployments
+        quarkus.openshift.jar-file-name=app.jar
+        quarkus.container-image.build=true
+        quarkus.container-image.push=true
+        quarkus.container-image.registry=quay.io
+        quarkus.container-image.group=klenkes74
+        quarkus.container-image.builder=docker
+        quarkus.kubernetes.part-of=kp-rpg
+        quarkus.openshift.part-of=kp-rpg
+        quarkus.openshift.name=kp-rpg-discord-bot
+        quarkus.openshift.version=1.0.0-SNAPSHOT
+        #
+        #
+        # OpenAPI
+        mp.openapi.extensions.smallrye.info.title=KP-RPG Discord Bot
+        %dev.mp.openapi.extensions.smallrye.info.title=KP-RPG Discord Bot (dev)
+        %test.mp.openapi.extensions.smallrye.info.title=KP-RPG Discord Bot (test)
+        mp.openapi.extensions.smallrye.info.version=1.0.0-SNAPSHOT
+        mp.openapi.extensions.smallrye.info.description=Help playing tabletop RPGs via Discord
+        mp.openapi.extensions.smallrye.info.termsOfService=best effort
+        mp.openapi.extensions.smallrye.info.contact.email=support@kaiserpfalz-edv.de
+        mp.openapi.extensions.smallrye.info.contact.name=Kaiserpfalz EDV-Service Support
+        mp.openapi.extensions.smallrye.info.contact.url=https://github.com/klenkes74/kp-rpg/issues
+        mp.openapi.extensions.smallrye.info.license.name=GPL 2.0
+        mp.openapi.extensions.smallrye.info.license.url=https://www.gnu.org/licenses/gpl-3.0.txt
+        mp.openapi.extensions.smallrye.operationIdStrategy=METHOD
+        #
+        #
+        quarkus.log.category."de.kaiserpfalzedv".level=TRACE

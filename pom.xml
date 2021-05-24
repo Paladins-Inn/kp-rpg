@@ -36,7 +36,7 @@
         <module>rpg-core</module>
         <module>rpg-game-modules</module>
 
-        <module>rpg-bot</module>
+        <module>kp-rpg-discord-bot</module>
 
         <!--
         <module>tomb-web</module>
