@@ -124,7 +124,7 @@
                 </repository>
                 <repository>
                     <id>github</id>
-                    <url>https://maven.pkg.github.com/Paladins-Inn/kp-commons</url>
+                    <url>https://maven.pkg.github.com/Paladins-Inn/*</url>
                     <snapshots>
                         <enabled>true</enabled>
                     </snapshots>
