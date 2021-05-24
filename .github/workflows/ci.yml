@@ -22,7 +22,9 @@ jobs:
 
       - name: Build
         id: build-java
-        run: mvn package -B -Pproduction -DskipTests=true
+        run: mvn deploy -B -Pproduction,release -DskipTests=true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set Image name and version
         run: |
