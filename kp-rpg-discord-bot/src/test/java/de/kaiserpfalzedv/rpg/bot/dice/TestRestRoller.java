@@ -31,10 +31,10 @@ public class TestRestRoller {
     @Test
     public void shouldReturnARollWhenD6IsRolled() {
         given()
-            .when()
+                .when()
                 .get("/apis/die/v1/roll/D6")
-            .prettyPeek()
-            .then()
+                .prettyPeek()
+                .then()
                 .statusCode(200)
                 .body(containsString("D6"));
 

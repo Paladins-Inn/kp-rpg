@@ -16,7 +16,8 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -26,8 +27,8 @@
         <relativePath>../rpg-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>rpg-bot</artifactId>
-    <name>KP RPG :: TOMB Discord Bot</name>
+    <artifactId>kp-rpg-discord-bot</artifactId>
+    <name>TOMB Discord Bot</name>
     <description>The discord services as a bot.</description>
 
     <properties>

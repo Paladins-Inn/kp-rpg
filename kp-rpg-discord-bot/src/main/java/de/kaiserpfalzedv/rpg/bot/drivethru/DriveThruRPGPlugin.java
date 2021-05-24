@@ -53,9 +53,13 @@ public class DriveThruRPGPlugin implements DiscordMessageChannelPlugin {
      * The DriveThruRPG service.
      */
     private final DriveThruRPGService service;
-    /** The user store. */
+    /**
+     * The user store.
+     */
     private final UserStoreService userStore;
-    /** The commands of this plugin. */
+    /**
+     * The commands of this plugin.
+     */
     private final List<DriveThruRPGPluginCommand> commands = new ArrayList<>();
 
     @Inject
