@@ -26,8 +26,8 @@ jobs:
 
       - name: Set Image name and version
         run: |
-          echo "IMAGE=$(cat rpg-bot/target/Dockerfile | grep APP_NAME= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
-          echo "VERSION=$(cat rpg-bot/target/Dockerfile | grep APP_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
+          echo "IMAGE=$(cat kp-rpg-discord-bot/target/Dockerfile | grep APP_NAME= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
+          echo "VERSION=$(cat kp-rpg-discord-bot/target/Dockerfile | grep APP_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
 
       - name: Image name and version
         run: echo "Working on image '${{ env.IMAGE }}:${{ env.VERSION }}'."
@@ -38,8 +38,8 @@ jobs:
         with:
           name: dci
           path: |
-            rpg-bot/target/app-runner.jar
-            rpg-bot/target/Dockerfile
+            kp-rpg-discord-bot/target/app-runner.jar
+            kp-rpg-discord-bot/target/Dockerfile
           retention-days: 1
 
 
