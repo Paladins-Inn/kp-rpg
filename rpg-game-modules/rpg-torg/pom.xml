@@ -34,17 +34,5 @@
             <groupId>de.kaiserpfalz-edv.rpg</groupId>
             <artifactId>rpg-core</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>de.kaiserpfalz-edv.rpg</groupId>
-            <artifactId>datastore-mongodb</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
 </project>

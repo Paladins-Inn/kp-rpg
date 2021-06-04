@@ -19,7 +19,6 @@ package de.kaiserpfalzedv.rpg.torg.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.sun.xml.bind.v2.schemagen.xmlschema.AttributeType;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
