@@ -29,7 +29,7 @@ import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 /**
- * Spell -- A single magic spell.
+ * Perk -- A perk.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-05-23

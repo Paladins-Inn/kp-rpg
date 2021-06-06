@@ -41,12 +41,17 @@ public class SkillValue {
     @Schema(description = "Name of the skill to use.")
     private final Skill name;
 
+    @ToString.Exclude
     @Schema(description = "The adds of this skill", nullable = true)
     private final Integer adds;
 
+    @ToString.Exclude
     @Schema(description = "The bonus to the skill", nullable = true)
     private final Integer bonus;
 
     @Schema(description = "The total value of this skill", nullable = true)
     private final Integer value;
+
+    @Schema(description = "If the skill is favoured", nullable = true)
+    private final Boolean favoured;
 }

@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg.model.actors;
 
+import de.kaiserpfalzedv.rpg.torg.model.MapperEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @AllArgsConstructor
 @Getter
-public enum Attribute {
+public enum Attribute implements MapperEnum<Attribute> {
     CHARISMA("CHA", "charisma", "attr_CHA", "charisma"),
     DEXTERITY("DEX", "dexterity", "attr_DEX", "dexterity"),
     MIND("MIN", "mind", "attr_MIN", "mind"),

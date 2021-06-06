@@ -21,10 +21,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.torg.foundry.FoundryResource;
 import de.kaiserpfalzedv.rpg.torg.foundry.items.FoundryItem;
-import de.kaiserpfalzedv.rpg.torg.foundry.model.ActorData;
+import de.kaiserpfalzedv.rpg.torg.foundry.model.Effect;
 import de.kaiserpfalzedv.rpg.torg.foundry.model.Flag;
 import de.kaiserpfalzedv.rpg.torg.foundry.model.Permission;
 import de.kaiserpfalzedv.rpg.torg.foundry.model.Token;
+import de.kaiserpfalzedv.rpg.torg.model.actors.ActorType;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -46,12 +47,14 @@ public class FoundryActor implements FoundryResource {
     private String _id;
     private String name;
     private Permission permission;
-    private FoundryActorType type;
+    private ActorType type;
     private ActorData data;
     private Flag flags;
     private int sort;
     private String img;
     private Token token;
+    @Builder.Default
     private final ArrayList<FoundryItem> items = new ArrayList<>();
-    private final ArrayList<Object> effects = new ArrayList<>();
+    @Builder.Default
+    private final ArrayList<Effect> effects = new ArrayList<>();
 }

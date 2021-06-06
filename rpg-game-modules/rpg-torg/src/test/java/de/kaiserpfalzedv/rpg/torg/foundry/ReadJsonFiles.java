@@ -19,10 +19,10 @@ package de.kaiserpfalzedv.rpg.torg.foundry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.kaiserpfalzedv.rpg.torg.foundry.actors.FoundryActor;
-import de.kaiserpfalzedv.rpg.torg.foundry.actors.FoundryActorType;
 import de.kaiserpfalzedv.rpg.torg.foundry.actors.FoundryPages;
 import de.kaiserpfalzedv.rpg.torg.foundry.items.FoundryItem;
 import de.kaiserpfalzedv.rpg.torg.foundry.items.FoundryItemType;
+import de.kaiserpfalzedv.rpg.torg.model.actors.ActorType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +48,7 @@ public class ReadJsonFiles {
     public void shouldReadActorsFromFile() throws IOException {
         List<FoundryActor> result = Arrays.asList(mapper.readValue(Paths.get("./target/classes/te001/Actors.db.json").toFile(), FoundryActor[].class));
 
-        Set<FoundryActorType> type = result.stream().map(FoundryActor::getType).filter(Objects::nonNull).collect(Collectors.toSet());
+        Set<ActorType> type = result.stream().map(FoundryActor::getType).filter(Objects::nonNull).collect(Collectors.toSet());
         log.info("Possible actor types: {}", type);
 
         log.info("Read actors. count={}", result.size());
@@ -77,9 +77,11 @@ public class ReadJsonFiles {
     public void shouldReadArchetypes() throws IOException {
         List<FoundryActor> result = Arrays.asList(mapper.readValue(Paths.get("./target/classes/data/archetypes.db.json").toFile(), FoundryActor[].class));
 
-        Set<FoundryActorType> type = result.stream().map(FoundryActor::getType).filter(Objects::nonNull).collect(Collectors.toSet());
+        Set<ActorType> type = result.stream().map(FoundryActor::getType).filter(Objects::nonNull).collect(Collectors.toSet());
         log.info("Possible archetype types: {}", type);
 
         log.info("Read archetypes. count={}", result.size());
+
+        log.info("Actor 0: {}", result.get(0));
     }
 }

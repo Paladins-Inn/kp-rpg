@@ -37,7 +37,7 @@ import lombok.*;
 public class Details {
     private String possibilitypotential;
     private String description;
-    private float sizeBonus;
+    private int sizeBonus;
 
     // Archetype data
     private String clearance;

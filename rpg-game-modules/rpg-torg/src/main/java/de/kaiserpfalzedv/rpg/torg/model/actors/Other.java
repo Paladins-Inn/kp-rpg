@@ -15,17 +15,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.foundry.model;
+package de.kaiserpfalzedv.rpg.torg.model.actors;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
 import lombok.*;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import java.util.Optional;
 
 /**
  * Other --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 2.0.0  2021-06-04
+ * @since 1.3.0  2021-06-04
  */
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Other.OtherBuilder.class)
@@ -34,12 +38,21 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @ToString
+@Schema(description = "Other calculated data")
 public class Other {
     private int move;
     private int run;
     private int toughness;
     private int armor;
+    private int sizeBonus;
     private String cosm;
     private int possibilities;
     private int posibilities;
+
+    public Optional<Cosm> getCosm() {
+        if (cosm == null || cosm.isBlank())
+            return Optional.empty();
+
+        return Cosm.mapFoundry(cosm);
+    }
 }

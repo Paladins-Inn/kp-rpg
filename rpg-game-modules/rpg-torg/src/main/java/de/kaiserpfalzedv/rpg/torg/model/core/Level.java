@@ -15,42 +15,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.foundry.actors;
+package de.kaiserpfalzedv.rpg.torg.model.core;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
-
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.*;
 
 /**
- * FoundryItemType -- The different item types as defined by the Foundry VTT Roll20 implementation.
+ * Wounds --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0  2021-06-05
+ * @since 1.3.0  2021-06-04
  */
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = Level.LevelBuilder.class)
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
-@ToString(onlyExplicitlyIncluded = true)
-public enum FoundryActorType {
-    STORMKNIGHT("meleeweapon"),
-    THREAT("firearm"),
-    ;
-
-    /**
-     * The name of the item type as used within Foundry VTT json.
-     */
-    @ToString.Include
-    @JsonValue
-    private final String title;
-
-    /**
-     * A set of all possible types.
-     */
-    public Set<FoundryActorType> allTypes() {
-        return Set.of(
-                STORMKNIGHT, THREAT
-        );
-    }
+@ToString
+public class Level {
+    private int value;
+    private int max;
 }

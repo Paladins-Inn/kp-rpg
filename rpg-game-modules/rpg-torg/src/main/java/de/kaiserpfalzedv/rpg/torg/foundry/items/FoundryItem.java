@@ -49,6 +49,7 @@ public class FoundryItem implements FoundryResource {
     private int sort;
     private Flag flags;
     private String img;
+    @Builder.Default
     private final ArrayList<Effect> effects = new ArrayList<>();
     private String _id;
 }

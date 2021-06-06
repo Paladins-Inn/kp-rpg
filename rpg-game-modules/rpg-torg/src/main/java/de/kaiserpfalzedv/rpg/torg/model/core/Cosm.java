@@ -19,11 +19,15 @@ package de.kaiserpfalzedv.rpg.torg.model.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.kaiserpfalzedv.rpg.torg.model.Book.Publication;
+import de.kaiserpfalzedv.rpg.torg.model.MapperEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static de.kaiserpfalzedv.rpg.torg.data.Publications.CORE_RULES;
 
@@ -36,26 +40,26 @@ import static de.kaiserpfalzedv.rpg.torg.data.Publications.CORE_RULES;
 @SuppressWarnings({"unused", "SpellCheckingInspection", "CdiInjectionPointsInspection"})
 @Getter
 @ToString
-public enum Cosm {
-    AYSLE(24, 16, 18, 14, Type.MAIN, CORE_RULES),
-    CORE_EARTH(9, 23, 10, 23, Type.MAIN, CORE_RULES),
-    CYBERPAPACY(14, 18, 16, 26, Type.MAIN, CORE_RULES),
-    LIVING_LAND(1, 7, 24, 6, Type.MAIN, CORE_RULES),
-    NILE_EMPIRE(14, 20, 18, 20, Type.MAIN, CORE_RULES),
-    ORRORSH(16, 18, 16, 18, Type.MAIN, CORE_RULES),
-    PAN_PACIFICA(4, 24, 8, 24, Type.MAIN, CORE_RULES),
-    THARKOLD(12, 25, 4, 25, Type.MAIN, CORE_RULES),
+public enum Cosm implements MapperEnum<Cosm> {
+    AYSLE("aysle", "aysle", 24, 16, 18, 14, Type.MAIN, CORE_RULES),
+    CORE_EARTH("coreEarth", "Core Earth", 9, 23, 10, 23, Type.MAIN, CORE_RULES),
+    CYBERPAPACY("cyberpapacy", "Cyberpapacy", 14, 18, 16, 26, Type.MAIN, CORE_RULES),
+    LIVING_LAND("livingLand", "Living Land", 1, 7, 24, 6, Type.MAIN, CORE_RULES),
+    NILE_EMPIRE("nileEmpire", "Nile Empire", 14, 20, 18, 20, Type.MAIN, CORE_RULES),
+    ORRORSH("0rrorsh", "Orrorsh", 16, 18, 16, 18, Type.MAIN, CORE_RULES),
+    PAN_PACIFICA("panPacifica", "Pan Pacifica", 4, 24, 8, 24, Type.MAIN, CORE_RULES),
+    THARKOLD("tharkold", "Tharkold", 12, 25, 4, 25, Type.MAIN, CORE_RULES),
 
-    AKASHA(1, 26, 1, 28, Type.MINOR, null),
-    UKHAAN(8, 27, 5, 27, Type.MINOR, null),
+    AKASHA("akasha", "Akasha", 1, 26, 1, 28, Type.MINOR, null),
+    UKHAAN("ukhaan", "Ukhaan", 8, 27, 5, 27, Type.MINOR, null),
 
-    AYSLE_THARKOLD(24, 25, 18, 25, Type.UNKNOWN, null),
-    ELFAME(24, 11, 18, 14, Type.UNKNOWN, null),
-    FAIRY_TALE_AYSLE(24, 16, 18, 14, Type.UNKNOWN, null),
-    MECHOPOTAMIA(9, 9, 12, 8, Type.UNKNOWN, null),
-    THE_DEAD_WORLD(3, 7, 4, 8, Type.UNKNOWN, null),
-    TOMBSPACE(0, 0, 0, 0, Type.UNKNOWN, null),
-    WALDECK(14, 11, 2, 12, Type.UNKNOWN, null);
+    AYSLE_THARKOLD("aysleTharkold", "Aysle/Tharkold", 24, 25, 18, 25, Type.UNKNOWN, null),
+    ELFAME("elfame", "Elfame", 24, 11, 18, 14, Type.UNKNOWN, null),
+    FAIRY_TALE_AYSLE("fairyTaleAysle", "Fairy Tale Aysle", 24, 16, 18, 14, Type.UNKNOWN, null),
+    MECHOPOTAMIA("mechopotamia", "Mechopotamia", 9, 9, 12, 8, Type.UNKNOWN, null),
+    THE_DEAD_WORLD("theDeadWorld", "The Dead World", 3, 7, 4, 8, Type.UNKNOWN, null),
+    TOMBSPACE("tombSpace", "Tomb Space", 0, 0, 0, 0, Type.UNKNOWN, null),
+    WALDECK("waldeck", "Waldeck", 14, 11, 2, 12, Type.UNKNOWN, null);
 
     public enum Type {
         MAIN,
@@ -63,12 +67,18 @@ public enum Cosm {
         UNKNOWN
     }
 
+
+    private final String foundry;
+    private final String roll20;
     private final Publication publication;
     private final Type type;
-    private final HashSet<Axiom> axioms = new HashSet<>();
+    private final HashMap<Axiom.AxiomName, Axiom> axioms = new HashMap<>();
     private final String[] laws;
 
+
     Cosm(
+            @NotNull final String foundry,
+            @NotNull final String roll20,
             @NotNull final int magic,
             @NotNull final int social,
             @NotNull final int spirit,
@@ -77,11 +87,13 @@ public enum Cosm {
             @NotNull final Publication publication,
             String... laws
     ) {
-        axioms.add(Axiom.builder().withName(Axiom.AxiomName.Magic).withValue(tech).build());
-        axioms.add(Axiom.builder().withName(Axiom.AxiomName.Social).withValue(social).build());
-        axioms.add(Axiom.builder().withName(Axiom.AxiomName.Spirit).withValue(spirit).build());
-        axioms.add(Axiom.builder().withName(Axiom.AxiomName.Tech).withValue(tech).build());
+        axioms.put(Axiom.AxiomName.Magic, Axiom.builder().withName(Axiom.AxiomName.Magic).withValue(tech).build());
+        axioms.put(Axiom.AxiomName.Social, Axiom.builder().withName(Axiom.AxiomName.Social).withValue(social).build());
+        axioms.put(Axiom.AxiomName.Spirit, Axiom.builder().withName(Axiom.AxiomName.Spirit).withValue(spirit).build());
+        axioms.put(Axiom.AxiomName.Tech, Axiom.builder().withName(Axiom.AxiomName.Tech).withValue(tech).build());
 
+        this.foundry = foundry;
+        this.roll20 = roll20;
         this.publication = publication;
         this.type = cosmType;
         this.laws = laws;
@@ -99,33 +111,69 @@ public enum Cosm {
 
     @JsonIgnore
     public int getMagic() {
-        return axioms.stream()
-                .filter(a -> Axiom.AxiomName.Magic.equals(a.getName()))
-                .findFirst().orElseThrow()
-                .getValue();
+        return axioms.get(Axiom.AxiomName.Magic).getValue();
     }
 
     @JsonIgnore
     public int getSocial() {
-        return axioms.stream()
-                .filter(a -> Axiom.AxiomName.Social.equals(a.getName()))
-                .findFirst().orElseThrow()
-                .getValue();
+        return axioms.get(Axiom.AxiomName.Social).getValue();
     }
 
     @JsonIgnore
     public int getSpirit() {
-        return axioms.stream()
-                .filter(a -> Axiom.AxiomName.Spirit.equals(a.getName()))
-                .findFirst().orElseThrow()
-                .getValue();
+        return axioms.get(Axiom.AxiomName.Spirit).getValue();
     }
 
     @JsonIgnore
     public int getTech() {
-        return axioms.stream()
-                .filter(a -> Axiom.AxiomName.Tech.equals(a.getName()))
-                .findFirst().orElseThrow()
-                .getValue();
+        return axioms.get(Axiom.AxiomName.Tech).getValue();
+    }
+
+
+    @Override
+    public Optional<Cosm> mapFromFoundry(@NotNull final String name) {
+        return Optional.of(
+                allCosms().stream()
+                        .filter(e -> e.foundry.equals(name)).distinct()
+                        .collect(Collectors.toList()).get(0)
+        );
+    }
+
+    public static Optional<Cosm> mapFoundry(@NotNull final String name) {
+        return Cosm.CORE_EARTH.mapFromFoundry(name);
+    }
+
+    @Override
+    public Optional<Cosm> mapFromRoll20(@NotNull final String name) {
+        return Optional.of(
+                allCosms().stream()
+                        .filter(e -> e.roll20.equals(name)).distinct()
+                        .collect(Collectors.toList()).get(0)
+        );
+    }
+
+
+    public Set<Cosm> allCosms() {
+        return Set.of(
+                AYSLE,
+                CORE_EARTH,
+                CYBERPAPACY,
+                LIVING_LAND,
+                NILE_EMPIRE,
+                ORRORSH,
+                PAN_PACIFICA,
+                THARKOLD,
+
+                AKASHA,
+                UKHAAN,
+
+                AYSLE_THARKOLD,
+                ELFAME,
+                FAIRY_TALE_AYSLE,
+                MECHOPOTAMIA,
+                THE_DEAD_WORLD,
+                TOMBSPACE,
+                WALDECK
+        );
     }
 }

@@ -22,19 +22,23 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 /**
- * Bar1 --
+ * AirVehicles --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2.0.0  2021-06-04
  */
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = Ammo.AmmoBuilder.class)
+@JsonDeserialize(builder = FoundrySkill.FoundrySkillBuilder.class)
 @Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString
-public class Ammo {
-    private int max;
-    private int value;
+public class FoundrySkill {
+    private String baseAttribute;
+    private String adds;
+    private String value;
+    private int unskilledUse;
+    private boolean isFav;
+    private String groupName;
 }

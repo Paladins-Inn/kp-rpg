@@ -15,26 +15,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.foundry.model;
+package de.kaiserpfalzedv.rpg.torg.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 /**
- * Wounds --
+ * Xp --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 2.0.0  2021-06-04
+ * @since 1.2.0  2021-06-05
  */
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = Wounds.WoundsBuilder.class)
+@JsonDeserialize(builder = Xp.XpBuilder.class)
 @Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString
-public class Wounds {
-    private int value;
-    private int max;
+public class Xp {
+    private int unspent;
+    private int earned;
 }

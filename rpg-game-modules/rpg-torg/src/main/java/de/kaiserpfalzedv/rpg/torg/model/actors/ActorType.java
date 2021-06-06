@@ -15,30 +15,42 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.foundry.model;
+package de.kaiserpfalzedv.rpg.torg.model.actors;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+
+import java.util.Set;
 
 /**
- * AirVehicles --
+ * FoundryItemType -- The different item types as defined by the Foundry VTT Roll20 implementation.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 2.0.0  2021-06-04
+ * @since 1.2.0  2021-06-05
  */
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = Skill.SkillBuilder.class)
-@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@ToString
-public class Skill {
-    private String baseAttribute;
-    private String adds;
-    private String value;
-    private int unskilledUse;
-    private boolean isFav;
-    private String groupName;
+@ToString(onlyExplicitlyIncluded = true)
+public enum ActorType {
+    STORMKNIGHT("stormknight"),
+    THREAT("threat"),
+    ;
+
+    /**
+     * The name of the item type as used within Foundry VTT json.
+     */
+    @ToString.Include
+    @JsonValue
+    private final String title;
+
+    /**
+     * A set of all possible types.
+     */
+    public Set<ActorType> allTypes() {
+        return Set.of(
+                STORMKNIGHT, THREAT
+        );
+    }
 }

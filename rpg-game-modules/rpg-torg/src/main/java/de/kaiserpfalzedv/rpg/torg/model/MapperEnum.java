@@ -15,26 +15,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.foundry.model;
+package de.kaiserpfalzedv.rpg.torg.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.*;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.Optional;
 
 /**
- * Shock --
+ * MapperEnum -- Mapper Enums contain the strings used by foundry VTT and Roll20 used for the resource.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 2.0.0  2021-06-04
+ * @since 1.2.0  2021-06-06
  */
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = Shock.ShockBuilder.class)
-@Builder(setterPrefix = "with", toBuilder = true)
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@ToString
-public class Shock {
-    private int value;
-    private int max;
+public interface MapperEnum<T> {
+    String getRoll20();
+
+    String getFoundry();
+
+    Optional<T> mapFromFoundry(@NotNull final String name);
+
+    Optional<T> mapFromRoll20(@NotNull final String name);
 }

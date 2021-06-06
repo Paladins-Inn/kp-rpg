@@ -19,6 +19,8 @@ package de.kaiserpfalzedv.rpg.torg.foundry.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import de.kaiserpfalzedv.rpg.torg.model.actors.Other;
+import de.kaiserpfalzedv.rpg.torg.model.core.Level;
 import lombok.*;
 
 /**
@@ -38,10 +40,10 @@ public class FoundryItemData {
     private Flag flags;
     private Permission permission;
 
-    private Shock shock;
+    private Level shock;
     private Attributes attributes;
     private Other other;
-    private Skills skills;
+    private FoundrySkills skills;
     private Details details;
     private String editstate;
     private int possibilities;
@@ -68,7 +70,7 @@ public class FoundryItemData {
     private int minStrength;
     private boolean equipped;
     private String equippedClass;
-    private Ammo ammo;
+    private Level ammo;
     private String range;
     private int axiom;
     private String skill;

@@ -15,10 +15,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.foundry.model;
+package de.kaiserpfalzedv.rpg.torg.foundry.actors;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import de.kaiserpfalzedv.rpg.torg.foundry.model.*;
+import de.kaiserpfalzedv.rpg.torg.model.actors.Other;
+import de.kaiserpfalzedv.rpg.torg.model.core.Level;
+import de.kaiserpfalzedv.rpg.torg.model.core.Xp;
 import lombok.*;
 
 /**
@@ -40,11 +44,11 @@ public class ActorData {
 
     private ActorData data;
 
-    private Shock shock;
-    private Wounds wounds;
+    private Level shock;
+    private Level wounds;
     private Attributes attributes;
     private Other other;
-    private Skills skills;
+    private FoundrySkills skills;
     private Details details;
     private String editstate;
 
@@ -66,7 +70,7 @@ public class ActorData {
     private int minStrength;
     private boolean equipped;
     private String equippedClass;
-    private Ammo ammo;
+    private Level ammo;
     private String range;
     private Xp xp;
     private Axioms axioms;

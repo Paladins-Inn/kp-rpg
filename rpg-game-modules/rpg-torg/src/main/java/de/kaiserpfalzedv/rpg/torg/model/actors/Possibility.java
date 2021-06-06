@@ -15,26 +15,39 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.foundry.model;
+package de.kaiserpfalzedv.rpg.torg.model.actors;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
 import lombok.*;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import java.util.HashMap;
 
 /**
- * Xp --
+ * Possibility --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0  2021-06-05
+ * @since 2.0.0  2021-06-06
  */
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = Xp.XpBuilder.class)
 @Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @ToString
-public class Xp {
-    private int unspent;
-    private int earned;
+@EqualsAndHashCode
+@JsonDeserialize(builder = Possibility.PossibilityBuilder.class)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
+@Schema(description = "Possibilities and probability to have possibilities")
+public class Possibility {
+    @Schema(description = "Number of maximum possibilities of the actor", nullable = true)
+    private final Integer possibilities;
+
+    @Schema(description = "The probability that the actor has possibilities (need to be checked with D20).", nullable = true)
+    private final Integer probability;
+
+    @ToString.Exclude
+    @Schema(description = "Different cosms have different possibilities.", nullable = true)
+    @Builder.Default
+    private final HashMap<Cosm, Integer> cosmPossibilities = new HashMap<>();
 }

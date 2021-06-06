@@ -20,6 +20,8 @@ package de.kaiserpfalzedv.rpg.torg.foundry.actors;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.torg.foundry.FoundryResource;
+import de.kaiserpfalzedv.rpg.torg.foundry.model.Flag;
+import de.kaiserpfalzedv.rpg.torg.foundry.model.Permission;
 import lombok.*;
 
 /**

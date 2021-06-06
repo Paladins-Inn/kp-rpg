@@ -17,6 +17,16 @@
 
 package de.kaiserpfalzedv.rpg.torg.model.actors;
 
+import de.kaiserpfalzedv.rpg.torg.model.core.Armor;
+import de.kaiserpfalzedv.rpg.torg.model.core.Attack;
+import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
+import de.kaiserpfalzedv.rpg.torg.model.items.Item;
+import de.kaiserpfalzedv.rpg.torg.model.perks.Perk;
+import de.kaiserpfalzedv.rpg.torg.model.perks.magic.Spell;
+import de.kaiserpfalzedv.rpg.torg.model.perks.psionic.PsiPower;
+
+import java.util.Set;
+
 /**
  * Threat --
  *
@@ -24,4 +34,29 @@ package de.kaiserpfalzedv.rpg.torg.model.actors;
  * @since 1.3.0  2021-06-05
  */
 public interface Threat {
+    String getName();
+
+    String getDescription();
+
+    Cosm getCosm();
+
+    Set<AttributeValue> getAttributes();
+
+    Other getOther();
+
+    Possibility getPossibilities();
+
+    Set<SkillValue> getSkills();
+
+    Set<Attack> getAttacks();
+
+    Set<Armor> getArmor();
+
+    Set<Perk> getPerks();
+
+    Set<Spell> getSpells();
+
+    Set<PsiPower> getPsiPowers();
+
+    Set<Item> getGear();
 }

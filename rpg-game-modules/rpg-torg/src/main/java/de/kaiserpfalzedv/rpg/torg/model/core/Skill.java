@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg.model.core;
 
+import de.kaiserpfalzedv.rpg.torg.model.MapperEnum;
 import de.kaiserpfalzedv.rpg.torg.model.actors.Attribute;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -40,7 +41,7 @@ import static de.kaiserpfalzedv.rpg.torg.model.actors.Attribute.*;
 @AllArgsConstructor
 @Getter
 @ToString(onlyExplicitlyIncluded = true)
-public enum Skill {
+public enum Skill implements MapperEnum<Skill> {
     ENERGY_WEAPONS(DEXTERITY, "attr_EnergyWeapons", "energyWeapons"),
     FIRE_COMBAT(DEXTERITY, "attr_FireCombat", "fireCombat"),
     HEAVY_WEAPONS(DEXTERITY, "attr_HeavyWeapons", "heavyWeapons"),

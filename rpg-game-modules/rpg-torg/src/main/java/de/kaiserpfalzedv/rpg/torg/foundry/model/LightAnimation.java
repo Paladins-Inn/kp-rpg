@@ -36,6 +36,6 @@ import lombok.*;
 @ToString
 public class LightAnimation {
     private String type;
-    private float speed;
-    private float intensity;
+    private int speed;
+    private int intensity;
 }
