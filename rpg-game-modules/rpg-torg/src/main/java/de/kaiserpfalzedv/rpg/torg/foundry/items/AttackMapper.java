@@ -17,8 +17,16 @@
 
 package de.kaiserpfalzedv.rpg.torg.foundry.items;
 
-import de.kaiserpfalzedv.rpg.torg.model.items.Item;
+import de.kaiserpfalzedv.rpg.torg.model.core.Attack;
+import de.kaiserpfalzedv.rpg.torg.model.core.Axiom;
+import de.kaiserpfalzedv.rpg.torg.model.core.Damage;
+import de.kaiserpfalzedv.rpg.torg.model.core.Skill;
+import de.kaiserpfalzedv.rpg.torg.model.items.ItemData;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * AttackMapper --
@@ -29,7 +37,49 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AttackMapper extends BaseItemMapper {
     @Override
-    public Item convert(FoundryItem orig) {
-        return null;
+    public ItemData convertItemSpec(
+            @NotNull final ItemData.ItemDataBuilder result,
+            @NotNull final FoundryItem orig
+    ) {
+        result.withAttack(convertAttacks(orig));
+
+        return result.build();
+    }
+
+    private Set<Attack> convertAttacks(final FoundryItem orig) {
+        return Set.of(convertAttack(orig));
+    }
+
+    private Attack convertAttack(final FoundryItem orig) {
+        Attack.AttackBuilder result = Attack.builder();
+
+        if (orig.getData().getTechlevel() != 0) {
+            result.withAxioms(List.of(
+                    Axiom.builder()
+                            .withName(Axiom.AxiomName.Tech)
+                            .withValue(orig.getData().getTechlevel())
+                            .build()
+            ));
+        }
+
+        result.withSkill(Skill.mapFoundry(orig.getData().getAttackWith()).orElse(null));
+
+        try {
+            result.withDamage(
+                    Damage.builder()
+                            .withType(Damage.DamageType.mapFoundry(orig.getData().getDamageType()).orElse(null))
+                            .withValue(orig.getData().getDamage())
+                            .withAdds(orig.getData().getBonus())
+                            .build()
+            );
+        } catch (NullPointerException e) {
+            log.warn("No damage type defined for item. item='{}', id={}", orig.getName(), orig.get_id());
+        }
+
+        result.withAp(orig.getData().getAp());
+
+        result.withDamageNote(orig.getData().getNotes());
+
+        return result.build();
     }
 }

@@ -19,7 +19,6 @@ package de.kaiserpfalzedv.rpg.torg.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.rpg.torg.model.actors.SkillValue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,8 +62,11 @@ public class Attack {
     private final String range;
 
     @Schema(description = "The skill used for this attack.")
-    private final SkillValue skill;
+    private final Skill skill;
 
     @Schema(description = "The attack is a power and not an item.", nullable = true)
     private final AttackPower power;
+
+    private final String attackNote;
+    private final String damageNote;
 }

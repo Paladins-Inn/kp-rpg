@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.torg.foundry.model.*;
 import de.kaiserpfalzedv.rpg.torg.model.actors.Other;
+import de.kaiserpfalzedv.rpg.torg.model.actors.Xp;
 import de.kaiserpfalzedv.rpg.torg.model.core.Level;
-import de.kaiserpfalzedv.rpg.torg.model.core.Xp;
 import lombok.*;
 
 /**

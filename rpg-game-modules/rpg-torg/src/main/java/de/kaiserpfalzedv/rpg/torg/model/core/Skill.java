@@ -90,6 +90,10 @@ public enum Skill implements MapperEnum<Skill> {
     private final String roll20;
     private final String foundry;
 
+    public static Optional<Skill> mapFoundry(@NotNull final String name) {
+        return REALITY.mapFromFoundry(name);
+    }
+
     public Optional<Skill> mapFromFoundry(@NotNull final String name) {
         return Optional.ofNullable(
                 allSkills().stream()

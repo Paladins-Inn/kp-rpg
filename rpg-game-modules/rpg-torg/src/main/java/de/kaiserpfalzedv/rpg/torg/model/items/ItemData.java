@@ -45,7 +45,7 @@ import java.util.Set;
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @Getter
-@ToString(onlyExplicitlyIncluded = true)
+@ToString
 @JsonDeserialize(builder = ItemData.ItemDataBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(description = "Gear and equipment.")

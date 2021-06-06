@@ -15,28 +15,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.foundry.items;
+package de.kaiserpfalzedv.rpg.torg.foundry;
 
-import de.kaiserpfalzedv.rpg.torg.model.items.ItemData;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.enterprise.context.Dependent;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
 /**
- * GearMapper -- Maps the basic gear data.
+ * PriceMapper --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0  2021-06-05
+ * @since 2.0.0  2021-06-06
  */
-@Dependent
 @Slf4j
-public class GearMapper extends BaseItemMapper {
-    @Override
-    public ItemData convertItemSpec(
-            @NotNull final ItemData.ItemDataBuilder result,
-            @NotNull final FoundryItem orig
-    ) {
-        return result.build();
+public class PriceMapper {
+    public Integer parse(@NotNull final String input) {
+        if (input == null || input.isBlank() || "null".equals(input)) {
+            log.debug("Price can't be parsed. input='{}'", input);
+            return null;
+        } else {
+            log.trace("Parsing price: input='{}'", input);
+        }
+
+        return (int) new ExpressionBuilder(input
+                .replaceAll("B", "*1000000000")
+                .replaceAll("M", "*1000000")
+                .replaceAll("K", "*1000")
+                .replace(",", ".")
+        ).build().evaluate();
     }
 }

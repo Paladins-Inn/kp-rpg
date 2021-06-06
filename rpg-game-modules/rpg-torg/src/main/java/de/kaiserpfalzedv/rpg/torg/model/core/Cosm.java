@@ -23,6 +23,7 @@ import de.kaiserpfalzedv.rpg.torg.model.MapperEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -40,15 +41,16 @@ import static de.kaiserpfalzedv.rpg.torg.data.Publications.CORE_RULES;
 @SuppressWarnings({"unused", "SpellCheckingInspection", "CdiInjectionPointsInspection"})
 @Getter
 @ToString
+@Slf4j
 public enum Cosm implements MapperEnum<Cosm> {
-    AYSLE("aysle", "aysle", 24, 16, 18, 14, Type.MAIN, CORE_RULES),
-    CORE_EARTH("coreEarth", "Core Earth", 9, 23, 10, 23, Type.MAIN, CORE_RULES),
-    CYBERPAPACY("cyberpapacy", "Cyberpapacy", 14, 18, 16, 26, Type.MAIN, CORE_RULES),
-    LIVING_LAND("livingLand", "Living Land", 1, 7, 24, 6, Type.MAIN, CORE_RULES),
-    NILE_EMPIRE("nileEmpire", "Nile Empire", 14, 20, 18, 20, Type.MAIN, CORE_RULES),
-    ORRORSH("0rrorsh", "Orrorsh", 16, 18, 16, 18, Type.MAIN, CORE_RULES),
-    PAN_PACIFICA("panPacifica", "Pan Pacifica", 4, 24, 8, 24, Type.MAIN, CORE_RULES),
-    THARKOLD("tharkold", "Tharkold", 12, 25, 4, 25, Type.MAIN, CORE_RULES),
+    AYSLE("Aysle", "Aysle", 24, 16, 18, 14, Type.MAIN, CORE_RULES),
+    CORE_EARTH("Core Earth", "Core Earth", 9, 23, 10, 23, Type.MAIN, CORE_RULES),
+    CYBERPAPACY("Cyberpapacy", "Cyberpapacy", 14, 18, 16, 26, Type.MAIN, CORE_RULES),
+    LIVING_LAND("Living Land", "Living Land", 1, 7, 24, 6, Type.MAIN, CORE_RULES),
+    NILE_EMPIRE("Nile Empire", "Nile Empire", 14, 20, 18, 20, Type.MAIN, CORE_RULES),
+    ORRORSH("Orrorsh", "Orrorsh", 16, 18, 16, 18, Type.MAIN, CORE_RULES),
+    PAN_PACIFICA("Pan-Pacifica", "Pan-Pacifica", 4, 24, 8, 24, Type.MAIN, CORE_RULES),
+    THARKOLD("Tharkold", "Tharkold", 12, 25, 4, 25, Type.MAIN, CORE_RULES),
 
     AKASHA("akasha", "Akasha", 1, 26, 1, 28, Type.MINOR, null),
     UKHAAN("ukhaan", "Ukhaan", 8, 27, 5, 27, Type.MINOR, null),
@@ -132,6 +134,12 @@ public enum Cosm implements MapperEnum<Cosm> {
 
     @Override
     public Optional<Cosm> mapFromFoundry(@NotNull final String name) {
+        log.trace("Mapping cosm. name='{}'", name);
+
+        if ("(None)".equals(name) || "Universal".equals(name)) {
+            return Optional.empty();
+        }
+
         return Optional.of(
                 allCosms().stream()
                         .filter(e -> e.foundry.equals(name)).distinct()

@@ -17,12 +17,22 @@
 
 package de.kaiserpfalzedv.rpg.torg.foundry.items;
 
+import de.kaiserpfalzedv.commons.core.resources.History;
+import de.kaiserpfalzedv.commons.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.resources.Status;
 import de.kaiserpfalzedv.rpg.torg.foundry.FoundryMapper;
+import de.kaiserpfalzedv.rpg.torg.foundry.PriceMapper;
+import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
 import de.kaiserpfalzedv.rpg.torg.model.items.Item;
+import de.kaiserpfalzedv.rpg.torg.model.items.ItemData;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collections;
+import java.util.Set;
+
 /**
- * BaseItemMapper --
+ * BaseItemMapper -- The strategy base for converting items.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-06-05
@@ -30,4 +40,87 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class BaseItemMapper implements FoundryMapper<FoundryItem, Item> {
 
+    private final PriceMapper priceMapper = new PriceMapper();
+
+    public Item convert(@NotNull final FoundryItem orig) {
+        Item.ItemBuilder result = Item.builder()
+                .withKind(Item.KIND)
+                .withApiVersion(Item.VERSION)
+
+                .withName(orig.getName())
+                .withNamespace(orig.getType().getTitle())
+
+                .withMetadata(Metadata.builder()
+                        .withLabel("foundry.id", orig.get_id())
+                        .build()
+                )
+
+                .withStatus(Status.builder()
+                        .withHistory(Collections.singletonList(
+                                History.builder()
+                                        .withStatus("converted")
+                                        .withMessage("Converted from foundry data.")
+                                        .build()
+                        ))
+                        .build()
+                );
+
+        ItemData.ItemDataBuilder spec = ItemData.builder();
+
+
+        if (orig.getData().getNotes() != null) {
+            spec.withNotes(Set.of(orig.getData().getNotes()));
+        }
+
+        if (orig.getData().getDescription() != null
+                && !"null".equals(orig.getData().getDescription())
+        ) {
+            spec.withDescription(orig.getData().getDescription());
+        }
+
+
+        if (orig.getData().getCosm() != null
+                && !orig.getData().getCosm().isBlank()
+                && !"(None)".equals(orig.getData().getCosm())
+                && !"Universal".equals(orig.getData().getCosm())
+        ) {
+            convertCosm(spec, orig);
+        }
+
+        if (orig.getData().getPrice() != null
+                && !"null".equals(orig.getData().getPrice())
+                && !orig.getData().getPrice().isBlank()
+        ) {
+            convertPrice(spec, orig);
+        }
+
+        result.withSpec(convertItemSpec(spec, orig));
+
+        return result.build();
+    }
+
+    public abstract ItemData convertItemSpec(
+            @NotNull final ItemData.ItemDataBuilder spec,
+            @NotNull final FoundryItem orig
+    );
+
+    protected void convertCosm(@NotNull ItemData.ItemDataBuilder result, @NotNull final FoundryItem orig) {
+        Cosm.mapFoundry(orig.getData().getCosm()).ifPresentOrElse(
+                c -> result.withCosms(Collections.singleton(c)),
+                () -> {
+                }
+        );
+    }
+
+    protected void convertPrice(@NotNull ItemData.ItemDataBuilder result, @NotNull final FoundryItem orig) {
+        try {
+            result.withPrice(priceMapper.parse(orig.getData().getPrice()));
+        } catch (NullPointerException e) {
+            log.trace(
+                    "No valid price for item. item='{}', id={}, price:'{}'",
+                    orig.getName(), orig.get_id(), orig.getData().getPrice()
+            );
+        }
+        result.withDelphiDN(orig.getData().getValue());
+    }
 }

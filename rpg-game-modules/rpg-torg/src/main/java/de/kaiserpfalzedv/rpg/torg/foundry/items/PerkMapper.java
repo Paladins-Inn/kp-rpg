@@ -17,7 +17,8 @@
 
 package de.kaiserpfalzedv.rpg.torg.foundry.items;
 
-import de.kaiserpfalzedv.rpg.torg.model.items.Item;
+import de.kaiserpfalzedv.rpg.torg.model.items.ItemData;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -29,7 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PerkMapper extends BaseItemMapper {
     @Override
-    public Item convert(FoundryItem orig) {
-        return null;
+    public ItemData convertItemSpec(
+            @NotNull final ItemData.ItemDataBuilder result,
+            @NotNull final FoundryItem orig
+    ) {
+        return result.build();
     }
 }

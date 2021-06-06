@@ -19,7 +19,10 @@ package de.kaiserpfalzedv.rpg.torg.foundry.items;
 
 import de.kaiserpfalzedv.rpg.torg.foundry.FoundryMapper;
 import de.kaiserpfalzedv.rpg.torg.model.items.Item;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.enterprise.context.Dependent;
 
 /**
  * ItemMapperFactory --
@@ -27,8 +30,14 @@ import lombok.extern.slf4j.Slf4j;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-06-05
  */
+@Dependent
 @Slf4j
-public class ItemMapperFactory {
+public class FoundryItemMapper {
+    public Item convert(@NotNull final FoundryItem orig) {
+        return FoundryItemMapper.getMapper(orig)
+                .convert(orig);
+    }
+
     public static FoundryMapper<FoundryItem, Item> getMapper(FoundryItem item) {
         switch (item.getType()) {
             case MELEEWEAPON: // true false true false
