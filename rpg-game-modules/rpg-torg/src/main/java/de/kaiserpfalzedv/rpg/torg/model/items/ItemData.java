@@ -42,6 +42,7 @@ import java.util.Set;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-05-23
  */
+@SuppressWarnings("FieldMayBeFinal")
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @Getter
@@ -72,11 +73,11 @@ public class ItemData implements Serializable {
 
     @Min(1)
     @Schema(description = "The price in $.", minimum = "1")
-    private final int price = 100;
+    private int price = 100;
 
     @Min(1)
     @Schema(description = "The DN to get the equipment from the Delphi Council.", minimum = "1")
-    private final int delphiDN = 10;
+    private int delphiDN = 10;
 
     @Schema(description = "Possible attack (most spells are treated as attack to use the CharSheet for rolling).", minItems = 0)
     @Builder.Default
