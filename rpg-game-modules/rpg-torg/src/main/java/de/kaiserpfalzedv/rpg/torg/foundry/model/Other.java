@@ -15,40 +15,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model;
+package de.kaiserpfalzedv.rpg.torg.foundry.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 /**
- * Skill -- A single skill of a character/npc or threat.
+ * Other --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0  2021-05-23
+ * @since 2.0.0  2021-06-04
  */
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = Other.OtherBuilder.class)
 @Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @ToString
-@EqualsAndHashCode
-@JsonDeserialize(builder = Skill.SkillBuilder.class)
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
-@Schema(description = "A single skill with its values")
-public class Skill {
-    @Schema(description = "Name of the skill to use.")
-    private final SkillType name;
-
-    @Schema(description = "Name of the attribute to use.")
-    private final Attribute attribute;
-
-    @Schema(description = "The adds of this skill", nullable = true)
-    private final Integer adds;
-
-    @Schema(description = "The bonus to the skill", nullable = true)
-    private final Integer bonus;
-
-    @Schema(description = "The total value of this skill", nullable = true)
-    private final Integer value;
+public class Other {
+    private int move;
+    private int run;
+    private int toughness;
+    private int armor;
+    private String cosm;
+    private int possibilities;
+    private int posibilities;
 }

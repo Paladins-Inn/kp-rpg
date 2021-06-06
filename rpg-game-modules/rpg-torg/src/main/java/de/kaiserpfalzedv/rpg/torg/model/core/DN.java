@@ -15,38 +15,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model.perks;
+package de.kaiserpfalzedv.rpg.torg.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.rpg.torg.model.actors.Clearance;
-import de.kaiserpfalzedv.rpg.torg.model.actors.SkillValue;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-
-import java.io.Serializable;
-import java.util.Set;
 
 /**
- * Prerequisites -- The prerequisites for obtaining a perk.
+ * DN --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 0.3.0  2021-05-23
  */
-@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @Getter
-@ToString
-@JsonDeserialize(builder = Prerequisites.PrerequisitesBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@Schema(description = "The prerequisites for obtaining a perk.")
-public class Prerequisites implements Serializable {
-    @Schema(description = "Skills that are a prerequisite.", nullable = true)
-    private final Set<SkillValue> skills;
+public enum DN {
+    VERY_EASY("Very Easy", 6, +4),
+    EASY("Easy", 8, +2),
+    STANDARD("Standard", 10, 0),
+    CHALLENGING("Challenging", 12, -2),
+    HARD("Hard", 14, -4),
+    VERY_HARD("Very Hard", 16, -6),
+    HEROIC("Heroic", 18, -8),
+    NEAR_IMPOSSIBLE("Near Impossible", 20, -10);
 
-    @Schema(description = "Minimum clearance level as prerequisite", nullable = true)
-    private final Clearance clearance;
+    private final String name;
+    private final Integer dn;
+    private final Integer modifier;
 }

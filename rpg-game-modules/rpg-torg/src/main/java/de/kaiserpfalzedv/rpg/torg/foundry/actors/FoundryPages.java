@@ -15,38 +15,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model;
+package de.kaiserpfalzedv.rpg.torg.foundry.actors;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import de.kaiserpfalzedv.rpg.torg.foundry.FoundryResource;
 import lombok.*;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 /**
- * Axiom -- A single axiom value.
- * <p>
- * This is the value of an axiom for the given axiom. Since most of the times the {@link AxiomName#Tech} is needed, this
- * is the default when building an axiom.
+ * FoundryPages --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0  2021-05-23
+ * @since 1.2.0  2021-06-04
  */
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = FoundryPages.FoundryPagesBuilder.class)
 @Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString(onlyExplicitlyIncluded = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@JsonDeserialize(builder = Axiom.AxiomBuilder.class)
-@Schema(description = "A single axiom with its value")
-public class Axiom {
-    public enum AxiomName {
-        Magic,
-        Social,
-        Spirit,
-        Tech
-    }
-
-    @Builder.Default
-    private final AxiomName name = AxiomName.Tech;
-    private int value;
+@ToString
+public class FoundryPages implements FoundryResource {
+    private String _id;
+    private String name;
+    private Permission permission;
+    private String folder;
+    private Flag flags;
+    private String content;
+    private String img;
 }

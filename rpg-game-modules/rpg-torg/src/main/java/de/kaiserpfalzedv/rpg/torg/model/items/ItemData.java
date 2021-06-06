@@ -19,11 +19,10 @@ package de.kaiserpfalzedv.rpg.torg.model.items;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.commons.core.resources.Resource;
-import de.kaiserpfalzedv.rpg.torg.model.Armor;
-import de.kaiserpfalzedv.rpg.torg.model.Attack;
-import de.kaiserpfalzedv.rpg.torg.model.Axiom;
-import de.kaiserpfalzedv.rpg.torg.model.Cosm;
+import de.kaiserpfalzedv.rpg.torg.model.core.Armor;
+import de.kaiserpfalzedv.rpg.torg.model.core.Attack;
+import de.kaiserpfalzedv.rpg.torg.model.core.Axiom;
+import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

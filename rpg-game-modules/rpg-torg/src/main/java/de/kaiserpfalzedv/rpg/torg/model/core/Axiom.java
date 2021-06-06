@@ -15,38 +15,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model.perks;
+package de.kaiserpfalzedv.rpg.torg.model.core;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.rpg.torg.model.actors.Clearance;
-import de.kaiserpfalzedv.rpg.torg.model.actors.SkillValue;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import java.io.Serializable;
-import java.util.Set;
-
 /**
- * Prerequisites -- The prerequisites for obtaining a perk.
+ * Axiom -- A single axiom value.
+ * <p>
+ * This is the value of an axiom for the given axiom. Since most of the times the {@link AxiomName#Tech} is needed, this
+ * is the default when building an axiom.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 0.3.0  2021-05-23
+ * @since 1.2.0  2021-05-23
  */
 @Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
-@ToString
-@JsonDeserialize(builder = Prerequisites.PrerequisitesBuilder.class)
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
-@Schema(description = "The prerequisites for obtaining a perk.")
-public class Prerequisites implements Serializable {
-    @Schema(description = "Skills that are a prerequisite.", nullable = true)
-    private final Set<SkillValue> skills;
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@JsonDeserialize(builder = Axiom.AxiomBuilder.class)
+@Schema(description = "A single axiom with its value")
+public class Axiom {
+    public enum AxiomName {
+        Magic,
+        Social,
+        Spirit,
+        Tech
+    }
 
-    @Schema(description = "Minimum clearance level as prerequisite", nullable = true)
-    private final Clearance clearance;
+    @Builder.Default
+    private final AxiomName name = AxiomName.Tech;
+    private int value;
 }

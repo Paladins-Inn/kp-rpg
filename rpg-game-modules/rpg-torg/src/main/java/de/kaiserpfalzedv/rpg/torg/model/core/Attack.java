@@ -15,10 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model;
+package de.kaiserpfalzedv.rpg.torg.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import de.kaiserpfalzedv.rpg.torg.model.actors.SkillValue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -62,7 +63,7 @@ public class Attack {
     private final String range;
 
     @Schema(description = "The skill used for this attack.")
-    private final Skill skill;
+    private final SkillValue skill;
 
     @Schema(description = "The attack is a power and not an item.", nullable = true)
     private final AttackPower power;

@@ -15,26 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+package de.kaiserpfalzedv.rpg.torg.model.actors;
 
 /**
- * AttributeType --
+ * Threat --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 0.3.0  2021-05-23
+ * @since 1.3.0  2021-06-05
  */
-@AllArgsConstructor
-@Getter
-public enum AttributeType {
-    CHARISMA("CHA", "charisma"),
-    DEXTERITY("DEX", "dexterity"),
-    MIND("MIN", "mind"),
-    SPIRIT("SPI", "spirit"),
-    STRENGTH("STR", "strength");
-
-    private final String shortName;
-    private final String name;
+public interface Threat {
 }

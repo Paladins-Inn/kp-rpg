@@ -15,37 +15,37 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model;
+package de.kaiserpfalzedv.rpg.torg.foundry.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import java.util.ArrayList;
 
 /**
- * AttackPower -- A power usage instead of an attack.
+ * Effects --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0  2021-05-23
+ * @since 2.0.0  2021-06-04
  */
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = Effect.EffectBuilder.class)
 @Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @ToString
-@EqualsAndHashCode
-@JsonDeserialize(builder = AttackPower.AttackPowerBuilder.class)
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
-public class AttackPower {
-    @Schema(description = "Casting time of this power.", nullable = true)
-    private final String castingTime;
-
-    @Schema(description = "Duration of the power effects.", nullable = true)
-    private final String duration;
-
-    @Schema(description = "DN for this power")
+public class Effect {
+    private String _id;
+    private Flag flags;
     @Builder.Default
-    private final AttackPowerTarget dn = AttackPowerTarget.DefaultAttack;
-
-    @Schema(description = "Description of the possible results.")
-    private final Success success;
+    private final ArrayList<Change> changes = new ArrayList<>();
+    private boolean disabled;
+    private Duration duration;
+    private String icon;
+    private String label;
+    private String origin;
+    private String tint;
+    private boolean transfer;
 }

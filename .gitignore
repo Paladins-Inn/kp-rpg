@@ -15,4 +15,5 @@ stats.json
 coverage
 storybook-static
 .env
-/rpg-bot/src/main/resources/static/
+te001/
+/kp-rpg-discord-bot/token

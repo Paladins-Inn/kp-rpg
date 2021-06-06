@@ -15,20 +15,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model;
+package de.kaiserpfalzedv.rpg.torg.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import java.util.List;
-
 /**
- * Armor -- The data for all CharSheet armors (weapons, powers, ...).
+ * AttackPower -- A power usage instead of an attack.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-05-23
@@ -37,25 +32,20 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @ToString
-@JsonDeserialize(builder = Armor.ArmorBuilder.class)
+@EqualsAndHashCode
+@JsonDeserialize(builder = AttackPower.AttackPowerBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-public class Armor {
-    @Schema(description = "Name of the armor.", minLength = 5, maxLength = 50)
-    private final String name;
+public class AttackPower {
+    @Schema(description = "Casting time of this power.", nullable = true)
+    private final String castingTime;
 
-    @Schema(description = "Axiom of this armor.", minItems = 1, maxItems = 1)
-    private final List<Axiom> axioms;
+    @Schema(description = "Duration of the power effects.", nullable = true)
+    private final String duration;
 
-    @Schema(description = "This armor limits the dexterity to this value.", nullable = true, minimum = "1", maximum = "30")
-    private final Integer maxDex;
-
-    @Schema(description = "The armor bonus.")
-    private final Integer bonus;
-
-    @Schema(description = "If the use of this armor will fatigue the wearer of this armor.")
+    @Schema(description = "DN for this power")
     @Builder.Default
-    private final Boolean fatigues = false;
+    private final AttackPowerTarget dn = AttackPowerTarget.DefaultAttack;
 
-    @Schema(description = "The description of a power.")
-    private final AttackPower power;
+    @Schema(description = "Description of the possible results.")
+    private final Success success;
 }

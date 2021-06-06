@@ -15,37 +15,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model;
+package de.kaiserpfalzedv.rpg.torg.foundry.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 /**
- * Attribute -- A single attribute of the person.
+ * Details --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0  2021-05-23
+ * @since 2.0.0  2021-06-04
  */
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
+@JsonDeserialize(builder = Details.DetailsBuilder.class)
 @Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @ToString
-@EqualsAndHashCode
-@JsonDeserialize(builder = Attribute.AttributeBuilder.class)
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
-@Schema(description = "A single attribute with its values")
-public class Attribute {
-    @Schema(description = "Name of the attribute.")
-    private final AttributeType name;
+public class Details {
+    private String possibilitypotential;
+    private String description;
+    private float sizeBonus;
 
-    @Schema(description = "Base value of the attribute.")
-    private final Integer base;
-
-    @Schema(description = "The modification to the attribute.", nullable = true)
-    private final Integer mod;
-
-    @Schema(description = "The total value of this attribute")
-    private final Integer value;
+    // Archetype data
+    private String clearance;
+    private String background;
+    private String race;
 }

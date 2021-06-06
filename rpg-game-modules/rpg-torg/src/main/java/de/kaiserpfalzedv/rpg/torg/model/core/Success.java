@@ -15,38 +15,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model.perks;
+package de.kaiserpfalzedv.rpg.torg.model.core;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.rpg.torg.model.actors.Clearance;
-import de.kaiserpfalzedv.rpg.torg.model.actors.SkillValue;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import java.io.Serializable;
-import java.util.Set;
-
 /**
- * Prerequisites -- The prerequisites for obtaining a perk.
+ * Success -- Description of different success levels.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 0.3.0  2021-05-23
+ * @since 1.2.0  2021-05-23
  */
 @Builder(setterPrefix = "with", toBuilder = true)
-@AllArgsConstructor
 @Getter
 @ToString
-@JsonDeserialize(builder = Prerequisites.PrerequisitesBuilder.class)
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
-@Schema(description = "The prerequisites for obtaining a perk.")
-public class Prerequisites implements Serializable {
-    @Schema(description = "Skills that are a prerequisite.", nullable = true)
-    private final Set<SkillValue> skills;
+@EqualsAndHashCode
+@Schema(description = "Description of different success levels.")
+public class Success {
+    @Schema(description = "Description of a standard success.")
+    private final String standard;
 
-    @Schema(description = "Minimum clearance level as prerequisite", nullable = true)
-    private final Clearance clearance;
+    @Schema(description = "Description of a good success.")
+    private final String good;
+
+    @Schema(description = "Description of an outstanding success.")
+    private final String outstanding;
 }

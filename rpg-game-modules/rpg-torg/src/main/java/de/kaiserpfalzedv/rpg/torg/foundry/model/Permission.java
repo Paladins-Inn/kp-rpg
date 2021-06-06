@@ -15,32 +15,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model;
+package de.kaiserpfalzedv.rpg.torg.foundry.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.*;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 
 /**
- * DN --
+ * Permission --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 0.3.0  2021-05-23
+ * @since 2.0.0  2021-06-04
  */
-@AllArgsConstructor
-@Getter
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-public enum DN {
-    VERY_EASY("Very Easy", 6, +4),
-    EASY("Easy", 8, +2),
-    STANDARD("Standard", 10, 0),
-    CHALLENGING("Challenging", 12, -2),
-    HARD("Hard", 14, -4),
-    VERY_HARD("Very Hard", 16, -6),
-    HEROIC("Heroic", 18, -8),
-    NEAR_IMPOSSIBLE("Near Impossible", 20, -10);
+@JsonDeserialize(builder = Permission.PermissionBuilder.class)
+@Builder(setterPrefix = "with", toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString
+public class Permission {
+    @BsonProperty("default")
+    @JsonProperty("default")
+    private int _default;
 
-    private final String name;
-    private final Integer dn;
-    private final Integer modifier;
+    @JsonProperty("A9LyAqagoJJU3gDH")
+    @BsonProperty("A9LyAqagoJJU3gDH")
+    private int A9LyAqagoJJU3gDH;
 }

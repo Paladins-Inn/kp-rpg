@@ -15,38 +15,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model.perks;
+package de.kaiserpfalzedv.rpg.torg.foundry.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.rpg.torg.model.actors.Clearance;
-import de.kaiserpfalzedv.rpg.torg.model.actors.SkillValue;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-
-import java.io.Serializable;
-import java.util.Set;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
- * Prerequisites -- The prerequisites for obtaining a perk.
+ * Duration --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 0.3.0  2021-05-23
+ * @since 2.0.0  2021-06-04
  */
-@Builder(setterPrefix = "with", toBuilder = true)
-@AllArgsConstructor
-@Getter
-@ToString
-@JsonDeserialize(builder = Prerequisites.PrerequisitesBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@Schema(description = "The prerequisites for obtaining a perk.")
-public class Prerequisites implements Serializable {
-    @Schema(description = "Skills that are a prerequisite.", nullable = true)
-    private final Set<SkillValue> skills;
-
-    @Schema(description = "Minimum clearance level as prerequisite", nullable = true)
-    private final Clearance clearance;
+@JsonDeserialize(builder = Duration.DurationBuilder.class)
+@Builder(setterPrefix = "with", toBuilder = true)
+@RequiredArgsConstructor
+@NoArgsConstructor
+@Getter
+public class Duration {
+    @Builder.Default
+    private final String startTime = null;
+    @Builder.Default
+    private final String seconds = null;
+    @Builder.Default
+    private final String rounds = null;
+    @Builder.Default
+    private final String turns = null;
+    @Builder.Default
+    private final String startRound = null;
+    @Builder.Default
+    private final String startTurn = null;
 }

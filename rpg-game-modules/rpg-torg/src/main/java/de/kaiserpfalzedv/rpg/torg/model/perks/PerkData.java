@@ -19,9 +19,9 @@ package de.kaiserpfalzedv.rpg.torg.model.perks;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.rpg.torg.model.Armor;
-import de.kaiserpfalzedv.rpg.torg.model.Attack;
-import de.kaiserpfalzedv.rpg.torg.model.Clearance;
+import de.kaiserpfalzedv.rpg.torg.model.actors.Clearance;
+import de.kaiserpfalzedv.rpg.torg.model.core.Armor;
+import de.kaiserpfalzedv.rpg.torg.model.core.Attack;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

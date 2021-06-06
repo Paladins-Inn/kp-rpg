@@ -19,10 +19,10 @@ package de.kaiserpfalzedv.rpg.torg.model.perks.magic;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.rpg.torg.model.Armor;
-import de.kaiserpfalzedv.rpg.torg.model.Attack;
-import de.kaiserpfalzedv.rpg.torg.model.Axiom;
-import de.kaiserpfalzedv.rpg.torg.model.Clearance;
+import de.kaiserpfalzedv.rpg.torg.model.actors.Clearance;
+import de.kaiserpfalzedv.rpg.torg.model.core.Armor;
+import de.kaiserpfalzedv.rpg.torg.model.core.Attack;
+import de.kaiserpfalzedv.rpg.torg.model.core.Axiom;
 import de.kaiserpfalzedv.rpg.torg.model.perks.Prerequisites;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

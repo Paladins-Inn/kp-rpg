@@ -15,32 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model;
+package de.kaiserpfalzedv.rpg.torg.foundry;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import de.kaiserpfalzedv.commons.core.resources.Resource;
+import jakarta.validation.constraints.NotNull;
+
+import java.io.Serializable;
 
 /**
- * Success -- Description of different success levels.
+ * FoundryMapper --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 1.2.0  2021-05-23
+ * @since 1.2.0  2021-06-05
  */
-@Builder(setterPrefix = "with", toBuilder = true)
-@Getter
-@ToString
-@EqualsAndHashCode
-@Schema(description = "Description of different success levels.")
-public class Success {
-    @Schema(description = "Description of a standard success.")
-    private final String standard;
-
-    @Schema(description = "Description of a good success.")
-    private final String good;
-
-    @Schema(description = "Description of an outstanding success.")
-    private final String outstanding;
+public interface FoundryMapper<F extends FoundryResource, K extends Resource<? extends Serializable>> {
+    K convert(@NotNull final F orig);
 }
