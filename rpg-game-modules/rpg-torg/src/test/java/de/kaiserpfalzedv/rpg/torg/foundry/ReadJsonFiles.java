@@ -19,6 +19,7 @@ package de.kaiserpfalzedv.rpg.torg.foundry;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import de.kaiserpfalzedv.rpg.torg.foundry.actors.FoundryActor;
 import de.kaiserpfalzedv.rpg.torg.foundry.actors.FoundryPages;
 import de.kaiserpfalzedv.rpg.torg.foundry.items.*;
@@ -30,6 +31,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -59,6 +61,9 @@ public class ReadJsonFiles {
                 new PerkMapper(priceMapper),
                 new AttackAndArmorMapper(priceMapper)
         );
+
+        mapper.registerModule(new JSR310Module());
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"));
     }
 
     @Test

@@ -18,6 +18,7 @@
 package de.kaiserpfalzedv.rpg.torg.model.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
 import de.kaiserpfalzedv.rpg.torg.model.Book.Publication;
 import de.kaiserpfalzedv.rpg.torg.model.MapperEnum;
 import jakarta.validation.constraints.NotNull;
@@ -71,6 +72,8 @@ public enum Cosm implements MapperEnum<Cosm> {
 
 
     private final String foundry;
+
+    @JsonValue
     private final String roll20;
     private final Publication publication;
     private final Type type;
