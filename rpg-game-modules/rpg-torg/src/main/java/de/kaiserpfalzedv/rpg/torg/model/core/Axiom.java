@@ -34,8 +34,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString(onlyExplicitlyIncluded = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
+@EqualsAndHashCode
 @JsonDeserialize(builder = Axiom.AxiomBuilder.class)
 @Schema(description = "A single axiom with its value")
 public class Axiom {

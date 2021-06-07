@@ -43,13 +43,13 @@ public class TestPriceMapper {
     }
 
     @Test
-    public void shouldMapPricesWithKAndCommas() {
-        assertEquals(1500, sut.parse("1,5K"));
+    public void shouldMapPricesWithKAndPoint() {
+        assertEquals(1500, sut.parse("1.5K"));
     }
 
     @Test
-    public void shouldMapPricesWithKAndCommasAndSpace() {
-        assertEquals(1500, sut.parse("1,5 K"));
+    public void shouldMapPricesWithKAndPointAndSpace() {
+        assertEquals(1500, sut.parse("1.5 K"));
     }
 
 
@@ -64,12 +64,17 @@ public class TestPriceMapper {
     }
 
     @Test
-    public void shouldMapPricesWithMAndCommas() {
-        assertEquals(1500000, sut.parse("1,5M"));
+    public void shouldMapPricesWithMAndPoint() {
+        assertEquals(1500000, sut.parse("1.5M"));
     }
 
     @Test
-    public void shouldMapPricesWithMAndCommasAndSpace() {
-        assertEquals(1500000, sut.parse("1,5 M"));
+    public void shouldMapPricesWithBAndPointAndSpace() {
+        assertEquals(1500000000, sut.parse("1.5 B"));
+    }
+
+    @Test
+    public void shouldMapPricesWithMAndCommas() {
+        assertEquals(1500000000, sut.parse("1,500 M"));
     }
 }

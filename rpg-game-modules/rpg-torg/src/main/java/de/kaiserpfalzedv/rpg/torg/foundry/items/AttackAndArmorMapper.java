@@ -17,9 +17,12 @@
 
 package de.kaiserpfalzedv.rpg.torg.foundry.items;
 
+import de.kaiserpfalzedv.rpg.torg.foundry.PriceMapper;
 import de.kaiserpfalzedv.rpg.torg.model.items.ItemData;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.enterprise.context.Dependent;
 
 /**
  * AttackAndArmorMapper --
@@ -27,8 +30,14 @@ import lombok.extern.slf4j.Slf4j;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-06-05
  */
+@Dependent
 @Slf4j
 public class AttackAndArmorMapper extends BaseItemMapper {
+
+    public AttackAndArmorMapper(PriceMapper priceMapper) {
+        super(priceMapper);
+    }
+
     @Override
     public ItemData convertItemSpec(
             @NotNull final ItemData.ItemDataBuilder result,

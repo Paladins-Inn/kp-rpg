@@ -17,9 +17,12 @@
 
 package de.kaiserpfalzedv.rpg.torg.foundry.items;
 
+import de.kaiserpfalzedv.rpg.torg.foundry.PriceMapper;
 import de.kaiserpfalzedv.rpg.torg.model.items.ItemData;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.enterprise.context.Dependent;
 
 /**
  * PerkMapper --
@@ -28,7 +31,13 @@ import lombok.extern.slf4j.Slf4j;
  * @since 1.2.0  2021-06-05
  */
 @Slf4j
+@Dependent
 public class PerkMapper extends BaseItemMapper {
+
+    public PerkMapper(PriceMapper priceMapper) {
+        super(priceMapper);
+    }
+
     @Override
     public ItemData convertItemSpec(
             @NotNull final ItemData.ItemDataBuilder result,

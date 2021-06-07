@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg.foundry.items;
 
+import de.kaiserpfalzedv.rpg.torg.foundry.PriceMapper;
 import de.kaiserpfalzedv.rpg.torg.model.items.ItemData;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,11 @@ import javax.enterprise.context.Dependent;
 @Dependent
 @Slf4j
 public class GearMapper extends BaseItemMapper {
+
+    public GearMapper(PriceMapper priceMapper) {
+        super(priceMapper);
+    }
+
     @Override
     public ItemData convertItemSpec(
             @NotNull final ItemData.ItemDataBuilder result,

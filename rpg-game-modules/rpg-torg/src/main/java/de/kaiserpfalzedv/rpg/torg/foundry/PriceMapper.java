@@ -41,7 +41,7 @@ public class PriceMapper {
                 .replaceAll("B", "*1000000000")
                 .replaceAll("M", "*1000000")
                 .replaceAll("K", "*1000")
-                .replace(",", ".")
+                .replace(",", "")
         ).build().evaluate();
     }
 }

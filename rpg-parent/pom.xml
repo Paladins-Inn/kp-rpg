@@ -299,6 +299,7 @@
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
                 <excludes>
+                    <exclude>**/*.webp</exclude>
                     <exclude>**/*.docx</exclude>
                     <exclude>**/*.xlsx</exclude>
                     <exclude>**/*.zip</exclude>
@@ -314,6 +315,7 @@
                 <filtering>false</filtering>
                 <directory>src/main/resources</directory>
                 <includes>
+                    <include>**/*.webp</include>
                     <include>**/*.docx</include>
                     <include>**/*.xlsx</include>
                     <include>**/*.zip</include>

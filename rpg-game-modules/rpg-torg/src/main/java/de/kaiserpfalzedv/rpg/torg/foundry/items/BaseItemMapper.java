@@ -26,6 +26,7 @@ import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
 import de.kaiserpfalzedv.rpg.torg.model.items.Item;
 import de.kaiserpfalzedv.rpg.torg.model.items.ItemData;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
@@ -37,12 +38,28 @@ import java.util.Set;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-06-05
  */
+@RequiredArgsConstructor
 @Slf4j
 public abstract class BaseItemMapper implements FoundryMapper<FoundryItem, Item> {
 
-    private final PriceMapper priceMapper = new PriceMapper();
+    private final PriceMapper priceMapper;
 
     public Item convert(@NotNull final FoundryItem orig) {
+        Item.ItemBuilder result = createCommonItemData(orig);
+
+        ItemData.ItemDataBuilder spec = ItemData.builder();
+
+        convertNotes(orig, spec);
+        convertDescription(orig, spec);
+        convertCosm(orig, spec);
+        convertPrice(orig, spec);
+
+        result.withSpec(convertItemSpec(spec, orig));
+
+        return result.build();
+    }
+
+    private Item.ItemBuilder createCommonItemData(FoundryItem orig) {
         Item.ItemBuilder result = Item.builder()
                 .withKind(Item.KIND)
                 .withApiVersion(Item.VERSION)
@@ -64,39 +81,32 @@ public abstract class BaseItemMapper implements FoundryMapper<FoundryItem, Item>
                         ))
                         .build()
                 );
+        return result;
+    }
 
-        ItemData.ItemDataBuilder spec = ItemData.builder();
-
-
+    private void convertNotes(@NotNull final FoundryItem orig, @NotNull final ItemData.ItemDataBuilder spec) {
         if (orig.getData().getNotes() != null) {
             spec.withNotes(Set.of(orig.getData().getNotes()));
         }
+    }
 
+    private void convertDescription(@NotNull final FoundryItem orig, @NotNull final ItemData.ItemDataBuilder spec) {
         if (orig.getData().getDescription() != null
                 && !"null".equals(orig.getData().getDescription())
         ) {
-            spec.withDescription(orig.getData().getDescription());
+            spec.withDescription(orig.getData().getDescription()
+                    .replaceAll("<img[^>]+alt='([^'>]+)'[^>]+>", "$1")
+                    .replaceAll("<a href=[^>]+>([^<]+)</a>", "$1"));
         }
+    }
 
-
-        if (orig.getData().getCosm() != null
-                && !orig.getData().getCosm().isBlank()
-                && !"(None)".equals(orig.getData().getCosm())
-                && !"Universal".equals(orig.getData().getCosm())
-        ) {
-            convertCosm(spec, orig);
-        }
-
+    private void convertPrice(@NotNull final FoundryItem orig, @NotNull final ItemData.ItemDataBuilder spec) {
         if (orig.getData().getPrice() != null
                 && !"null".equals(orig.getData().getPrice())
                 && !orig.getData().getPrice().isBlank()
         ) {
             convertPrice(spec, orig);
         }
-
-        result.withSpec(convertItemSpec(spec, orig));
-
-        return result.build();
     }
 
     public abstract ItemData convertItemSpec(
@@ -104,12 +114,18 @@ public abstract class BaseItemMapper implements FoundryMapper<FoundryItem, Item>
             @NotNull final FoundryItem orig
     );
 
-    protected void convertCosm(@NotNull ItemData.ItemDataBuilder result, @NotNull final FoundryItem orig) {
-        Cosm.mapFoundry(orig.getData().getCosm()).ifPresentOrElse(
-                c -> result.withCosms(Collections.singleton(c)),
-                () -> {
-                }
-        );
+    protected void convertCosm(@NotNull final FoundryItem orig, @NotNull ItemData.ItemDataBuilder result) {
+        if (orig.getData().getCosm() != null
+                && !orig.getData().getCosm().isBlank()
+                && !"(None)".equals(orig.getData().getCosm())
+                && !"Universal".equals(orig.getData().getCosm())
+        ) {
+            Cosm.mapFoundry(orig.getData().getCosm()).ifPresentOrElse(
+                    c -> result.withCosms(Collections.singleton(c)),
+                    () -> {
+                    }
+            );
+        }
     }
 
     protected void convertPrice(@NotNull ItemData.ItemDataBuilder result, @NotNull final FoundryItem orig) {

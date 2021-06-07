@@ -72,8 +72,8 @@ public class ItemData implements Serializable {
     private final Set<Axiom> axioms = new HashSet<>();
 
     @Min(1)
-    @Schema(description = "The price in $.", minimum = "1")
-    private int price = 100;
+    @Schema(description = "The price in $.", minimum = "0")
+    private int price = 0;
 
     @Min(1)
     @Schema(description = "The DN to get the equipment from the Delphi Council.", minimum = "1")

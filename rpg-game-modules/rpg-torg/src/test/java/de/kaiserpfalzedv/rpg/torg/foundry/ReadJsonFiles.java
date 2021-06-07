@@ -17,14 +17,15 @@
 
 package de.kaiserpfalzedv.rpg.torg.foundry;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.kaiserpfalzedv.rpg.torg.foundry.actors.FoundryActor;
 import de.kaiserpfalzedv.rpg.torg.foundry.actors.FoundryPages;
-import de.kaiserpfalzedv.rpg.torg.foundry.items.FoundryItem;
-import de.kaiserpfalzedv.rpg.torg.foundry.items.FoundryItemMapper;
+import de.kaiserpfalzedv.rpg.torg.foundry.items.*;
 import de.kaiserpfalzedv.rpg.torg.model.actors.ActorType;
 import de.kaiserpfalzedv.rpg.torg.model.items.Item;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -45,6 +46,21 @@ import java.util.stream.Collectors;
 public class ReadJsonFiles {
     private final static ObjectMapper mapper = new ObjectMapper();
 
+    private static FoundryItemMapper mapperFactory;
+
+    @BeforeAll
+    protected static void generateMapper() {
+        PriceMapper priceMapper = new PriceMapper();
+
+        mapperFactory = new FoundryItemMapper(
+                new AttackMapper(priceMapper),
+                new ArmorMapper(priceMapper),
+                new GearMapper(priceMapper),
+                new PerkMapper(priceMapper),
+                new AttackAndArmorMapper(priceMapper)
+        );
+    }
+
     @Test
     public void shouldReadActorsFromFile() throws IOException {
         List<FoundryActor> result = Arrays.asList(mapper.readValue(Paths.get("./target/classes/te001/Actors.db.json").toFile(), FoundryActor[].class));
@@ -61,7 +77,7 @@ public class ReadJsonFiles {
         log.info("Read items. count={}", result.size());
 
         result.forEach(i -> {
-            Item converted = new FoundryItemMapper().convert(i);
+            Item converted = mapperFactory.convert(i);
             String description;
             try {
                 description = converted.getData().orElseThrow().getDescription();
@@ -69,11 +85,11 @@ public class ReadJsonFiles {
                 description = "./.";
             }
 
-            log.debug(
-                    "Converted item. foundryId={}, name='{}', type='{}', item={}, description='{}'",
-                    i.get_id(), i.getName(), i.getType().getTitle(),
-                    converted, description
-            );
+            try {
+                log.debug("Converted item:\n{}", mapper.writeValueAsString(converted));
+            } catch (JsonProcessingException e) {
+                log.error("{}. item='{}'", e.getMessage(), converted.getSelfLink());
+            }
         });
     }
 
