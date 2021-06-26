@@ -34,6 +34,7 @@
 
     <modules>
         <module>drivethru</module>
+        <module>warhorn</module>
         <module>datastore-mongodb</module>
     </modules>
 </project>
