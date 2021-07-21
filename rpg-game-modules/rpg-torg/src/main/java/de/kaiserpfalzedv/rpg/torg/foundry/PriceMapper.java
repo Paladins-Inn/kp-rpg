@@ -21,12 +21,15 @@ import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
+import javax.enterprise.context.Dependent;
+
 /**
  * PriceMapper --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2.0.0  2021-06-06
  */
+@Dependent
 @Slf4j
 public class PriceMapper {
     public Integer parse(@NotNull final String input) {
