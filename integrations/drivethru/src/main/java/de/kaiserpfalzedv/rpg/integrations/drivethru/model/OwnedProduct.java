@@ -21,12 +21,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
-import lombok.*;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
+@RegisterForReflection
 @SuppressWarnings("FieldMayBeFinal")
 @Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
