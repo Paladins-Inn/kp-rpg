@@ -18,7 +18,12 @@
 package de.kaiserpfalzedv.rpg.torg.model.core;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 /**
@@ -39,11 +44,15 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @JsonDeserialize(builder = Axiom.AxiomBuilder.class)
 @Schema(description = "A single axiom with its value")
 public class Axiom {
+    @AllArgsConstructor
+    @Getter
     public enum AxiomName {
-        Magic,
-        Social,
-        Spirit,
-        Tech
+        Magic("M"),
+        Social("S"),
+        Spirit("Sp"),
+        Tech("T");
+
+        private final String abbreviation;
     }
 
     @Builder.Default
