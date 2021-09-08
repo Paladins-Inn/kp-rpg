@@ -36,13 +36,13 @@
         <kp-rpg.groupId>de.kaiserpfalz-edv.rpg</kp-rpg.groupId>
         <kp-rpg.version>1.2.0-SNAPSHOT</kp-rpg.version>
 
-        <vaadin.version>14.5.3</vaadin.version>
+        <vaadin.version>21.0.0</vaadin.version>
         <discord.version>3.5.0_329</discord.version>
         <kp-commons.version>2.0.2-SNAPSHOT</kp-commons.version>
 
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>2.1.2.Final</quarkus.platform.version>
+        <quarkus.platform.version>2.2.1.Final</quarkus.platform.version>
 
         <quarkus-plugin.version>1.13.4.Final</quarkus-plugin.version>
         <surefire-plugin.version>2.22.1</surefire-plugin.version>
@@ -264,7 +264,7 @@
             <dependency>
                 <groupId>com.github.tomakehurst</groupId>
                 <artifactId>wiremock-jre8</artifactId>
-                <version>2.30.0</version>
+                <version>2.30.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
