@@ -77,6 +77,14 @@
         <system>GitHub Issues</system>
     </issueManagement>
 
+    <distributionManagement>
+        <repository>
+            <id>gh-paladins</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/Paladins-Inn/kp-commons</url>
+        </repository>
+    </distributionManagement>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -125,11 +133,11 @@
 
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>2.2.1.Final</quarkus.platform.version>
+        <quarkus.platform.version>2.2.2.Final</quarkus.platform.version>
 
 
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
-        <quarkus-plugin.version>2.2.1.Final</quarkus-plugin.version>
+        <quarkus-plugin.version>${quarkus.platform.version}</quarkus-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
@@ -408,12 +416,20 @@
 
             <repositories>
                 <repository>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
                     <id>central</id>
                     <name>bintray</name>
                     <url>https://jcenter.bintray.com</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+
+                <repository>
+                    <id>gh-paladins</id>
+                    <url>https://maven.pkg.github.com/Paladins-Inn</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
                 </repository>
             </repositories>
 
@@ -540,6 +556,14 @@
                 </file>
             </activation>
 
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss</groupId>
+                    <artifactId>jandex</artifactId>
+                    <version>2.4.0.Final</version>
+                </dependency>
+            </dependencies>
+
             <build>
                 <plugins>
                     <plugin>
@@ -551,146 +575,10 @@
         </profile>
 
         <profile>
-            <id>quarkus-test</id>
-            <activation>
-                <file>
-                    <exists>src/test/resources/application.properties</exists>
-                </file>
-            </activation>
-
-            <dependencies>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-jackson</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-openapi</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-resteasy</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-arc</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-cache</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-logging-json</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-health</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-vertx</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-resteasy-jackson</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-resteasy-multipart</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-micrometer</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.micrometer</groupId>
-                    <artifactId>micrometer-registry-prometheus</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>io.smallrye</groupId>
-                            <artifactId>smallrye-metrics-api</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-opentracing</artifactId>
-                </dependency>
-
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-junit5</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.rest-assured</groupId>
-                    <artifactId>rest-assured</artifactId>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>io.quarkus</groupId>
-                        <artifactId>quarkus-maven-plugin</artifactId>
-                        <!--suppress MavenModelInspection -->
-                        <version>${quarkus-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>generate-code-tests</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                                <!--suppress UnresolvedMavenProperty -->
-                                <maven.home>${maven.home}</maven.home>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                                <!--suppress UnresolvedMavenProperty -->
-                                <maven.home>${maven.home}</maven.home>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-
-        <profile>
             <id>quarkus</id>
             <activation>
                 <file>
-                    <exists>src/main/resources/application.properties</exists>
+                    <exists>src/main/resources/application.*</exists>
                 </file>
             </activation>
 
@@ -760,6 +648,11 @@
                     <artifactId>quarkus-smallrye-opentracing</artifactId>
                 </dependency>
 
+                <dependency>
+                    <groupId>org.jboss</groupId>
+                    <artifactId>jandex</artifactId>
+                    <version>2.4.0.Final</version>
+                </dependency>
 
                 <dependency>
                     <groupId>io.quarkus</groupId>

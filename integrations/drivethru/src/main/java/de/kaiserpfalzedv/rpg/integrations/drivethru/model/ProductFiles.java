@@ -21,10 +21,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import java.util.HashSet;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Set;
 
 @Builder(setterPrefix = "with", toBuilder = true)
@@ -34,36 +40,22 @@ import java.util.Set;
 @ToString
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = Product.ProductBuilder.class)
-@Schema(name = "Product", description = "A product from DriveThruRPG.")
-public class Product implements DriveThruResource {
-    @JsonProperty("products_id")
-    private String productsId;
+@JsonDeserialize(builder = ProductFiles.ProductFilesBuilder.class)
+@Schema(name = "Product", description = "A product fileset from DriveThruRPG.")
+public class ProductFiles implements DriveThruResource {
+    @JsonProperty("bundle_id")
+    private String bundleId;
 
-    @JsonProperty("products_name")
-    private String productsName;
+    @JsonProperty("filename")
+    private String filename;
 
-    @JsonProperty("publishers_id")
-    private String publisherId;
+    @Builder.Default
+    @JsonProperty("last_modified")
+    private OffsetDateTime lastModified = OffsetDateTime.now(ZoneOffset.UTC);
 
-    @JsonProperty("publishers_name")
-    private String publisherName;
+    @JsonProperty("raw_filesize_bytes")
+    private long filesizeBytes;
 
-    @JsonProperty("cover_url")
-    private String coverURL;
-
-    @JsonProperty("products_thumbnail")
-    private String thumbnail;
-
-    @JsonProperty("products_thumbnail100")
-    private String thumbnail100;
-
-    @JsonProperty("products_thumbnail80")
-    private String thumbnail80;
-
-    @JsonProperty("products_thumbnail40")
-    private String thumbnail40;
-
-    @Singular
-    private Set<ProductFiles> files = new HashSet<>();
+    @JsonProperty("raw_filesize")
+    private Double fileSizeMegaBytes;
 }

@@ -17,11 +17,13 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
+import com.google.common.collect.Sets;
 import de.kaiserpfalzedv.commons.core.user.InvalidUserException;
 import de.kaiserpfalzedv.commons.core.user.User;
 import de.kaiserpfalzedv.rpg.core.dice.bag.D100;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.OwnedProduct;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Product;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.ProductFiles;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Publisher;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Token;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoDriveThruRPGAPIKeyDefinedException;
@@ -129,29 +131,23 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
         log.trace("Product created. productId={}", productId);
         String productUrl = "https://nowhere/product/" + productId;
         return Optional.of(
-                new Product(
-                        productId, "Product Nr. 1",
-                        "1", "Publisher Nr. 1",
-                        productUrl + "/cover",
-                        productUrl + "/thumb",
-                        productUrl + "/thumb100",
-                        productUrl + "/thumb80",
-                        productUrl + "/thumb40"
-                )
-                /*Product.builder()
-                        .productsId(productId)
-                        .productsName("Product Nr. 1")
-
-                        .publisherId("1")
-                        .publisherName("Publisher Nr. 1")
-
-                        .coverURL(productUrl + "/cover")
-                        .thumbnail(productUrl + "/thumb")
-                        .thumbnail40(productUrl + "/thumb40")
-                        .thumbnail80(productUrl + "/thumb80")
-                        .thumbnail100(productUrl + "/thumb100")
-
-                        .build()*/
+                Product.builder()
+                        .withProductsId(productId).withProductsName("Product Nr. 1")
+                        .withPublisherId("1").withPublisherName("Publisher Nr. 1")
+                        .withCoverURL(productUrl + "/cover")
+                        .withThumbnail(productUrl + "/tumb")
+                        .withThumbnail100(productUrl + "/tumb100")
+                        .withThumbnail80(productUrl + "/tumb80")
+                        .withThumbnail40(productUrl + "/tumb40")
+                        .withFile(
+                                ProductFiles.builder()
+                                        .withBundleId("Bundle 0")
+                                        .withFilename("filename.pdf")
+                                        .withFilesizeBytes(1024L^3)
+                                        .withFileSizeMegaBytes(1.0d)
+                                        .build()
+                        )
+                        .build()
         );
     }
 

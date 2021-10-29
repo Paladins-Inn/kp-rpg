@@ -23,7 +23,7 @@
         <artifactId>kp-rpg-parent</artifactId>
         <groupId>de.kaiserpfalz-edv.rpg</groupId>
         <version>1.2.0-SNAPSHOT</version>
-        <relativePath>../rpg-parent/pom.xml</relativePath>
+        <relativePath>../kp-rpg-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>rpg-core</artifactId>
