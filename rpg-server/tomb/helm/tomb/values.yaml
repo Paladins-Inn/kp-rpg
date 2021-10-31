@@ -30,7 +30,7 @@ image:
   repository: quay.io/klenkes74/tomb
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "${project.version}"
+  tag: "1.1.0"
 
 imagePullSecrets: [ ]
 nameOverride: ""

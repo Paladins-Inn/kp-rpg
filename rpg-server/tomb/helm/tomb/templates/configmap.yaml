@@ -24,19 +24,19 @@ data:
     # along with this program.  If not, see <https://www.gnu.org/licenses/>.
     #
 
-    quarkus.application.name=${project.build.finalName}
-    quarkus.application.version=${project.version}
+    quarkus.application.name=tomb-discord
+    quarkus.application.version=1.1.0
     #
-    discord.token=\${DISCORD_TOKEN}
-    discord.client_id=\${DISCORD_CLIENT_ID}
-    discord.callback=https://\${quarkus.openshift.host}/callback
+    discord.token=${DISCORD_TOKEN}
+    discord.client_id=${DISCORD_CLIENT_ID}
+    discord.callback=https://${quarkus.openshift.host}/callback
     #
-    %prod.quarkus.mongodb.connection-string=\${MONGODB_SCHEME}://\${MONGODB_USER}:\${MONGODB_PASSWORD}@\${MONGODB_HOST}/\${MONGODB_DATABASE}?\${MONGODB_PARAMETERS}
-    %prod.quarkus.mongodb.application-name=\${quarkus.application.name}
+    %prod.quarkus.mongodb.connection-string=${MONGODB_SCHEME}://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_HOST}/${MONGODB_DATABASE}?${MONGODB_PARAMETERS}
+    %prod.quarkus.mongodb.application-name=${quarkus.application.name}
     #
     #
     quarkus.http.cors=true
-    quarkus.http.cors.origins=https://\${quarkus.openshift.host}
+    quarkus.http.cors.origins=https://${quarkus.openshift.host}
     quarkus.http.cors.methods=GET,PUT,POST
     quarkus.http.cors.headers=X-Custom
     quarkus.http.cors.exposed-headers=Content-Disposition
@@ -84,7 +84,7 @@ data:
     quarkus.openshift.host=tomb.paladins-inn.de
     quarkus.openshift.part-of=kp-rpg
     quarkus.openshift.name=kp-rpg-discord-bot
-    quarkus.openshift.version=${project.version}
+    quarkus.openshift.version=1.1.0
     quarkus.openshift.add-build-timestamp=true
     quarkus.openshift.add-version-to-label-selectors=true
     quarkus.openshift.replicas=1
@@ -120,7 +120,7 @@ data:
     #
     # OpenAPI
     mp.openapi.extensions.smallrye.info.title=TOMB Bot
-    mp.openapi.extensions.smallrye.info.version=\${project.version}
+    mp.openapi.extensions.smallrye.info.version=${project.version}
     mp.openapi.extensions.smallrye.info.description=Help playing tabletop RPGs via Discord
     mp.openapi.extensions.smallrye.info.termsOfService=best effort
     mp.openapi.extensions.smallrye.info.contact.email=support@kaiserpfalz-edv.de

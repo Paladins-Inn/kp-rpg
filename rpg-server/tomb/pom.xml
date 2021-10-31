@@ -144,4 +144,25 @@
             </resource>
         </resources>
     </build>
+
+    <profiles>
+        <profile>
+            <id>helm</id>
+            <activation>
+                <file>
+                    <exists>src/main/helm</exists>
+                </file>
+            </activation>
+
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/helm</directory>
+                        <targetPath>../../helm</targetPath>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+    </profiles>
 </project>
