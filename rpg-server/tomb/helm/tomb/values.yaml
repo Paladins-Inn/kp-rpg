@@ -27,7 +27,7 @@ mongodb:
   parameters: ""
 
 image:
-  repository: quay.io/klenkes74/tomb
+  repository: quay.io/klenkes74/kp-rpg-discord-bot
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "1.1.0"

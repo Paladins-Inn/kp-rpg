@@ -31,7 +31,7 @@
     <module>rpg-game-modules</module>
     <module>rpg-server</module>
 
-    <module>testsupport</module>
+    <module>rpg-testsupport</module>
   </modules>
 
 
@@ -173,7 +173,7 @@
       <dependency>
         <groupId>net.dv8tion</groupId>
         <artifactId>JDA</artifactId>
-        <version>4.2.0_227</version>
+        <version>4.2.0_247</version>
       </dependency>
 
       <!-- MarkDown Library -->
@@ -344,6 +344,9 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
           <version>${maven-resources-plugin.version}</version>
+          <configuration>
+            <escapeString>\</escapeString>
+          </configuration>
           <executions>
             <execution>
               <id>test-sources-generation</id>
@@ -514,12 +517,9 @@
 
       <repositories>
         <repository>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <id>central</id>
-          <name>bintray</name>
-          <url>https://jcenter.bintray.com</url>
+          <id>dv8tion</id>
+          <name>m2-dv8tion</name>
+          <url>https://m2.dv8tion.net/releases</url>
         </repository>
       </repositories>
 
@@ -795,6 +795,25 @@
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
       </properties>
+    </profile>
+
+    <profile>
+      <id>helm</id>
+      <activation>
+        <file>
+          <exists>src/main/helm</exists>
+        </file>
+      </activation>
+
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/helm</directory>
+            <targetPath>../../helm</targetPath>
+            <filtering>true</filtering>
+          </resource>
+        </resources>
+      </build>
     </profile>
   </profiles>
 </project>

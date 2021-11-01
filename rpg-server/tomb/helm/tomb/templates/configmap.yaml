@@ -1,13 +1,13 @@
-{ { - $fullName := include "tomb.fullname" . - } }
+{{- $fullName := include "tomb.fullname" . -}}
 ---
 kind: ConfigMap
-version: v1
+apiVersion: v1
 metadata:
-  name: { { $fullName } }
+  name: {{ $fullName }}
   labels:
-    { { - include "tomb.labels" . | nindent 4 } }
+    {{- include "tomb.labels" . | nindent 4 }}
 data:
-  application.yaml: |-
+  application.properties: |-
     # Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
     #
     # This program is free software: you can redistribute it and/or modify
@@ -31,7 +31,7 @@ data:
     discord.client_id=${DISCORD_CLIENT_ID}
     discord.callback=https://${quarkus.openshift.host}/callback
     #
-    %prod.quarkus.mongodb.connection-string=${MONGODB_SCHEME}://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_HOST}/${MONGODB_DATABASE}?${MONGODB_PARAMETERS}
+    #%prod.quarkus.mongodb.connection-string=${MONGODB_SCHEME}://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_HOST}/${MONGODB_DATABASE}?${MONGODB_PARAMETERS}
     %prod.quarkus.mongodb.application-name=${quarkus.application.name}
     #
     #

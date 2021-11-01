@@ -16,3 +16,6 @@ coverage
 storybook-static
 .env
 /rpg-bot/src/main/resources/static/
+/rpg-server/tomb/atlas-db.txt
+/rpg-server/tomb/src/main/helm/demo-values.yaml
+/rpg-server/tomb/helm/demo-values.yaml

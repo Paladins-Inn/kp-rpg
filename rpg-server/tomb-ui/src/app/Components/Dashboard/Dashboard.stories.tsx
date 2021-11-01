@@ -25,5 +25,5 @@ stories.addDecorator(withInfo);
 stories.add(
   'Dashboard',
   () => <Dashboard />,
-  { info: { inline: true } }
+  { info: { inline: true }}
 );

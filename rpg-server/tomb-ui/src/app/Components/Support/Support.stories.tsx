@@ -25,5 +25,5 @@ stories.addDecorator(withInfo);
 stories.add(
   'Support',
   () => <Support />,
-  { info: { inline: true } }
+  { info: { inline: true }}
 );
