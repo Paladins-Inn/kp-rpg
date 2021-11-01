@@ -1,0 +1,9 @@
+apiVersion: v2
+name: ${project.build.finalName}
+description: ${project.description}
+icon: https://cdn.discordapp.com/app-icons/794193453403734066/b83bbcf7c0704323981b7f4f9b47977c.png
+
+type: application
+
+version: ${project.version}
+appVersion: "${project.version}"

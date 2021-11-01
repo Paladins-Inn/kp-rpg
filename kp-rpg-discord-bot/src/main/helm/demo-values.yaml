@@ -1,0 +1,24 @@
+hosts:
+  main: tomb.paladins-inn.de
+  hosts:
+  - tomb.paladins-inn.de
+
+tls:
+  issuer:
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+
+discord:
+  applicationId: "794193453403734066"
+  permissionInteger: "377957218369"
+  token: "Nzk0MTkzNDUzNDAzNzM0MDY2.X-3QSg.55m6lv7TZMnYcCV53ogipUSDmaY"
+  clientId: "794193453403734066"
+  clientSecret: "oseD30qMtTZdR-VO3L2x-RqIFBah1SYE"
+
+mongodb:
+  scheme: mongodb+srv
+  hosts: tomb.c0afh.mongodb.net
+  parameters: "retryWrites=true&w=majority"
+  database: tomb
+  user: tomb
+  password: "dl5soppboEn5VkCu"

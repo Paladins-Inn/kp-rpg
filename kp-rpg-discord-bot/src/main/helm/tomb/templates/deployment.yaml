@@ -1,0 +1,137 @@
+{{- $fullname := include "tomb.fullname" . }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullname }}
+  labels:
+    {{- include "tomb.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "tomb.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "tomb.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "tomb.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "image-registry.openshift-image-registry.svc:5000/{{ .Release.Namespace }}/{{- include "tomb.fullname" . }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /q/health/ready
+              port: http
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /q/health/live
+              port: http
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /q/health/ready
+              port: http
+            periodSeconds: 10
+          resources:
+            {{ toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: application-properties
+              mountPath: /deployments/config/
+          env:
+            - name: MONGODB_SCHEME
+              valueFrom:
+                secretKeyRef:
+                  key: scheme
+                  name: {{ $fullname }}-mongodb
+            - name: MONGODB_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: hosts
+                  name: {{ $fullname }}-mongodb
+            - name: MONGODB_PARAMETERS
+              valueFrom:
+                secretKeyRef:
+                  key: parameters
+                  name: {{ $fullname }}-mongodb
+            - name: MONGODB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: database
+                  name: {{ $fullname }}-mongodb
+            - name: MONGODB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: {{ $fullname }}-mongodb
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: {{ $fullname }}-mongodb
+            - name: DISCORD_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: clientId
+                  name: {{ $fullname }}-discord
+            - name: DISCORD_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: clientSecret
+                  name: {{ $fullname }}-discord
+            - name: DISCORD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: {{ $fullname }}-discord
+            - name: DISCORD_APPLICATION_ID
+              valueFrom:
+                secretKeyRef:
+                  key: applicationId
+                  name: {{ $fullname }}-discord
+            - name: DISCORD_PERMISSION_INTEGER
+              valueFrom:
+                secretKeyRef:
+                  key: permissionInteger
+                  name: {{ $fullname }}-discord
+      volumes:
+        - name: application-properties
+          configMap:
+            name: {{ $fullname }}
+            items:
+            - key: application.properties
+              path: application.properties
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

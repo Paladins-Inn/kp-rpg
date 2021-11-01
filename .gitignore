@@ -17,3 +17,7 @@ storybook-static
 .env
 te001/
 /kp-rpg-discord-bot/token
+/rpg-bot/src/main/resources/static/
+/rpg-server/tomb/atlas-db.txt
+/rpg-server/tomb/src/main/helm/demo-values.yaml
+/rpg-server/tomb/helm/demo-values.yaml

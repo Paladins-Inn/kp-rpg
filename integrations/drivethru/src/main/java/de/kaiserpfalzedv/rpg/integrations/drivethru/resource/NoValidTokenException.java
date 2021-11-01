@@ -17,8 +17,13 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru.resource;
 
+<<<<<<< HEAD:integrations/drivethru/src/main/java/de/kaiserpfalzedv/rpg/integrations/drivethru/resource/NoValidTokenException.java
 import de.kaiserpfalzedv.commons.core.user.User;
 import de.kaiserpfalzedv.rpg.core.api.RPGBaseException;
+=======
+import de.kaiserpfalzedv.rpg.bot.text.MarkdownConverter;
+import net.dv8tion.jda.api.entities.MessageChannel;
+>>>>>>> main:rpg-server/tomb/src/main/java/de/kaiserpfalzedv/rpg/bot/discord/DiscordMessageSender.java
 
 
 /**

@@ -1,0 +1,29 @@
+{{ $fullName := include "tomb.fullname" . -}}
+---
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "tomb.labels" . | nindent 4 }}
+spec:
+  dockerImageRepository: {{ .Values.image.repository }}
+  lookupPolicy:
+    local: true
+  tags:
+    - name: "{{ .Values.image.tag }}"
+      from:
+        kind: DockerImage
+        name: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+      importPolicy:
+        scheduled: false
+      referencePolicy:
+        type: Local
+    - name: 'latest'
+      from:
+        kind: DockerImage
+        name: {{ .Values.image.repository }}:latest
+      importPolicy:
+        scheduled: true
+      referencePolicy:
+        type: Local

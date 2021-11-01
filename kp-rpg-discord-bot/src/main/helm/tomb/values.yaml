@@ -1,0 +1,74 @@
+hosts:
+  main: ""
+  hosts: [ ]
+tls:
+  issuer:
+    kind: ""
+    name: ""
+  duration: 2160h
+  renewBefore: 1800h
+
+discord:
+  applicationId: ""
+  permissionInteger: "377957218369"
+  token: ""
+  clientId: ""
+  clientSecret: ""
+
+mongodb:
+  hosts: ""
+  tls: false
+  replicaset: ""
+  auth-source: ""
+  database: "tomb"
+  user: "tomb"
+  password: ""
+  scheme: "mongodb"
+  parameters: ""
+
+image:
+  repository: quay.io/klenkes74/kp-rpg-discord-bot
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "${project.version}"
+
+imagePullSecrets: [ ]
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: { }
+  name: ""
+
+podAnnotations: { }
+
+podSecurityContext: { }
+
+securityContext: { }
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 250M
+  requests:
+    cpu: 500m
+    memory: 250M
+
+replicaCount: 1
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: { }
+
+tolerations: [ ]
+
+affinity: { }

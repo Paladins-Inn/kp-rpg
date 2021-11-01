@@ -1,0 +1,25 @@
+{{ $fullname := include "tomb.fullname" . }}
+---
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  name: {{ $fullname }}-cert
+  labels:
+    {{- include "tomb.labels" . | nindent 4 }}
+spec:
+  commonName: "{{ .Values.hosts.main }}"
+  dnsNames:
+  {{- range .Values.hosts.hosts }}
+  - {{ . | quote }}
+  {{- end }}
+  uris:
+  {{- range .Values.hosts.hosts }}
+  - {{ . | quote }}
+  {{- end }}
+  issuerRef:
+    {{ toYaml .Values.tls.issuer | nindent 4 }}
+  secretName: {{ $fullname }}-tls
+  duration: {{ .Values.tls.duration }}
+  renewBefore: {{ .Values.tls.renewBefore }}
+  usages:
+    - server auth

@@ -13,7 +13,7 @@
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses />.
   -->
 
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
@@ -128,5 +128,24 @@
                 </repository>
             </repositories>
         </profile>
-    </profiles>
+
+    <profile>
+      <id>helm</id>
+      <activation>
+        <file>
+          <exists>src/main/helm</exists>
+        </file>
+      </activation>
+
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/helm</directory>
+            <targetPath>../../helm</targetPath>
+            <filtering>true</filtering>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+  </profiles>
 </project>

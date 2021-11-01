@@ -1,0 +1,135 @@
+{{- $fullName := include "tomb.fullname" . -}}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "tomb.labels" . | nindent 4 }}
+data:
+  application.properties: |-
+    # Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
+    #
+    # This program is free software: you can redistribute it and/or modify
+    # it under the terms of the GNU General Public License as published by
+    # the Free Software Foundation, either version 3 of the License, or
+    # (at your option) any later version.
+    #
+    # This program is distributed in the hope that it will be useful,
+    # but WITHOUT ANY WARRANTY; without even the implied warranty of
+    # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    # GNU General Public License for more details.
+    #
+    # You should have received a copy of the GNU General Public License
+    # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    #
+
+    quarkus.application.name=${project.build.finalName}
+    quarkus.application.version=${project.version}
+    #
+    discord.token=\${DISCORD_TOKEN}
+    discord.client_id=\${DISCORD_CLIENT_ID}
+    discord.callback=https://\${quarkus.openshift.host}/callback
+    #
+    #%prod.quarkus.mongodb.connection-string=\${MONGODB_SCHEME}://\${MONGODB_USER}:\${MONGODB_PASSWORD}@\${MONGODB_HOST}/\${MONGODB_DATABASE}?\${MONGODB_PARAMETERS}
+    %prod.quarkus.mongodb.application-name=\${quarkus.application.name}
+    #
+    #
+    quarkus.http.cors=true
+    quarkus.http.cors.origins=https://\${quarkus.openshift.host}
+    quarkus.http.cors.methods=GET,PUT,POST
+    quarkus.http.cors.headers=X-Custom
+    quarkus.http.cors.exposed-headers=Content-Disposition
+    quarkus.http.cors.access-control-max-age=8H
+    quarkus.http.cors.access-control-allow-credentials=true
+    #
+    quarkus.locales=[en-GB, en-US, de-DE]
+    quarkus.default-locale=de-DE
+    quarkus.http.body.handle-file-uploads=true
+    quarkus.http.body.delete-uploaded-files-on-end=true
+    quarkus.http.record-request-start-time=true
+    quarkus.http.access-log.enabled=true
+    quarkus.http.access-log.pattern=common
+    quarkus.jaeger.enabled=true
+    quarkus.jaeger.metrics.enabled=true
+    quarkus.log.metrics.enabled=true
+    quarkus.health.extensions.enabled=true
+    quarkus.smallrye-openapi.path=/openapi
+    quarkus.smallrye-openapi.store-schema-directory=target
+    quarkus.swagger-ui.path=/docs
+    quarkus.swagger-ui.always-include=true
+    quarkus.swagger-ui.enable=true
+    #
+    quarkus.oauth2.enabled=false
+    quarkus.oauth2.introspection-url=
+    quarkus.oauth2.role-claim=bot,connections,email,guilds
+    quarkus.oauth2.client-id=<client-id>
+    quarkus.oauth2.client-secret=<client-secret>
+    #
+    #
+    # OpenShift deployment
+    quarkus.package.type=uber-jar
+    quarkus.package.output-name=app
+    quarkus.container-image.build=false
+    quarkus.container-image.push=false
+    quarkus.container-image.registry=quay.io
+    quarkus.container-image.group=klenkes74
+    quarkus.container-image.builder=docker
+
+    quarkus.kubernetes.part-of=kp-rpg
+
+    quarkus.openshift.jar-directory=/deployments
+    quarkus.openshift.jar-file-name=app.jar
+    quarkus.openshift.flavor=v3
+    quarkus.openshift.host=tomb.paladins-inn.de
+    quarkus.openshift.part-of=kp-rpg
+    quarkus.openshift.name=kp-rpg-discord-bot
+    quarkus.openshift.version=${project.version}
+    quarkus.openshift.add-build-timestamp=true
+    quarkus.openshift.add-version-to-label-selectors=true
+    quarkus.openshift.replicas=1
+    quarkus.openshift.image-pull-policy=always
+    quarkus.openshift.env.fields."KUBERNETES_NAMESPACE"=metadata.namespace
+    quarkus.openshift.env.fields."KUBERNETES_POD"=metadata.name
+    quarkus.openshift.env.secrets=tomb-mongodb
+    quarkus.openshift.liveness-probe.http-action-path=/health/live
+    quarkus.openshift.liveness-probe.initial-deay=10s
+    quarkus.openshift.liveness-probe.period=1m
+    quarkus.openshift.liveness-probe.timeout=2s
+    quarkus.openshift.liveness-probe.failure-threshold=2
+    quarkus.openshift.readyness-probe.http-action-path=/health/ready
+    quarkus.openshift.readyness-probe.initial-deay=10s
+    quarkus.openshift.readyness-probe.period=1m
+    quarkus.openshift.readyness-probe.timeout=2s
+    quarkus.openshift.readyness-probe.failure-threshold=2
+    quarkus.openshift.resources.limits.cpu=1000m
+    quarkus.openshift.resources.limits.memory=512Mi
+    quarkus.openshift.resources.requests.cpu=100m
+    quarkus.openshift.resources.requests.memory=256Mi
+    quarkus.openshift.expose=true
+    quarkus.openshift.ports."8080-tcp".container-port=8080
+    quarkus.openshift.ports."8080-tcp".protocol=tcp
+    quarkus.openshift.mounts."config-volume".name=config-volume
+    quarkus.openshift.mounts."config-volume".path=/deployments/config/application.properties
+    quarkus.openshift.mounts."config-volume".sub-path=application.properties
+    quarkus.openshift.mounts."config-volume".read-only=true
+    quarkus.openshift.config-map-volumes."config-volume".config-map-name=kp-rpg-discord-dev-configuration
+    quarkus.openshift.config-map-volumes."config-volume".default-mode=0420
+    quarkus.openshift.config-map-volumes."config-volume".optional=false
+    #
+    #
+    # OpenAPI
+    mp.openapi.extensions.smallrye.info.title=TOMB Bot
+    mp.openapi.extensions.smallrye.info.version=\${project.version}
+    mp.openapi.extensions.smallrye.info.description=Help playing tabletop RPGs via Discord
+    mp.openapi.extensions.smallrye.info.termsOfService=best effort
+    mp.openapi.extensions.smallrye.info.contact.email=support@kaiserpfalz-edv.de
+    mp.openapi.extensions.smallrye.info.contact.name=Kaiserpfalz EDV-Service Support
+    mp.openapi.extensions.smallrye.info.contact.url=https://github.com/klenkes74/kp-rpg/issues
+    mp.openapi.extensions.smallrye.info.license.name=GPL 3.0
+    mp.openapi.extensions.smallrye.info.license.url=https://www.gnu.org/licenses/gpl-3.0.txt
+    mp.openapi.extensions.smallrye.operationIdStrategy=METHOD
+    #
+    #
+    quarkus.logging-manager.openapi.included=true
+    quarkus.log.category."de.kaiserpfalzedv.rpg".level=INFO

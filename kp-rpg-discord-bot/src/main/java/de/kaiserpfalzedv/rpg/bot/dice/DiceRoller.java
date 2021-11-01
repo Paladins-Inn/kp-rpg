@@ -34,6 +34,10 @@ public class DiceRoller {
     @ConsumeEvent("throw-dice")
     public String work(final String dieRollString) {
         String[] rollAndComment = dieRollString.split(" # ", 2);
+<<<<<<< HEAD:kp-rpg-discord-bot/src/main/java/de/kaiserpfalzedv/rpg/bot/dice/DiceRoller.java
+=======
+        RollTotal roll = parser.parse(dieRollString);
+>>>>>>> main:rpg-server/tomb/src/main/java/de/kaiserpfalzedv/rpg/bot/dice/DiceRoller.java
 
         RollTotal roll = results(dieRollString);
 
