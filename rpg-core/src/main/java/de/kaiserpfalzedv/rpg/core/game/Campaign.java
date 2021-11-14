@@ -31,8 +31,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
  * @since 1.2.0  2021-02-06
  */
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
-@AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = true)
@@ -40,6 +39,6 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @JsonDeserialize(builder = Campaign.CampaignBuilder.class)
 @Schema(name = "Campaign", description = "A campaign consisting of multiple games.")
 public class Campaign extends Resource<CampaignData> {
-    String API_VERSION = "v1";
-    String KIND = "Campaign";
+    public static String API_VERSION = "v1";
+    public static String KIND = "Campaign";
 }

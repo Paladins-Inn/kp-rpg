@@ -20,10 +20,7 @@ package de.kaiserpfalzedv.rpg.core.game;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.commons.core.resources.Resource;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -34,7 +31,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
  * @since 1.2.0  2021-02-06
  */
 @SuperBuilder(setterPrefix = "with", toBuilder = true)
-@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

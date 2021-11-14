@@ -22,6 +22,7 @@ import de.kaiserpfalzedv.rpg.core.dice.mat.ExpressionTotal;
 import de.kaiserpfalzedv.rpg.core.dice.mat.RollTotal;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,11 +44,10 @@ import java.util.regex.Pattern;
  * @since 2020-01-03
  */
 @Dependent
-@RequiredArgsConstructor(onConstructor = @__(@Inject))
+@RequiredArgsConstructor(onConstructor_= {@Inject})
 @ToString
+@Slf4j
 public class DiceParser {
-    static private final Logger LOG = LoggerFactory.getLogger(DiceParser.class);
-
     static private final String DICE_PATTERN =
             "(?<pre>(([A-Za-z]+)?[(])?)?"
                     + "(?<amount>\\d+)?"
@@ -60,14 +60,13 @@ public class DiceParser {
 
     @PostConstruct
     public void startUp() {
-        LOG.debug("Loaded dice: {}", dice);
+        log.debug("Loaded dice: {}", dice);
     }
 
     public RollTotal parse(final String diceString) {
         String[] dieString = diceString.split("\\s+");
 
-        //noinspection ConfusingArgumentToVarargsMethod
-        LOG.debug("working on di(c)e roll: {}", dieString);
+        log.debug("working on di(c)e roll: {}", (Object[]) dieString);
 
         RollTotal.RollTotalBuilder result = RollTotal.builder();
 
@@ -124,13 +123,13 @@ public class DiceParser {
             }
 
             String expression = expressionString.toString();
-            LOG.trace("Die roll expression: input='{}', amount={}, expression='{}'", dieString, amount, expression);
+            log.trace("Die roll expression: input='{}', amount={}, expression='{}'", dieString, amount, expression);
 
             Die die;
             try {
                 die = selectDieType(dieIdentifier);
             } catch (NumberFormatException e) {
-                LOG.warn("Can't find a valid die for this expression!");
+                log.warn("Can't find a valid die for this expression!");
 
                 return Optional.empty();
             }
@@ -138,7 +137,7 @@ public class DiceParser {
             try {
                 new ExpressionBuilder(expression).variable("x").build();
             } catch (IllegalArgumentException e) {
-                LOG.warn("Expression '" + dieString + "' is not valid: " + e.getMessage());
+                log.warn("Expression '" + dieString + "' is not valid: " + e.getMessage());
 
                 return Optional.empty();
             }
@@ -148,7 +147,7 @@ public class DiceParser {
                     .withExpression(expression)
                     .build();
 
-            LOG.debug("Parsed die: {}", result);
+            log.debug("Parsed die: {}", result);
             return Optional.of(result);
         }
 
@@ -158,7 +157,7 @@ public class DiceParser {
 
     private Die selectDieType(final String qualifier) {
         for (Die die : dice) {
-            LOG.trace("Checking die type: qualifier={}, die={}", qualifier, die.getDieType());
+            log.trace("Checking die type: qualifier={}, die={}", qualifier, die.getDieType());
             if (die.getDieType().equalsIgnoreCase(qualifier))
                 return die;
         }

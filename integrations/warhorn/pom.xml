@@ -33,6 +33,7 @@
 
     <properties>
         <activate.jcenter>true</activate.jcenter>
+        <quarkus>true</quarkus>
     </properties>
 
     <dependencies>

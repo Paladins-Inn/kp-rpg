@@ -21,22 +21,22 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.kaiserpfalz-edv.rpg</groupId>
-    <artifactId>kp-rpg-root</artifactId>
+    <artifactId>rpg-root</artifactId>
     <version>1.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>KP RPG :: Root</name>
 
     <modules>
-        <module>kp-rpg-parent</module>
-        <module>kp-rpg-bom</module>
+        <module>rpg-parent</module>
+        <module>rpg-bom</module>
 
         <module>rpg-core</module>
         <module>integrations</module>
 
         <module>rpg-game-modules</module>
 
-        <module>kp-rpg-discord-bot</module>
+        <module>rpg-discord-bot</module>
     </modules>
 
     <scm>

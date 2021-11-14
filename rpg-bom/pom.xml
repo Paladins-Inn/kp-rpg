@@ -23,12 +23,12 @@
 
     <parent>
         <groupId>de.kaiserpfalz-edv.rpg</groupId>
-        <artifactId>kp-rpg-root</artifactId>
+        <artifactId>rpg-root</artifactId>
         <version>1.2.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>kp-rpg-bom</artifactId>
+    <artifactId>rpg-bom</artifactId>
 
     <name>KP RPG :: Bill of Materials</name>
 

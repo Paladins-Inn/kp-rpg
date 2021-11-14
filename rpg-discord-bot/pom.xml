@@ -21,10 +21,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>kp-rpg-parent</artifactId>
+        <artifactId>rpg-parent</artifactId>
         <groupId>de.kaiserpfalz-edv.rpg</groupId>
         <version>1.2.0-SNAPSHOT</version>
-        <relativePath>../kp-rpg-parent/pom.xml</relativePath>
+        <relativePath>../rpg-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>kp-rpg-discord-bot</artifactId>
@@ -33,6 +33,7 @@
 
     <properties>
         <activate.jcenter>true</activate.jcenter>
+        <quarkus>true</quarkus>
     </properties>
 
     <dependencies>
