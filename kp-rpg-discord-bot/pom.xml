@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>kp-rpg-parent</artifactId>
+        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../kp-rpg-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>kp-rpg-discord-bot</artifactId>
+    <name>TOMB Discord Bot</name>
+    <description>The discord services as a bot.</description>
+
+    <properties>
+        <activate.jcenter>true</activate.jcenter>
+        <quarkus>true</quarkus>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.rpg</groupId>
+            <artifactId>kp-rpg-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.commons</groupId>
+            <artifactId>kp-commons-discord</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.rpg</groupId>
+            <artifactId>drivethru</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.rpg</groupId>
+            <artifactId>datastore-mongodb</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.rpg</groupId>
+            <artifactId>kp-rpg-traveller</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.rpg</groupId>
+            <artifactId>kp-rpg-dsa5</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.rpg</groupId>
+            <artifactId>kp-rpg-fate</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.rpg</groupId>
+            <artifactId>kp-rpg-hexxen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.rpg</groupId>
+            <artifactId>kp-rpg-saga</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.rpg</groupId>
+            <artifactId>kp-rpg-wod</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.rpg</groupId>
+            <artifactId>kp-rpg-torg</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkiverse.loggingmanager</groupId>
+            <artifactId>quarkus-logging-manager</artifactId>
+            <version>2.1.2</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-keycloak-authorization</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-oidc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-oidc-token-propagation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-elytron-security-properties-file</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.microprofile.metrics</groupId>
+            <artifactId>microprofile-metrics-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-openapi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-swagger-ui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-opentracing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-openshift</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.commons.test-support</groupId>
+            <artifactId>mongodb-testsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.commons.test-support</groupId>
+            <artifactId>discord-testsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/docker</directory>
+                <filtering>true</filtering>
+                <targetPath>../</targetPath>
+            </resource>
+        </resources>
+    </build>
+</project>

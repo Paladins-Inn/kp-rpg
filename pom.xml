@@ -21,22 +21,22 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.kaiserpfalz-edv.rpg</groupId>
-    <artifactId>rpg-root</artifactId>
+    <artifactId>kp-rpg</artifactId>
     <version>1.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>KP RPG :: Root</name>
 
     <modules>
-        <module>rpg-parent</module>
-        <module>rpg-bom</module>
+        <module>kp-rpg-parent</module>
+        <module>kp-rpg-bom</module>
 
-        <module>rpg-core</module>
+        <module>kp-rpg-core</module>
         <module>integrations</module>
 
-        <module>rpg-game-modules</module>
+        <module>kp-rpg-game-modules</module>
 
-        <module>rpg-discord-bot</module>
+        <module>kp-rpg-discord-bot</module>
     </modules>
 
     <scm>
@@ -48,7 +48,7 @@
 
     <distributionManagement>
         <repository>
-            <id>gh-paladins</id>
+            <id>github</id>
             <name>GitHub Paladins Inn Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/Paladins-Inn/kp-commons</url>
         </repository>
@@ -120,7 +120,7 @@
                     <url>https://repo1.maven.org/maven2/</url>
                 </repository>
                 <repository>
-                    <id>gh-paladins</id>
+                    <id>github</id>
                     <url>https://maven.pkg.github.com/Paladins-Inn</url>
                     <snapshots>
                         <enabled>true</enabled>
