@@ -35,8 +35,6 @@
         <module>integrations</module>
 
         <module>kp-rpg-game-modules</module>
-
-        <module>kp-rpg-discord-bot</module>
     </modules>
 
     <scm>
