@@ -18,23 +18,30 @@
 package de.kaiserpfalzedv.rpg.bot.dice;
 
 import de.kaiserpfalzedv.commons.test.mongodb.MongoDBResource;
+import de.kaiserpfalzedv.commons.test.oauth2.Oauth2WireMock;
 import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.security.TestSecurity;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
 
 @QuarkusTest
-@QuarkusTestResource(MongoDBResource.class)
+@QuarkusTestResource(Oauth2WireMock.class)
 public class TestRestRoller {
+    private static final String BEARER_TOKEN = "337aab0f-b547-489b-9dbd-a54dc7bdf20d";
+
     @Test
     public void shouldReturnARollWhenD6IsRolled() {
         given()
-                .when()
+            .when()
+                .header("Authorization", "bearer " + BEARER_TOKEN)
+                .log().all()
                 .get("/apis/die/v1/roll/D6")
                 .prettyPeek()
-                .then()
+            .then()
                 .statusCode(200)
                 .body(containsString("D6"));
 

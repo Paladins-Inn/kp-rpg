@@ -492,11 +492,6 @@
                     <artifactId>junit-jupiter-engine</artifactId>
                     <scope>test</scope>
                 </dependency>
-
-                <dependency>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-slf4j-impl</artifactId>
-                </dependency>
             </dependencies>
 
             <build>
@@ -597,7 +592,7 @@
             <id>quarkus</id>
             <activation>
                 <file>
-                    <exists>src/main/resources/application.*</exists>
+                    <exists>src/main/resources/application.properties</exists>
                 </file>
             </activation>
 
@@ -645,10 +640,6 @@
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-vertx</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-resteasy-jackson</artifactId>
                 </dependency>
                 <dependency>
                     <groupId>io.quarkus</groupId>
@@ -743,7 +734,7 @@
             <id>quarkus-test</id>
             <activation>
                 <file>
-                    <exists>src/test/resources/application.*</exists>
+                    <exists>src/test/resources/application.properties</exists>
                 </file>
             </activation>
 
@@ -763,11 +754,6 @@
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-resteasy</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-resteasy-jackson</artifactId>
                     <scope>test</scope>
                 </dependency>
                 <dependency>

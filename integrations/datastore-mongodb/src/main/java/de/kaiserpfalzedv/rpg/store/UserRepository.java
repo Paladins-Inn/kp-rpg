@@ -24,7 +24,6 @@ import de.kaiserpfalzedv.commons.core.user.User;
 import de.kaiserpfalzedv.commons.core.user.UserData;
 import de.kaiserpfalzedv.commons.core.user.UserStoreService;
 import io.quarkus.arc.AlternativePriority;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.Map;
@@ -39,9 +38,7 @@ import java.util.UUID;
  */
 @ApplicationScoped
 @AlternativePriority(500)
-@Slf4j
-public class UserRepository extends BaseMongoRepository<User, UserData> implements UserStoreService {
-    @Override
+public class UserRepository implements BaseMongoRepository<User, UserData>, UserStoreService {
     public Optional<User> findByNameSpaceAndName(String nameSpace, String name) {
         return find(
                 "namespace = :namespace and name = :name",
@@ -52,41 +49,28 @@ public class UserRepository extends BaseMongoRepository<User, UserData> implemen
                 .firstResultOptional();
     }
 
-    @Override
     public Optional<User> findByUid(UUID uid) {
         return Optional.ofNullable(findById(uid));
     }
 
-    @Override
     public User save(final User object) throws OptimisticLockStoreException, DuplicateStoreException {
         persistOrUpdate(object);
 
         return object;
     }
 
-    @Override
     public void remove(User object) {
         delete(object);
-
-        log.debug("User '{}' deleted.", object.getSelfLink());
     }
 
-    @Override
     public void remove(String nameSpace, String name) {
-        log.trace("Deleting user '{}/{}'.", nameSpace, name);
-
         findByNameSpaceAndName(nameSpace, name).ifPresentOrElse(
                 this::delete,
-                () -> log.debug("User '{}/{}' did not exist.", nameSpace, name)
+                () -> {}
         );
-
-        log.debug("User '{}/{}' deleted.", nameSpace, name);
     }
 
-    @Override
     public void remove(UUID uid) {
         deleteById(uid);
-
-        log.debug("User with UUID '{}' deleted.", uid);
     }
 }

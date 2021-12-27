@@ -31,15 +31,40 @@
     <description>Integration into the DriveThru API.</description>
 
     <properties>
-        <activate.jcenter>true</activate.jcenter>
+        <activate.jcenter>false</activate.jcenter>
+        <quarkus>true</quarkus>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>de.kaiserpfalz-edv.rpg</groupId>
-            <artifactId>rpg-core</artifactId>
+            <artifactId>kp-rpg-core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-arc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-cache</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest-client-jackson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.github.tomakehurst</groupId>
             <artifactId>wiremock-jre8</artifactId>

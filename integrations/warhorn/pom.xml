@@ -39,7 +39,7 @@
     <dependencies>
         <dependency>
             <groupId>de.kaiserpfalz-edv.rpg</groupId>
-            <artifactId>rpg-core</artifactId>
+            <artifactId>kp-rpg-core</artifactId>
         </dependency>
 
         <dependency>

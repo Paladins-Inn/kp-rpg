@@ -17,11 +17,11 @@
 
 package de.kaiserpfalzedv.rpg.integrations.warhorn;
 
-import io.quarkus.arc.config.ConfigProperties;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.eclipse.microprofile.config.inject.ConfigProperties;
 
 /**
  * WarhornConfiguration --

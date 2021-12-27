@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.DriveThruResource;
 import lombok.*;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.util.HashSet;
@@ -50,20 +51,26 @@ public class Product implements DriveThruResource {
     private String publisherName;
 
     @JsonProperty("cover_url")
+    @ToStringExclude
     private String coverURL;
 
     @JsonProperty("products_thumbnail")
+    @ToStringExclude
     private String thumbnail;
 
     @JsonProperty("products_thumbnail100")
+    @ToStringExclude
     private String thumbnail100;
 
     @JsonProperty("products_thumbnail80")
+    @ToStringExclude
     private String thumbnail80;
 
     @JsonProperty("products_thumbnail40")
+    @ToStringExclude
     private String thumbnail40;
 
-    @Singular
+    @Builder.Default
+    @ToStringExclude
     private Set<ProductFiles> files = new HashSet<>();
 }

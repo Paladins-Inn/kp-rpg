@@ -21,9 +21,9 @@
 
     <parent>
         <groupId>de.kaiserpfalz-edv.rpg</groupId>
-        <artifactId>rpg-parent</artifactId>
+        <artifactId>kp-rpg-parent</artifactId>
         <version>1.2.0-SNAPSHOT</version>
-        <relativePath>../rpg-parent/pom.xml</relativePath>
+        <relativePath>../kp-rpg-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>integrations</artifactId>

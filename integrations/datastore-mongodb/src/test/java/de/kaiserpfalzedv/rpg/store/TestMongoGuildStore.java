@@ -22,9 +22,6 @@ import de.kaiserpfalzedv.commons.core.resources.Metadata;
 import de.kaiserpfalzedv.commons.core.resources.Status;
 import de.kaiserpfalzedv.commons.discord.guilds.Guild;
 import de.kaiserpfalzedv.commons.discord.guilds.GuildData;
-import de.kaiserpfalzedv.commons.discord.guilds.GuildStoreService;
-import de.kaiserpfalzedv.commons.test.mongodb.MongoDBResource;
-import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -48,7 +45,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @since 1.2.0 2021-01-30
  */
 @QuarkusTest
-@QuarkusTestResource(MongoDBResource.class)
 @Slf4j
 public class TestMongoGuildStore {
     private static final String NAMESPACE = Guild.DISCORD_NAMESPACE;
@@ -99,14 +95,8 @@ public class TestMongoGuildStore {
         DATA_ANNOTATIONS.put("test", "true");
     }
 
-    private final GuildStoreService sut;
-
     @Inject
-    public TestMongoGuildStore(final GuildStoreService store) {
-        this.sut = store;
-
-        log.debug("Loaded store: {}", store);
-    }
+    private GuildRepository sut;
 
     @Test
     public void shouldBeMongoBasedImplementation() {

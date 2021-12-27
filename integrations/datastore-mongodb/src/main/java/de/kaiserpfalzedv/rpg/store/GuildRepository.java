@@ -40,12 +40,10 @@ import java.util.UUID;
  */
 @ApplicationScoped
 @AlternativePriority(500)
-@Slf4j
 @ToString
-public class GuildRepository extends BaseMongoRepository<Guild, GuildData> implements GuildStoreService {
-    @Override
+@Slf4j
+public class GuildRepository implements BaseMongoRepository<Guild, GuildData>, GuildStoreService {
     public Optional<Guild> findByNameSpaceAndName(final String nameSpace, final String name) {
-        log.trace("Loading guild by namespace and name: '{}/{}'", nameSpace, name);
         return find(
                 "namespace = :nameSpace and name = :name",
                 Map.of(
@@ -56,41 +54,28 @@ public class GuildRepository extends BaseMongoRepository<Guild, GuildData> imple
                 .firstResultOptional();
     }
 
-    @Override
     public Optional<Guild> findByUid(final UUID uid) {
-        log.trace("Loading guild by uid={}", uid);
         return Optional.ofNullable(findById(uid));
     }
 
-    @Override
     public Guild save(final Guild object) throws OptimisticLockStoreException, DuplicateStoreException {
-        log.trace("Saving guild: '{}'", object.getSelfLink());
-
         Guild stored = prepareStorage(object.toBuilder().build());
         persistOrUpdate(stored);
 
         return stored;
     }
 
-    @Override
     public void remove(final Guild object) {
-        log.trace("Deleting guild: '{}'", object.getSelfLink());
         delete(object);
     }
 
-    @Override
     public void remove(final String nameSpace, final String name) {
-        log.trace("Deleting guild '{}/{}'.", nameSpace, name);
-
         findByNameSpaceAndName(nameSpace, name).ifPresentOrElse(
                 this::delete,
-                () -> log.debug("Guild '{}/{}' did not exist.", nameSpace, name)
+                () -> log.info("Guild {}/{} did not exist.", nameSpace, name)
         );
-
-        log.debug("Guild '{}/{}' deleted.", nameSpace, name);
     }
 
-    @Override
     public void remove(final UUID uid) {
         deleteById(uid);
     }

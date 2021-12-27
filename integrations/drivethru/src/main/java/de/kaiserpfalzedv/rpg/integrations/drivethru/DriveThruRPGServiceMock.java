@@ -21,11 +21,7 @@ import com.google.common.collect.Sets;
 import de.kaiserpfalzedv.commons.core.user.InvalidUserException;
 import de.kaiserpfalzedv.commons.core.user.User;
 import de.kaiserpfalzedv.rpg.core.dice.bag.D100;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.OwnedProduct;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Product;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.ProductFiles;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Publisher;
-import de.kaiserpfalzedv.rpg.integrations.drivethru.model.Token;
+import de.kaiserpfalzedv.rpg.integrations.drivethru.model.*;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoDriveThruRPGAPIKeyDefinedException;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoValidTokenException;
 import io.quarkus.arc.AlternativePriority;
@@ -130,6 +126,16 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
 
         log.trace("Product created. productId={}", productId);
         String productUrl = "https://nowhere/product/" + productId;
+
+        HashSet<ProductFiles> files = Sets.newHashSet(
+                ProductFiles.builder()
+                        .withBundleId("Bundle 0")
+                        .withFilename("filename.pdf")
+                        .withFilesizeBytes(1024L^3)
+                        .withFileSizeMegaBytes(1.0d)
+                        .build()
+        );
+
         return Optional.of(
                 Product.builder()
                         .withProductsId(productId).withProductsName("Product Nr. 1")
@@ -139,14 +145,7 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
                         .withThumbnail100(productUrl + "/tumb100")
                         .withThumbnail80(productUrl + "/tumb80")
                         .withThumbnail40(productUrl + "/tumb40")
-                        .withFile(
-                                ProductFiles.builder()
-                                        .withBundleId("Bundle 0")
-                                        .withFilename("filename.pdf")
-                                        .withFilesizeBytes(1024L^3)
-                                        .withFileSizeMegaBytes(1.0d)
-                                        .build()
-                        )
+                        .withFiles(files)
                         .build()
         );
     }

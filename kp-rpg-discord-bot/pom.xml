@@ -130,6 +130,15 @@
 
         <dependency>
             <groupId>de.kaiserpfalz-edv.commons.test-support</groupId>
+            <artifactId>oauth2-testsupport</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-test-security</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.commons.test-support</groupId>
             <artifactId>mongodb-testsupport</artifactId>
             <scope>test</scope>
         </dependency>
