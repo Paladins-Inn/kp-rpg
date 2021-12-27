@@ -176,7 +176,7 @@
             <dependency>
                 <groupId>org.eclipse.microprofile.openapi</groupId>
                 <artifactId>microprofile-openapi-api</artifactId>
-                <version>3.0-RC5</version>
+                <version>3.0</version>
             </dependency>
 
 
