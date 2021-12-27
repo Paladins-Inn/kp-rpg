@@ -113,7 +113,12 @@
             </dependency>
             <dependency>
                 <groupId>${kp-rpg.groupId}</groupId>
-                <artifactId>drivethru</artifactId>
+                <artifactId>kp-rpg-drivethru</artifactId>
+                <version>${kp-rpg.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${kp-rpg.groupId}</groupId>
+                <artifactId>kp-rpg-warhorn</artifactId>
                 <version>${kp-rpg.version}</version>
             </dependency>
 

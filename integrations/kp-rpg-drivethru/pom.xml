@@ -13,11 +13,10 @@
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with this program.  If not, see <https://www.gnu.org/licenses />.
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -27,12 +26,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>warhorn</artifactId>
-    <name>KP RPG :: Integration :: Warhorn</name>
-    <description>Event publishing via Warhorn.</description>
+    <artifactId>kp-rpg-drivethru</artifactId>
+    <name>KP RPG :: Integration :: DriveThru</name>
+    <description>Integration into the DriveThru API.</description>
 
     <properties>
-        <activate.jcenter>true</activate.jcenter>
+        <activate.jcenter>false</activate.jcenter>
         <quarkus>true</quarkus>
     </properties>
 
@@ -44,7 +43,7 @@
 
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-graphql-client</artifactId>
+            <artifactId>quarkus-arc</artifactId>
         </dependency>
 
         <dependency>
@@ -52,6 +51,20 @@
             <artifactId>quarkus-cache</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest-client-jackson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.github.tomakehurst</groupId>
             <artifactId>wiremock-jre8</artifactId>
