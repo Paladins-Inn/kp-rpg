@@ -366,7 +366,9 @@
                     <exclude>**/*.tgz</exclude>
                     <exclude>**/*.png</exclude>
                     <exclude>**/*.jpg</exclude>
+                    <exclude>**/*.jpeg</exclude>
                     <exclude>**/*.gpg</exclude>
+                    <exclude>**/*.svg</exclude>
                     <exclude>**/*.license</exclude>
                     <exclude>src/main/resources/static/*</exclude>
                 </excludes>
@@ -382,7 +384,9 @@
                     <include>**/*.tgz</include>
                     <include>**/*.png</include>
                     <include>**/*.jpg</include>
+                    <include>**/*.jpeg</include>
                     <include>**/*.gpg</include>
+                    <include>**/*.svg</include>
                     <include>**/*.license</include>
                 </includes>
             </resource>
@@ -535,12 +539,15 @@
                         <filtering>true</filtering>
                         <directory>src/test/resources</directory>
                         <excludes>
+                            <exclude>**/*.webp</exclude>
                             <exclude>**/*.docx</exclude>
                             <exclude>**/*.xlsx</exclude>
                             <exclude>**/*.zip</exclude>
                             <exclude>**/*.tgz</exclude>
                             <exclude>**/*.png</exclude>
                             <exclude>**/*.jpg</exclude>
+                            <exclude>**/*.jpeg</exclude>
+                            <exclude>**/*.svg</exclude>
                             <exclude>**/*.gpg</exclude>
                             <exclude>**/*.license</exclude>
                         </excludes>
@@ -549,13 +556,16 @@
                         <filtering>false</filtering>
                         <directory>src/test/resources</directory>
                         <includes>
+                            <include>**/*.webp</include>
                             <include>**/*.docx</include>
                             <include>**/*.xlsx</include>
                             <include>**/*.zip</include>
                             <include>**/*.tgz</include>
                             <include>**/*.png</include>
                             <include>**/*.jpg</include>
+                            <include>**/*.jpeg</include>
                             <include>**/*.gpg</include>
+                            <include>**/*.svg</include>
                             <include>**/*.license</include>
                         </includes>
                     </testResource>

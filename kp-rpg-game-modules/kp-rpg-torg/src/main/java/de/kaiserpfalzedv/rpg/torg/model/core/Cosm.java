@@ -29,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static de.kaiserpfalzedv.rpg.torg.data.Publications.CORE_RULES;
 
@@ -75,9 +74,13 @@ public enum Cosm implements MapperEnum<Cosm> {
 
     @JsonValue
     private final String roll20;
+    @ToString.Exclude
     private final Publication publication;
+    @ToString.Exclude
     private final Type type;
+    @ToString.Exclude
     private final HashMap<Axiom.AxiomName, Axiom> axioms = new HashMap<>();
+    @ToString.Exclude
     private final String[] laws;
 
 
@@ -143,11 +146,9 @@ public enum Cosm implements MapperEnum<Cosm> {
             return Optional.empty();
         }
 
-        return Optional.of(
-                allCosms().stream()
+        return allCosms().stream()
                         .filter(e -> e.foundry.equals(name)).distinct()
-                        .collect(Collectors.toList()).get(0)
-        );
+                        .findFirst();
     }
 
     public static Optional<Cosm> mapFoundry(@NotNull final String name) {
@@ -156,11 +157,9 @@ public enum Cosm implements MapperEnum<Cosm> {
 
     @Override
     public Optional<Cosm> mapFromRoll20(@NotNull final String name) {
-        return Optional.of(
-                allCosms().stream()
+        return allCosms().stream()
                         .filter(e -> e.roll20.equals(name)).distinct()
-                        .collect(Collectors.toList()).get(0)
-        );
+                        .findFirst();
     }
 
 
