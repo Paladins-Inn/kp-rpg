@@ -95,19 +95,15 @@ public enum Skill implements MapperEnum<Skill> {
     }
 
     public Optional<Skill> mapFromFoundry(@NotNull final String name) {
-        return Optional.ofNullable(
-                allSkills().stream()
+        return allSkills().stream()
                         .filter(e -> e.foundry.equals(name)).distinct()
-                        .collect(Collectors.toList()).get(0)
-        );
+                        .findFirst();
     }
 
     public Optional<Skill> mapFromRoll20(@NotNull final String name) {
-        return Optional.ofNullable(
-                allSkills().stream()
+        return allSkills().stream()
                         .filter(e -> e.roll20.equals(name)).distinct()
-                        .collect(Collectors.toList()).get(0)
-        );
+                        .findFirst();
     }
 
     public List<Skill> allSkills() {

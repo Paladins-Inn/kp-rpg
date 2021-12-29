@@ -55,7 +55,4 @@ public class Armor {
     @Schema(description = "If the use of this armor will fatigue the wearer of this armor.")
     @Builder.Default
     private final Boolean fatigues = false;
-
-    @Schema(description = "The description of a power.")
-    private final AttackPower power;
 }

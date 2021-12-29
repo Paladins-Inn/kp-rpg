@@ -29,7 +29,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.io.Serializable;
@@ -43,7 +42,7 @@ import java.util.Set;
  * @since 1.2.0  2021-05-23
  */
 @SuppressWarnings("FieldMayBeFinal")
-@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@Builder(setterPrefix = "with", toBuilder = true)
 @AllArgsConstructor
 @Getter
 @ToString

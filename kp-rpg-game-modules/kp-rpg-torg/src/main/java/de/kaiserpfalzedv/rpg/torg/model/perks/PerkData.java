@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.torg.model.actors.Clearance;
 import de.kaiserpfalzedv.rpg.torg.model.core.Armor;
 import de.kaiserpfalzedv.rpg.torg.model.core.Attack;
+import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -63,6 +64,11 @@ public class PerkData implements Serializable {
     @EqualsAndHashCode.Include
     @Schema(description = "The minimum clearance level for this spell.")
     private final Clearance clearance;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @Schema(description = "The cosms this perk is available for.", minItems = 0)
+    private final Set<Cosm> cosms;
 
     @Schema(description = "Notes to this spell.", minItems = 0)
     private final Set<String> notes;
