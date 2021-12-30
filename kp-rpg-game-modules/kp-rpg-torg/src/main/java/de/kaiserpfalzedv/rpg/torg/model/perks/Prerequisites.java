@@ -44,9 +44,10 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(description = "The prerequisites for obtaining a perk.")
 public class Prerequisites implements Serializable {
-    @Schema(description = "Skills that are a prerequisite.", nullable = true)
-    private final Set<SkillValue> skills;
+    @Schema(description = "Skills that are a prerequisite.", nullable = true, minItems = 0)
+    private Set<SkillValue> skills;
 
     @Schema(description = "Minimum clearance level as prerequisite", nullable = true)
-    private final Clearance clearance;
+    @Builder.Default
+    private Clearance clearance = Clearance.ALPHA;
 }

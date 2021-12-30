@@ -68,7 +68,7 @@ public enum AttackPowerTarget {
 
     public Optional<AttackPowerTarget> mapFromFoundry(@NotNull final String name) {
         return allAttackPowerTargets().stream()
-                .filter(e -> e.foundry.equals(name)).distinct()
+                .filter(e -> name.equalsIgnoreCase(e.foundry)).distinct()
                 .findFirst();
     }
 

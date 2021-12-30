@@ -26,6 +26,7 @@ import lombok.ToString;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Armor -- The data for all CharSheet armors (weapons, powers, ...).
@@ -44,7 +45,7 @@ public class Armor {
     private final String name;
 
     @Schema(description = "Axiom of this armor.", minItems = 1, maxItems = 1)
-    private final List<Axiom> axioms;
+    private final Set<Axiom> axioms;
 
     @Schema(description = "This armor limits the dexterity to this value.", nullable = true, minimum = "1", maximum = "30")
     private final Integer maxDex;
