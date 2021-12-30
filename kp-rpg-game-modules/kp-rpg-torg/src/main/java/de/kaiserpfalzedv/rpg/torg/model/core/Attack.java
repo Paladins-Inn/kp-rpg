@@ -26,6 +26,7 @@ import lombok.ToString;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * AttackData -- The data for all CharSheet attacks (weapons, powers, ...).
@@ -44,7 +45,7 @@ public class Attack {
     private final String name;
 
     @Schema(description = "Up to 2 axioms for this attack.", minItems = 1, maxItems = 2)
-    private final List<Axiom> axioms;
+    private final Set<Axiom> axioms;
 
     @Schema(description = "Minimal strength to use this attack.", nullable = true, minimum = "1", maximum = "30")
     private final Integer minStr;
@@ -63,6 +64,7 @@ public class Attack {
 
     @Schema(description = "The skill used for this attack.")
     private final Skill skill;
+    private final Integer skillLevel;
 
     @Schema(description = "The attack is a power and not an item.", nullable = true)
     private final AttackPower power;

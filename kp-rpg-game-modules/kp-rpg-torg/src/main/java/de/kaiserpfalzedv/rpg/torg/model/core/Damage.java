@@ -71,20 +71,16 @@ public class Damage {
                 return Optional.empty();
             }
 
-            return Optional.of(
-                    all().stream()
+            return all().stream()
                             .filter(e -> e.foundry.equals(name)).distinct()
-                            .collect(Collectors.toList()).get(0)
-            );
+                            .findFirst();
         }
 
         @Override
         public Optional<DamageType> mapFromRoll20(String name) {
-            return Optional.of(
-                    all().stream()
+            return all().stream()
                             .filter(e -> e.roll20.equals(name)).distinct()
-                            .collect(Collectors.toList()).get(0)
-            );
+                            .findFirst();
         }
 
         public Set<DamageType> all() {
@@ -92,8 +88,9 @@ public class Damage {
         }
     }
 
-    @Schema(description = "Type of the damage. Either 'fixed' or the base attribute.")
-    private final DamageType type;
+    @Schema(description = "Type of the damage. Either 'fixed' or the base attribute.", defaultValue = "fixed")
+    @Builder.Default
+    private final DamageType type = DamageType.fixed;
 
     @Schema(description = "The adds for damage calculated. Will be ignored when type is 'fixed'.")
     private final Integer adds;
