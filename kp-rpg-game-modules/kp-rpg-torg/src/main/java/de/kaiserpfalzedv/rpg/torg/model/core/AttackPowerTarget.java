@@ -81,4 +81,5 @@ public enum AttackPowerTarget {
                 STANDARD, STANDARD_DodgeOrDexterity,
                 CHALLENGING, HARD, VERY_HARD, HEROIC, NEAR_IMPOSSIBLE
         );
+    }
 }
