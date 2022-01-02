@@ -23,12 +23,13 @@ import de.kaiserpfalzedv.commons.core.user.UserData;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.*;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoDriveThruRPGAPIKeyDefinedException;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoValidTokenException;
-import io.quarkus.arc.AlternativePriority;
+import io.quarkus.arc.Priority;
 import io.quarkus.cache.CacheResult;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -45,7 +46,8 @@ import java.util.Optional;
  * @since 1.2.0  2021-02-03
  */
 @ApplicationScoped
-@AlternativePriority(100)
+@Alternative
+@Priority(100)
 @Slf4j
 public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
     /**

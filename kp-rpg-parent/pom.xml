@@ -105,16 +105,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>3.1.2</version>
-            <type>maven-plugin</type>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
-
     <properties>
         <skipTests>false</skipTests>
         <skip.jar>false</skip.jar>
@@ -417,18 +407,22 @@
                 <dependency>
                     <groupId>jakarta.annotation</groupId>
                     <artifactId>jakarta.annotation-api</artifactId>
+                    <scope>provided</scope>
                 </dependency>
                 <dependency>
                     <groupId>jakarta.inject</groupId>
                     <artifactId>jakarta.inject-api</artifactId>
+                    <scope>provided</scope>
                 </dependency>
                 <dependency>
                     <groupId>jakarta.enterprise</groupId>
                     <artifactId>jakarta.enterprise.cdi-api</artifactId>
+                    <scope>provided</scope>
                 </dependency>
                 <dependency>
                     <groupId>jakarta.validation</groupId>
                     <artifactId>jakarta.validation-api</artifactId>
+                    <scope>provided</scope>
                 </dependency>
             </dependencies>
 

@@ -17,17 +17,16 @@
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
-import com.google.common.collect.Sets;
 import de.kaiserpfalzedv.commons.core.user.InvalidUserException;
 import de.kaiserpfalzedv.commons.core.user.User;
 import de.kaiserpfalzedv.rpg.core.dice.bag.D100;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.model.*;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoDriveThruRPGAPIKeyDefinedException;
 import de.kaiserpfalzedv.rpg.integrations.drivethru.resource.NoValidTokenException;
-import io.quarkus.arc.AlternativePriority;
+import io.quarkus.arc.Priority;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Alternative;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -51,8 +50,8 @@ import static java.time.ZoneOffset.UTC;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-02-06
  */
-@Dependent
-@AlternativePriority(50)
+@Alternative
+@Priority(50)
 @Slf4j
 public class DriveThruRPGServiceMock implements DriveThruRPGService {
     /**
@@ -127,7 +126,7 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
         log.trace("Product created. productId={}", productId);
         String productUrl = "https://nowhere/product/" + productId;
 
-        HashSet<ProductFiles> files = Sets.newHashSet(
+        Set<ProductFiles> files = Set.of(
                 ProductFiles.builder()
                         .withBundleId("Bundle 0")
                         .withFilename("filename.pdf")
@@ -141,10 +140,10 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
                         .withProductsId(productId).withProductsName("Product Nr. 1")
                         .withPublisherId("1").withPublisherName("Publisher Nr. 1")
                         .withCoverURL(productUrl + "/cover")
-                        .withThumbnail(productUrl + "/tumb")
-                        .withThumbnail100(productUrl + "/tumb100")
-                        .withThumbnail80(productUrl + "/tumb80")
-                        .withThumbnail40(productUrl + "/tumb40")
+                        .withThumbnail(productUrl + "/thumb")
+                        .withThumbnail100(productUrl + "/thumb100")
+                        .withThumbnail80(productUrl + "/thumb80")
+                        .withThumbnail40(productUrl + "/thumb40")
                         .withFiles(files)
                         .build()
         );
