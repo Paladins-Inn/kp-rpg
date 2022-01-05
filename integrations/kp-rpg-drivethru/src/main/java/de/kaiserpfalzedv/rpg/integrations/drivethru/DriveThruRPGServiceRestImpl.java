@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
+ * Copyright (c) &today.year Kaiserpfalz EDV-Service, Roland T. Lichti
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
@@ -79,7 +79,7 @@ public class DriveThruRPGServiceRestImpl implements DriveThruRPGService {
             throw new NoDriveThruRPGAPIKeyDefinedException(user);
         }
 
-        log.trace("Loading access token for user='{}/{}', apiKey='{}'", user.getNamespace(), user.getName(), u.getDriveThruRPGApiKey().get());
+        log.trace("Loading access token for user='{}/{}', apiKey='{}'", user.getNameSpace(), user.getName(), u.getDriveThruRPGApiKey().get());
 
         LinkedHashMap<String, String> response = client.getToken(u.getDriveThruRPGApiKey().get()).getMessage();
         log.trace("Token loaded. token={}", response);

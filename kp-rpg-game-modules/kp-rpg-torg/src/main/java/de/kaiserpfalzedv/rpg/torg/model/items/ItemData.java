@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
+ * Copyright (c) &today.year Kaiserpfalz EDV-Service, Roland T. Lichti
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kaiserpfalzedv.rpg.torg.model.items;
@@ -23,14 +23,14 @@ import de.kaiserpfalzedv.rpg.torg.model.core.Armor;
 import de.kaiserpfalzedv.rpg.torg.model.core.Attack;
 import de.kaiserpfalzedv.rpg.torg.model.core.Axiom;
 import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
