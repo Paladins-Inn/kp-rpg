@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
+ * Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
@@ -67,15 +67,15 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
     public Token getToken(final User user) throws InvalidUserException, NoDriveThruRPGAPIKeyDefinedException, NoValidTokenException {
         switch (user.getName().toLowerCase(Locale.ROOT)) {
             case "invalid#0001":
-                log.debug("Throwing InvalidUserException. user='{}'", user.getDisplayName());
+                log.debug("Throwing InvalidUserException. user='{}'", user.getSelfLink());
                 throw new InvalidUserException(user);
 
             case "invalid#0002":
-                log.debug("Throwing NoDriveThruRPGAPIKeyDefinedException. user='{}'", user.getDisplayName());
+                log.debug("Throwing NoDriveThruRPGAPIKeyDefinedException. user='{}'", user.getSelfLink());
                 throw new NoDriveThruRPGAPIKeyDefinedException(user);
 
             case "invalid#0004":
-                log.debug("Throwing NoValidTokenException. user='{}'", user.getDisplayName());
+                log.debug("Throwing NoValidTokenException. user='{}'", user.getSelfLink());
                 throw new NoValidTokenException(user);
         }
 
@@ -105,7 +105,7 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
                     .build();
         }
 
-        log.trace("Token created. user='{}', token={}", user.getDisplayName(), token);
+        log.trace("Token created. user='{}', token={}", user.getSelfLink(), token);
         return token;
     }
 
@@ -211,7 +211,7 @@ public class DriveThruRPGServiceMock implements DriveThruRPGService {
             );
         }
 
-        log.trace("Created owned products: user='{}', count={}", user.getDisplayName(), result.size());
+        log.trace("Created owned products: user='{}', count={}", user.getSelfLink(), result.size());
         return result;
     }
 }
