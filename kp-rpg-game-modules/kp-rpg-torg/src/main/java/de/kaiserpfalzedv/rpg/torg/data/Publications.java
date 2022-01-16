@@ -1,5 +1,5 @@
 /*
- * Copyright (c) &today.year Kaiserpfalz EDV-Service, Roland T. Lichti
+ * Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 package de.kaiserpfalzedv.rpg.torg.data;
 
 import de.kaiserpfalzedv.commons.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.resources.Pointer;
 import de.kaiserpfalzedv.rpg.torg.About;
 import de.kaiserpfalzedv.rpg.torg.model.Book.Publication;
 import de.kaiserpfalzedv.rpg.torg.model.Book.PublicationData;
@@ -34,15 +35,18 @@ import java.util.UUID;
  */
 public interface Publications {
     Publication CORE_RULES = Publication.builder()
-            .withKind(Publication.KIND)
-            .withApiVersion(Publication.VERSION)
-            .withNameSpace(About.TORG_NAMESPACE)
-            .withName("Torg Core Rules")
-            .withUid(UUID.fromString("dc1de20e-c19b-49a7-873e-45fd0ce91e73"))
-            .withGeneration(1L)
-
             .withMetadata(
                     Metadata.builder()
+                            .withIdentity(
+                                    Pointer.builder()
+                                            .withKind(Publication.KIND)
+                                            .withApiVersion(Publication.VERSION)
+                                            .withNameSpace(About.TORG_NAMESPACE)
+                                            .withName("Torg Core Rules")
+                                            .build()
+                            )
+                            .withUid(UUID.fromString("dc1de20e-c19b-49a7-873e-45fd0ce91e73"))
+                            .withGeneration(1L)
                             .withCreated(About.DEFAULT_CREATION)
                             .withOwner(Publishers.ULISSES_SPIELE)
 
