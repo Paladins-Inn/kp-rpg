@@ -124,11 +124,11 @@
 
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>2.6.2.Final</quarkus.platform.version>
+        <quarkus.platform.version>2.6.3.Final</quarkus.platform.version>
 
 
         <compiler-plugin.version>3.9.0</compiler-plugin.version>
-        <quarkus-plugin.version>2.6.1.Final</quarkus-plugin.version>
+        <quarkus-plugin.version>2.6.3.Final</quarkus-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
@@ -138,7 +138,7 @@
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
         <lombok-maven-plugin.version>1.18.20.0</lombok-maven-plugin.version>
-        <jandex-maven-plugin.version>1.2.1</jandex-maven-plugin.version>
+        <jandex-maven-plugin.version>1.2.2</jandex-maven-plugin.version>
     </properties>
 
     <reporting>
