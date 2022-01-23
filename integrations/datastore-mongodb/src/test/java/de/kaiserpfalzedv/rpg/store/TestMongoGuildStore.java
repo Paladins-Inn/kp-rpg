@@ -1,30 +1,33 @@
 /*
- * Copyright (c) &today.year Kaiserpfalz EDV-Service, Roland T. Lichti
+ * Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 
 package de.kaiserpfalzedv.rpg.store;
 
 import de.kaiserpfalzedv.commons.core.resources.History;
 import de.kaiserpfalzedv.commons.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.resources.Pointer;
 import de.kaiserpfalzedv.commons.core.resources.Status;
 import de.kaiserpfalzedv.commons.discord.guilds.Guild;
 import de.kaiserpfalzedv.commons.discord.guilds.GuildData;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.MDC;
 
 import javax.inject.Inject;
@@ -36,6 +39,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -58,33 +62,34 @@ public class TestMongoGuildStore {
      * Default data created during setup of tests.
      */
     private static final Guild DATA = Guild.builder()
-            .withKind(Guild.KIND)
-            .withApiVersion(Guild.API_VERSION)
-            .withNameSpace(NAMESPACE)
-            .withName(NAME)
-            .withUid(UID)
-
-            .withMetadata(
+            .metadata(
                     Metadata.builder()
-                            .withCreated(CREATED)
-
-                            .withAnnotations(DATA_ANNOTATIONS)
-
+                            .identity(
+                                    Pointer.builder()
+                                            .kind(Guild.KIND)
+                                            .apiVersion(Guild.API_VERSION)
+                                            .nameSpace(NAMESPACE)
+                                            .name(NAME)
+                                            .build()
+                            )
+                            .uid(UID)
+                            .created(CREATED)
+                            .annotations(DATA_ANNOTATIONS)
                             .build()
             )
-            .withSpec(
+            .spec(
                     GuildData.builder()
-                            .withPrefix(PREFIX)
-                            .withProperties(new HashMap<>())
+                            .prefix(PREFIX)
+                            .properties(new HashMap<>())
                             .build()
             )
-            .withStatus(
+            .status(
                     Status.builder()
-                            .withObservedGeneration(0L)
-                            .withHistory(Collections.singletonList(
+                            .observedGeneration(0)
+                            .history(Collections.singletonList(
                                     History.builder()
-                                            .withStatus("created")
-                                            .withTimeStamp(CREATED)
+                                            .status("created")
+                                            .timeStamp(CREATED)
                                             .build()
                             ))
                             .build()
@@ -96,7 +101,7 @@ public class TestMongoGuildStore {
     }
 
     @Inject
-    private GuildRepository sut;
+    GuildRepository sut;
 
     @Test
     public void shouldBeMongoBasedImplementation() {
@@ -121,7 +126,7 @@ public class TestMongoGuildStore {
     public void shouldUseTheMongoGuildStore() {
         MDC.put("test", "use-mongo-store");
 
-        assertTrue(sut instanceof GuildRepository);
+        assertNotNull(sut);
     }
 
     @AfterEach

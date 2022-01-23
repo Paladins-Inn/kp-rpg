@@ -1,23 +1,22 @@
 /*
- * Copyright (c) &today.year Kaiserpfalz EDV-Service, Roland T. Lichti
+ * Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
 
 import de.kaiserpfalzedv.commons.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.resources.Pointer;
 import de.kaiserpfalzedv.commons.core.user.InvalidUserException;
 import de.kaiserpfalzedv.commons.core.user.User;
 import de.kaiserpfalzedv.commons.core.user.UserData;
@@ -55,20 +54,24 @@ import static org.junit.jupiter.api.Assertions.fail;
 @Slf4j
 public class TestDriveThruRPGService {
     private static final User DEFAULT_USER = User.builder()
-            .withKind(User.KIND)
-            .withApiVersion(User.API_VERSION)
-            .withNameSpace("discord")
-            .withName("test#1234")
-            .withMetadata(
+            .metadata(
                     Metadata.builder()
-                            .withCreated(OffsetDateTime.now(Clock.systemUTC()))
+                            .identity(
+                                    Pointer.builder()
+                                            .kind(User.KIND)
+                                            .apiVersion(User.API_VERSION)
+                                            .nameSpace("discord")
+                                            .name("test#1234")
+                                            .build()
+                            )
+                            .created(OffsetDateTime.now(Clock.systemUTC()))
                             .build()
             )
-            .withSpec(
+            .spec(
                     UserData.builder()
-                            .withProperties(new HashMap<>())
-                            .withDescription("Test-user for API calls")
-                            .withDriveThruRPGKey("API-KEY")
+                            .properties(new HashMap<>())
+                            .description("Test-user for API calls")
+                            .driveThruRPGKey("API-KEY")
                             .build()
             )
             .build();

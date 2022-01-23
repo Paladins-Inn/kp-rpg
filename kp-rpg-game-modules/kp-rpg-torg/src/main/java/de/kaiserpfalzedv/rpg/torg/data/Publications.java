@@ -1,18 +1,16 @@
 /*
  * Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 
 package de.kaiserpfalzedv.rpg.torg.data;
@@ -35,29 +33,29 @@ import java.util.UUID;
  */
 public interface Publications {
     Publication CORE_RULES = Publication.builder()
-            .withMetadata(
+            .metadata(
                     Metadata.builder()
-                            .withIdentity(
+                            .identity(
                                     Pointer.builder()
-                                            .withKind(Publication.KIND)
-                                            .withApiVersion(Publication.VERSION)
-                                            .withNameSpace(About.TORG_NAMESPACE)
-                                            .withName("Torg Core Rules")
+                                            .kind(Publication.KIND)
+                                            .apiVersion(Publication.VERSION)
+                                            .nameSpace(About.TORG_NAMESPACE)
+                                            .name("Torg Core Rules")
                                             .build()
                             )
-                            .withUid(UUID.fromString("dc1de20e-c19b-49a7-873e-45fd0ce91e73"))
-                            .withGeneration(1L)
-                            .withCreated(About.DEFAULT_CREATION)
-                            .withOwner(Publishers.ULISSES_SPIELE)
+                            .uid(UUID.fromString("dc1de20e-c19b-49a7-873e-45fd0ce91e73"))
+                            .generation(1L)
+                            .created(About.DEFAULT_CREATION)
+                            .owner(Publishers.ULISSES_SPIELE)
 
                             .build()
             )
-            .withSpec(
+            .spec(
                     PublicationData.builder()
-                            .withDisplayTitle("Torg Core Rules")
-                            .withTitle("Torg Eternity - Core Rules")
-                            .withOrderId("UNA10000")
-                            .withDriveThroughId(216248)
+                            .displayTitle("Torg Core Rules")
+                            .title("Torg Eternity - Core Rules")
+                            .orderId("UNA10000")
+                            .driveThroughId(216248)
                             .build()
             )
             .build();

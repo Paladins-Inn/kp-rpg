@@ -1,18 +1,16 @@
 /*
- * Copyright (c) &today.year Kaiserpfalz EDV-Service, Roland T. Lichti
+ * Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 
 package de.kaiserpfalzedv.rpg.torg.data;
@@ -37,35 +35,35 @@ import java.util.stream.Collectors;
  */
 public interface Publishers {
     Publisher ULISSES_SPIELE = Publisher.builder()
-            .withKind(Publisher.KIND)
-            .withApiVersion(Publisher.VERSION)
-            .withNameSpace(About.TORG_NAMESPACE)
-            .withName("Ulisses Spiele")
-            .withUid(UUID.fromString("c6d3efb7-2c99-4ac3-8d9a-fa48b1a597c2"))
-            .withGeneration(1L)
+            .kind(Publisher.KIND)
+            .apiVersion(Publisher.VERSION)
+            .nameSpace(About.TORG_NAMESPACE)
+            .name("Ulisses Spiele")
+            .uid(UUID.fromString("c6d3efb7-2c99-4ac3-8d9a-fa48b1a597c2"))
+            .generation(1L)
 
-            .withMetadata(
+            .metadata(
                     Metadata.builder()
-                            .withCreated(About.DEFAULT_CREATION)
+                            .created(About.DEFAULT_CREATION)
                             .build()
             )
-            .withSpec(
+            .spec(
                     PublisherData.builder()
-                            .withDriveThroughId(3444)
+                            .driveThroughId(3444)
                             .build()
             )
             .build();
 
     Publisher PALADINS_INN = Publisher.builder()
-            .withKind(Publisher.KIND)
-            .withApiVersion(Publisher.VERSION)
-            .withNameSpace(About.TORG_NAMESPACE)
-            .withName("Paladin's Inn")
-            .withUid(UUID.fromString("a26b0214-2aca-4f78-bb34-e827319ec8c9"))
-            .withGeneration(1L)
-            .withMetadata(
+            .kind(Publisher.KIND)
+            .apiVersion(Publisher.VERSION)
+            .nameSpace(About.TORG_NAMESPACE)
+            .name("Paladin's Inn")
+            .uid(UUID.fromString("a26b0214-2aca-4f78-bb34-e827319ec8c9"))
+            .generation(1L)
+            .metadata(
                     Metadata.builder()
-                            .withCreated(About.DEFAULT_CREATION)
+                            .created(About.DEFAULT_CREATION)
                             .build()
             )
             .build();

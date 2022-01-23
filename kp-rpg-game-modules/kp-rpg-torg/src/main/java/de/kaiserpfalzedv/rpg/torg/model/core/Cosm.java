@@ -1,18 +1,16 @@
 /*
- * Copyright (c) &today.year Kaiserpfalz EDV-Service, Roland T. Lichti
+ * Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 
 package de.kaiserpfalzedv.rpg.torg.model.core;
@@ -95,10 +93,10 @@ public enum Cosm implements MapperEnum<Cosm> {
             @NotNull final Publication publication,
             String... laws
     ) {
-        axioms.put(Axiom.AxiomName.Magic, Axiom.builder().withName(Axiom.AxiomName.Magic).withValue(tech).build());
-        axioms.put(Axiom.AxiomName.Social, Axiom.builder().withName(Axiom.AxiomName.Social).withValue(social).build());
-        axioms.put(Axiom.AxiomName.Spirit, Axiom.builder().withName(Axiom.AxiomName.Spirit).withValue(spirit).build());
-        axioms.put(Axiom.AxiomName.Tech, Axiom.builder().withName(Axiom.AxiomName.Tech).withValue(tech).build());
+        axioms.put(Axiom.AxiomName.Magic, Axiom.builder().name(Axiom.AxiomName.Magic).value(tech).build());
+        axioms.put(Axiom.AxiomName.Social, Axiom.builder().name(Axiom.AxiomName.Social).value(social).build());
+        axioms.put(Axiom.AxiomName.Spirit, Axiom.builder().name(Axiom.AxiomName.Spirit).value(spirit).build());
+        axioms.put(Axiom.AxiomName.Tech, Axiom.builder().name(Axiom.AxiomName.Tech).value(tech).build());
 
         this.foundry = foundry;
         this.roll20 = roll20;

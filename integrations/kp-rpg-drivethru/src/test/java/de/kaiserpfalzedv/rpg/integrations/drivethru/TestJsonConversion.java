@@ -1,18 +1,16 @@
 /*
- * Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
+ * Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 
 package de.kaiserpfalzedv.rpg.integrations.drivethru;
@@ -33,16 +31,16 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 public class TestJsonConversion {
     @Test
-    public void shouldCOnvert() throws JsonProcessingException {
+    public void shouldConvert() throws JsonProcessingException {
         ProductMessage source = ProductMessage.builder()
-                .withStatus("success")
-                .withMessage(
+                .status("success")
+                .message(
                         Product.builder()
-                                .withProductsId("1")
-                                .withProductsName("Name 1")
-                                .withPublisherId("1")
-                                .withPublisherName("Publisher 1")
-                                .withCoverURL("https://url")
+                                .productsId("1")
+                                .productsName("Name 1")
+                                .publisherId("1")
+                                .publisherName("Publisher 1")
+                                .coverURL("https://url")
                                 .build()
                 )
                 .build();
