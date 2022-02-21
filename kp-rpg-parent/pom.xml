@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
+  ~ Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti.
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -21,13 +21,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>kp-rpg</artifactId>
-        <groupId>de.kaiserpfalz-edv.rpg</groupId>
-        <version>1.2.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <artifactId>kp-commons-parent</artifactId>
+        <groupId>de.kaiserpfalz-edv.commons</groupId>
+        <version>2.1.0</version>
+        <relativePath>../../kp-commons/kp-commons-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>kp-rpg-parent</artifactId>
+    <groupId>de.kaiserpfalz-edv.rpg</groupId>
+    <version>1.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>KP RPG :: Parent</name>

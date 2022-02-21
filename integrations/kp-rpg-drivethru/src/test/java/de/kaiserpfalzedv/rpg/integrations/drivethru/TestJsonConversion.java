@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
+ * Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,16 +33,16 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 public class TestJsonConversion {
     @Test
-    public void shouldCOnvert() throws JsonProcessingException {
+    public void shouldConvert() throws JsonProcessingException {
         ProductMessage source = ProductMessage.builder()
-                .withStatus("success")
-                .withMessage(
+                .status("success")
+                .message(
                         Product.builder()
-                                .withProductsId("1")
-                                .withProductsName("Name 1")
-                                .withPublisherId("1")
-                                .withPublisherName("Publisher 1")
-                                .withCoverURL("https://url")
+                                .productsId("1")
+                                .productsName("Name 1")
+                                .publisherId("1")
+                                .publisherName("Publisher 1")
+                                .coverURL("https://url")
                                 .build()
                 )
                 .build();

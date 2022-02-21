@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) &today.year Kaiserpfalz EDV-Service, Roland T. Lichti
+  ~ Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti.
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
@@ -36,13 +36,14 @@
         <kp-rpg.groupId>de.kaiserpfalz-edv.rpg</kp-rpg.groupId>
         <kp-rpg.version>1.2.0-SNAPSHOT</kp-rpg.version>
 
-        <vaadin.version>14.5.3</vaadin.version>
         <discord.version>3.5.0_329</discord.version>
         <kp-commons.version>2.1.1</kp-commons.version>
 
-        <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
-        <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>2.7.1.Final</quarkus.platform.version>
+        <quarkus.artifact-id>quarkus-universe-bom</quarkus.artifact-id>
+        <quarkus.group-id>io.quarkus</quarkus.group-id>
+        <quarkus.version>2.6.3.Final</quarkus.version>
+
+        <quarkus-plugin.version>1.13.4.Final</quarkus-plugin.version>
         <surefire-plugin.version>2.22.1</surefire-plugin.version>
     </properties>
 
@@ -59,7 +60,7 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.32</version>
+                <version>1.7.33</version>
             </dependency>
 
             <!-- KP RPG modules -->
@@ -123,9 +124,9 @@
 
             <!-- quarkus -->
             <dependency>
-                <groupId>${quarkus.platform.group-id}</groupId>
-                <artifactId>${quarkus.platform.artifact-id}</artifactId>
-                <version>${quarkus.platform.version}</version>
+                <groupId>${quarkus.group-id}</groupId>
+                <artifactId>${quarkus.artifact-id}</artifactId>
+                <version>${quarkus.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -177,70 +178,6 @@
                 <version>3.0</version>
             </dependency>
 
-
-            <!-- Vaadin Components -->
-            <dependency>
-                <groupId>com.vaadin</groupId>
-                <!-- Replace artifactId with vaadin-core to use only free components -->
-                <artifactId>vaadin</artifactId>
-                <version>${vaadin.version}</version>
-                <exclusions>
-                    <!-- Webjars are only needed when running in Vaadin 13 compatibility mode -->
-                    <exclusion>
-                        <groupId>com.vaadin.webjar</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.webjars.bowergithub.insites</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.webjars.bowergithub.polymer</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.webjars.bowergithub.polymerelements</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.webjars.bowergithub.vaadin</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.webjars.bowergithub.webcomponents</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-spring-boot-starter</artifactId>
-                <version>${vaadin.version}</version>
-                <exclusions>
-                    <!-- Excluding so that webjars are not included. -->
-                    <exclusion>
-                        <groupId>com.vaadin</groupId>
-                        <artifactId>vaadin-core</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.vaadin.artur</groupId>
-                <artifactId>a-vaadin-helper</artifactId>
-                <version>1.6.0</version>
-            </dependency>
-            <dependency>
-                <groupId>de.codecamp.vaadin</groupId>
-                <artifactId>vaadin-service-ref</artifactId>
-                <version>0.5.0</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.carnet.kasparscherrer</groupId>
-                <artifactId>language-select</artifactId>
-                <version>1.0.9</version>
-            </dependency>
-
-
             <!-- testing -->
             <dependency>
                 <groupId>org.junit</groupId>
@@ -252,7 +189,7 @@
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers-bom</artifactId>
-                <version>1.16.2</version>
+                <version>1.16.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
