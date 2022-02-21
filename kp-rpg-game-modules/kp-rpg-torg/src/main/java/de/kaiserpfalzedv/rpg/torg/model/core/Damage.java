@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.torg.model.MapperEnum;
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -34,12 +35,12 @@ import java.util.Set;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 0.3.0  2021-05-23
  */
-@Builder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
-@JsonDeserialize(builder = Damage.DamageBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(description = "Type of damage and the value")
 @Slf4j

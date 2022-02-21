@@ -19,7 +19,6 @@ package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.commons.core.resources.DefaultResourceSpec;
 import de.kaiserpfalzedv.commons.core.resources.ResourcePointer;
 import lombok.AllArgsConstructor;
@@ -27,9 +26,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import javax.persistence.Transient;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,13 +40,13 @@ import java.util.Optional;
  * @since 1.2.0 2021-02-06
  */
 @SuppressWarnings("unused")
-@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = GameData.GameDataBuilder.class)
 @Schema(name = "GameData", description = "A game session data.")
 public class GameData extends DefaultResourceSpec {
     public static String CAMPAIGN = "campaign";
@@ -70,35 +69,30 @@ public class GameData extends DefaultResourceSpec {
     }
 
 
-    @Transient
     @JsonIgnore
     public Optional<ResourcePointer> getCampaign() {
         return getResourcePointer(CAMPAIGN);
     }
 
 
-    @Transient
     @JsonIgnore
     public Optional<ResourcePointer> getGameMaster() {
         return getResourcePointer(GAME_GM);
     }
 
 
-    @Transient
     @JsonIgnore
     public List<ResourcePointer> getPlayers() {
         return getResourcePointers(GAME_PLAYERS);
     }
 
 
-    @Transient
     @JsonIgnore
     public Optional<ResourcePointer> getDiscordChannel() {
         return getResourcePointer(DISCORD_CHANNEL);
     }
 
 
-    @Transient
     @JsonIgnore
     public Optional<ResourcePointer> getDiscordGuild() {
         return getResourcePointer(DISCORD_GUILD);

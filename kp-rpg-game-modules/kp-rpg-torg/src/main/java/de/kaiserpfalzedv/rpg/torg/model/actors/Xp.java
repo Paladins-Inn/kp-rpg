@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.torg.model.actors;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 
 /**
  * Xp --
@@ -27,13 +28,13 @@ import lombok.*;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-06-05
  */
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = Xp.XpBuilder.class)
-@Builder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 public class Xp {
     private int unspent;
     private int earned;

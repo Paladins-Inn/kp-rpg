@@ -23,11 +23,9 @@ import de.kaiserpfalzedv.rpg.torg.model.actors.Clearance;
 import de.kaiserpfalzedv.rpg.torg.model.core.Armor;
 import de.kaiserpfalzedv.rpg.torg.model.core.Attack;
 import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import javax.validation.constraints.Size;
@@ -42,12 +40,12 @@ import java.util.Set;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-05-23
  */
-@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @Getter
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode
-@JsonDeserialize(builder = PerkData.PerkDataBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(description = "The perk definition.")
 public class PerkData implements Serializable {

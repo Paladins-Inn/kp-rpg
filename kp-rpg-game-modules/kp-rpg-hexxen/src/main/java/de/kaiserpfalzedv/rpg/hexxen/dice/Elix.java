@@ -41,9 +41,9 @@ public class Elix extends HeXXenDie {
         String result = (roll == 6) ? "3" : Integer.toString(roll, 10);
 
         return DieResult.builder()
-                .withDie(this)
-                .withTotal(result)
-                .withRolls(new String[]{result})
+                .die(this)
+                .total(result)
+                .rolls(new String[]{result})
                 .build();
     }
 }

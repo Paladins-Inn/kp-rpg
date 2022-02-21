@@ -18,10 +18,12 @@
 package de.kaiserpfalzedv.rpg.torg.model.Book;
 
 import de.kaiserpfalzedv.commons.core.resources.Resource;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
 /**
  * Publication -- A print/PDF publication
@@ -29,7 +31,8 @@ import lombok.experimental.SuperBuilder;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-05-23
  */
-@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@SuperBuilder(toBuilder = true)
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

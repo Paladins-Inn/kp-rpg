@@ -18,10 +18,10 @@
 package de.kaiserpfalzedv.rpg.core.dice.mat;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.core.dice.Die;
 import de.kaiserpfalzedv.rpg.core.dice.LookupTable;
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -36,13 +36,13 @@ import java.util.StringJoiner;
  *
  * This is the result of a numeric die roll.
  */
-@Builder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
-@JsonDeserialize(builder = ExpressionTotal.ExpressionTotalBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(name = "ExpressionTotal", description = "A generic result of an expression.")
 public class ExpressionTotal implements Serializable {

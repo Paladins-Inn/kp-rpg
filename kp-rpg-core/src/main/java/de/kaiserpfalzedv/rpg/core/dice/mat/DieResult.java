@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.core.dice.mat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import de.kaiserpfalzedv.rpg.core.dice.Die;
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.io.Serializable;
@@ -36,7 +37,8 @@ import java.util.StringJoiner;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.0.0 2021-01-09
  */
-@Builder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter

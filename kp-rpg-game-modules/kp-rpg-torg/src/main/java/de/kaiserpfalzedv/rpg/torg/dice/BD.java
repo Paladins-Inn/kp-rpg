@@ -80,9 +80,9 @@ public class BD implements Die {
         } while (roll == 6);
 
         return DieResult.builder()
-                .withDie(this)
-                .withTotal(Integer.toString(total, 10))
-                .withRolls(rolls.toArray(new String[0]))
+                .die(this)
+                .total(Integer.toString(total, 10))
+                .rolls(rolls.toArray(new String[0]))
                 .build();
     }
 }

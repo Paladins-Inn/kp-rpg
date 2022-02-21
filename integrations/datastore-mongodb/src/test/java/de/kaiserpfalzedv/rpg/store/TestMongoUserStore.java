@@ -19,6 +19,7 @@ package de.kaiserpfalzedv.rpg.store;
 
 import de.kaiserpfalzedv.commons.core.resources.History;
 import de.kaiserpfalzedv.commons.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.resources.Pointer;
 import de.kaiserpfalzedv.commons.core.resources.Status;
 import de.kaiserpfalzedv.commons.core.user.User;
 import de.kaiserpfalzedv.commons.core.user.UserData;
@@ -61,34 +62,34 @@ public class TestMongoUserStore {
      * Default data created during setup of tests.
      */
     private static final User data = User.builder()
-            .withKind(User.KIND)
-            .withApiVersion(User.API_VERSION)
-            .withNameSpace(NAMESPACE)
-            .withName(NAME)
-            .withUid(UID)
-
-            .withMetadata(
-                    Metadata.builder()
-                            .withCreated(CREATED)
-
-                            .withAnnotations(DATA_ANNOTATIONS)
-
+            .metadata(Metadata.builder()
+                    .identity(Pointer.builder()
+                            .kind(User.KIND)
+                            .apiVersion(User.API_VERSION)
+                            .nameSpace(NAMESPACE)
+                            .name(NAME)
                             .build()
+                    )
+                    .uid(UID)
+                    .created(CREATED)
+                    .annotations(DATA_ANNOTATIONS)
+                    .generation(1)
+                    .build()
             )
-            .withSpec(
+            .spec(
                     UserData.builder()
-                            .withDescription("A discord user.")
-                            .withDriveThruRPGKey("API-KEY")
-                            .withProperties(new HashMap<>())
+                            .description("A discord user.")
+                            .driveThruRPGKey("API-KEY")
+                            .properties(new HashMap<>())
                             .build()
             )
-            .withStatus(
+            .status(
                     Status.builder()
-                            .withObservedGeneration(1L)
-                            .withHistory(Collections.singletonList(
+                            .observedGeneration(1)
+                            .history(Collections.singletonList(
                                     History.builder()
-                                            .withStatus("created")
-                                            .withTimeStamp(CREATED)
+                                            .status("created")
+                                            .timeStamp(CREATED)
                                             .build()
                             ))
                             .build()

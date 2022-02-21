@@ -1,5 +1,6 @@
 .DS_Store
 .idea/
+.java-version
 docs/generated/
 resources/static/
 **/src/app/generated/

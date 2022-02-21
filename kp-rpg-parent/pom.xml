@@ -79,9 +79,9 @@
 
     <distributionManagement>
         <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/Paladins-Inn/kp-commons</url>
+            <id>gh-rpg</id>
+            <name>GitHub Packages kp-rpg</name>
+            <url>https://maven.pkg.github.com/Paladins-Inn/kp-rpg</url>
         </repository>
     </distributionManagement>
 
@@ -96,9 +96,17 @@
             </dependency>
 
             <dependency>
-                <groupId>${quarkus.platform.group-id}</groupId>
-                <artifactId>${quarkus.platform.artifact-id}</artifactId>
-                <version>${quarkus.platform.version}</version>
+                <groupId>de.kaiserpfalz-edv.commons</groupId>
+                <artifactId>kp-commons-bom</artifactId>
+                <version>2.1.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>${quarkus.group-id}</groupId>
+                <artifactId>${quarkus.artifact-id}</artifactId>
+                <version>${quarkus.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -113,8 +121,6 @@
         <skip.site>false</skip.site>
 
         <war.output.directory>undefined</war.output.directory>
-        <delombok.output>${project.build.directory}/delombok/main</delombok.output>
-        <delombok.test-output>${project.build.directory}/delombok/test</delombok.test-output>
 
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.source>11</maven.compiler.source>
@@ -122,13 +128,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
-        <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>2.6.2.Final</quarkus.platform.version>
-
+        <quarkus.artifact-id>quarkus-bom</quarkus.artifact-id>
+        <quarkus.group-id>io.quarkus</quarkus.group-id>
+        <quarkus.version>2.7.1.Final</quarkus.version>
 
         <compiler-plugin.version>3.9.0</compiler-plugin.version>
-        <quarkus-plugin.version>2.6.1.Final</quarkus-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
@@ -138,7 +142,7 @@
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
         <lombok-maven-plugin.version>1.18.20.0</lombok-maven-plugin.version>
-        <jandex-maven-plugin.version>1.2.1</jandex-maven-plugin.version>
+        <jandex-maven-plugin.version>1.2.2</jandex-maven-plugin.version>
     </properties>
 
     <reporting>
@@ -150,10 +154,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>3.0.0-M5</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.2</version>
             </plugin>
         </plugins>
     </reporting>
@@ -170,9 +176,6 @@
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
                         <encoding>${project.build.sourceEncoding}</encoding>
-                        <compileSourceRoots>
-                            <compileSourceRoot>${delombok.output}</compileSourceRoot>
-                        </compileSourceRoots>
                     </configuration>
                     <executions>
                         <execution>
@@ -183,13 +186,11 @@
                             <phase>test-compile</phase>
                             <configuration>
                                 <skip>${skipTests}</skip>
-                                <compileSourceRoots>
-                                    <compileSourceRoot>${delombok.test-output}</compileSourceRoot>
-                                </compileSourceRoots>
                             </configuration>
                         </execution>
                     </executions>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -206,47 +207,9 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${maven-surefire-plugin.version}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>${maven-failsafe-plugin.version}</version>
-                </plugin>
-
-                <plugin>
                     <groupId>org.projectlombok</groupId>
                     <artifactId>lombok-maven-plugin</artifactId>
                     <version>${lombok-maven-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>delombok-main</id>
-                            <phase>generate-sources</phase>
-                            <goals>
-                                <goal>delombok</goal>
-                            </goals>
-                            <configuration>
-                                <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-                                <outputDirectory>${delombok.output}</outputDirectory>
-                                <addOutputDirectory>false</addOutputDirectory>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>delombok-test</id>
-                            <phase>generate-test-sources</phase>
-                            <goals>
-                                <goal>testDelombok</goal>
-                            </goals>
-                            <configuration>
-                                <sourceDirectory>${project.basedir}/src/test/java</sourceDirectory>
-                                <outputDirectory>${delombok.test-output}</outputDirectory>
-                                <addOutputDirectory>false</addOutputDirectory>
-                            </configuration>
-                        </execution>
-                    </executions>
                 </plugin>
 
                 <plugin>
@@ -255,7 +218,6 @@
                     <version>${maven-javadoc-plugin.version}</version>
                     <configuration>
                         <skip>${skip.javadoc}</skip>
-                        <sourcepath>${delombok.output}</sourcepath>
                     </configuration>
                     <executions>
                         <execution>
@@ -265,6 +227,7 @@
                         </execution>
                     </executions>
                 </plugin>
+
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -322,6 +285,13 @@
                     <groupId>org.jboss.jandex</groupId>
                     <artifactId>jandex-maven-plugin</artifactId>
                     <version>${jandex-maven-plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.jboss</groupId>
+                            <artifactId>jandex</artifactId>
+                            <version>2.4.2.Final</version>
+                        </dependency>
+                    </dependencies>
                     <executions>
                         <execution>
                             <id>make-index</id>
@@ -394,68 +364,71 @@
             </activation>
 
             <dependencies>
+                <!-- Syntactic Sugar -->
+                <dependency>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-hibernate-validator</artifactId>
+                </dependency>
+
+
+                <!-- Observability -->
                 <dependency>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
                 </dependency>
 
+
+                <!-- Quarkus Integration -->
                 <dependency>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-arc</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-config-yaml</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss</groupId>
+                    <artifactId>jandex</artifactId>
                 </dependency>
 
+
+                <!-- Caching -->
                 <dependency>
-                    <groupId>jakarta.annotation</groupId>
-                    <artifactId>jakarta.annotation-api</artifactId>
-                    <scope>provided</scope>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-cache</artifactId>
+                </dependency>
+
+
+                <!-- openapi/swagger -->
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-swagger-ui</artifactId>
                 </dependency>
                 <dependency>
-                    <groupId>jakarta.inject</groupId>
-                    <artifactId>jakarta.inject-api</artifactId>
-                    <scope>provided</scope>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-smallrye-openapi</artifactId>
+                </dependency>
+
+
+                <!-- JSon/XML handling -->
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-jackson</artifactId>
                 </dependency>
                 <dependency>
-                    <groupId>jakarta.enterprise</groupId>
-                    <artifactId>jakarta.enterprise.cdi-api</artifactId>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>jakarta.validation</groupId>
-                    <artifactId>jakarta.validation-api</artifactId>
-                    <scope>provided</scope>
+                    <groupId>com.fasterxml.jackson.datatype</groupId>
+                    <artifactId>jackson-datatype-jsr353</artifactId>
                 </dependency>
             </dependencies>
-
-
-            <repositories>
-                <repository>
-                    <id>central</id>
-                    <name>bintray</name>
-                    <url>https://jcenter.bintray.com</url>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                </repository>
-
-                <repository>
-                    <id>github</id>
-                    <url>https://maven.pkg.github.com/Paladins-Inn</url>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </repository>
-            </repositories>
-
-            <pluginRepositories>
-                <pluginRepository>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                    <id>central</id>
-                    <name>bintray-plugins</name>
-                    <url>https://jcenter.bintray.com</url>
-                </pluginRepository>
-            </pluginRepositories>
 
             <build>
                 <plugins>
@@ -471,7 +444,6 @@
                         <groupId>org.projectlombok</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
                     </plugin>
-
                 </plugins>
             </build>
         </profile>
@@ -486,8 +458,38 @@
 
             <dependencies>
                 <dependency>
-                    <groupId>org.junit.jupiter</groupId>
-                    <artifactId>junit-jupiter-engine</artifactId>
+                    <groupId>de.kaiserpfalz-edv.commons.test-support</groupId>
+                    <artifactId>kp-core-testsupport</artifactId>
+                    <scope>test</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-junit5</artifactId>
+                    <scope>test</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest</artifactId>
+                    <version>2.2</version>
+                    <scope>test</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-core</artifactId>
+                    <version>2.17.1</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                    <version>2.17.1</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -499,6 +501,10 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>${maven-surefire-plugin.version}</version>
                         <configuration>
+                            <classpathDependencyExcludes>
+                                <classpathDependencyExclude>org.jboss.slf4j:slf4j-jboss-logmanager
+                                </classpathDependencyExclude>
+                            </classpathDependencyExcludes>
                             <argLine>-Dorg.jboss.logging.provider=slf4j</argLine>
                         </configuration>
                     </plugin>
@@ -517,6 +523,10 @@
                             </execution>
                         </executions>
                         <configuration>
+                            <classpathDependencyExcludes>
+                                <classpathDependencyExclude>org.jboss.slf4j:slf4j-jboss-logmanager
+                                </classpathDependencyExclude>
+                            </classpathDependencyExcludes>
                             <systemPropertyVariables>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                                 <!--suppress UnresolvedMavenProperty -->
@@ -533,15 +543,12 @@
                         <filtering>true</filtering>
                         <directory>src/test/resources</directory>
                         <excludes>
-                            <exclude>**/*.webp</exclude>
                             <exclude>**/*.docx</exclude>
                             <exclude>**/*.xlsx</exclude>
                             <exclude>**/*.zip</exclude>
                             <exclude>**/*.tgz</exclude>
                             <exclude>**/*.png</exclude>
                             <exclude>**/*.jpg</exclude>
-                            <exclude>**/*.jpeg</exclude>
-                            <exclude>**/*.svg</exclude>
                             <exclude>**/*.gpg</exclude>
                             <exclude>**/*.license</exclude>
                         </excludes>
@@ -550,16 +557,13 @@
                         <filtering>false</filtering>
                         <directory>src/test/resources</directory>
                         <includes>
-                            <include>**/*.webp</include>
                             <include>**/*.docx</include>
                             <include>**/*.xlsx</include>
                             <include>**/*.zip</include>
                             <include>**/*.tgz</include>
                             <include>**/*.png</include>
                             <include>**/*.jpg</include>
-                            <include>**/*.jpeg</include>
                             <include>**/*.gpg</include>
-                            <include>**/*.svg</include>
                             <include>**/*.license</include>
                         </includes>
                     </testResource>
@@ -575,13 +579,6 @@
                 </file>
             </activation>
 
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss</groupId>
-                    <artifactId>jandex</artifactId>
-                </dependency>
-            </dependencies>
-
             <build>
                 <plugins>
                     <plugin>
@@ -592,94 +589,293 @@
             </build>
         </profile>
 
+
+        <profile>
+            <id>quarkus-jpa</id>
+            <activation>
+                <file>
+                    <exists>.profile-jpa</exists>
+                </file>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-hibernate-orm-panache</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-hibernate-envers</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-test-h2</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+
+        <profile>
+            <id>quarkus-mongodb</id>
+            <activation>
+                <file>
+                    <exists>.profile-mongodb</exists>
+                </file>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-mongodb-client</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-mongodb-panache</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>io.github.cbartosiak</groupId>
+                    <artifactId>bson-codecs-jsr310</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-test-mongodb</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+
+        <profile>
+            <id>quarkus-security</id>
+            <activation>
+                <file>
+                    <exists>.profile-security</exists>
+                </file>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-security</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-keycloak-authorization</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-keycloak-admin-client</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-security-jpa</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-elytron-security-properties-file</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-test-security</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-test-oidc-server</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>quarkus-rest</id>
+            <activation>
+                <file>
+                    <exists>.profile-rest</exists>
+                </file>
+            </activation>
+            <dependencies>
+                <!-- REST/Communication -->
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-resteasy-jackson</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-resteasy-multipart</artifactId>
+                </dependency>
+                <!-- Resilience pattern -->
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>io.smallrye</groupId>
+                            <artifactId>smallrye-metrics-api</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <!-- Zalando Problem -->
+                <dependency>
+                    <groupId>com.tietoevry.quarkus</groupId>
+                    <artifactId>quarkus-resteasy-problem</artifactId>
+                </dependency>
+
+                <!-- testing -->
+                <dependency>
+                    <groupId>io.rest-assured</groupId>
+                    <artifactId>rest-assured</artifactId>
+                    <scope>test</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>com.github.tomakehurst</groupId>
+                    <artifactId>wiremock-jre8</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+
+        <profile>
+            <id>quarkus-rest-client</id>
+            <activation>
+                <file>
+                    <exists>.profile-rest-client</exists>
+                </file>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-rest-client</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-rest-client-jackson</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-rest-client-config</artifactId>
+                </dependency>
+
+                <!-- testing -->
+                <dependency>
+                    <groupId>com.github.tomakehurst</groupId>
+                    <artifactId>wiremock-jre8</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+
+        <profile>
+            <id>quarkus-graphql</id>
+            <activation>
+                <file>
+                    <exists>.profile-graphql</exists>
+                </file>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-vertx-graphql</artifactId>
+                </dependency>
+
+                <!-- testing -->
+                <dependency>
+                    <groupId>com.github.tomakehurst</groupId>
+                    <artifactId>wiremock-jre8</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+
+        <profile>
+            <id>quarkus-graphql-client</id>
+            <activation>
+                <file>
+                    <exists>.profile-graphql-client</exists>
+                </file>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-smallrye-graphql-client</artifactId>
+                </dependency>
+
+                <!-- testing -->
+                <dependency>
+                    <groupId>com.github.tomakehurst</groupId>
+                    <artifactId>wiremock-jre8</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>quarkus-observability</id>
+            <activation>
+                <file>
+                    <exists>.profile-observability</exists>
+                </file>
+            </activation>
+
+            <dependencies>
+                <!-- Logging -->
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-logging-json</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkiverse.loggingmanager</groupId>
+                    <artifactId>quarkus-logging-manager</artifactId>
+                    <version>2.1.2</version>
+                </dependency>
+
+                <!-- API / Health -->
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-smallrye-openapi</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-smallrye-health</artifactId>
+                </dependency>
+
+                <!-- Metrics -->
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-micrometer</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.micrometer</groupId>
+                    <artifactId>micrometer-registry-prometheus</artifactId>
+                </dependency>
+
+                <!-- Tracing -->
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-smallrye-opentracing</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+
+
         <profile>
             <id>quarkus</id>
             <activation>
                 <file>
-                    <exists>src/main/resources/application.properties</exists>
+                    <exists>src/main/resources/application.yaml</exists>
                 </file>
             </activation>
 
             <dependencies>
                 <dependency>
                     <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-openapi</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-rest-client</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-resteasy</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-resteasy-jackson</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-jackson</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-arc</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-cache</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-logging-json</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-health</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-vertx</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-resteasy-multipart</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-micrometer</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.micrometer</groupId>
-                    <artifactId>micrometer-registry-prometheus</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-opentracing</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>org.jboss</groupId>
-                    <artifactId>jandex</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-junit5</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.rest-assured</groupId>
-                    <artifactId>rest-assured</artifactId>
-                    <scope>test</scope>
+                    <artifactId>quarkus-core</artifactId>
                 </dependency>
             </dependencies>
 
@@ -689,7 +885,7 @@
                         <groupId>io.quarkus</groupId>
                         <artifactId>quarkus-maven-plugin</artifactId>
                         <!--suppress MavenModelInspection -->
-                        <version>${quarkus-plugin.version}</version>
+                        <version>${quarkus.version}</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -717,179 +913,10 @@
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                                <!--suppress UnresolvedMavenProperty -->
-                                <maven.home>${maven.home}</maven.home>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
 
-
-        <profile>
-            <id>quarkus-test</id>
-            <activation>
-                <file>
-                    <exists>src/test/resources/application.properties</exists>
-                </file>
-            </activation>
-
-            <dependencies>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-openapi</artifactId>
-                    <scope>test</scope>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-rest-client</artifactId>
-                    <scope>test</scope>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-resteasy</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-jackson</artifactId>
-                    <scope>test</scope>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-arc</artifactId>
-                    <scope>test</scope>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-cache</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-logging-json</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-health</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-vertx</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-resteasy-jackson</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-resteasy-multipart</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-micrometer</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.micrometer</groupId>
-                    <artifactId>micrometer-registry-prometheus</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-opentracing</artifactId>
-                    <scope>test</scope>
-                </dependency>
-
-                <dependency>
-                    <groupId>org.jboss</groupId>
-                    <artifactId>jandex</artifactId>
-                    <scope>test</scope>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-junit5</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.rest-assured</groupId>
-                    <artifactId>rest-assured</artifactId>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>io.quarkus</groupId>
-                        <artifactId>quarkus-maven-plugin</artifactId>
-                        <!--suppress MavenModelInspection -->
-                        <version>${quarkus-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>build</goal>
-                                    <goal>generate-code</goal>
-                                    <goal>generate-code-tests</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                                <!--suppress UnresolvedMavenProperty -->
-                                <maven.home>${maven.home}</maven.home>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                                <!--suppress UnresolvedMavenProperty -->
-                                <maven.home>${maven.home}</maven.home>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
 
         <profile>
             <id>helm</id>

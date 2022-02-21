@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.util.Optional;
@@ -31,13 +32,13 @@ import java.util.Optional;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.3.0  2021-06-04
  */
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = Other.OtherBuilder.class)
-@Builder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(description = "Other calculated data")
 public class Other {
     private int move;

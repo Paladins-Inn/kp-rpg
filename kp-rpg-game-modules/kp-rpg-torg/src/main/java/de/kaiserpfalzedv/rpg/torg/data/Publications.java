@@ -35,29 +35,29 @@ import java.util.UUID;
  */
 public interface Publications {
     Publication CORE_RULES = Publication.builder()
-            .withMetadata(
+            .metadata(
                     Metadata.builder()
-                            .withIdentity(
+                            .identity(
                                     Pointer.builder()
-                                            .withKind(Publication.KIND)
-                                            .withApiVersion(Publication.VERSION)
-                                            .withNameSpace(About.TORG_NAMESPACE)
-                                            .withName("Torg Core Rules")
+                                            .kind(Publication.KIND)
+                                            .apiVersion(Publication.VERSION)
+                                            .nameSpace(About.TORG_NAMESPACE)
+                                            .name("Torg Core Rules")
                                             .build()
                             )
-                            .withUid(UUID.fromString("dc1de20e-c19b-49a7-873e-45fd0ce91e73"))
-                            .withGeneration(1L)
-                            .withCreated(About.DEFAULT_CREATION)
-                            .withOwner(Publishers.ULISSES_SPIELE)
+                            .uid(UUID.fromString("dc1de20e-c19b-49a7-873e-45fd0ce91e73"))
+                            .generation(1)
+                            .created(About.DEFAULT_CREATION)
+                            .owner(Publishers.ULISSES_SPIELE.toPointer())
 
                             .build()
             )
-            .withSpec(
+            .spec(
                     PublicationData.builder()
-                            .withDisplayTitle("Torg Core Rules")
-                            .withTitle("Torg Eternity - Core Rules")
-                            .withOrderId("UNA10000")
-                            .withDriveThroughId(216248)
+                            .displayTitle("Torg Core Rules")
+                            .title("Torg Eternity - Core Rules")
+                            .orderId("UNA10000")
+                            .driveThroughId(216248)
                             .build()
             )
             .build();

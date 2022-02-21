@@ -18,6 +18,7 @@
 package de.kaiserpfalzedv.rpg.core.dice;
 
 import de.kaiserpfalzedv.commons.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.resources.Pointer;
 import de.kaiserpfalzedv.commons.core.resources.SerializableList;
 import de.kaiserpfalzedv.commons.core.store.OptimisticLockStoreException;
 import de.kaiserpfalzedv.commons.core.user.User;
@@ -52,17 +53,21 @@ public class TestMemoryRollHistoryStore {
     private static final SerializableList<RollHistoryEntry> ENTRIES = new SerializableList<>();
 
     private static final RollHistory DATA = RollHistory.builder()
-            .withKind(User.KIND)
-            .withApiVersion(User.API_VERSION)
-            .withNameSpace(DATA_NAMESPACE)
-            .withName(DATA_NAME)
-            .withUid(DATA_UID)
-            .withGeneration(0L)
-
-            .withMetadata(
-                    generateMetadata(DATA_CREATED, null)
+            .metadata(Metadata.builder()
+                    .identity(
+                            Pointer.builder()
+                                    .kind(User.KIND)
+                                    .apiVersion(User.API_VERSION)
+                                    .nameSpace(DATA_NAMESPACE)
+                                    .name(DATA_NAME)
+                                    .build()
+                    )
+                    .uid(DATA_UID)
+                    .generation(0)
+                    .created(DATA_CREATED)
+                    .build()
             )
-            .withSpec(ENTRIES)
+            .spec(ENTRIES)
             .build();
 
 
@@ -71,21 +76,6 @@ public class TestMemoryRollHistoryStore {
      */
     private RollHistoryStoreService sut;
 
-    /**
-     * Sets up a metadata set.
-     *
-     * @return The generated metadata
-     */
-    @SuppressWarnings("SameParameterValue")
-    private static Metadata generateMetadata(
-            final OffsetDateTime created,
-            final OffsetDateTime deleted
-    ) {
-        return Metadata.builder()
-                .withCreated(created)
-                .withDeleted(deleted)
-                .build();
-    }
 
     @BeforeAll
     static void setUp() {
@@ -132,11 +122,10 @@ public class TestMemoryRollHistoryStore {
 
         Optional<RollHistory> result = sut.findByNameSpaceAndName(DATA_NAMESPACE, DATA_NAME);
         log.trace("result: {}", result);
-
+        log.trace("original: {}", DATA);
         assertTrue(result.isPresent(), "The data should have been stored!");
-        assertNotEquals(DATA, result.get());
 
-        assertEquals(1L, result.get().getGeneration());
+        assertEquals(1, result.get().getGeneration());
     }
 
     @Test
@@ -145,7 +134,10 @@ public class TestMemoryRollHistoryStore {
 
         sut.save(
                 DATA.toBuilder()
-                        .withGeneration(1L)
+                        .metadata(DATA.getMetadata().toBuilder()
+                                .generation(1)
+                                .build()
+                        )
                         .build()
         );
 

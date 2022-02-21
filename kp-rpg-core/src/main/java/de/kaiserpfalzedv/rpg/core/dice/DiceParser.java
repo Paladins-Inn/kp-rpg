@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
  * @since 2020-01-03
  */
 @Dependent
-@RequiredArgsConstructor(onConstructor_= {@Inject})
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @ToString
 @Slf4j
 public class DiceParser {
@@ -74,7 +74,7 @@ public class DiceParser {
             parseSingleDie(d).ifPresent(expressions::add);
         }
 
-        return result.withExpressions(expressions).build();
+        return result.expressions(expressions).build();
     }
 
     /**
@@ -141,8 +141,8 @@ public class DiceParser {
             }
 
             ExpressionTotal result = ExpressionTotal.builder()
-                    .withRolls(die.roll(amount))
-                    .withExpression(expression)
+                    .rolls(die.roll(amount))
+                    .expression(expression)
                     .build();
 
             log.debug("Parsed die: {}", result);

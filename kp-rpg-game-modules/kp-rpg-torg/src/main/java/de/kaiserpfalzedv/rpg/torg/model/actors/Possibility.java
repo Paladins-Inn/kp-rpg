@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.util.HashMap;
@@ -31,12 +32,12 @@ import java.util.HashMap;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2.0.0  2021-06-06
  */
-@Builder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
-@JsonDeserialize(builder = Possibility.PossibilityBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(description = "Possibilities and probability to have possibilities")
 public class Possibility {

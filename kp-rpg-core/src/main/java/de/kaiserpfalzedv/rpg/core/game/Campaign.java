@@ -25,6 +25,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 /**
@@ -33,13 +34,13 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-02-06
  */
-@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = Campaign.CampaignBuilder.class)
 @Schema(name = "Campaign", description = "A campaign consisting of multiple games.")
 public class Campaign extends Resource<CampaignData> {
     public static String API_VERSION = "v1";

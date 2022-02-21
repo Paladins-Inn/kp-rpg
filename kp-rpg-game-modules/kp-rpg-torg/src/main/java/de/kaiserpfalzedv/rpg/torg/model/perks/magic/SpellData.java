@@ -24,11 +24,9 @@ import de.kaiserpfalzedv.rpg.torg.model.core.Armor;
 import de.kaiserpfalzedv.rpg.torg.model.core.Attack;
 import de.kaiserpfalzedv.rpg.torg.model.core.Axiom;
 import de.kaiserpfalzedv.rpg.torg.model.perks.Prerequisites;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import javax.validation.constraints.Size;
@@ -41,12 +39,12 @@ import java.util.Set;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-05-23
  */
-@SuperBuilder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @Getter
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = false)
-@JsonDeserialize(builder = SpellData.SpellDataBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(description = "The spell definition.")
 public class SpellData implements Serializable {

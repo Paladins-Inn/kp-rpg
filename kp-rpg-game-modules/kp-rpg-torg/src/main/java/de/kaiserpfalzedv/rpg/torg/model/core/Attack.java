@@ -23,6 +23,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.util.List;
@@ -34,11 +35,11 @@ import java.util.Set;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-05-23
  */
-@Builder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @Getter
 @ToString
-@JsonDeserialize(builder = Attack.AttackBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 public class Attack {
     @Schema(description = "Name of the attack.", minLength = 5, maxLength = 50)

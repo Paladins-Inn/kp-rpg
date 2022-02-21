@@ -27,6 +27,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import javax.validation.constraints.Min;
@@ -42,11 +43,11 @@ import java.util.Set;
  * @since 1.2.0  2021-05-23
  */
 @SuppressWarnings("FieldMayBeFinal")
-@Builder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @Getter
 @ToString
-@JsonDeserialize(builder = ItemData.ItemDataBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(description = "Gear and equipment.")
 public class ItemData implements Serializable {

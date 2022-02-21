@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.torg.model.core;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 
 /**
  * Wounds --
@@ -27,13 +28,13 @@ import lombok.*;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.3.0  2021-06-04
  */
-@JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = Level.LevelBuilder.class)
-@Builder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 public class Level {
     private int value;
     private int max;

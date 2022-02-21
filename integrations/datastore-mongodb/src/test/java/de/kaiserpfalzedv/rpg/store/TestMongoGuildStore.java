@@ -19,6 +19,7 @@ package de.kaiserpfalzedv.rpg.store;
 
 import de.kaiserpfalzedv.commons.core.resources.History;
 import de.kaiserpfalzedv.commons.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.resources.Pointer;
 import de.kaiserpfalzedv.commons.core.resources.Status;
 import de.kaiserpfalzedv.commons.discord.guilds.Guild;
 import de.kaiserpfalzedv.commons.discord.guilds.GuildData;
@@ -58,33 +59,33 @@ public class TestMongoGuildStore {
      * Default data created during setup of tests.
      */
     private static final Guild DATA = Guild.builder()
-            .withKind(Guild.KIND)
-            .withApiVersion(Guild.API_VERSION)
-            .withNameSpace(NAMESPACE)
-            .withName(NAME)
-            .withUid(UID)
-
-            .withMetadata(
-                    Metadata.builder()
-                            .withCreated(CREATED)
-
-                            .withAnnotations(DATA_ANNOTATIONS)
-
+            .metadata(Metadata.builder()
+                    .identity(Pointer.builder()
+                            .kind(Guild.KIND)
+                            .apiVersion(Guild.API_VERSION)
+                            .nameSpace(NAMESPACE)
+                            .name(NAME)
                             .build()
+                    )
+                    .uid(UID)
+                    .created(CREATED)
+                    .annotations(DATA_ANNOTATIONS)
+                    .generation(0)
+                    .build()
             )
-            .withSpec(
+            .spec(
                     GuildData.builder()
-                            .withPrefix(PREFIX)
-                            .withProperties(new HashMap<>())
+                            .prefix(PREFIX)
+                            .properties(new HashMap<>())
                             .build()
             )
-            .withStatus(
+            .status(
                     Status.builder()
-                            .withObservedGeneration(0L)
-                            .withHistory(Collections.singletonList(
+                            .observedGeneration(0)
+                            .history(Collections.singletonList(
                                     History.builder()
-                                            .withStatus("created")
-                                            .withTimeStamp(CREATED)
+                                            .status("created")
+                                            .timeStamp(CREATED)
                                             .build()
                             ))
                             .build()

@@ -18,6 +18,7 @@
 package de.kaiserpfalzedv.rpg.torg.data;
 
 import de.kaiserpfalzedv.commons.core.resources.Metadata;
+import de.kaiserpfalzedv.commons.core.resources.Pointer;
 import de.kaiserpfalzedv.rpg.torg.About;
 import de.kaiserpfalzedv.rpg.torg.model.Book.Publisher;
 import de.kaiserpfalzedv.rpg.torg.model.Book.PublisherData;
@@ -37,36 +38,39 @@ import java.util.stream.Collectors;
  */
 public interface Publishers {
     Publisher ULISSES_SPIELE = Publisher.builder()
-            .withKind(Publisher.KIND)
-            .withApiVersion(Publisher.VERSION)
-            .withNameSpace(About.TORG_NAMESPACE)
-            .withName("Ulisses Spiele")
-            .withUid(UUID.fromString("c6d3efb7-2c99-4ac3-8d9a-fa48b1a597c2"))
-            .withGeneration(1L)
-
-            .withMetadata(
-                    Metadata.builder()
-                            .withCreated(About.DEFAULT_CREATION)
+            .metadata(Metadata.builder()
+                    .identity(Pointer.builder()
+                            .kind(Publisher.KIND)
+                            .apiVersion(Publisher.VERSION)
+                            .nameSpace(About.TORG_NAMESPACE)
+                            .name("Ulisses Spiele")
                             .build()
+                    )
+                    .created(About.DEFAULT_CREATION)
+                    .uid(UUID.fromString("c6d3efb7-2c99-4ac3-8d9a-fa48b1a597c2"))
+                    .generation(1)
+                    .build()
             )
-            .withSpec(
+            .spec(
                     PublisherData.builder()
-                            .withDriveThroughId(3444)
+                            .driveThroughId(3444)
                             .build()
             )
             .build();
 
     Publisher PALADINS_INN = Publisher.builder()
-            .withKind(Publisher.KIND)
-            .withApiVersion(Publisher.VERSION)
-            .withNameSpace(About.TORG_NAMESPACE)
-            .withName("Paladin's Inn")
-            .withUid(UUID.fromString("a26b0214-2aca-4f78-bb34-e827319ec8c9"))
-            .withGeneration(1L)
-            .withMetadata(
-                    Metadata.builder()
-                            .withCreated(About.DEFAULT_CREATION)
+            .metadata(Metadata.builder()
+                    .identity(Pointer.builder()
+                            .kind(Publisher.KIND)
+                            .apiVersion(Publisher.VERSION)
+                            .nameSpace(About.TORG_NAMESPACE)
+                            .name("Paladin's Inn")
                             .build()
+                    )
+                    .created(About.DEFAULT_CREATION)
+                    .uid(UUID.fromString("a26b0214-2aca-4f78-bb34-e827319ec8c9"))
+                    .generation(1)
+                    .build()
             )
             .build();
 

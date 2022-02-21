@@ -95,10 +95,10 @@ public enum Cosm implements MapperEnum<Cosm> {
             @NotNull final Publication publication,
             String... laws
     ) {
-        axioms.put(Axiom.AxiomName.Magic, Axiom.builder().withName(Axiom.AxiomName.Magic).withValue(tech).build());
-        axioms.put(Axiom.AxiomName.Social, Axiom.builder().withName(Axiom.AxiomName.Social).withValue(social).build());
-        axioms.put(Axiom.AxiomName.Spirit, Axiom.builder().withName(Axiom.AxiomName.Spirit).withValue(spirit).build());
-        axioms.put(Axiom.AxiomName.Tech, Axiom.builder().withName(Axiom.AxiomName.Tech).withValue(tech).build());
+        axioms.put(Axiom.AxiomName.Magic, Axiom.builder().name(Axiom.AxiomName.Magic).value(tech).build());
+        axioms.put(Axiom.AxiomName.Social, Axiom.builder().name(Axiom.AxiomName.Social).value(social).build());
+        axioms.put(Axiom.AxiomName.Spirit, Axiom.builder().name(Axiom.AxiomName.Spirit).value(spirit).build());
+        axioms.put(Axiom.AxiomName.Tech, Axiom.builder().name(Axiom.AxiomName.Tech).value(tech).build());
 
         this.foundry = foundry;
         this.roll20 = roll20;

@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.torg.model.core;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * DN --
@@ -27,7 +28,7 @@ import lombok.Getter;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 0.3.0  2021-05-23
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 public enum DN {

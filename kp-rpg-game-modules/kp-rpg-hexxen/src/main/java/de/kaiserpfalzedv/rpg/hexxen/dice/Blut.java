@@ -54,9 +54,9 @@ public class Blut extends HeXXenDie {
         }
 
         return DieResult.builder()
-                .withDie(this)
-                .withTotal(result)
-                .withRolls(new String[]{result})
+                .die(this)
+                .total(result)
+                .rolls(new String[]{result})
                 .build();
     }
 }

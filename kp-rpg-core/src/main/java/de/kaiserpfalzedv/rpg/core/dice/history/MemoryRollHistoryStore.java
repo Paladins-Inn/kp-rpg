@@ -18,9 +18,10 @@
 package de.kaiserpfalzedv.rpg.core.dice.history;
 
 import de.kaiserpfalzedv.commons.core.store.GenericStoreService;
-import io.quarkus.arc.AlternativePriority;
+import io.quarkus.arc.Priority;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
 
 /**
  * MemoryRollHistoryStore --
@@ -29,6 +30,7 @@ import javax.enterprise.context.ApplicationScoped;
  * @since 0.3.0  2021-05-09
  */
 @ApplicationScoped
-@AlternativePriority(100)
+@Alternative
+@Priority(100)
 public class MemoryRollHistoryStore extends GenericStoreService<RollHistory> implements RollHistoryStoreService {
 }

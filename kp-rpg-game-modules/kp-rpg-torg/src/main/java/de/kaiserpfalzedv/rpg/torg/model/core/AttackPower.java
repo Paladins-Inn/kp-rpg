@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.torg.model.core;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 /**
@@ -28,12 +29,12 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-05-23
  */
-@Builder(setterPrefix = "with", toBuilder = true)
+@Jacksonized
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
-@JsonDeserialize(builder = AttackPower.AttackPowerBuilder.class)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 public class AttackPower {
     @Schema(description = "Casting time of this power.", nullable = true)
