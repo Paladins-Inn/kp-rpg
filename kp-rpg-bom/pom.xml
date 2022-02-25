@@ -37,7 +37,7 @@
         <kp-rpg.version>1.2.0-SNAPSHOT</kp-rpg.version>
 
         <discord.version>3.5.0_329</discord.version>
-        <kp-commons.version>2.1.1</kp-commons.version>
+        <kp-commons.version>2.2.0-SNAPSHOT</kp-commons.version>
 
         <quarkus.artifact-id>quarkus-universe-bom</quarkus.artifact-id>
         <quarkus.group-id>io.quarkus</quarkus.group-id>

@@ -1,0 +1,116 @@
+#
+# Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+discord:
+  token: "<token by DISCORD>"
+
+project:
+  version: 999-SNAPSHOT
+
+quarkus:
+  application:
+    name: pandur
+    version: ${project.version}
+
+  locales:
+    - en-GB
+    - en-US
+    - de-DE
+  default-locale: de-DE
+
+  http:
+    body:
+      handle-file-uploads: true
+      delete-uploaded-files-on-end: true
+    record-request-start-time: true
+    access-log:
+      enabled: true
+      pattern: common
+      exclude-pattern: /q/*
+
+  jaeger:
+    enabled: false
+    metrics:
+      enabled: false
+
+  health:
+    extensions:
+      enabled: true
+
+  smallrye-openapi:
+    path: /openapi
+    store-schema-directory: target
+  swagger-ui:
+    enable: true
+    path: /docs
+    always-include: true
+
+  log:
+    min-level: TRACE
+    level: INFO
+    console:
+      json: true
+    file:
+      enable: false
+  metrics:
+    enabled: true
+
+  oauth2:
+    enabled: false
+    client-id: "<client-id>"
+    client-secret: "<client-secret>"
+    role-claim: bot,connections,email,guilds,guilds.join,messages.read,applications.entitlements,applications.commands.update,rpc,rpc.api,rpc.notifications.read
+
+  container-image:
+    build: false
+    push: false
+  arc:
+    transform-unproxyable-classes: true
+
+"%test":
+  quarkus:
+    log:
+      min-level: TRACE
+      level: INFO
+      console:
+        json: false
+        format: "%d{HH:mm:ss.SSSSSS} %-5p [%c{2.}] (%t|%X{test-class}|%X{test}) %s%e%n"
+      file:
+        enable: true
+        async: true
+        level: ALL
+        path: target/quarkus.log
+        format: "%d{HH:mm:ss.SSSSSS} %-5p [%c{2.}] (%t|%X{test-class}|%X{test}) %s%e%n"
+      category:
+        "de.kaiserpfalzedv.rpg":
+          min-level: TRACE
+          level: TRACE
+
+"%dev":
+  quarkus:
+    log:
+      min-level: TRACE
+      level: INFO
+      console:
+        json: false
+        format: "%d{HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n"
+      file:
+        enable: false
+        format: "%d{HH:mm:ss.SSSSSS} %-5p [%c{2.}] (%t) %s%e%n"
+      category:
+        "de.kaiserpfalzedv.rpg":
+          min-level: TRACE
+          level: TRACE
