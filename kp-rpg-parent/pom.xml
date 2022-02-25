@@ -24,6 +24,7 @@
         <artifactId>kp-commons-parent</artifactId>
         <groupId>de.kaiserpfalz-edv.commons</groupId>
         <version>2.2.0-SNAPSHOT</version>
+        <relativePath/>
     </parent>
 
     <artifactId>kp-rpg-parent</artifactId>
