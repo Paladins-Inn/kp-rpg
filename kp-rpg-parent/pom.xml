@@ -80,9 +80,9 @@
 
     <distributionManagement>
         <repository>
-            <id>gh-rpg</id>
+            <id>github</id>
             <name>GitHub Packages kp-rpg</name>
-            <url>https://maven.pkg.github.com/Paladins-Inn/kp-rpg</url>
+            <url>https://maven.pkg.github.com/Paladins-Inn</url>
         </repository>
     </distributionManagement>
 
