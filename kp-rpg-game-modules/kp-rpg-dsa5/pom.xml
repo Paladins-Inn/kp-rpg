@@ -22,7 +22,7 @@
   <parent>
     <artifactId>kp-rpg-game-modules</artifactId>
     <groupId>de.kaiserpfalz-edv.rpg</groupId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.2.0</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>kp-rpg-dsa5</artifactId>

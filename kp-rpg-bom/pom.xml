@@ -24,7 +24,7 @@
     <parent>
         <groupId>de.kaiserpfalz-edv.rpg</groupId>
         <artifactId>kp-rpg</artifactId>
-        <version>1.2.0-SNAPSHOT</version>
+        <version>1.2.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -34,16 +34,16 @@
 
     <properties>
         <kp-rpg.groupId>de.kaiserpfalz-edv.rpg</kp-rpg.groupId>
-        <kp-rpg.version>1.2.0-SNAPSHOT</kp-rpg.version>
+        <kp-rpg.version>1.2.0</kp-rpg.version>
 
         <discord.version>3.5.0_329</discord.version>
-        <kp-commons.version>2.2.0-SNAPSHOT</kp-commons.version>
+        <kp-commons.version>2.2.0</kp-commons.version>
 
         <quarkus.artifact-id>quarkus-universe-bom</quarkus.artifact-id>
         <quarkus.group-id>io.quarkus</quarkus.group-id>
-        <quarkus.version>2.9.1.Final</quarkus.version>
+        <quarkus.version>2.9.2.Final</quarkus.version>
 
-        <quarkus-plugin.version>1.13.4.Final</quarkus-plugin.version>
+        <quarkus-plugin.version>2.9.2.Final</quarkus-plugin.version>
         <surefire-plugin.version>2.22.1</surefire-plugin.version>
     </properties>
 
