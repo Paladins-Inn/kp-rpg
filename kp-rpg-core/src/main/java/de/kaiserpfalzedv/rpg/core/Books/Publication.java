@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model.Book;
+package de.kaiserpfalzedv.rpg.core.Books;
 
 import de.kaiserpfalzedv.commons.core.resources.Resource;
 import lombok.EqualsAndHashCode;
@@ -23,10 +23,9 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 /**
- * Publisher -- The publisher of documents.
+ * Publication -- A print/PDF publication
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-05-23
@@ -36,8 +35,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(name = "Publisher", description = "Publishing house for publications")
-public class Publisher extends Resource<PublisherData> {
-    public static final String KIND = "Publisher";
+public class Publication extends Resource<PublicationData> {
+    public static final String KIND = "Publication";
     public static final String VERSION = "v1";
 }

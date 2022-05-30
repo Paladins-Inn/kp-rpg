@@ -19,9 +19,9 @@ package de.kaiserpfalzedv.rpg.torg.data;
 
 import de.kaiserpfalzedv.commons.core.resources.Metadata;
 import de.kaiserpfalzedv.commons.core.resources.Pointer;
+import de.kaiserpfalzedv.rpg.core.Books.Publication;
+import de.kaiserpfalzedv.rpg.core.Books.PublicationData;
 import de.kaiserpfalzedv.rpg.torg.About;
-import de.kaiserpfalzedv.rpg.torg.model.Book.Publication;
-import de.kaiserpfalzedv.rpg.torg.model.Book.PublicationData;
 
 import java.util.HashMap;
 import java.util.Optional;

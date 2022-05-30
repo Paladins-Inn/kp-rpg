@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Kaiserpfalz EDV-Service, Roland T. Lichti.
+ * Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,28 +15,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model.Book;
+package de.kaiserpfalzedv.rpg.core.Books;
 
-import lombok.*;
+import de.kaiserpfalzedv.commons.core.resources.Resource;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import java.io.Serializable;
-
 /**
- * PublisherData -- The publisher data.
+ * Publisher -- The publisher of documents.
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-05-23
  */
 @Jacksonized
-@Builder(toBuilder = true)
-@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 @Getter
-@ToString
-@EqualsAndHashCode
-@Schema(description = "Special data for the publishing house.")
-public class PublisherData implements Serializable {
-    @Schema(description = "Publisher ID at https://drivethrurpg.com", nullable = true)
-    private final Integer driveThroughId;
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Schema(name = "Publisher", description = "Publishing house for publications")
+public class Publisher extends Resource<PublisherData> {
+    public static final String KIND = "Publisher";
+    public static final String VERSION = "v1";
 }

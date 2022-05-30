@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.rpg.torg.model.Book;
+package de.kaiserpfalzedv.rpg.core.Books;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

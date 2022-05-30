@@ -19,7 +19,7 @@ package de.kaiserpfalzedv.rpg.torg.model.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
-import de.kaiserpfalzedv.rpg.torg.model.Book.Publication;
+import de.kaiserpfalzedv.rpg.core.Books.Publication;
 import de.kaiserpfalzedv.rpg.torg.model.MapperEnum;
 import lombok.Getter;
 import lombok.ToString;
@@ -38,7 +38,7 @@ import static de.kaiserpfalzedv.rpg.torg.data.Publications.CORE_RULES;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-03-26
  */
-@SuppressWarnings({"unused", "SpellCheckingInspection", "CdiInjectionPointsInspection"})
+@SuppressWarnings({"unused", "SpellCheckingInspection"})
 @Getter
 @ToString
 @Slf4j

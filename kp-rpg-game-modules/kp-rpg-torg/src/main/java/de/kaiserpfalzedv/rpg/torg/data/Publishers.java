@@ -19,16 +19,16 @@ package de.kaiserpfalzedv.rpg.torg.data;
 
 import de.kaiserpfalzedv.commons.core.resources.Metadata;
 import de.kaiserpfalzedv.commons.core.resources.Pointer;
+import de.kaiserpfalzedv.rpg.core.Books.Publisher;
+import de.kaiserpfalzedv.rpg.core.Books.PublisherData;
 import de.kaiserpfalzedv.rpg.torg.About;
-import de.kaiserpfalzedv.rpg.torg.model.Book.Publisher;
-import de.kaiserpfalzedv.rpg.torg.model.Book.PublisherData;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Publishers -- A list of known publishers.
@@ -74,7 +74,7 @@ public interface Publishers {
             )
             .build();
 
-    Map<UUID, Publisher> PUBLISHERS = Set.of(ULISSES_SPIELE, PALADINS_INN).stream().collect(Collectors.toMap(Publisher::getUid, Function.identity()));
+    Map<UUID, Publisher> PUBLISHERS = Stream.of(ULISSES_SPIELE, PALADINS_INN).collect(Collectors.toMap(Publisher::getUid, Function.identity()));
 
     /**
      * @param id The UUID of the publisher.
