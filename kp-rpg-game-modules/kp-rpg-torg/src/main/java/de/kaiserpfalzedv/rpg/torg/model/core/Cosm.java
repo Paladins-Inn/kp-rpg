@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti.
+ * Copyright (c) 2023 Kaiserpfalz EDV-Service, Roland T. Lichti.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -139,7 +139,7 @@ public enum Cosm implements MapperEnum<Cosm> {
 
 
     @Override
-    public Optional<Cosm> mapFromFoundry(@NotNull final String name) {
+    public Optional<Cosm> mapFromFoundry(final String name) {
         log.trace("Mapping cosm. name='{}'", name);
 
         if ("(None)".equals(name) || "Universal".equals(name)) {
