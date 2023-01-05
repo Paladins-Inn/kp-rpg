@@ -638,38 +638,6 @@
             </dependencies>
         </profile>
 
-
-        <profile>
-            <id>quarkus-mongodb</id>
-            <activation>
-                <file>
-                    <exists>.profile-mongodb</exists>
-                </file>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-mongodb-client</artifactId>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-mongodb-panache</artifactId>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.github.cbartosiak</groupId>
-                    <artifactId>bson-codecs-jsr310</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-test-mongodb</artifactId>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-
-
         <profile>
             <id>quarkus-security</id>
             <activation>

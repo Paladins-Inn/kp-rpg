@@ -107,11 +107,6 @@
 
             <dependency>
                 <groupId>${kp-rpg.groupId}</groupId>
-                <artifactId>datastore-mongodb</artifactId>
-                <version>${kp-rpg.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${kp-rpg.groupId}</groupId>
                 <artifactId>kp-rpg-drivethru</artifactId>
                 <version>${kp-rpg.version}</version>
             </dependency>
