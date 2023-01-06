@@ -138,8 +138,12 @@ public enum Cosm implements MapperEnum<Cosm> {
     }
 
 
+    public static Optional<Cosm> mapFoundry(final String name) {
+        return Cosm.CORE_EARTH.mapFromFoundry(name);
+    }
+
     @Override
-    public Optional<Cosm> mapFromFoundry(final String name) {
+    public Optional<Cosm> mapFromFoundry(@NotNull final String name) {
         log.trace("Mapping cosm. name='{}'", name);
 
         if ("(None)".equals(name) || "Universal".equals(name)) {
@@ -149,10 +153,6 @@ public enum Cosm implements MapperEnum<Cosm> {
         return allCosms().stream()
                         .filter(e -> e.foundry.equals(name)).distinct()
                         .findFirst();
-    }
-
-    public static Optional<Cosm> mapFoundry(@NotNull final String name) {
-        return Cosm.CORE_EARTH.mapFromFoundry(name);
     }
 
     @Override
