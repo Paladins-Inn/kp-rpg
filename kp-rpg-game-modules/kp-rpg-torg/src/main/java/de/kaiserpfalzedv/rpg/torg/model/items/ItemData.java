@@ -72,10 +72,12 @@ public class ItemData implements Serializable {
 
     @Min(1)
     @Schema(description = "The price in $.", minimum = "0")
+    @Builder.Default
     private int price = 0;
 
     @Min(1)
     @Schema(description = "The DN to get the equipment from the Delphi Council.", minimum = "1")
+    @Builder.Default
     private int delphiDN = 10;
 
     @Schema(description = "Possible attack (most spells are treated as attack to use the CharSheet for rolling).", minItems = 0)

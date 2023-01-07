@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg.model.perks.psionic;
 
-import de.kaiserpfalzedv.commons.core.resources.Resource;
+import de.kaiserpfalzedv.commons.core.resources.ResourceImpl;
 import de.kaiserpfalzedv.rpg.torg.About;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -40,7 +40,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
 @Schema(description = "A single spell definition.")
-public class PsiPower extends Resource<PsiPowerData> {
+public class PsiPower extends ResourceImpl<PsiPowerData> {
     public static final String KIND = "PsiPower";
     public static final String VERSION = "v1";
     public static final String NAMESPACE = About.TORG_NAMESPACE;

@@ -18,7 +18,7 @@
 package de.kaiserpfalzedv.rpg.torg.model.perks;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.kaiserpfalzedv.commons.core.resources.Resource;
+import de.kaiserpfalzedv.commons.core.resources.ResourceImpl;
 import de.kaiserpfalzedv.rpg.torg.About;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -42,7 +42,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @EqualsAndHashCode(callSuper = false)
 @Schema(description = "A single perk definition.")
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-public class Perk extends Resource<PerkData> {
+public class Perk extends ResourceImpl<PerkData> {
     public static final String KIND = "Perk";
     public static final String VERSION = "v1";
     public static final String NAMESPACE = About.TORG_NAMESPACE;

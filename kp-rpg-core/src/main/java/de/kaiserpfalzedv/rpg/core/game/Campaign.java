@@ -19,6 +19,7 @@ package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import de.kaiserpfalzedv.commons.core.resources.Resource;
+import de.kaiserpfalzedv.commons.core.resources.ResourceImpl;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,7 +42,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(name = "Campaign", description = "A campaign consisting of multiple games.")
-public class Campaign extends Resource<CampaignData> {
+public class Campaign extends ResourceImpl<CampaignData> {
     public static String API_VERSION = "v1";
     public static String KIND = "Campaign";
 }

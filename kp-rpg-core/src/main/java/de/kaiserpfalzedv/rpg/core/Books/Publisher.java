@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.core.Books;
 
-import de.kaiserpfalzedv.commons.core.resources.Resource;
+import de.kaiserpfalzedv.commons.core.resources.ResourceImpl;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -37,7 +37,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Schema(name = "Publisher", description = "Publishing house for publications")
-public class Publisher extends Resource<PublisherData> {
+public class Publisher extends ResourceImpl<PublisherData> {
     public static final String KIND = "Publisher";
     public static final String VERSION = "v1";
 }

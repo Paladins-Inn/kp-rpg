@@ -37,8 +37,8 @@ import java.util.Optional;
  * @since 2021-01-02
  */
 @Dependent
-@ToString
-@EqualsAndHashCode
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class T20M extends TorgD20Base {
     @Override
     public DieResult roll() {

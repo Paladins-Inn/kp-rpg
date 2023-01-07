@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.rpg.core.dice.history;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import de.kaiserpfalzedv.commons.core.resources.Resource;
+import de.kaiserpfalzedv.commons.core.resources.ResourceImpl;
 import de.kaiserpfalzedv.commons.core.resources.SerializableList;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -47,7 +48,7 @@ import java.util.NoSuchElementException;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(name = "RollHistory", description = "The roll history of an user in a special channel.")
-public class RollHistory extends Resource<SerializableList<RollHistoryEntry>> {
+public class RollHistory extends ResourceImpl<SerializableList<RollHistoryEntry>> {
     public static String KIND = "RollHistory";
     public static String API_VERSION = "v1";
 

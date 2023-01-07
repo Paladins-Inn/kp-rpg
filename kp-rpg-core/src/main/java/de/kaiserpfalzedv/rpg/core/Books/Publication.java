@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.core.Books;
 
-import de.kaiserpfalzedv.commons.core.resources.Resource;
+import de.kaiserpfalzedv.commons.core.resources.ResourceImpl;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -35,7 +35,7 @@ import lombok.extern.jackson.Jacksonized;
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class Publication extends Resource<PublicationData> {
+public class Publication extends ResourceImpl<PublicationData> {
     public static final String KIND = "Publication";
     public static final String VERSION = "v1";
 }

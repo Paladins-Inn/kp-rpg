@@ -18,7 +18,7 @@
 package de.kaiserpfalzedv.rpg.torg.model.items;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.kaiserpfalzedv.commons.core.resources.Resource;
+import de.kaiserpfalzedv.commons.core.resources.ResourceImpl;
 import de.kaiserpfalzedv.rpg.torg.About;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -42,7 +42,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(description = "A single spell definition.")
-public class Item extends Resource<ItemData> {
+public class Item extends ResourceImpl<ItemData> {
     public static final String KIND = "Item";
     public static final String VERSION = "v1";
     public static final String NAMESPACE = About.TORG_NAMESPACE;

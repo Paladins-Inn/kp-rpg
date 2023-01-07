@@ -65,8 +65,6 @@ public class PerkData implements Serializable {
     @Schema(description = "The minimum clearance level for this spell.")
     private final Clearance clearance;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @Schema(description = "The cosms this perk is available for.", minItems = 0)
     private final Set<Cosm> cosms;
 
