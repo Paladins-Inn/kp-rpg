@@ -132,7 +132,7 @@
 
         <quarkus.artifact-id>quarkus-bom</quarkus.artifact-id>
         <quarkus.group-id>io.quarkus</quarkus.group-id>
-        <quarkus.version>2.15.3.Final</quarkus.version>
+        <quarkus.version>2.16.0.Final</quarkus.version>
 
         <compiler-plugin.version>3.10.1</compiler-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
