@@ -19,8 +19,9 @@ package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.kaiserpfalzedv.commons.core.resources.DefaultResourceSpec;
-import de.kaiserpfalzedv.commons.core.resources.ResourcePointer;
+
+import de.kaiserpfalzedv.commons.api.resources.Pointer;
+import de.kaiserpfalzedv.commons.core.resources.DefaultResourceSpecImpl;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -48,7 +49,7 @@ import java.util.Optional;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @Schema(name = "CampaignData", description = "The data for a multiple game spanning campaign.")
-public class CampaignData extends DefaultResourceSpec {
+public class CampaignData extends DefaultResourceSpecImpl {
     public static String CAMPAIGN_GM = "campaign.gm";
     public static String CAMPAIGN_PLAYERS = "campaign.players";
     public static String DISCORD_CHANNEL = "discord.channel";
@@ -71,27 +72,27 @@ public class CampaignData extends DefaultResourceSpec {
 
 
     @JsonIgnore
-    public Optional<ResourcePointer> getGameMaster() {
+    public Optional<Pointer> getGameMaster() {
         return getResourcePointer(CAMPAIGN_GM);
     }
 
     @JsonIgnore
-    public List<ResourcePointer> getPlayers() {
+    public List<Pointer> getPlayers() {
         return getResourcePointers(CAMPAIGN_PLAYERS);
     }
 
     @JsonIgnore
-    public Optional<ResourcePointer> getDiscordChannel() {
+    public Optional<Pointer> getDiscordChannel() {
         return getResourcePointer(DISCORD_CHANNEL);
     }
 
     @JsonIgnore
-    public Optional<ResourcePointer> getDiscordGuild() {
+    public Optional<Pointer> getDiscordGuild() {
         return getResourcePointer(DISCORD_GUILD);
     }
 
     @JsonIgnore
-    public List<ResourcePointer> getGames() {
+    public List<Pointer> getGames() {
         return getResourcePointers(GAMES);
     }
 }

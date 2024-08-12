@@ -25,9 +25,9 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

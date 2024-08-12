@@ -20,7 +20,7 @@ package de.kaiserpfalzedv.rpg.fate.dice;
 import de.kaiserpfalzedv.rpg.core.dice.bag.GenericNumericDie;
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
 
-import javax.enterprise.context.Dependent;
+import jakarta.enterprise.context.Dependent;
 
 /**
  * A FATE die only knows +, (empty) and -. We translate it to 1, 0 and -1.

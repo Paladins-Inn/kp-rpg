@@ -20,7 +20,7 @@ package de.kaiserpfalzedv.rpg.torg;
 import de.kaiserpfalzedv.rpg.core.dice.LookupTable;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.enterprise.context.Dependent;
+import jakarta.enterprise.context.Dependent;
 
 /**
  * BonusChart -- the bonus chart of TORG:Eternity.

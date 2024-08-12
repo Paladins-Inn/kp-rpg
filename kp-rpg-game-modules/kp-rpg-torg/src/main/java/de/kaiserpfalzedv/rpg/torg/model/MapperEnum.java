@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg.model;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.Optional;
 
 /**

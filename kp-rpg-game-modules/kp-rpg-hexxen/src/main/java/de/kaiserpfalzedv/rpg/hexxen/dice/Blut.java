@@ -19,7 +19,7 @@ package de.kaiserpfalzedv.rpg.hexxen.dice;
 
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
 
-import javax.enterprise.context.Dependent;
+import jakarta.enterprise.context.Dependent;
 
 /**
  * Blut die -- a die with symbols used by HeXXen 1733.

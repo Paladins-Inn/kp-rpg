@@ -24,27 +24,16 @@
     <parent>
         <groupId>de.kaiserpfalz-edv.rpg</groupId>
         <artifactId>kp-rpg</artifactId>
-        <version>1.2.1</version>
+        <version>1.2.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>kp-rpg-bom</artifactId>
-
-    <name>KP RPG :: Bill of Materials</name>
+    <name>de.kaiserpfalz-edv.rpg:kp-rpg-bom</name>
 
     <properties>
         <kp-rpg.groupId>de.kaiserpfalz-edv.rpg</kp-rpg.groupId>
-        <kp-rpg.version>1.2.1</kp-rpg.version>
-
-        <discord.version>3.5.0_329</discord.version>
-        <kp-commons.version>3.0.0</kp-commons.version>
-
-        <quarkus.artifact-id>quarkus-bom</quarkus.artifact-id>
-        <quarkus.group-id>io.quarkus.platform</quarkus.group-id>
-        <quarkus.version>2.15.3.Final</quarkus.version>
-
-        <quarkus-plugin.version>2.15.2.Final</quarkus-plugin.version>
-        <surefire-plugin.version>2.22.1</surefire-plugin.version>
+        <kp-rpg.version>1.2.2-SNAPSHOT</kp-rpg.version>
     </properties>
 
     <dependencyManagement>
@@ -52,15 +41,9 @@
             <dependency>
                 <groupId>de.kaiserpfalz-edv.commons</groupId>
                 <artifactId>kp-commons-bom</artifactId>
-                <version>${kp-commons.version}</version>
+                <version>3.3.1-2</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>2.0.6</version>
             </dependency>
 
             <!-- KP RPG modules -->
@@ -114,85 +97,6 @@
                 <groupId>${kp-rpg.groupId}</groupId>
                 <artifactId>kp-rpg-warhorn</artifactId>
                 <version>${kp-rpg.version}</version>
-            </dependency>
-
-
-            <!-- quarkus -->
-            <dependency>
-                <groupId>${quarkus.group-id}</groupId>
-                <artifactId>${quarkus.artifact-id}</artifactId>
-                <version>${quarkus.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.annotation</groupId>
-                <artifactId>jsr250-api</artifactId>
-                <version>1.0</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.validation</groupId>
-                <artifactId>javax.validation-api</artifactId>
-                <version>3.0.1</version>
-            </dependency>
-
-            <!-- lombok - syntactical sugar -->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>1.18.24</version>
-            </dependency>
-
-
-            <!-- Evaluate mathematical expressions -->
-            <dependency>
-                <groupId>net.objecthunter</groupId>
-                <artifactId>exp4j</artifactId>
-                <version>0.4.8</version>
-            </dependency>
-
-            <!-- MarkDown Library -->
-            <dependency>
-                <groupId>com.github.rjeschke</groupId>
-                <artifactId>txtmark</artifactId>
-                <version>0.13</version>
-            </dependency>
-
-            <!-- Encryption -->
-            <dependency>
-                <groupId>org.connectbot</groupId>
-                <artifactId>jbcrypt</artifactId>
-                <version>1.0.2</version>
-            </dependency>
-
-            <!-- TODO 2021-05-11 rlichti API documentation, can't switch to 2.x since quarkus.io does not support it yet. -->
-            <dependency>
-                <groupId>org.eclipse.microprofile.openapi</groupId>
-                <artifactId>microprofile-openapi-api</artifactId>
-                <version>3.1</version>
-            </dependency>
-
-            <!-- testing -->
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>5.9.2</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers-bom</artifactId>
-                <version>1.17.6</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.github.tomakehurst</groupId>
-                <artifactId>wiremock-jre8</artifactId>
-                <version>2.35.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

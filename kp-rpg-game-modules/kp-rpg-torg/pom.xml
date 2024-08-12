@@ -21,12 +21,12 @@
   <parent>
     <artifactId>kp-rpg-game-modules</artifactId>
     <groupId>de.kaiserpfalz-edv.rpg</groupId>
-    <version>1.2.1</version>
+    <version>1.2.2-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>kp-rpg-torg</artifactId>
-  <name>KP RPG :: Module :: TORG:Eternity</name>
+  <name>de.kaiserpfalz-edv.rpg:kp-rpg-torg</name>
   <description>The TORG:Eternity special services.</description>
 
     <dependencies>

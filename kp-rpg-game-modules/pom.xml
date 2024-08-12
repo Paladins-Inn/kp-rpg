@@ -22,23 +22,25 @@
     <parent>
         <artifactId>kp-rpg-parent</artifactId>
         <groupId>de.kaiserpfalz-edv.rpg</groupId>
-        <version>1.2.1</version>
+        <version>1.2.2-SNAPSHOT</version>
         <relativePath>../kp-rpg-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>kp-rpg-game-modules</artifactId>
-    <name>KP RPG :: Game Modules</name>
+    <name>de.kaiserpfalz-edv.rpg:kp-rpg-game-modules</name>
     <packaging>pom</packaging>
 
     <description>The modules for the different RPG systems.</description>
 
     <modules>
+        <module>kp-rpg-torg</module>
+<!--
         <module>kp-rpg-dsa5</module>
         <module>kp-rpg-fate</module>
         <module>kp-rpg-hexxen</module>
         <module>kp-rpg-saga</module>
-        <module>kp-rpg-torg</module>
         <module>kp-rpg-traveller</module>
         <module>kp-rpg-wod</module>
+-->
     </modules>
 </project>

@@ -19,9 +19,9 @@ package de.kaiserpfalzedv.rpg.core.dice.history;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.kaiserpfalzedv.commons.core.resources.Resource;
+
+import de.kaiserpfalzedv.commons.api.resources.SerializableList;
 import de.kaiserpfalzedv.commons.core.resources.ResourceImpl;
-import de.kaiserpfalzedv.commons.core.resources.SerializableList;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

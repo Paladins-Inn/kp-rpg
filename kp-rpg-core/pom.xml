@@ -22,18 +22,18 @@
     <parent>
         <artifactId>kp-rpg-parent</artifactId>
         <groupId>de.kaiserpfalz-edv.rpg</groupId>
-        <version>1.2.1</version>
+        <version>1.2.2-SNAPSHOT</version>
         <relativePath>../kp-rpg-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>kp-rpg-core</artifactId>
-    <name>KP RPG :: Core Services</name>
+    <name>de.kaiserpfalz-edv.rpg:kp-rpg-core</name>
     <description>The services used by almost all role playing systems.</description>
 
 
     <dependencies>
         <dependency>
-            <groupId>de.kaiserpfalz-edv.commons</groupId>
+            <groupId>de.kaiserpfalz-edv.commons.core</groupId>
             <artifactId>kp-commons-core</artifactId>
         </dependency>
 
@@ -50,24 +50,6 @@
         <dependency>
             <groupId>org.eclipse.microprofile.openapi</groupId>
             <artifactId>microprofile-openapi-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jackson2-provider</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.spec.javax.ws.rs</groupId>
-            <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
-            <version>2.0.2.Final</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-arc</artifactId>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

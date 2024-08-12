@@ -22,7 +22,7 @@ import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.enterprise.context.Dependent;
+import jakarta.enterprise.context.Dependent;
 import java.util.ArrayList;
 
 /**

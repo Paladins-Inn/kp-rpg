@@ -17,25 +17,34 @@
 
 package de.kaiserpfalzedv.rpg.core.dice;
 
-import de.kaiserpfalzedv.commons.core.resources.Metadata;
-import de.kaiserpfalzedv.commons.core.resources.Pointer;
-import de.kaiserpfalzedv.commons.core.resources.SerializableList;
-import de.kaiserpfalzedv.commons.core.store.OptimisticLockStoreException;
-import de.kaiserpfalzedv.commons.core.user.User;
-import de.kaiserpfalzedv.rpg.core.dice.history.MemoryRollHistoryStore;
-import de.kaiserpfalzedv.rpg.core.dice.history.RollHistory;
-import de.kaiserpfalzedv.rpg.core.dice.history.RollHistoryEntry;
-import de.kaiserpfalzedv.rpg.core.dice.history.RollHistoryStoreService;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
-import org.slf4j.MDC;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.slf4j.MDC;
+
+import de.kaiserpfalzedv.commons.api.resources.SerializableList;
+import de.kaiserpfalzedv.commons.api.store.OptimisticLockStoreException;
+import de.kaiserpfalzedv.commons.api.user.User;
+import de.kaiserpfalzedv.commons.core.resources.MetadataImpl;
+import de.kaiserpfalzedv.commons.core.resources.PointerImpl;
+import de.kaiserpfalzedv.rpg.core.dice.history.MemoryRollHistoryStore;
+import de.kaiserpfalzedv.rpg.core.dice.history.RollHistory;
+import de.kaiserpfalzedv.rpg.core.dice.history.RollHistoryEntry;
+import de.kaiserpfalzedv.rpg.core.dice.history.RollHistoryStoreService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * TestMemoryUserStore -- checks if the memory store behaves correctly.
@@ -53,9 +62,9 @@ public class TestMemoryRollHistoryStore {
     private static final SerializableList<RollHistoryEntry> ENTRIES = new SerializableList<>();
 
     private static final RollHistory DATA = RollHistory.builder()
-            .metadata(Metadata.builder()
+            .metadata(MetadataImpl.builder()
                     .identity(
-                            Pointer.builder()
+                            PointerImpl.builder()
                                     .kind(User.KIND)
                                     .apiVersion(User.API_VERSION)
                                     .nameSpace(DATA_NAMESPACE)
@@ -134,7 +143,7 @@ public class TestMemoryRollHistoryStore {
 
         sut.save(
                 DATA.toBuilder()
-                        .metadata(DATA.getMetadata().toBuilder()
+                        .metadata(((MetadataImpl)DATA.getMetadata()).toBuilder()
                                 .generation(1)
                                 .build()
                         )

@@ -17,8 +17,8 @@
 
 package de.kaiserpfalzedv.rpg.torg.data;
 
-import de.kaiserpfalzedv.commons.core.resources.Metadata;
-import de.kaiserpfalzedv.commons.core.resources.Pointer;
+import de.kaiserpfalzedv.commons.core.resources.MetadataImpl;
+import de.kaiserpfalzedv.commons.core.resources.PointerImpl;
 import de.kaiserpfalzedv.rpg.core.Books.Publisher;
 import de.kaiserpfalzedv.rpg.core.Books.PublisherData;
 import de.kaiserpfalzedv.rpg.torg.About;
@@ -38,8 +38,8 @@ import java.util.stream.Stream;
  */
 public interface Publishers {
     Publisher ULISSES_SPIELE = Publisher.builder()
-            .metadata(Metadata.builder()
-                    .identity(Pointer.builder()
+            .metadata(MetadataImpl.builder()
+                    .identity(PointerImpl.builder()
                             .kind(Publisher.KIND)
                             .apiVersion(Publisher.VERSION)
                             .nameSpace(About.TORG_NAMESPACE)
@@ -59,8 +59,8 @@ public interface Publishers {
             .build();
 
     Publisher PALADINS_INN = Publisher.builder()
-            .metadata(Metadata.builder()
-                    .identity(Pointer.builder()
+            .metadata(MetadataImpl.builder()
+                    .identity(PointerImpl.builder()
                             .kind(Publisher.KIND)
                             .apiVersion(Publisher.VERSION)
                             .nameSpace(About.TORG_NAMESPACE)

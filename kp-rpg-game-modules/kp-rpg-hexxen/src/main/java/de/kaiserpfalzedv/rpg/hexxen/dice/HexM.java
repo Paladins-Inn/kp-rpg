@@ -19,7 +19,7 @@ package de.kaiserpfalzedv.rpg.hexxen.dice;
 
 import de.kaiserpfalzedv.rpg.core.dice.mat.DieResult;
 
-import javax.enterprise.context.Dependent;
+import jakarta.enterprise.context.Dependent;
 
 /**
  * HeXXen gamemaster die -- the die with symbold used by HeXXen 1733.

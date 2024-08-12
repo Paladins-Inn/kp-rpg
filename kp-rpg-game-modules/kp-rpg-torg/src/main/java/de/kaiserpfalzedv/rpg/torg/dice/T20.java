@@ -23,7 +23,7 @@ import de.kaiserpfalzedv.rpg.torg.BonusChart;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.enterprise.context.Dependent;
+import jakarta.enterprise.context.Dependent;
 import java.util.ArrayList;
 import java.util.Optional;
 

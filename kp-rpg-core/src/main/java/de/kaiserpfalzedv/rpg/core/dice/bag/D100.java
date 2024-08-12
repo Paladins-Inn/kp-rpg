@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.core.dice.bag;
 
-import javax.enterprise.context.Dependent;
+import jakarta.enterprise.context.Dependent;
 
 /**
  * @author rlichti {@literal <rlichti@kaiserpfalz-edv.de>}

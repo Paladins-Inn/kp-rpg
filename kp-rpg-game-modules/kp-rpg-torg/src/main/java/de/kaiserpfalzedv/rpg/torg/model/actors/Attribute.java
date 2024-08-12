@@ -21,7 +21,7 @@ import de.kaiserpfalzedv.rpg.torg.model.MapperEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

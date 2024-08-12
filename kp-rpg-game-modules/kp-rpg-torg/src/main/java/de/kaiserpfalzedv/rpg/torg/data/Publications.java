@@ -17,8 +17,8 @@
 
 package de.kaiserpfalzedv.rpg.torg.data;
 
-import de.kaiserpfalzedv.commons.core.resources.Metadata;
-import de.kaiserpfalzedv.commons.core.resources.Pointer;
+import de.kaiserpfalzedv.commons.core.resources.MetadataImpl;
+import de.kaiserpfalzedv.commons.core.resources.PointerImpl;
 import de.kaiserpfalzedv.rpg.core.Books.Publication;
 import de.kaiserpfalzedv.rpg.core.Books.PublicationData;
 import de.kaiserpfalzedv.rpg.torg.About;
@@ -36,29 +36,29 @@ import java.util.UUID;
 public interface Publications {
     Publication CORE_RULES = Publication.builder()
             .metadata(
-                    Metadata.builder()
-                            .identity(
-                                    Pointer.builder()
-                                            .kind(Publication.KIND)
-                                            .apiVersion(Publication.VERSION)
-                                            .nameSpace(About.TORG_NAMESPACE)
-                                            .name("Torg Core Rules")
-                                            .build()
-                            )
-                            .uid(UUID.fromString("dc1de20e-c19b-49a7-873e-45fd0ce91e73"))
-                            .generation(1)
-                            .created(About.DEFAULT_CREATION)
-                            .owner(Publishers.ULISSES_SPIELE.toPointer())
+                    MetadataImpl.builder()
+                        .identity(
+                                PointerImpl.builder()
+                                .kind(Publication.KIND)
+                                .apiVersion(Publication.VERSION)
+                                .nameSpace(About.TORG_NAMESPACE)
+                                .name("Torg Core Rules")
+                                .build()
+                        )
+                        .uid(UUID.fromString("dc1de20e-c19b-49a7-873e-45fd0ce91e73"))
+                        .generation(1)
+                        .created(About.DEFAULT_CREATION)
+                        .owner(Publishers.ULISSES_SPIELE.toPointer())
 
-                            .build()
+                        .build()
             )
             .spec(
                     PublicationData.builder()
-                            .displayTitle("Torg Core Rules")
-                            .title("Torg Eternity - Core Rules")
-                            .orderId("UNA10000")
-                            .driveThroughId(216248)
-                            .build()
+                        .displayTitle("Torg Core Rules")
+                        .title("Torg Eternity - Core Rules")
+                        .orderId("UNA10000")
+                        .driveThroughId(216248)
+                        .build()
             )
             .build();
 

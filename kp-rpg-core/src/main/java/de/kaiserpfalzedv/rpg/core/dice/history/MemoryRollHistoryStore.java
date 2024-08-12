@@ -18,10 +18,9 @@
 package de.kaiserpfalzedv.rpg.core.dice.history;
 
 import de.kaiserpfalzedv.commons.core.store.GenericStoreService;
-import io.quarkus.arc.Priority;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Alternative;
+import jakarta.annotation.Priority;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Alternative;
 
 /**
  * MemoryRollHistoryStore --

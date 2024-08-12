@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.core.api;
 
-import de.kaiserpfalzedv.commons.core.api.BaseSystemException;
+import de.kaiserpfalzedv.commons.api.BaseSystemException;
 import lombok.ToString;
 
 /**

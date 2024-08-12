@@ -18,7 +18,6 @@
 package de.kaiserpfalzedv.rpg.core.game;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.kaiserpfalzedv.commons.core.resources.Resource;
 import de.kaiserpfalzedv.commons.core.resources.ResourceImpl;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

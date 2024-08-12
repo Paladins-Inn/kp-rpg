@@ -22,10 +22,10 @@
 
     <groupId>de.kaiserpfalz-edv.rpg</groupId>
     <artifactId>kp-rpg</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>KP RPG</name>
+    <name>de.kaiserpfalz-edv.rpg:kp-rpg</name>
 
     <modules>
         <module>kp-rpg-parent</module>
