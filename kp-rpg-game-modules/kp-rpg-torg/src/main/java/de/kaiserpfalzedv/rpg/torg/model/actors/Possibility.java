@@ -17,14 +17,19 @@
 
 package de.kaiserpfalzedv.rpg.torg.model.actors;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
-import lombok.*;
-import lombok.extern.jackson.Jacksonized;
+import java.util.HashMap;
+
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.extern.jackson.Jacksonized;
 
 /**
  * Possibility --

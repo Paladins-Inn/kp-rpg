@@ -17,10 +17,15 @@
 
 package de.kaiserpfalzedv.rpg.torg.model.core;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.*;
-import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.extern.jackson.Jacksonized;
 
 /**
  * Axiom -- A single axiom value.

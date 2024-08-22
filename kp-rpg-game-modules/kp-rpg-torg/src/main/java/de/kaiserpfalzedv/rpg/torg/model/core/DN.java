@@ -18,7 +18,7 @@
 package de.kaiserpfalzedv.rpg.torg.model.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
