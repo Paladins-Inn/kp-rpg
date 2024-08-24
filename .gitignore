@@ -21,3 +21,4 @@ atlas-db.txt
 demo-values.yaml
 token
 t
+*.versionsBackup
