@@ -25,7 +25,11 @@
     <version>1.2.2</version>
     <packaging>pom</packaging>
 
-    <name>de.kaiserpfalz-edv.rpg:kp-rpg</name>
+    <description>
+        kp-rpg is a library for table top rpg rules implementations.
+    </description>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <url>https://paladinsinn.github.io/kp-krp/</url>
 
     <modules>
         <module>kp-rpg-parent</module>
@@ -34,7 +38,48 @@
         <module>kp-rpg-core</module>
         <module>kp-rpg-game-modules</module>
     </modules>
+    
 
+    <inceptionYear>2016</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>GNU GENERAL PUBLIC LICENSE</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.de.html</url>
+            <distribution>repo</distribution>
+            <comments>
+                The GNU General Public License is a free, copyleft license for software and other kinds of works.
+            </comments>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>Kaiserpfalz EDV-Service</name>
+        <url>https://www.kaiserpfalz-edv.de</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>klenkes74</id>
+            <name>Roland T. Lichti</name>
+            <email>rlichti@kaiserpfalz-edv.de</email>
+            <url>https://www.lichti.de</url>
+            <roles>
+                <role>Project Chair</role>
+                <role>Developer</role>
+                <role>sombody</role><!-- "'somebody' really should do ..." -->
+            </roles>
+            <properties>
+                <picUrl>https://secure.gravatar.com/avatar/3b5c4008dc30b266341632f9931aab56</picUrl>
+            </properties>
+
+            <organization>Kaiserpfalz EDV-Service</organization>
+            <organizationUrl>https://www.kaiserpfalz-edv.de</organizationUrl>
+            <timezone>Europe/Berlin</timezone>
+        </developer>
+    </developers>
+
+    
     <scm>
         <url>https://github.com/Paladins-Inn/kp-rpg</url>
         <connection>scm:git:git://github.com/Paladins-Inn/kp-rpg.git</connection>
@@ -50,46 +95,440 @@
         </repository>
     </distributionManagement>
 
+    <properties>
+        <skipTests>false</skipTests>
+        <skip.jar>false</skip.jar>
+        <skip.javadoc>false</skip.javadoc>
+        <skip.source>false</skip.source>
+        <skip.site>false</skip.site>
+        <skip.owasp>true</skip.owasp>
+        <skip.coverage>true</skip.coverage>
+
+        <gpg.keyname>AF380360D648FC1D4BA7DBBA6A09445FE79CABD8</gpg.keyname>
+
+        <scmpublish.scm.branch>gh-pages</scmpublish.scm.branch>
+        <main.basedir>${project.basedir}</main.basedir>
+
+        <maven.compiler.parameters>true</maven.compiler.parameters>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.inputEncoding>UTF-8</project.reporting.inputEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <kp-commons.version>3.3.3-1</kp-commons.version>
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>0.5.0</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <publishingServerId>kaiserpfalz-central</publishingServerId>
+                        <autoPublish>true</autoPublish>
+                        <waitUntil>published</waitUntil>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>3.2.5</version>
+                    <configuration>
+                        <gpgArguments>
+                            <arg>--pinentry-mode</arg>
+                            <arg>loopback</arg>
+                        </gpgArguments>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>sign-artifacts</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.8.0</version>
+                    <configuration>
+                        <skip>${skip.javadoc}</skip>
+                        <charset>${project.build.sourceEncoding}</charset>
+                        <show>public</show>
+                        <failOnError>true</failOnError>
+                        <detectOfflineLinks>false</detectOfflineLinks>
+                        <doclint>all,-missing</doclint>
+                        <minmemory>128m</minmemory>
+                        <maxmemory>1g</maxmemory>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.1</version>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <propertiesEncoding>${project.build.sourceEncoding}</propertiesEncoding>
+                        <delimiters>
+                            <delimiter>@</delimiter>
+                        </delimiters>
+                        <useDefaultDelimiters>false</useDefaultDelimiters>
+                        <nonFilteredFileExtensions>
+                            <nonFilteredFileExtension>docx</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>xlsx</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>zip</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>tgz</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>png</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>jpg</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>gpg</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>license</nonFilteredFileExtension>
+                        </nonFilteredFileExtensions>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>test-sources-generation</id>
+                            <phase>generate-test-resources</phase>
+                            <goals>
+                                <goal>testResources</goal>
+                            </goals>
+                            <configuration>
+                                <skip>${skipTests}</skip>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.20.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.7.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>3.5.0</version>
+                    <configuration>
+                        <configLocation>kaiserpfalz/checkstyle.xml</configLocation>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>de.kaiserpfalz-edv.commons</groupId>
+                            <artifactId>kp-checkstyle</artifactId>
+                            <version>${kp-commons.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.owasp</groupId>
+                    <artifactId>dependency-check-maven</artifactId>
+                    <version>10.0.3</version>
+                    <configuration>
+                        <skip>${skip.owasp}</skip>
+                        <suppressionFiles>
+                            <suppressionFile>${main.basedir}/owasp-suppressions.xml</suppressionFile>
+                        </suppressionFiles>
+                        <failBuildOnCVSS>8</failBuildOnCVSS>
+                        <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+                        <failOnError>true</failOnError>
+                        <nvdServerId>nvdApi</nvdServerId>
+                        <verbose>true</verbose>
+                        <nvdApiServerId>nvdApi</nvdApiServerId>
+                        <inherit>false</inherit>
+                        <msbuildAnalyzerEnabled>false</msbuildAnalyzerEnabled>
+                        <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
+                        <pipfileAnalzerEnabled>false</pipfileAnalzerEnabled>
+                        <nugetconfAnalyzerenabled>false</nugetconfAnalyzerenabled>
+                        <skipSystemScope>true</skipSystemScope>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.12</version>
+                    <configuration>
+                        <skip>${skip.coverage}</skip>
+                        <rules>
+                            <rule>
+                                <element>BUNDLE</element>
+                                <limits>
+                                    <limit>
+                                    <counter>COMPLEXITY</counter>
+                                    <value>COVEREDRATIO</value>
+                                    <minimum>0</minimum>
+                                    </limit>
+                                </limits>
+                            </rule>
+                        </rules>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok-maven-plugin</artifactId>
+                    <version>1.18.20.0</version>
+                    <configuration>
+                        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                        <outputDirectory>${delombok.output}</outputDirectory>
+                        <addOutputDirectory>false</addOutputDirectory>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>delombok</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.32</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.7.0</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>index</report>
+                            <report>dependencies</report>
+                            <report>licenses</report>
+                        </reports>
+                    </reportSet>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>index</report>
+                            <report>dependencies</report>
+                            <report>team</report>
+                            <report>mailing-lists</report>
+                            <report>ci-management</report>
+                            <report>issue-management</report>
+                            <report>licenses</report>
+                            <report>scm</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <configLocation>kaiserpfalz/checkstyle.xml</configLocation>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <!-- select non-aggregate reports -->
+                            <report>checkstyle</report>
+                        </reports>
+                    </reportSet>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>checkstyle-aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>3.5.0</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <!-- select non-aggregate reports -->
+                            <report>jxr</report>
+                            <report>test-jxr</report>
+                        </reports>
+                    </reportSet>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>aggregate</report>
+                            <report>test-aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.24.0</version>
+                <configuration>
+                    <linkXref>true</linkXref>
+                    <inputEncoding>${project.reporting.inputEncoding}</inputEncoding>
+                    <minimumTokens>100</minimumTokens>
+                    <targetJdk>${maven.compiler.target}</targetJdk>
+                    <excludeRoot>
+                        <excludeRoot>target/generated-sources</excludeRoot>
+                    </excludeRoot>
+                    <reportSets>
+                        <reportSet>
+                            <reports>
+                                <report>pmd</report>
+                                <report>cpd</report>
+                            </reports>
+                        </reportSet>
+                        <reportSet>
+                            <id>aggregate</id>
+                            <inherited>false</inherited>
+                            <reports>
+                                <report>aggergate-pmd</report>
+                                <report>aggergate-cpd</report>
+                            </reports>
+                        </reportSet>
+                    </reportSets>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.12</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <!-- select non-aggregate reports -->
+                            <report>report</report>
+                        </reports>
+                    </reportSet>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>report-aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>9.2.0</version>
+                <configuration>
+                    <suppressionFiles>
+                        <suppressionFile>${main.basedir}/owasp-suppressions.xml</suppressionFile>
+                    </suppressionFiles>
+                    <skip>${skip.owasp}</skip>
+                    <failBuildOnCVSS>8</failBuildOnCVSS>
+                    <nvdApiServerId>nvdApi</nvdApiServerId>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
     <profiles>
         <profile>
-            <id>production</id>
-        </profile>
-
-        <profile>
             <id>release</id>
-        </profile>
-
-        <profile>
-            <id>site</id>
-
-            <properties>
-                <maven.javadoc.skip>true</maven.javadoc.skip>
-            </properties>
 
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok-maven-plugin</artifactId>    
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.8.0</version>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>site</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok-maven-plugin</artifactId>    
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-site-plugin</artifactId>
-                        <version>3.12.1</version>
+                        <version>3.20.0</version>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-project-info-reports-plugin</artifactId>
-                        <version>3.4.1</version>
+                        <version>3.7.0</version>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-report-plugin</artifactId>
-                        <version>3.0.0-M7</version>
+                        <version>3.4.0</version>
                     </plugin>
+                    
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.4.1</version>
-                        <configuration>
-                            <skip>${maven.javadoc.skip}</skip>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -99,10 +538,14 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.4.1</version>
-                        <configuration>
-                            <skip>${maven.javadoc.skip}</skip>
-                        </configuration>
+                        <reportSets>
+                            <reportSet>
+                                <reports>
+                                    <report>javadoc-no-fork</report>
+                                    <report>test-javadoc-no-fork</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
                     </plugin>
                 </plugins>
             </reporting>
@@ -128,24 +571,5 @@
                 </repository>
             </repositories>
         </profile>
-
-    <profile>
-      <id>helm</id>
-      <activation>
-        <file>
-          <exists>src/main/helm</exists>
-        </file>
-      </activation>
-
-      <build>
-        <resources>
-          <resource>
-            <directory>src/main/helm</directory>
-            <targetPath>../../helm</targetPath>
-            <filtering>true</filtering>
-          </resource>
-        </resources>
-      </build>
-    </profile>
-  </profiles>
+    </profiles>
 </project>
