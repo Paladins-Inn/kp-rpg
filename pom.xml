@@ -248,7 +248,7 @@
                 <plugin>
                     <groupId>org.owasp</groupId>
                     <artifactId>dependency-check-maven</artifactId>
-                    <version>10.0.3</version>
+                    <version>10.0.4</version>
                     <configuration>
                         <skip>${skip.owasp}</skip>
                         <suppressionFiles>
@@ -450,7 +450,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>9.2.0</version>
+                <version>10.0.4</version>
                 <configuration>
                     <suppressionFiles>
                         <suppressionFile>${main.basedir}/owasp-suppressions.xml</suppressionFile>
