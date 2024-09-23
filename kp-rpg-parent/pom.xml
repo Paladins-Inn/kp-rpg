@@ -23,13 +23,13 @@
     <parent>
         <artifactId>kp-commons-parent</artifactId>
         <groupId>de.kaiserpfalz-edv.commons</groupId>
-        <version>3.3.3-1</version>
+        <version>4.0.1-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
     <artifactId>kp-rpg-parent</artifactId>
     <groupId>de.kaiserpfalz-edv.rpg</groupId>
-    <version>1.2.3</version>
+    <version>1.2.4</version>
     <packaging>pom</packaging>
 
     <name>de.kaiserpfalz-edg.rpg:kp-rpg-parent</name>
@@ -39,7 +39,7 @@
     <inceptionYear>2020</inceptionYear>
 
     <properties>
-        <kp-rpg.version>1.2.3</kp-rpg.version>
+        <kp-rpg.version>1.2.4</kp-rpg.version>
 
         <skipTests>false</skipTests>
         <skip.jar>false</skip.jar>
@@ -105,7 +105,7 @@
             <dependency>
                 <groupId>de.kaiserpfalz-edv.rpg</groupId>
                 <artifactId>kp-rpg-bom</artifactId>
-                <version>1.2.3</version>
+                <version>1.2.4</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -113,7 +113,7 @@
             <dependency>
                 <groupId>de.kaiserpfalz-edv.commons</groupId>
                 <artifactId>kp-commons-bom</artifactId>
-                <version>3.3.3-1</version>
+                <version>4.0.1-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
