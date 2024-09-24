@@ -40,7 +40,6 @@ import java.util.Optional;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0 2021-02-06
  */
-@SuppressWarnings("unused")
 @Jacksonized
 @SuperBuilder(toBuilder = true)
 @AllArgsConstructor

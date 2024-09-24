@@ -38,7 +38,6 @@ import static de.kaiserpfalzedv.rpg.torg.data.Publications.CORE_RULES;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.2.0  2021-03-26
  */
-@SuppressWarnings({"unused", "SpellCheckingInspection"})
 @Getter
 @ToString
 @Slf4j
