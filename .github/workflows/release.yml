@@ -1,82 +1,52 @@
 ## This is basic continuous integration build for your Quarkus application.
 
-name: Release
+name: Release Software
 
 on:
-  push:
-    branches: [ main ]
+  release:
+    types: [created]
+  workflow_dispatch:
 
 jobs:
-  java-build:
-    runs-on: [ java ]
+  release-central:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
         id: checkout-sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 11
+      - name: Set up JDK 21
         id: setup-java
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
-          java-version: 11
+          java-version: 21
+          distribution: 'temurin'
+
+      - name: Prepare GPG signing
+        id: install-gpg-key
+        run: |
+          echo -en "${{ secrets.GPG_SIGNING_KEY }}\n" | gpg --batch --import || true
+          gpg --list-secret-keys --keyid-format LONG || true
+
+      - name: Set up Maven
+        id: setup-maven
+        uses: s4u/maven-settings-action@v3.0.0
+        with:
+          servers: |
+            [
+              { "id": "nvdApi", "username": "egal", "password": "${{ secrets.NVD_API_KEY }}"},
+              { "id": "kaiserpfalz-central", "username": "${{ secrets.MVN_CENTRAL_USERNAME }}", "password": "${{ secrets.MVN_CENTRAL_PASSWORD }}"}
+            ]
 
       - name: Build
         id: build-java
-        run: mvn deploy -B -Pproduction,release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set Image name and version
         run: |
-          echo "IMAGE=$(cat target/classes/Dockerfile | grep APP_NAME= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
-          echo "VERSION=$(cat target/classes/Dockerfile | grep APP_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
+          mvn \
+            --batch-mode \
+            --no-transfer-progress \
+            \
+            -Prelease \
+            -Dgpg.passphrase=${{ secrets.GPG_SECRET }} \
+            \
+            deploy
 
-      - name: Upload Artifact
-        id: upload-jar
-        uses: actions/upload-artifact@v2
-        with:
-          name: dci
-          path: |
-            rpg-bot/target/app-runner.jar
-            rpg-bot/target/Dockerfile
-          retention-days: 1
-
-
-  container-build:
-    runs-on: [ podman ]
-    needs: java-build
-    steps:
-      - name: checkout sources
-        id: checkout-sources
-        uses: actions/checkout@v2
-
-      - name: retrieve jar and dockerfile
-        id: retrieve-jar
-        uses: actions/download-artifact@v4.1.7
-        with:
-          name: dci
-
-      - name: Set Image name and version
-        run: |
-          echo "IMAGE=$(cat classes/Dockerfile | grep APP_NAME= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
-          echo "VERSION=$(cat classes/Dockerfile | grep APP_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
-
-      - name: Buildah
-        id: build-container
-        uses: redhat-actions/buildah-build@v2
-        with:
-          image: ${{ env.IMAGE }}
-          tags: ${{ env.VERSION }} latest ${{ github.sha }}
-          dockerfiles: |
-            ./Dockerfile
-          context: ./
-
-      - name: Push To quay
-        id: push-to-quay
-        uses: redhat-actions/push-to-registry@v2
-        with:
-          image: ${{ env.IMAGE }}
-          tags: ${{ env.VERSION }} latest ${{ github.sha }}
-          registry: ${{ secrets.QUAY_REPO }}
-          username: ${{ secrets.QUAY_USER }}
-          password: ${{ secrets.QUAY_TOKEN }}
