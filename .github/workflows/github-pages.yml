@@ -45,7 +45,7 @@ jobs:
         with:
           servers: |
             [
-              { "id": "kp-commons", "username": "${{ github.actor }}", "password": "${{ secrets.GITHUB_TOKEN }}"}
+              { "id": "kp-commons", "username": "${{ github.actor }}", "password": "${{ secrets.GITHUB_TOKEN }}"},
               { "id": "nvdApi", "username": "klenkes74", "password": "${{ secrets.NVD_API_KEY }}"}
             ]
 
