@@ -4,81 +4,43 @@ name: CI
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ feature/*, develop, main ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ feature/*, develop, main ]
+  workflow_dispatch:
+
 
 jobs:
   java-build:
-    runs-on: [ java ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout sources
         id: checkout-sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 11
+      - name: Set up JDK 21
         id: setup-java
         uses: actions/setup-java@v4
         with:
-          java-version: 11
+          java-version: 21
+          distribution: 'temurin'
+          cache: maven
 
-      - name: Build
+      - name: Set up Maven
+        id: setup-maven
+        uses: s4u/maven-settings-action@v3.0.0
+        with:
+          servers: |
+            [
+              { "id": "nvdApi", "username": "klenkes74", "password": "${{ secrets.NVD_API_KEY }}"}
+            ]
+
+      - name: Compile stuff
         id: build-java
-        run: mvn deploy -U -B -Pproduction,release -DskipTests=true
+        run: mvn test -U --batch-mode --no-transfer-progress
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Artifact
-        id: upload-jar
-        uses: actions/upload-artifact@v2
-        with:
-          name: dci
-          path: |
-            kp-rpg-discord-bot/target/app-runner.jar
-            kp-rpg-discord-bot/target/Dockerfile
-          retention-days: 1
-
-
-  container-build:
-    runs-on: [ podman ]
-    needs: java-build
-    steps:
-      - name: checkout sources
-        id: checkout-sources
-        uses: actions/checkout@v2
-
-      - name: retrieve jar and dockerfile
-        id: retrieve-jar
-        uses: actions/download-artifact@v4.1.7
-        with:
-          name: dci
-
-      - name: Set Image name and version
-        run: |
-          echo "IMAGE=$(cat ./Dockerfile | grep APP_NAME= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
-          echo "VERSION=$(cat ./Dockerfile | grep APP_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g')" >> $GITHUB_ENV
-
-      - name: Image name and version
-        run: echo "Working on image '${{ env.IMAGE }}:${{ env.VERSION }}'."
-
-      - name: Buildah
-        id: build-container
-        uses: redhat-actions/buildah-build@v2
-        with:
-          image: ${{ env.IMAGE }}
-          tags: ${{ env.VERSION }} latest ${{ github.sha }}
-          dockerfiles: |
-            ./Dockerfile
-          context: ./
-
-      - name: Push To quay
-        id: push-to-quay
-        uses: redhat-actions/push-to-registry@v2
-        with:
-          image: ${{ env.IMAGE }}
-          tags: ${{ env.VERSION }} development latest ${{ github.sha }}
-          registry: ${{ secrets.QUAY_REPO }}
-          username: ${{ secrets.QUAY_USER }}
-          password: ${{ secrets.QUAY_TOKEN }}
-
-      - name: Clean up all images
-        id: clean-up-images
-        run: yes | podman image prune -a

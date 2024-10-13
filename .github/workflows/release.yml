@@ -7,8 +7,9 @@ on:
     types: [created]
   workflow_dispatch:
 
+
 jobs:
-  release-central:
+  release-library:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -34,7 +35,7 @@ jobs:
         with:
           servers: |
             [
-              { "id": "nvdApi", "username": "egal", "password": "${{ secrets.NVD_API_KEY }}"},
+              { "id": "nvdApi", "username": "klenkes74", "password": "${{ secrets.NVD_API_KEY }}"},
               { "id": "kaiserpfalz-central", "username": "${{ secrets.MVN_CENTRAL_USERNAME }}", "password": "${{ secrets.MVN_CENTRAL_PASSWORD }}"}
             ]
 
@@ -49,4 +50,3 @@ jobs:
             -Dgpg.passphrase=${{ secrets.GPG_SECRET }} \
             \
             deploy
-
