@@ -87,7 +87,17 @@
         <tag>HEAD</tag>
     </scm>
 
+    <issueManagement>
+        <url>https://github.com/aladins-Inn/kp-rpg/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
     <distributionManagement>
+        <site>
+            <id>github</id>
+            <name>Paladins Inn -- KP-RPG</name>
+            <url>scm:git:git@github.com:Paladins-Inn/kp-rpg.git</url>
+        </site>
         <repository>
             <id>github</id>
             <name>GitHub Paladins Inn Apache Maven Packages</name>
