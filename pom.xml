@@ -22,7 +22,7 @@
 
     <groupId>de.kaiserpfalz-edv.rpg</groupId>
     <artifactId>kp-rpg</artifactId>
-    <version>1.2.5</version>
+    <version>1.2.6</version>
     <packaging>pom</packaging>
 
     <description>
@@ -106,7 +106,6 @@
 
         <gpg.keyname>AF380360D648FC1D4BA7DBBA6A09445FE79CABD8</gpg.keyname>
 
-        <scmpublish.scm.branch>gh-pages</scmpublish.scm.branch>
         <main.basedir>${project.basedir}</main.basedir>
 
         <maven.compiler.parameters>true</maven.compiler.parameters>
@@ -568,6 +567,14 @@
                     <snapshots>
                         <enabled>true</enabled>
                     </snapshots>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                </repository>
+                <repository>
+                    <id>kp-commons</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/KaiserpfalzEDV/kp-commons</url>
                 </repository>
             </repositories>
         </profile>

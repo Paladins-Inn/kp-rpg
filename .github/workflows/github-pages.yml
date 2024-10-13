@@ -45,19 +45,9 @@ jobs:
         with:
           servers: |
             [
+              { "id": "kp-commons", "username": "${{ github.actor }}", "password": "${{ secrets.GITHUB_TOKEN }}"}
               { "id": "nvdApi", "username": "klenkes74", "password": "${{ secrets.NVD_API_KEY }}"}
             ]
-
-      - name: Prepare checkstyle for site generation
-        id: prepare-checkstyle
-        run: |
-          mvn \
-            --batch-mode \
-            --no-transfer-progress \
-            \
-            -pl kp-checkstyle \
-            \
-            install
 
       - name: site
         id: build-site
@@ -66,7 +56,7 @@ jobs:
             --batch-mode \
             --no-transfer-progress \
             \
-            -Prelease \
+            -Psite \
             \
             site site:stage
 
