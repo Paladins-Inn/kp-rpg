@@ -173,7 +173,7 @@
       <dependency>
         <groupId>net.dv8tion</groupId>
         <artifactId>JDA</artifactId>
-        <version>4.2.0_247</version>
+        <version>4.4.1_353</version>
       </dependency>
 
       <!-- MarkDown Library -->
