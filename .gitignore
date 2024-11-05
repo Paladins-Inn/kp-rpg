@@ -1,5 +1,6 @@
 .DS_Store
 .idea/
+.java-version
 docs/generated/
 resources/static/
 **/src/app/generated/
@@ -15,7 +16,9 @@ stats.json
 coverage
 storybook-static
 .env
-/rpg-bot/src/main/resources/static/
-/rpg-server/tomb/atlas-db.txt
-/rpg-server/tomb/src/main/helm/demo-values.yaml
-/rpg-server/tomb/helm/demo-values.yaml
+te001/
+atlas-db.txt
+demo-values.yaml
+token
+t
+*.versionsBackup

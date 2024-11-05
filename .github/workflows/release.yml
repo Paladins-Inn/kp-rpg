@@ -1,0 +1,52 @@
+## This is basic continuous integration build for your Quarkus application.
+
+name: Release Software
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+
+jobs:
+  release-library:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        id: checkout-sources
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        id: setup-java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'temurin'
+
+      - name: Prepare GPG signing
+        id: install-gpg-key
+        run: |
+          echo -en "${{ secrets.GPG_SIGNING_KEY }}\n" | gpg --batch --import || true
+          gpg --list-secret-keys --keyid-format LONG || true
+
+      - name: Set up Maven
+        id: setup-maven
+        uses: s4u/maven-settings-action@v3.0.0
+        with:
+          servers: |
+            [
+              { "id": "nvdApi", "username": "klenkes74", "password": "${{ secrets.NVD_API_KEY }}"},
+              { "id": "kaiserpfalz-central", "username": "${{ secrets.MVN_CENTRAL_USERNAME }}", "password": "${{ secrets.MVN_CENTRAL_PASSWORD }}"}
+            ]
+
+      - name: Build
+        id: build-java
+        run: |
+          mvn \
+            --batch-mode \
+            --no-transfer-progress \
+            \
+            -Prelease \
+            -Dgpg.passphrase=${{ secrets.GPG_SECRET }} \
+            \
+            deploy

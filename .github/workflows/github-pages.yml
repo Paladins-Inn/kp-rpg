@@ -1,0 +1,72 @@
+## This is basic continuous integration build for your Quarkus application.
+
+name: Create Github Pages
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+
+jobs:
+  github-pages:
+    name: Create and Publish
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: write
+      packages: read
+      id-token: write
+
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+
+    steps:
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
+      - name: Checkout sources
+        id: checkout-sources
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        id: setup-java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Set up Maven
+        id: setup-maven
+        uses: s4u/maven-settings-action@v3.0.0
+        with:
+          servers: |
+            [
+              { "id": "kp-commons", "username": "${{ github.actor }}", "password": "${{ secrets.GITHUB_TOKEN }}"},
+              { "id": "nvdApi", "username": "klenkes74", "password": "${{ secrets.NVD_API_KEY }}"}
+            ]
+
+      - name: site
+        id: build-site
+        run: |
+          mvn \
+            --batch-mode \
+            --no-transfer-progress \
+            \
+            -Psite \
+            \
+            site site:stage
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: 'target/staging'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2022 Kaiserpfalz EDV-Service, Roland T. Lichti.
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>de.kaiserpfalz-edv.rpg</groupId>
+        <artifactId>kp-rpg</artifactId>
+        <version>1.2.7</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>kp-rpg-bom</artifactId>
+    <name>de.kaiserpfalz-edv.rpg:kp-rpg-bom</name>
+
+    <properties>
+        <kp-rpg.groupId>de.kaiserpfalz-edv.rpg</kp-rpg.groupId>
+        <kp-rpg.version>1.2.7</kp-rpg.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>de.kaiserpfalz-edv.commons</groupId>
+                <artifactId>kp-commons-bom</artifactId>
+                <version>4.0.4</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- KP RPG modules -->
+            <dependency>
+                <groupId>${kp-rpg.groupId}</groupId>
+                <artifactId>kp-rpg-core</artifactId>
+                <version>${kp-rpg.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${kp-rpg.groupId}</groupId>
+                <artifactId>kp-rpg-torg</artifactId>
+                <version>${kp-rpg.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${kp-rpg.groupId}</groupId>
+                <artifactId>kp-rpg-traveller</artifactId>
+                <version>${kp-rpg.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${kp-rpg.groupId}</groupId>
+                <artifactId>kp-rpg-dsa5</artifactId>
+                <version>${kp-rpg.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${kp-rpg.groupId}</groupId>
+                <artifactId>kp-rpg-fate</artifactId>
+                <version>${kp-rpg.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${kp-rpg.groupId}</groupId>
+                <artifactId>kp-rpg-hexxen</artifactId>
+                <version>${kp-rpg.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${kp-rpg.groupId}</groupId>
+                <artifactId>kp-rpg-saga</artifactId>
+                <version>${kp-rpg.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${kp-rpg.groupId}</groupId>
+                <artifactId>kp-rpg-wod</artifactId>
+                <version>${kp-rpg.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${kp-rpg.groupId}</groupId>
+                <artifactId>kp-rpg-drivethru</artifactId>
+                <version>${kp-rpg.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${kp-rpg.groupId}</groupId>
+                <artifactId>kp-rpg-warhorn</artifactId>
+                <version>${kp-rpg.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
