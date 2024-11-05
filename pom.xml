@@ -210,7 +210,7 @@
     <skip.source>false</skip.source>
     <skip.site>false</skip.site>
 
-    <compiler-plugin.version>3.8.1</compiler-plugin.version>
+    <compiler-plugin.version>3.13.0</compiler-plugin.version>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     <maven-site-plugin.version>3.9.1</maven-site-plugin.version>
     <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
