@@ -17,6 +17,7 @@
 
 package de.kaiserpfalzedv.rpg.torg.model.actors;
 
+import de.kaiserpfalzedv.commons.api.resources.HasName;
 import de.kaiserpfalzedv.rpg.torg.model.core.Armor;
 import de.kaiserpfalzedv.rpg.torg.model.core.Attack;
 import de.kaiserpfalzedv.rpg.torg.model.core.Cosm;
@@ -33,9 +34,7 @@ import java.util.Set;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 1.3.0  2021-06-05
  */
-public interface Threat {
-    String getName();
-
+public interface Threat extends HasName {
     String getDescription();
 
     Cosm getCosm();
