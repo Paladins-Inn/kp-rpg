@@ -22,7 +22,7 @@
 
     <groupId>de.kaiserpfalz-edv.rpg</groupId>
     <artifactId>kp-rpg</artifactId>
-    <version>1.2.7</version>
+    <version>1.2.8</version>
     <packaging>pom</packaging>
 
     <description>
@@ -126,7 +126,7 @@
         <project.reporting.inputEncoding>UTF-8</project.reporting.inputEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <kp-commons.version>4.0.5</kp-commons.version>
+        <kp-commons.version>4.0.6</kp-commons.version>
     </properties>
 
     <build>
@@ -265,14 +265,12 @@
                         <failBuildOnCVSS>8</failBuildOnCVSS>
                         <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
                         <failOnError>true</failOnError>
-                        <nvdServerId>nvdApi</nvdServerId>
-                        <verbose>true</verbose>
+                        <nvdDatafeedServerId>nvdApi</nvdDatafeedServerId>
                         <nvdApiServerId>nvdApi</nvdApiServerId>
-                        <inherit>false</inherit>
                         <msbuildAnalyzerEnabled>false</msbuildAnalyzerEnabled>
                         <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
-                        <pipfileAnalzerEnabled>false</pipfileAnalzerEnabled>
-                        <nugetconfAnalyzerenabled>false</nugetconfAnalyzerenabled>
+                        <pipAnalyzerEnabled>false</pipAnalyzerEnabled>
+                        <nugetconfAnalyzerEnabled>false</nugetconfAnalyzerEnabled>
                         <skipSystemScope>true</skipSystemScope>
                     </configuration>
                 </plugin>
@@ -384,7 +382,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.5.0</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -406,7 +404,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.26.0</version>
+                <version>3.24.0</version>
                 <configuration>
                     <linkXref>true</linkXref>
                     <inputEncoding>${project.reporting.inputEncoding}</inputEncoding>
@@ -531,7 +529,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-report-plugin</artifactId>
-                        <version>3.5.2</version>
+                        <version>3.4.0</version>
                     </plugin>
                     
                     <plugin>

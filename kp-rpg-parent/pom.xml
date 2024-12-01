@@ -23,7 +23,7 @@
     <parent>
         <artifactId>kp-commons-parent</artifactId>
         <groupId>de.kaiserpfalz-edv.commons</groupId>
-        <version>4.0.5</version>
+        <version>4.0.6</version>
         <relativePath/>
     </parent>
 
@@ -113,7 +113,7 @@
             <dependency>
                 <groupId>de.kaiserpfalz-edv.rpg</groupId>
                 <artifactId>kp-rpg-bom</artifactId>
-                <version>1.2.7</version>
+                <version>1.2.8</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -121,7 +121,7 @@
             <dependency>
                 <groupId>de.kaiserpfalz-edv.commons</groupId>
                 <artifactId>kp-commons-bom</artifactId>
-                <version>4.0.5</version>
+                <version>4.0.6</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
