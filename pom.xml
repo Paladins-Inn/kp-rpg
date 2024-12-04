@@ -256,7 +256,7 @@
                 <plugin>
                     <groupId>org.owasp</groupId>
                     <artifactId>dependency-check-maven</artifactId>
-                    <version>11.1.0</version>
+                    <version>11.1.1</version>
                     <configuration>
                         <skip>${skip.owasp}</skip>
                         <suppressionFiles>
@@ -456,7 +456,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>11.1.0</version>
+                <version>11.1.1</version>
                 <configuration>
                     <suppressionFiles>
                         <suppressionFile>${main.basedir}/owasp-suppressions.xml</suppressionFile>
