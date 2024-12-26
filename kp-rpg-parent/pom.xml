@@ -29,7 +29,7 @@
 
     <artifactId>kp-rpg-parent</artifactId>
     <groupId>de.kaiserpfalz-edv.rpg</groupId>
-    <version>1.2.10</version>
+    <version>1.2.11</version>
     <packaging>pom</packaging>
 
     <name>de.kaiserpfalz-edg.rpg:kp-rpg-parent</name>
@@ -39,7 +39,7 @@
     <inceptionYear>2020</inceptionYear>
 
     <properties>
-        <kp-rpg.version>1.2.10</kp-rpg.version>
+        <kp-rpg.version>1.2.11</kp-rpg.version>
 
         <skipTests>false</skipTests>
         <skip.jar>false</skip.jar>
@@ -113,7 +113,7 @@
             <dependency>
                 <groupId>de.kaiserpfalz-edv.rpg</groupId>
                 <artifactId>kp-rpg-bom</artifactId>
-                <version>1.2.10</version>
+                <version>1.2.11</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
