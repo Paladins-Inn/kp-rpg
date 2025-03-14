@@ -41,12 +41,14 @@ jobs:
 
       - name: Build
         id: build-java
+        env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_SECRET }}
         run: |
           mvn \
             --batch-mode \
             --no-transfer-progress \
             \
             -Prelease \
-            -Dgpg.passphrase=${{ secrets.GPG_SECRET }} \
+#            -Dgpg.passphrase=${{ secrets.GPG_SECRET }} \
             \
             deploy
