@@ -47,8 +47,5 @@ jobs:
           mvn \
             --batch-mode \
             --no-transfer-progress \
-            \
             -Prelease \
-#            -Dgpg.passphrase=${{ secrets.GPG_SECRET }} \
-            \
             deploy
