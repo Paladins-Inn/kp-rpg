@@ -22,11 +22,11 @@
 
     <groupId>de.kaiserpfalz-edv.rpg</groupId>
     <artifactId>kp-rpg</artifactId>
-    <version>1.2.13</version>
+    <version>1.2.14</version>
     <packaging>pom</packaging>
 
     <description>
-        kp-rpg is a library for table top rpg rules implementations.
+        kp-rpg is a library for tabletop rpg rules implementations.
     </description>
     <name>${project.groupId}:${project.artifactId}</name>
     <url>https://paladinsinn.github.io/kp-krp/</url>
@@ -67,7 +67,7 @@
             <roles>
                 <role>Project Chair</role>
                 <role>Developer</role>
-                <role>sombody</role><!-- "'somebody' really should do ..." -->
+                <role>somebody</role><!-- "'somebody' really should do ..." -->
             </roles>
             <properties>
                 <picUrl>https://secure.gravatar.com/avatar/3b5c4008dc30b266341632f9931aab56</picUrl>
@@ -126,7 +126,7 @@
         <project.reporting.inputEncoding>UTF-8</project.reporting.inputEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <kp-commons.version>4.0.10</kp-commons.version>
+        <kp-commons.version>4.0.11</kp-commons.version>
     </properties>
 
     <build>
