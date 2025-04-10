@@ -126,7 +126,7 @@
         <project.reporting.inputEncoding>UTF-8</project.reporting.inputEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <kp-commons.version>4.0.11</kp-commons.version>
+        <kp-commons.version>4.0.13</kp-commons.version>
     </properties>
 
     <build>
