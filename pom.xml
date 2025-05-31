@@ -22,7 +22,7 @@
 
     <groupId>de.kaiserpfalz-edv.rpg</groupId>
     <artifactId>kp-rpg</artifactId>
-    <version>1.2.14</version>
+    <version>1.2.15</version>
     <packaging>pom</packaging>
 
     <description>
@@ -126,7 +126,7 @@
         <project.reporting.inputEncoding>UTF-8</project.reporting.inputEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <kp-commons.version>4.0.13</kp-commons.version>
+        <kp-commons.version>4.1.0</kp-commons.version>
     </properties>
 
     <build>
